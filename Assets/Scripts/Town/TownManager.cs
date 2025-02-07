@@ -77,6 +77,7 @@ public class TownManager : MonoBehaviour
 
     public void Connected()
     {
+        /*
         var enterPacket = new C_RegisterRequest
         {
             //여기에 이메일 연결 
