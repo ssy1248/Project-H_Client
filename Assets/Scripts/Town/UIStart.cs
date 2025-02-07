@@ -15,6 +15,19 @@ public class UIStart : MonoBehaviour
     [SerializeField] private TMP_InputField inputPort;
     [SerializeField] private TMP_Text txtMessage;
 
+    //제가 테스트 용도로 추가한 오브젝트들 입니다.
+    [SerializeField] TMP_InputField inputEmail;
+    [SerializeField] TMP_InputField inputname;
+    [SerializeField] TMP_InputField inputpasword;
+
+    [SerializeField] TMP_InputField inputLoginEmail;
+    [SerializeField] TMP_InputField inputLogipasword;
+
+    [SerializeField] GameObject loginObject;
+    [SerializeField] GameObject registerObject;
+    public TextMeshProUGUI errorText;
+
+
     private TMP_Text placeHolder;
 
     private int classIdx = 0;
@@ -68,12 +81,37 @@ public class UIStart : MonoBehaviour
         btnConfirm.onClick.RemoveAllListeners();
         btnConfirm.onClick.AddListener(ConfirmServer);
     }
-
-    private void SetNicknameUI()
+    // 여기서 수정할 함수들 작성 예정
+    public void SetNicknameUI()
     {
-        UpdateUI(WelcomeMessage, Color.white, DefaultNicknameMessage, true, false);
-        btnConfirm.onClick.RemoveAllListeners();
-        btnConfirm.onClick.AddListener(ConfirmNickname);
+        charList.SetActive(false);
+        if (registerObject.activeSelf)
+        {
+            registerObject.SetActive(false);
+        }
+        loginObject.SetActive(true);
+        //UpdateUI(WelcomeMessage, Color.white, DefaultNicknameMessage, true, false);
+        //btnConfirm.onClick.RemoveAllListeners();
+        //btnConfirm.onClick.AddListener(ConfirmNickname);
+    }
+
+    public void Login()
+    {
+        TownManager.Instance.Login(inputLoginEmail.text,inputLogipasword.text);
+    }
+    public void Register()
+    {
+        TownManager.Instance.Register(inputEmail.text,inputNickname.text, inputpasword.text);
+    }
+
+
+    public void SetRegister()
+    {
+        if (loginObject.activeSelf)
+        {
+            loginObject.SetActive(false);
+        }
+        registerObject.SetActive(true);
     }
 
     private void UpdateUI(string message, Color messageColor, string placeholderText, bool showCharList, bool showPortInput)
