@@ -177,14 +177,18 @@ public class TownManager : MonoBehaviour
 
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
-    public void Enter()
+    public void Enter(PlayerInfo playerData)
     {
-
+        Spawn(playerData);
     }
     // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
-    public void AllSpawn()
+    public void AllSpawn(List<PlayerInfo> playerDatas)
     {
-
+        foreach (PlayerInfo player in playerDatas)
+        {
+            Spawn(player);
+        }
+        
     }
     // 나가면 삭제해주기 
     public void Despawn()
@@ -206,6 +210,8 @@ public class TownManager : MonoBehaviour
     {
 
     }
+    //  주말 목표 입니다람쥐
+
     // 아이템 사는거 응답 처리
     public void BuyItemResponse()
     {
