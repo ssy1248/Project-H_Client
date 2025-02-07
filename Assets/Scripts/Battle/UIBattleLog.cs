@@ -125,8 +125,8 @@ public class UIBattleLog : MonoBehaviour
 
     private void SendResponse(int index)
     {
-        var response = new C_PlayerResponse { ResponseCode = index };
-        GameManager.Network.Send(response);
+        /*var response = new C_PlayerResponse { ResponseCode = index };
+        GameManager.Network.Send(response);*/
     }
 
     private static void SetImageAlpha(Image image, float alpha)

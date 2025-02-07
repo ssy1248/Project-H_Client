@@ -12,7 +12,7 @@ public class ServerSession : PacketSession
 	public void Send(IMessage packet)
 	{
 		string msgName = packet.Descriptor.Name.Replace("_", String.Empty);
-		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
+		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName,true);
 			
 		ushort size = (ushort)packet.CalculateSize();
 		// byte[] sendBuff = new byte[size + 4]; 

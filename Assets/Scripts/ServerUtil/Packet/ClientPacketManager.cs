@@ -23,44 +23,41 @@ class PacketManager
 	public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
 
 	public void Register()
-	{		
-		_onRecv.Add((ushort)MsgId.SEnter, MakePacket<S_Enter>);
-		_handler.Add((ushort)MsgId.SEnter, PacketHandler.S_EnterHandler);		
-		_onRecv.Add((ushort)MsgId.SSpawn, MakePacket<S_Spawn>);
-		_handler.Add((ushort)MsgId.SSpawn, PacketHandler.S_SpawnHandler);		
-		_onRecv.Add((ushort)MsgId.SLeave, MakePacket<S_Leave>);
-		_handler.Add((ushort)MsgId.SLeave, PacketHandler.S_LeaveHandler);		
-		_onRecv.Add((ushort)MsgId.SDespawn, MakePacket<S_Despawn>);
-		_handler.Add((ushort)MsgId.SDespawn, PacketHandler.S_DespawnHandler);		
-		_onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
-		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
-		_onRecv.Add((ushort)MsgId.SAnimation, MakePacket<S_Animation>);
-		_handler.Add((ushort)MsgId.SAnimation, PacketHandler.S_AnimationHandler);		
-		_onRecv.Add((ushort)MsgId.SChangeCostume, MakePacket<S_ChangeCostume>);
-		_handler.Add((ushort)MsgId.SChangeCostume, PacketHandler.S_ChangeCostumeHandler);		
-		_onRecv.Add((ushort)MsgId.SChat, MakePacket<S_Chat>);
-		_handler.Add((ushort)MsgId.SChat, PacketHandler.S_ChatHandler);		
-		_onRecv.Add((ushort)MsgId.SEnterDungeon, MakePacket<S_EnterDungeon>);
-		_handler.Add((ushort)MsgId.SEnterDungeon, PacketHandler.S_EnterDungeonHandler);		
-		_onRecv.Add((ushort)MsgId.SLeaveDungeon, MakePacket<S_LeaveDungeon>);
-		_handler.Add((ushort)MsgId.SLeaveDungeon, PacketHandler.S_LeaveDungeonHandler);		
-		_onRecv.Add((ushort)MsgId.SScreenText, MakePacket<S_ScreenText>);
-		_handler.Add((ushort)MsgId.SScreenText, PacketHandler.S_ScreenTextHandler);		
-		_onRecv.Add((ushort)MsgId.SScreenDone, MakePacket<S_ScreenDone>);
-		_handler.Add((ushort)MsgId.SScreenDone, PacketHandler.S_ScreenDoneHandler);		
-		_onRecv.Add((ushort)MsgId.SBattleLog, MakePacket<S_BattleLog>);
-		_handler.Add((ushort)MsgId.SBattleLog, PacketHandler.S_BattleLogHandler);		
-		_onRecv.Add((ushort)MsgId.SSetPlayerHp, MakePacket<S_SetPlayerHp>);
-		_handler.Add((ushort)MsgId.SSetPlayerHp, PacketHandler.S_SetPlayerHpHandler);		
-		_onRecv.Add((ushort)MsgId.SSetPlayerMp, MakePacket<S_SetPlayerMp>);
-		_handler.Add((ushort)MsgId.SSetPlayerMp, PacketHandler.S_SetPlayerMpHandler);		
-		_onRecv.Add((ushort)MsgId.SSetMonsterHp, MakePacket<S_SetMonsterHp>);
-		_handler.Add((ushort)MsgId.SSetMonsterHp, PacketHandler.S_SetMonsterHpHandler);		
-		_onRecv.Add((ushort)MsgId.SPlayerAction, MakePacket<S_PlayerAction>);
-		_handler.Add((ushort)MsgId.SPlayerAction, PacketHandler.S_PlayerActionHandler);		
-		_onRecv.Add((ushort)MsgId.SMonsterAction, MakePacket<S_MonsterAction>);
-		_handler.Add((ushort)MsgId.SMonsterAction, PacketHandler.S_MonsterActionHandler);
-
+	{
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_RegisterResponse>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_RegisterHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_LoginResponse>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_LoginHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Enter>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_EnterHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Spawn>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_SpawnHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Despawn>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_DespawnHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Move>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_MoveHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Animation>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_AnimationHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Chat>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ChatHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_BuyItemResponse>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_BuyItemHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_EquipItemResponse>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_EquipItemHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_DisrobeItemResponse>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_DisrobeItemHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_ActiveItemRequest>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ActiveItemHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_PartyResponse>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_PartyHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_EnterDungeon>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_EnterDungeonHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_LeaveDungeon>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_LeaveDungeonHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_ScreenText>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ScreenTextHandler);
+        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_ScreenDone>);
+        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ScreenDoneHandler);
         Debug.Log("핸들러 등록 완료");
     }
 
