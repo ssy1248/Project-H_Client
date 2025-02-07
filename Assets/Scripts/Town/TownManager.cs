@@ -75,15 +75,164 @@ public class TownManager : MonoBehaviour
 
     public void Connected()
     {
-        var enterPacket = new C_Enter
+        var enterPacket = new C_RegisterRequest
+        {
+            //여기에 이메일 연결 
+            Email = "aaaaaaa",
+            Nickname = GameManager.Instance.UserName,
+            //여기에 비밀번호 연결
+            Password = "aaaaaaaa"
+        };
+
+        GameManager.Network.Send(enterPacket);
+        /*var enterPacket = new C_Enter
         {
             Nickname = GameManager.Instance.UserName,
             Class = GameManager.Instance.ClassIdx
         };
 
-        GameManager.Network.Send(enterPacket);
+        GameManager.Network.Send(enterPacket);*/
     }
 
+    /* 임시로 만든 보내는 메서드 들 */
+    // 해야할 일 패킷에 들어갈 매개변수로 받거나 다른곳에서 받아오는 형식으로 보낼 패킷 짜기 
+    public void Register()
+    {
+        var enterPacket = new C_RegisterRequest
+        {
+            //여기에 이메일 연결 
+            Email = "",
+            Nickname = GameManager.Instance.UserName,
+            //여기에 비밀번호 연결
+            Password = ""
+        };
+
+        GameManager.Network.Send(enterPacket);
+    }
+    public void Login()
+    {
+        var enterPacket = new C_LoginRequest
+        {
+            //여기에 이메일 연결 
+            Email = "",
+            //여기에 비밀번호 연결
+            Password = ""
+        };
+
+        GameManager.Network.Send(enterPacket);
+    }
+    public void SelectCharacterRequest()
+    {
+
+    }
+    public void Move()
+    {
+
+    }
+    public void Animation()
+    {
+
+    }
+    public void Chat()
+    {
+
+    }
+    public void BuyItemRequest()
+    {
+
+    }
+    public void EquipItemRequest()
+    {
+
+    }
+    public void DisrobeItemRequest()
+    {
+
+    }
+    public void ActiveItemRequest()
+    {
+
+    }
+    public void PartyRequest()
+    {
+
+    }
+    public void EnterDungeon()
+    {
+
+    }
+    /* 여기까지 */
+
+    /* 임시로 만든 받는 메서드 들 */
+    // 핸들러와 연결후 각각 필요한 기능 구현 
+    
+    // 회원가입 확인 메세지 출력정도.
+    public void RegisterResponse()
+    {
+
+    }
+    // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
+    public void LoginResponse()
+    {
+
+    }
+    // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
+    public void Enter()
+    {
+
+    }
+    // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
+    public void AllSpawn()
+    {
+
+    }
+    // 나가면 삭제해주기 
+    public void Despawn()
+    {
+
+    }
+    //아마 아이디 받은뒤 해당 player 움직여 주는걸로 압니다.
+    public void AllMove()
+    {
+
+    }
+    //아마 아이디 받은뒤 해당 id player 애니메이션 
+    public void AllAnimation()
+    {
+
+    }
+    // 채팅 받아오기
+    public void ChatResponse()
+    {
+
+    }
+    // 아이템 사는거 응답 처리
+    public void BuyItemResponse()
+    {
+
+    }
+    // 아이템 장착 응답 처리
+    public void EquipItemResponse()
+    {
+
+    }
+    // 아이템 탈착 응답 처리
+    public void DisrobeItemResponse()
+    {
+
+    }
+    // 소비 장착 응답 처리
+    public void ActiveItemeResponse()
+    {
+
+    }
+    // 파티 응답 처리
+    public void PartyResponse()
+    {
+
+    }
+    // 던전 쪽 추후 추가 예정
+    /* 여기까지 */
     public void Spawn(PlayerInfo playerInfo)
     {
         Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);

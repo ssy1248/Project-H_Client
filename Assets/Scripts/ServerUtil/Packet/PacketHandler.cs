@@ -2,6 +2,7 @@
 using Google.Protobuf.Protocol;
 using ServerCore;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,76 @@ class PacketHandler
 {
     #region Town
 
+    public static void S_RegisterHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_RegisterResponse enterPacket) return; 
+    }
+    public static void S_LoginHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_LoginResponse enterPacket) return;
+    }
+    public static void S_EnterHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Enter enterPacket) return;
+    }
+    public static void S_SpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Spawn enterPacket) return;
+    }
+    public static void S_DespawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Despawn enterPacket) return;
+    }
+    public static void S_MoveHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Move enterPacket) return;
+    }
+    public static void S_AnimationHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Animation enterPacket) return;
+    }
+    public static void S_ChatHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Chat enterPacket) return;
+    }
+    public static void S_BuyItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BuyItemResponse enterPacket) return;
+    }
+    public static void S_EquipItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_EquipItemResponse enterPacket) return;
+    }
+    public static void S_DisrobeItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DisrobeItemResponse enterPacket) return;
+    }
+    public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_ActiveItemRequest enterPacket) return;
+    }
+    public static void S_PartyHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_PartyResponse enterPacket) return;
+    }
+    public static void S_EnterDungeonHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_EnterDungeon enterPacket) return;
+    }
+    public static void S_LeaveDungeonHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_LeaveDungeon enterPacket) return;
+    }
+    public static void S_ScreenTextHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_ScreenText enterPacket) return;
+    }
+    public static void S_ScreenDoneHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_ScreenDone enterPacket) return;
+    }
+
+    /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Enter enterPacket) return;
@@ -167,6 +238,6 @@ class PacketHandler
         BattleManager.Instance.TriggerPlayerHitAnimation();
         EffectManager.Instance.SetEffectToPlayer(pkt.ActionSet.EffectCode);
     }
-
+    */
     #endregion
 }

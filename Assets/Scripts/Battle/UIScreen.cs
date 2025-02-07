@@ -100,8 +100,10 @@ public class UIScreen : MonoBehaviour
 
     private void SendResponse(int responseCode)
     {
+        /*
         var response = new C_PlayerResponse { ResponseCode = responseCode };
         GameManager.Network.Send(response);
+        */
     }
 
     private void SetBackgroundColor(byte r, byte g, byte b)

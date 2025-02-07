@@ -69,7 +69,7 @@ public class BattleManager : MonoBehaviour
     public void ConfigureGame(S_EnterDungeon pkt)
     {
         Debug.Log("Entering Dungeon");
-
+        /*
         if (pkt.DungeonInfo != null)
         {
             ConfigureDungeon(pkt.DungeonInfo);
@@ -89,7 +89,7 @@ public class BattleManager : MonoBehaviour
         if (pkt.BattleLog != null)
         {
             uiBattleLog.Initialize(pkt.BattleLog);
-        }
+        }*/
     }
 
     private void ConfigurePlayer(int classCode)
