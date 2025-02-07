@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TownManager : MonoBehaviour
 {
@@ -96,70 +98,141 @@ public class TownManager : MonoBehaviour
 
     /* 임시로 만든 보내는 메서드 들 */
     // 해야할 일 패킷에 들어갈 매개변수로 받거나 다른곳에서 받아오는 형식으로 보낼 패킷 짜기 
-    public void Register()
+    public void Register(string email, string nickname, string password)
     {
         var enterPacket = new C_RegisterRequest
         {
             //여기에 이메일 연결 
-            Email = "",
-            Nickname = GameManager.Instance.UserName,
+            Email = email,
+            Nickname = nickname,//GameManager.Instance.UserName,
             //여기에 비밀번호 연결
-            Password = ""
+            Password = password
         };
 
         GameManager.Network.Send(enterPacket);
     }
-    public void Login()
+    public void Login(string email, string password)
     {
         var enterPacket = new C_LoginRequest
         {
             //여기에 이메일 연결 
-            Email = "",
+            Email = email,
             //여기에 비밀번호 연결
-            Password = ""
+            Password = password
         };
 
         GameManager.Network.Send(enterPacket);
     }
-    public void SelectCharacterRequest()
+    // 패킷 명세에서는 닉네임, 클래스인데 생성자를 보니 클래스밖에 없음
+    public void SelectCharacterRequest(/*string nickname*/ int jobIndex)
     {
+        var selectCharacterPacket = new C_SelectCharacterRequest
+        {
+           // Nickname = nickname,
+            Class = jobIndex
+        };
 
+        GameManager.Network.Send(selectCharacterPacket);
     }
-    public void Move()
-    {
 
+    public void Move(Vector3 pos, float rotation)
+    {
+        var movePacket = new C_Move
+        {
+            Transform = new TransformInfo
+            {
+                PosX = pos.x,
+                PosY = pos.y,
+                PosZ = pos.z,
+                Rot = rotation
+            }
+        };
+
+        GameManager.Network.Send(movePacket);
     }
-    public void Animation()
+    public void Animation(int animCode)
     {
+        var animationPacket = new C_Animation
+        {
+            AnimCode = animCode
+        };
 
+        GameManager.Network.Send(animationPacket);
     }
-    public void Chat()
+    public void Chat(int playerId, int type, string senderName, string chatMsg)
     {
+        var chatPacket = new C_Chat
+        {
+            PlayerId = playerId,
+            Type = type,
+            SenderName = senderName,
+            ChatMsg = chatMsg
+        };
 
+        GameManager.Network.Send(chatPacket);
     }
-    public void BuyItemRequest()
+    public void BuyItemRequest(string itemName, int price)
     {
+        var buyItemPacket = new C_BuyItemRequest
+        {
+            Itemname = itemName,
+            Price = price
+        };
 
+        GameManager.Network.Send(buyItemPacket);
     }
-    public void EquipItemRequest()
+    public void EquipItemRequest(int itemId)
     {
+        var equipItemPacket = new C_EquipItemRequest
+        {
+            ItemId = itemId
+        };
 
+        GameManager.Network.Send(equipItemPacket);
     }
-    public void DisrobeItemRequest()
+    public void DisrobeItemRequest(int itemId)
     {
+        var disrobeItemPacket = new C_DisrobeItemRequest
+        {
+            ItemId = itemId
+        };
 
+        GameManager.Network.Send(disrobeItemPacket);
     }
-    public void ActiveItemRequest()
+    public void ActiveItemRequest(int itemId)
     {
+        var activeItemPacket = new C_ActiveItemRequest
+        {
+            ItemId = itemId
+        };
 
+        GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest()
+    public void PartyRequest(int userId)
     {
+        var partyPacket = new C_PartyRequest
+        {
+            UserId = userId
+        };
 
+        GameManager.Network.Send(partyPacket);
     }
-    public void EnterDungeon()
+    public void EnterDungeon(int duneonCode, PlayerInfo player)
     {
+        var enterDungeonPacket = new C_EnterDungeon
+        {
+            DungeonCode = duneonCode,
+            //Players = new PlayerInfo
+            //{
+            //    PlayerId = player.PlayerId,
+            //    Nickname = player.Nickname,
+            //    Class = player.Class,
+            //    Transform = player.Transform,
+            //    StatInfo = player.StatInfo
+            //}
+        };
 
+        GameManager.Network.Send(enterDungeonPacket);
     }
     /* 여기까지 */
 
@@ -181,6 +254,9 @@ public class TownManager : MonoBehaviour
     {
         Spawn(playerData);
     }
+
+    //private Dictionary<int, Player> playerList = new();
+    #region 고쳐야할곳
     // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
     public void AllSpawn(List<PlayerInfo> playerDatas)
     {
@@ -205,6 +281,7 @@ public class TownManager : MonoBehaviour
     {
 
     }
+    #endregion
     // 채팅 받아오기
     public void ChatResponse()
     {
