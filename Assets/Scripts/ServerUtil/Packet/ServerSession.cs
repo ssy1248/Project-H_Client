@@ -26,7 +26,7 @@ public class ServerSession : PacketSession
 		Array.Copy(packet.ToByteArray(), 0, sendBuff, 5, size); // 전달하려는 데이터
 		
 		Send(new ArraySegment<byte>(sendBuff));
-	}
+    }
 	
 	public override void OnConnected(EndPoint endPoint)
 	{
@@ -35,8 +35,13 @@ public class ServerSession : PacketSession
 		
 		
 		TownManager.Instance.Connected();
-		
-		PacketManager.Instance.CustomHandler = (s, m, i) =>
+
+        if (PacketManager.Instance == null)
+        {
+            Debug.LogError("PacketManager 초기화되지 않음!");
+        }
+
+        PacketManager.Instance.CustomHandler = (s, m, i) =>
 		{
 			PacketQueue.Instance.Push(i, m);
 #if !UNITY_EDITOR

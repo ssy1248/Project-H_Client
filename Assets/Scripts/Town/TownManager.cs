@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +21,9 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+
+    // 테스트 용도로 생성
+    [SerializeField] GameObject errorText;
 
     private const string DefaultPlayerPath = "Player/Player1";
 
@@ -109,7 +114,6 @@ public class TownManager : MonoBehaviour
             //여기에 비밀번호 연결
             Password = password
         };
-
         GameManager.Network.Send(enterPacket);
     }
     public void Login(string email, string password)
@@ -239,21 +243,30 @@ public class TownManager : MonoBehaviour
 
     /* 임시로 만든 받는 메서드 들 */
     // 핸들러와 연결후 각각 필요한 기능 구현 
-    
-    // 회원가입 확인 메세지 출력정도.
-    public void RegisterResponse()
-    {
 
+    // 회원가입 확인 메세지 출력정도.
+    IEnumerator erroText()
+    {
+        errorText.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        errorText.SetActive(false);
+    }
+    // 테스트 코드 
+    public void RegisterResponse(S_RegisterResponse data)
+    {
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
-    public void LoginResponse()
+    public void LoginResponse(S_LoginResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
-    public void Enter(PlayerInfo playerData)
+    public void Enter(S_Enter data)
     {
-        Spawn(playerData);
+        
     }
 
     //private Dictionary<int, Player> playerList = new();

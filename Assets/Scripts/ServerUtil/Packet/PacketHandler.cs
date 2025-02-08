@@ -12,15 +12,18 @@ class PacketHandler
 
     public static void S_RegisterHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_RegisterResponse enterPacket) return; 
+        if (packet is not S_RegisterResponse enterPacket) return;
+        TownManager.Instance.RegisterResponse(enterPacket);
     }
     public static void S_LoginHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_LoginResponse enterPacket) return;
+        TownManager.Instance.LoginResponse(enterPacket);
     }
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Enter enterPacket) return;
+        TownManager.Instance.Enter(enterPacket);
     }
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {

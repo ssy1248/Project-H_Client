@@ -8,7 +8,7 @@ using UnityEngine;
 class PacketManager
 {
 	#region Singleton
-	static PacketManager _instance = new PacketManager();
+	static PacketManager _instance = new();
 	public static PacketManager Instance { get { return _instance; } }
 	#endregion
 
@@ -26,38 +26,38 @@ class PacketManager
 	{
         _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_RegisterResponse>);
         _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_RegisterHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_LoginResponse>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_LoginHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Enter>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_EnterHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Spawn>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_SpawnHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Despawn>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_DespawnHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Move>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_MoveHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Animation>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_AnimationHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_Chat>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ChatHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_BuyItemResponse>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_BuyItemHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_EquipItemResponse>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_EquipItemHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_DisrobeItemResponse>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_DisrobeItemHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_ActiveItemRequest>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ActiveItemHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_PartyResponse>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_PartyHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_EnterDungeon>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_EnterDungeonHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_LeaveDungeon>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_LeaveDungeonHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_ScreenText>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ScreenTextHandler);
-        _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_ScreenDone>);
-        _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_ScreenDoneHandler);
+        _onRecv.Add((ushort)MsgId.SLoginresponse, MakePacket<S_LoginResponse>);
+        _handler.Add((ushort)MsgId.SLoginresponse, PacketHandler.S_LoginHandler);
+        _onRecv.Add((ushort)MsgId.SEnter, MakePacket<S_Enter>);
+        _handler.Add((ushort)MsgId.SEnter, PacketHandler.S_EnterHandler);
+        _onRecv.Add((ushort)MsgId.SSpawn, MakePacket<S_Spawn>);
+        _handler.Add((ushort)MsgId.SSpawn, PacketHandler.S_SpawnHandler);
+        _onRecv.Add((ushort)MsgId.SDespawn, MakePacket<S_Despawn>);
+        _handler.Add((ushort)MsgId.SDespawn, PacketHandler.S_DespawnHandler);
+        _onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
+        _handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);
+        _onRecv.Add((ushort)MsgId.SAnimation, MakePacket<S_Animation>);
+        _handler.Add((ushort)MsgId.SAnimation, PacketHandler.S_AnimationHandler);
+        _onRecv.Add((ushort)MsgId.SChat, MakePacket<S_Chat>);
+        _handler.Add((ushort)MsgId.SChat, PacketHandler.S_ChatHandler);
+        _onRecv.Add((ushort)MsgId.SBuyitemresponse, MakePacket<S_BuyItemResponse>);
+        _handler.Add((ushort)MsgId.SBuyitemresponse, PacketHandler.S_BuyItemHandler);
+        _onRecv.Add((ushort)MsgId.SEquipitemresponse, MakePacket<S_EquipItemResponse>);
+        _handler.Add((ushort)MsgId.SEquipitemresponse, PacketHandler.S_EquipItemHandler);
+        _onRecv.Add((ushort)MsgId.SDisrobeitemresponse, MakePacket<S_DisrobeItemResponse>);
+        _handler.Add((ushort)MsgId.SDisrobeitemresponse, PacketHandler.S_DisrobeItemHandler);
+        _onRecv.Add((ushort)MsgId.SActiveitemrequest, MakePacket<S_ActiveItemRequest>);
+        _handler.Add((ushort)MsgId.SActiveitemrequest, PacketHandler.S_ActiveItemHandler);
+        _onRecv.Add((ushort)MsgId.SPartyresponse, MakePacket<S_PartyResponse>);
+        _handler.Add((ushort)MsgId.SPartyresponse, PacketHandler.S_PartyHandler);
+        _onRecv.Add((ushort)MsgId.SEnterdungeon, MakePacket<S_EnterDungeon>);
+        _handler.Add((ushort)MsgId.SEnterdungeon, PacketHandler.S_EnterDungeonHandler);
+        _onRecv.Add((ushort)MsgId.SLeavedungeon, MakePacket<S_LeaveDungeon>);
+        _handler.Add((ushort)MsgId.SLeavedungeon, PacketHandler.S_LeaveDungeonHandler);
+        _onRecv.Add((ushort)MsgId.SScreentext, MakePacket<S_ScreenText>);
+        _handler.Add((ushort)MsgId.SScreentext, PacketHandler.S_ScreenTextHandler);
+        _onRecv.Add((ushort)MsgId.SScreendone, MakePacket<S_ScreenDone>);
+        _handler.Add((ushort)MsgId.SScreendone, PacketHandler.S_ScreenDoneHandler);
         Debug.Log("핸들러 등록 완료");
     }
 

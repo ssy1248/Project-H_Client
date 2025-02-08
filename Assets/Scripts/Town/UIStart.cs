@@ -23,9 +23,9 @@ public class UIStart : MonoBehaviour
     [SerializeField] TMP_InputField inputLoginEmail;
     [SerializeField] TMP_InputField inputLogipasword;
 
+    [SerializeField] GameObject conectObject;
     [SerializeField] GameObject loginObject;
     [SerializeField] GameObject registerObject;
-    public TextMeshProUGUI errorText;
 
 
     private TMP_Text placeHolder;
@@ -89,21 +89,34 @@ public class UIStart : MonoBehaviour
         {
             registerObject.SetActive(false);
         }
+        conectObject.SetActive(false);
         loginObject.SetActive(true);
         //UpdateUI(WelcomeMessage, Color.white, DefaultNicknameMessage, true, false);
         //btnConfirm.onClick.RemoveAllListeners();
         //btnConfirm.onClick.AddListener(ConfirmNickname);
+        ConfirmNickname();
     }
 
     public void Login()
     {
+        Debug.Log(inputLoginEmail.text + inputLogipasword.text);
+
         TownManager.Instance.Login(inputLoginEmail.text,inputLogipasword.text);
     }
     public void Register()
     {
-        TownManager.Instance.Register(inputEmail.text,inputNickname.text, inputpasword.text);
-    }
+        Debug.Log(inputname.text);
 
+        TownManager.Instance.Register(inputEmail.text, inputname.text, inputpasword.text);
+    }
+    public void SetLogin()
+    {
+        if (registerObject.activeSelf)
+        {
+            registerObject.SetActive(false);
+        }
+        loginObject.SetActive(true);
+    }
 
     public void SetRegister()
     {
@@ -151,6 +164,7 @@ public class UIStart : MonoBehaviour
 
     private void ConfirmNickname()
     {
+        /*
         if (inputNickname.text.Length < 2)
         {
             DisplayError(ShortNicknameError);
@@ -161,11 +175,11 @@ public class UIStart : MonoBehaviour
         {
             DisplayError(LongNicknameError);
             return;
-        }
+        }*/
 
         nickname = inputNickname.text;
         TownManager.Instance.GameStart(serverUrl, port, nickname, classIdx);
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private void DisplayError(string errorMessage)
