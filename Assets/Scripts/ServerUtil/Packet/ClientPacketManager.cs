@@ -46,7 +46,7 @@ class PacketManager
         _handler.Add((ushort)MsgId.SEquipitemresponse, PacketHandler.S_EquipItemHandler);
         _onRecv.Add((ushort)MsgId.SDisrobeitemresponse, MakePacket<S_DisrobeItemResponse>);
         _handler.Add((ushort)MsgId.SDisrobeitemresponse, PacketHandler.S_DisrobeItemHandler);
-        _onRecv.Add((ushort)MsgId.SActiveitemrequest, MakePacket<S_ActiveItemRequest>);
+        _onRecv.Add((ushort)MsgId.SActiveitemrequest, MakePacket<S_ActiveItemResponse>);
         _handler.Add((ushort)MsgId.SActiveitemrequest, PacketHandler.S_ActiveItemHandler);
         _onRecv.Add((ushort)MsgId.SPartyresponse, MakePacket<S_PartyResponse>);
         _handler.Add((ushort)MsgId.SPartyresponse, PacketHandler.S_PartyHandler);

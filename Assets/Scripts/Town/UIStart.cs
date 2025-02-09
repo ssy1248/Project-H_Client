@@ -26,6 +26,7 @@ public class UIStart : MonoBehaviour
     [SerializeField] GameObject conectObject;
     [SerializeField] GameObject loginObject;
     [SerializeField] GameObject registerObject;
+    public GameObject chuseObject;
 
 
     private TMP_Text placeHolder;

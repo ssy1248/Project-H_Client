@@ -24,6 +24,7 @@ public class TownManager : MonoBehaviour
 
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
+    [SerializeField] UIStart uiStartTemp;
 
     private const string DefaultPlayerPath = "Player/Player1";
 
@@ -262,6 +263,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        uiStartTemp.chuseObject.SetActive(true);
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)

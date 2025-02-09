@@ -59,7 +59,7 @@ class PacketHandler
     }
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_ActiveItemRequest enterPacket) return;
+        if (packet is not S_ActiveItemResponse enterPacket) return;
     }
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {
