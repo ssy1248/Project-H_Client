@@ -1008,6 +1008,9 @@ GameObject:
   - component: {fileID: 348433924}
   - component: {fileID: 348433926}
   - component: {fileID: 348433925}
+  - component: {fileID: 348433928}
+  - component: {fileID: 348433927}
+  - component: {fileID: 348433929}
   m_Layer: 5
   m_Name: TextPanel
   m_TagString: Untagged
@@ -1073,6 +1076,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348433923}
   m_CullTransparentMesh: 1
+--- !u!114 &348433927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348433923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3253993a006428f409bf5728b6ecfbb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!225 &348433928
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348433923}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &348433929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348433923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b52ffd51e2a40a49abb0c4570e4d975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  draggablePanelRectTransform: {fileID: 0}
 --- !u!1 &402407706
 GameObject:
   m_ObjectHideFlags: 0
@@ -2520,6 +2560,7 @@ GameObject:
   - component: {fileID: 1305229167}
   - component: {fileID: 1305229166}
   - component: {fileID: 1305229170}
+  - component: {fileID: 1305229172}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2623,6 +2664,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 2114979542}
+--- !u!225 &1305229172
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305229165}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &1313466066 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1903701047758812710, guid: 7c29f5da827f7434e9f39ec66cd37418,
