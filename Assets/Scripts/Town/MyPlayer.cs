@@ -73,8 +73,7 @@ public class MyPlayer : MonoBehaviour
         int animKey = animHash[animIdx];
         agent.SetDestination(transform.position);
 
-        var animationPacket = new C_Animation { AnimCode = animKey };
-        GameManager.Network.Send(animationPacket);
+        TownManager.Instance.Animation(animKey);
     }
 
 

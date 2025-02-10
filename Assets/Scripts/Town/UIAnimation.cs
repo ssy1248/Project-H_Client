@@ -6,7 +6,8 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] private Button btnBattle;
     [SerializeField] private Button[] btnList;
 
-    private MyPlayer mPlayer;
+    [SerializeField] private MyPlayer mPlayer;
+    [SerializeField] private GameObject inventory;
 
     void Start()
     {
@@ -39,5 +40,24 @@ public class UIAnimation : MonoBehaviour
         }
 
         mPlayer.ExecuteAnimation(idx);
+    }
+
+    private void Update()
+    {
+        if (mPlayer == null)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (inventory.activeSelf)
+            {
+                inventory.SetActive(false);
+            }
+            else
+            {
+                inventory.SetActive(true);
+            }
+        }
     }
 }
