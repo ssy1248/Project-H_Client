@@ -2,17 +2,21 @@ using UnityEngine;
 
 public class PageManager : MonoBehaviour
 {
-    public GameObject[] pages;
+    public GameObject[] consumablePages; // 소모품 페이지들
+    public GameObject[] equipmentPages;  // 장비 페이지들
+    private GameObject[] currentPages;   // 현재 활성화된 페이지 리스트
     private int currentPageIndex = 0;
 
-    void Start()
+    private void Start()
     {
+        // 기본적으로 소모품 페이지 활성화
+        currentPages = consumablePages;
         UpdatePageVisibility();
     }
 
     public void ShowNextPage()
     {
-        if (currentPageIndex < pages.Length - 1)
+        if (currentPageIndex < currentPages.Length - 1)
         {
             currentPageIndex++;
             UpdatePageVisibility();
@@ -28,11 +32,37 @@ public class PageManager : MonoBehaviour
         }
     }
 
+    public void SwitchToConsumablePages()
+    {
+        currentPages = consumablePages;
+        currentPageIndex = 0;
+        UpdatePageVisibility();
+    }
+
+    public void SwitchToEquipmentPages()
+    {
+        currentPages = equipmentPages;
+        currentPageIndex = 0;
+        UpdatePageVisibility();
+    }
+
     private void UpdatePageVisibility()
     {
-        for (int i = 0; i < pages.Length; i++)
+        // 모든 페이지 비활성화 후 현재 페이지 활성화
+        DisableAllPages(consumablePages);
+        DisableAllPages(equipmentPages);
+
+        if (currentPages.Length > 0)
         {
-            pages[i].SetActive(i == currentPageIndex);
+            currentPages[currentPageIndex].SetActive(true);
+        }
+    }
+
+    private void DisableAllPages(GameObject[] pages)
+    {
+        foreach (var page in pages)
+        {
+            page.SetActive(false);
         }
     }
 }
