@@ -12,27 +12,33 @@ class PacketHandler
 
     public static void S_RegisterHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_RegisterResponse enterPacket) return; 
+        if (packet is not S_RegisterResponse enterPacket) return;
+        TownManager.Instance.RegisterResponse(enterPacket);
     }
     public static void S_LoginHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_LoginResponse enterPacket) return;
+        TownManager.Instance.LoginResponse(enterPacket);
     }
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Enter enterPacket) return;
+        TownManager.Instance.Enter(enterPacket);
     }
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Spawn enterPacket) return;
+        TownManager.Instance.AllSpawn(enterPacket);
     }
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Despawn enterPacket) return;
+        TownManager.Instance.Despawn(enterPacket);
     }
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Move enterPacket) return;
+        TownManager.Instance.AllMove(enterPacket);
     }
     public static void S_AnimationHandler(PacketSession session, IMessage packet)
     {
@@ -56,7 +62,7 @@ class PacketHandler
     }
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_ActiveItemRequest enterPacket) return;
+        if (packet is not S_ActiveItemResponse enterPacket) return;
     }
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {

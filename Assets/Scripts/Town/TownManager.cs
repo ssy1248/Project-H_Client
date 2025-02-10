@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +21,9 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+
+    // 테스트 용도로 생성
+    [SerializeField] GameObject errorText;
 
     private const string DefaultPlayerPath = "Player/Player1";
 
@@ -77,6 +82,7 @@ public class TownManager : MonoBehaviour
 
     public void Connected()
     {
+        /*
         var enterPacket = new C_RegisterRequest
         {
             //여기에 이메일 연결 
@@ -108,7 +114,6 @@ public class TownManager : MonoBehaviour
             //여기에 비밀번호 연결
             Password = password
         };
-
         GameManager.Network.Send(enterPacket);
     }
     public void Login(string email, string password)
@@ -131,7 +136,7 @@ public class TownManager : MonoBehaviour
            // Nickname = nickname,
             Class = jobIndex
         };
-
+        uiStart.chuseObject.SetActive(false);
         GameManager.Network.Send(selectCharacterPacket);
     }
 
@@ -238,128 +243,151 @@ public class TownManager : MonoBehaviour
 
     /* 임시로 만든 받는 메서드 들 */
     // 핸들러와 연결후 각각 필요한 기능 구현 
-    
-    // 회원가입 확인 메세지 출력정도.
-    public void RegisterResponse()
-    {
 
+    // 회원가입 확인 메세지 출력정도.
+    IEnumerator erroText()
+    {
+        errorText.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        errorText.SetActive(false);
+    }
+    // 테스트 코드 
+    public void RegisterResponse(S_RegisterResponse data)
+    {
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
-    public void LoginResponse()
+    public void LoginResponse(S_LoginResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        if (data.Success)
+        {
+            uiStart.loginObject.SetActive(false);
+            uiStart.chuseObject.SetActive(true);
+        }
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
-    public void Enter()
+    public void Enter(S_Enter data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Player.ToString());
+        Spawn(data.Player);
     }
 
-    // 나가면 삭제해주기 
-    public void Despawn()
-    {
-
-    }
     //private Dictionary<int, Player> playerList = new();
     // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
-    // players -> repeated PlayerInfo, storeList -> itemInfo
-    public void AllSpawn(PlayerInfo[] players, ItemInfo storeList)
+    // 여기 패킷에 자기 자신이 몇번인지 추가해줬으면 좋겠습니다.
+    public void AllSpawn(S_Spawn data)
     {
-        // 여러 플레이어 정보를 순회합니다.
-        foreach (PlayerInfo info in players)
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
+        foreach (PlayerInfo player in data.Players)
         {
-            // 이미 존재하는 플레이어라면(예를 들어, 이미 생성된 경우) 필요한 데이터 업데이트를 할 수 있음.
-            if (playerList.ContainsKey(info.PlayerId))
+            if (player.PlayerId == data.UserId)
             {
-                // 기존 플레이어의 위치, 애니메이션, 기타 정보 업데이트가 필요하다면 여기서 처리
-                // 예시: AllMove(info.PlayerId, info.Transform);
+                Spawn(player,true);
             }
-            else
-            {
-                // 플레이어가 없다면 스폰 처리
-                Vector3 spawnPos = CalculateSpawnPosition(info.Transform);
-                Player newPlayer = CreatePlayer(info, spawnPos);
-                // 여기서 추가적인 초기화가 필요하다면 수행합니다.
-            }
+            Spawn(player);
         }
-
-        // storeList 처리 (상점 관련 데이터가 있을 경우)
-        // 예: UpdateStoreUI(storeList);
     }
-    //아마 아이디 받은뒤 해당 player 움직여 주는걸로 압니다.
-    public void AllMove(int playerId, TransformInfo transform)
+    // 나가면 삭제해주기 
+    public void Despawn(S_Despawn data)
     {
-        // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
-        Player player = GetPlayerAvatarById(playerId);
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
+    }
+    public void AllMove(S_Move data)
+    {
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+
+        Player player = GetPlayerAvatarById(data.PlayerId);
         if (player == null)
         {
-            Debug.LogWarning("Player with ID " + playerId + " not found.");
+            Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
             return;
         }
 
         // TransformInfo를 이용해 새로운 위치와 회전값을 계산합니다.
-        Vector3 targetPos = new Vector3(transform.PosX, transform.PosY, transform.PosZ);
+        Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
         // 여기서는 y축 회전만 적용한다고 가정 (필요시 다른 축도 적용)
-        Quaternion targetRot = Quaternion.Euler(0, transform.Rot, 0);
+        Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
 
         // 플레이어의 Move() 메서드를 호출하여 부드러운 이동 및 회전 처리를 위임합니다.
         player.Move(targetPos, targetRot);
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
-    // playerList에서 받은 id를 dictionary에서 검색한 후 그 플레이어
-    public void AllAnimation(int playerId, int animCode)
+    public void AllAnimation(S_Animation data)
     {
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+
         // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
-        Player player = GetPlayerAvatarById(playerId);
+        Player player = GetPlayerAvatarById(data.PlayerId);
         if (player == null)
         {
-            Debug.LogWarning("Player with ID " + playerId + " not found for animation.");
+            Debug.LogWarning("Player with ID " + data.PlayerId + " not found for animation.");
             return;
         }
 
         // 플레이어의 애니메이션 재생 메서드 호출
-        player.PlayAnimation(animCode);
+        player.PlayAnimation(data.AnimCode);
     }
     // 채팅 받아오기
-    public void ChatResponse()
+    public void ChatResponse(S_Chat data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
     }
-    // 아이템 사는거 응답 처리
-    public void BuyItemResponse()
-    {
+    //  주말 목표 입니다람쥐
 
+    // 아이템 사는거 응답 처리
+    public void BuyItemResponse(S_BuyItemResponse data)
+    {
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 아이템 장착 응답 처리
-    public void EquipItemResponse()
+    public void EquipItemResponse(S_EquipItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 아이템 탈착 응답 처리
-    public void DisrobeItemResponse()
+    public void DisrobeItemResponse(S_DisrobeItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 소비 장착 응답 처리
-    public void ActiveItemeResponse()
+    public void ActiveItemeResponse(S_ActiveItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 파티 응답 처리
-    public void PartyResponse()
+    public void PartyResponse(S_PartyResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
-    public void Spawn(PlayerInfo playerInfo)
+
+    // 자기 자신 스폰용도 
+    public void Spawn(PlayerInfo playerInfo , bool isPlayer = false)
     {
-        Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
+        if (isPlayer)
+        {
+            Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
+            MyPlayer = CreatePlayer(playerInfo, spawnPos);
+            MyPlayer.SetIsMine(true);
 
-        MyPlayer = CreatePlayer(playerInfo, spawnPos);
-        MyPlayer.SetIsMine(true);
-
-        ActivateGameUI();
+            ActivateGameUI();
+        }
+        CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
     }
 
     private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
