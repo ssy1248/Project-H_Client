@@ -263,75 +263,88 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        uiStartTemp.chuseObject.SetActive(true);
+        if (data.Success)
+        {
+            uiStartTemp.loginObject.SetActive(false);
+            uiStartTemp.chuseObject.SetActive(true);
+        }
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)
     {
-        
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Player.ToString());
     }
 
     //private Dictionary<int, Player> playerList = new();
     #region 고쳐야할곳
     // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
-    public void AllSpawn(List<PlayerInfo> playerDatas)
+    public void AllSpawn(S_Spawn data)
     {
-        foreach (PlayerInfo player in playerDatas)
-        {
-            Spawn(player);
-        }
-        
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
     }
-    // 나가면 삭제해주기 
-    public void Despawn()
-    {
 
+    // 나가면 삭제해주기 
+    public void Despawn(S_Despawn data)
+    {
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
     }
     //아마 아이디 받은뒤 해당 player 움직여 주는걸로 압니다.
-    public void AllMove()
+    public void AllMove(S_Move data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
-    public void AllAnimation()
+    public void AllAnimation(S_Animation data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
     }
     #endregion
     // 채팅 받아오기
-    public void ChatResponse()
+    public void ChatResponse(S_Chat data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
     }
     //  주말 목표 입니다람쥐
 
     // 아이템 사는거 응답 처리
-    public void BuyItemResponse()
+    public void BuyItemResponse(S_BuyItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 아이템 장착 응답 처리
-    public void EquipItemResponse()
+    public void EquipItemResponse(S_EquipItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 아이템 탈착 응답 처리
-    public void DisrobeItemResponse()
+    public void DisrobeItemResponse(S_DisrobeItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 소비 장착 응답 처리
-    public void ActiveItemeResponse()
+    public void ActiveItemeResponse(S_ActiveItemResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 파티 응답 처리
-    public void PartyResponse()
+    public void PartyResponse(S_PartyResponse data)
     {
-
+        StartCoroutine("erroText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
+
     public void Spawn(PlayerInfo playerInfo)
     {
         Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);

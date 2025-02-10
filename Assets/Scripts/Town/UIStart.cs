@@ -24,7 +24,7 @@ public class UIStart : MonoBehaviour
     [SerializeField] TMP_InputField inputLogipasword;
 
     [SerializeField] GameObject conectObject;
-    [SerializeField] GameObject loginObject;
+    public GameObject loginObject;
     [SerializeField] GameObject registerObject;
     public GameObject chuseObject;
 
