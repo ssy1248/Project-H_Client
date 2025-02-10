@@ -24,7 +24,6 @@ public class TownManager : MonoBehaviour
 
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
-    [SerializeField] UIStart uiStartTemp;
 
     private const string DefaultPlayerPath = "Player/Player1";
 
@@ -265,8 +264,8 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            uiStartTemp.loginObject.SetActive(false);
-            uiStartTemp.chuseObject.SetActive(true);
+            uiStart.loginObject.SetActive(false);
+            uiStart.chuseObject.SetActive(true);
         }
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
@@ -274,14 +273,20 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Player.ToString());
+        Spawn(data.Player);
     }
 
     //private Dictionary<int, Player> playerList = new();
     // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
+    // 여기 패킷에 자기 자신이 몇번인지 추가해줬으면 좋겠습니다.
     public void AllSpawn(S_Spawn data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
+        foreach (PlayerInfo player in data.Players)
+        {
+            Spawn(player);
+        }
     }
 
     // 나가면 삭제해주기 
@@ -343,14 +348,18 @@ public class TownManager : MonoBehaviour
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
 
-    public void Spawn(PlayerInfo playerInfo)
+    // 자기 자신 스폰용도 
+    public void Spawn(PlayerInfo playerInfo , bool isPlayer = false)
     {
         Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
+        if (isPlayer)
+        {
+            MyPlayer = CreatePlayer(playerInfo, spawnPos);
+            MyPlayer.SetIsMine(true);
 
-        MyPlayer = CreatePlayer(playerInfo, spawnPos);
-        MyPlayer.SetIsMine(true);
-
-        ActivateGameUI();
+            ActivateGameUI();
+        }
+        CreatePlayer(playerInfo, spawnPos);
     }
 
     private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
