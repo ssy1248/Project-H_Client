@@ -285,8 +285,10 @@ public class TownManager : MonoBehaviour
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
         Debug.Log(data);
+        Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
+            Debug.Log("포이치 들어옴");
             if (player.PlayerId == data.UserId)
             {
                 Spawn(player,true);
@@ -394,7 +396,8 @@ public class TownManager : MonoBehaviour
             ActivateGameUI();
             return;
         }
-        CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
+        //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
+        CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
     }
 
     private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
