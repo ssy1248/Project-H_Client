@@ -22,7 +22,6 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
-    [SerializeField] private GameObject spawnPoint;
 
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
@@ -292,7 +291,10 @@ public class TownManager : MonoBehaviour
             {
                 Spawn(player,true);
             }
-            Spawn(player);
+            else
+            {
+                Spawn(player);
+            }
         }
     }
     // 나가면 삭제해주기 
@@ -384,13 +386,15 @@ public class TownManager : MonoBehaviour
     {
         if (isPlayer)
         {
+            Debug.Log("플레이어 입니다.");
             Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
 
             ActivateGameUI();
+            return;
         }
-        CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
+        CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
     }
 
     private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
@@ -406,7 +410,7 @@ public class TownManager : MonoBehaviour
         string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, DefaultPlayerPath);
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
-        var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity, spawnPoint.transform);
+        var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
         player.Move(spawnPos, Quaternion.identity);
         player.SetPlayerId(playerInfo.PlayerId);
         player.SetNickname(playerInfo.Nickname);
