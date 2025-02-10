@@ -255,29 +255,71 @@ public class TownManager : MonoBehaviour
 
     }
 
-    //private Dictionary<int, Player> playerList = new();
-    #region 고쳐야할곳
-    // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
-    public void AllSpawn()
-    {
-
-    }
     // 나가면 삭제해주기 
     public void Despawn()
     {
 
     }
-    //아마 아이디 받은뒤 해당 player 움직여 주는걸로 압니다.
-    public void AllMove()
+    //private Dictionary<int, Player> playerList = new();
+    // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
+    // players -> repeated PlayerInfo, storeList -> itemInfo
+    public void AllSpawn(PlayerInfo[] players, ItemInfo storeList)
     {
+        // 여러 플레이어 정보를 순회합니다.
+        foreach (PlayerInfo info in players)
+        {
+            // 이미 존재하는 플레이어라면(예를 들어, 이미 생성된 경우) 필요한 데이터 업데이트를 할 수 있음.
+            if (playerList.ContainsKey(info.PlayerId))
+            {
+                // 기존 플레이어의 위치, 애니메이션, 기타 정보 업데이트가 필요하다면 여기서 처리
+                // 예시: AllMove(info.PlayerId, info.Transform);
+            }
+            else
+            {
+                // 플레이어가 없다면 스폰 처리
+                Vector3 spawnPos = CalculateSpawnPosition(info.Transform);
+                Player newPlayer = CreatePlayer(info, spawnPos);
+                // 여기서 추가적인 초기화가 필요하다면 수행합니다.
+            }
+        }
 
+        // storeList 처리 (상점 관련 데이터가 있을 경우)
+        // 예: UpdateStoreUI(storeList);
+    }
+    //아마 아이디 받은뒤 해당 player 움직여 주는걸로 압니다.
+    public void AllMove(int playerId, TransformInfo transform)
+    {
+        // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
+        Player player = GetPlayerAvatarById(playerId);
+        if (player == null)
+        {
+            Debug.LogWarning("Player with ID " + playerId + " not found.");
+            return;
+        }
+
+        // TransformInfo를 이용해 새로운 위치와 회전값을 계산합니다.
+        Vector3 targetPos = new Vector3(transform.PosX, transform.PosY, transform.PosZ);
+        // 여기서는 y축 회전만 적용한다고 가정 (필요시 다른 축도 적용)
+        Quaternion targetRot = Quaternion.Euler(0, transform.Rot, 0);
+
+        // 플레이어의 Move() 메서드를 호출하여 부드러운 이동 및 회전 처리를 위임합니다.
+        player.Move(targetPos, targetRot);
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
-    public void AllAnimation()
+    // playerList에서 받은 id를 dictionary에서 검색한 후 그 플레이어
+    public void AllAnimation(int playerId, int animCode)
     {
+        // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
+        Player player = GetPlayerAvatarById(playerId);
+        if (player == null)
+        {
+            Debug.LogWarning("Player with ID " + playerId + " not found for animation.");
+            return;
+        }
 
+        // 플레이어의 애니메이션 재생 메서드 호출
+        player.PlayAnimation(animCode);
     }
-    #endregion
     // 채팅 받아오기
     public void ChatResponse()
     {
