@@ -5,6 +5,7 @@ public class PageManager : MonoBehaviour
 {
     public GameObject[] consumablePages; // 소모품 페이지들
     public GameObject[] equipmentPages;  // 장비 페이지들
+    public GameObject[] sellPages;  // 장비 페이지들
     private GameObject[] currentPages;   // 현재 활성화된 페이지 리스트
     private int currentPageIndex = 0;
 
@@ -59,12 +60,19 @@ public class PageManager : MonoBehaviour
         currentPageIndex = 0;
         UpdatePageVisibility();
     }
+    public void SwitchToSellPages()
+    {
+        currentPages = sellPages;
+        currentPageIndex = 0;
+        UpdatePageVisibility();
+    }
 
     private void UpdatePageVisibility()
     {
         // 모든 페이지 비활성화 후 현재 페이지 활성화
         DisableAllPages(consumablePages);
         DisableAllPages(equipmentPages);
+        DisableAllPages(sellPages);
 
         if (currentPages.Length > 0 && currentPages[currentPageIndex] != null)
         {
