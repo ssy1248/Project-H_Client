@@ -276,8 +276,12 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Player.ToString());
     }
 
+    // 나가면 삭제해주기 
+    public void Despawn()
+    {
+
+    }
     //private Dictionary<int, Player> playerList = new();
-    #region 고쳐야할곳
     // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
     public void AllSpawn(S_Spawn data)
     {
@@ -303,7 +307,6 @@ public class TownManager : MonoBehaviour
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
     }
-    #endregion
     // 채팅 받아오기
     public void ChatResponse(S_Chat data)
     {
