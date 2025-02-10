@@ -17,7 +17,7 @@ public class MyPlayer : MonoBehaviour
     private readonly List<int> animHash = new List<int>();
 
     // 100ms마다 이동 패킷 전송 
-    private float sendMovePacketInterval = 0.1f; // 100ms
+    private float sendMovePacketInterval = 1f; // 100ms
     // 마지막으로 패킷을 전송한 시간
     private float lastSendTime = 0f;
 

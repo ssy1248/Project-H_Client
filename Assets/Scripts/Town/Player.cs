@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     private bool isInitialized = false;
 
     private Vector3 lastPos;
-
+    
     private void Start()
     {
         Avatar = GetComponent<Avatar>();

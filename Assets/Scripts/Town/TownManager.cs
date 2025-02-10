@@ -136,7 +136,7 @@ public class TownManager : MonoBehaviour
            // Nickname = nickname,
             Class = jobIndex
         };
-
+        uiStart.chuseObject.SetActive(false);
         GameManager.Network.Send(selectCharacterPacket);
     }
 
@@ -288,24 +288,48 @@ public class TownManager : MonoBehaviour
             Spawn(player);
         }
     }
-
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
     }
-    //아마 아이디 받은뒤 해당 player 움직여 주는걸로 압니다.
     public void AllMove(S_Move data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+
+        Player player = GetPlayerAvatarById(data.PlayerId);
+        if (player == null)
+        {
+            Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
+            return;
+        }
+
+        // TransformInfo를 이용해 새로운 위치와 회전값을 계산합니다.
+        Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
+        // 여기서는 y축 회전만 적용한다고 가정 (필요시 다른 축도 적용)
+        Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
+
+        // 플레이어의 Move() 메서드를 호출하여 부드러운 이동 및 회전 처리를 위임합니다.
+        player.Move(targetPos, targetRot);
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
     public void AllAnimation(S_Animation data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+
+        // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
+        Player player = GetPlayerAvatarById(data.PlayerId);
+        if (player == null)
+        {
+            Debug.LogWarning("Player with ID " + data.PlayerId + " not found for animation.");
+            return;
+        }
+
+        // 플레이어의 애니메이션 재생 메서드 호출
+        player.PlayAnimation(data.AnimCode);
     }
     // 채팅 받아오기
     public void ChatResponse(S_Chat data)
@@ -351,15 +375,15 @@ public class TownManager : MonoBehaviour
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo , bool isPlayer = false)
     {
-        Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
         if (isPlayer)
         {
+            Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
 
             ActivateGameUI();
         }
-        CreatePlayer(playerInfo, spawnPos);
+        CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
     }
 
     private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
