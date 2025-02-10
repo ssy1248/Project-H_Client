@@ -285,7 +285,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
         foreach (PlayerInfo player in data.Players)
         {
-            if (player)
+            if (player.PlayerId == data.UserId)
             {
                 Spawn(player,true);
             }
