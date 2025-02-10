@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -21,6 +22,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+    [SerializeField] private GameObject spawnPoint;
 
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
@@ -283,6 +285,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
+        Debug.Log(data);
         foreach (PlayerInfo player in data.Players)
         {
             if (player.PlayerId == data.UserId)
@@ -403,7 +406,7 @@ public class TownManager : MonoBehaviour
         string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, DefaultPlayerPath);
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
-        var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
+        var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity, spawnPoint.transform);
         player.Move(spawnPos, Quaternion.identity);
         player.SetPlayerId(playerInfo.PlayerId);
         player.SetNickname(playerInfo.Nickname);
