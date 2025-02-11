@@ -106,6 +106,9 @@ public class UIRegister : MonoBehaviour
         // 회원가입 성공 메시지
         txtMessage.text = "회원가입 성공! 로그인해주세요.";
         txtMessage.color = Color.green;
+
+        // 비밀번호 확인 필드 비활성화
+        inputPasswordConfirm.interactable = false;
     }
 
     public void ConfirmCharacterSelection()
