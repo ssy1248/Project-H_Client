@@ -127,7 +127,15 @@ public class UIRegister : MonoBehaviour
 
     private void StartGame()
     {
-        TownManager.Instance.GameStart("defaultServerUrl", "3000", inputNickname.text, selectedCharacterIndex);
+        // 서버 URL, 포트, 닉네임, 캐릭터 인덱스를 GameStart에 전달
+        string serverUrl = "127.0.0.1"; // 예시: 서버 URL 입력 필드
+        string port = "5555";  // 예시: 포트 입력 필드
+
+        // 캐릭터 선택과 닉네임은 이미 입력이 끝났다고 가정
+        string nickname = inputNickname.text;
+        int selectedCharacterIndex = this.selectedCharacterIndex;
+
+        TownManager.Instance.GameStart(serverUrl, port, nickname , selectedCharacterIndex);
         gameObject.SetActive(false);
     }
 }

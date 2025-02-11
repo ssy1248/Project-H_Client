@@ -1,49 +1,52 @@
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIStart : MonoBehaviour
 {
-    [SerializeField] private GameObject charList;
-    [SerializeField] private Button[] charBtns;
-    [SerializeField] private Button localServerBtn;
-    [SerializeField] private Button btnConfirm;
-    [SerializeField] private Button btnBack;
+    [SerializeField] private GameObject loginPanel;
+    [SerializeField] private GameObject registerPanel;
+    [SerializeField] private GameObject characterPanel;
+
+    [Header("Register")]
+    [SerializeField] private TMP_InputField registerEmail;
+    [SerializeField] private TMP_InputField registerPassword;
     [SerializeField] private TMP_InputField inputNickname;
-    [SerializeField] private TMP_InputField inputPort;
+    [SerializeField] private Button btnRegister;
+
+    [Header("Login")]
+    [SerializeField] private TMP_InputField loginEmail;
+    [SerializeField] private TMP_InputField loginPassword;
+    [SerializeField] private Button btnLogin;
+
+    [SerializeField] private Button btnConfirmCharacter;
+    [SerializeField] private Button[] charBtns;
+    [SerializeField] private TMP_Text txtCharDescription;
     [SerializeField] private TMP_Text txtMessage;
 
-    private TMP_Text placeHolder;
+    private int selectedCharacterIndex = 0;
 
-    private int classIdx = 0;
-    private string serverUrl;
-    private string nickname;
-    private string port;
+    private readonly string[] characterDescriptions =
+    {
+        "섭르탄\n용감한 전사입니다.",
+        "클르탄\n신비로운 마법사입니다.",
+        "디르탄\n날렵한 궁수입니다.",
+        "큐르탄\n강력한 탱커입니다.",
+        "기르탄\n치유의 성직자입니다."
+    };
 
-    private const string DefaultServerMessage = "Input Server";
-    private const string DefaultNicknameMessage = "닉네임 (2~10글자)";
-    private const string WelcomeMessage = "Welcome!";
-    private const string ShortNicknameError = "이름을 2글자 이상 입력해주세요!";
-    private const string LongNicknameError = "이름을 10글자 이하로 입력해주세요!";
+    private const string EmailPasswordError = "이메일과 비밀번호를 입력하세요!";
+    private const string NicknameError = "닉네임을 입력하세요! (2~10자)";
 
     void Start()
     {
-        placeHolder = inputNickname.placeholder.GetComponent<TMP_Text>();
-        btnBack.onClick.AddListener(SetServerUI);
-        localServerBtn.onClick.AddListener(OnClickLocalServer);
-        SetServerUI();
         InitializeCharacterButtons();
-    }
+        btnRegister.onClick.AddListener(HandleRegistration);
+        btnLogin.onClick.AddListener(HandleLogin);
+        btnConfirmCharacter.onClick.AddListener(StartGame);
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Return))
-        {
-            if (inputNickname.IsActive())
-                btnConfirm.onClick.Invoke();
-        }
+        SetRegisterUI();
     }
 
     private void InitializeCharacterButtons()
@@ -57,82 +60,82 @@ public class UIStart : MonoBehaviour
 
     private void SelectCharacter(int idx)
     {
-        charBtns[classIdx].transform.GetChild(0).gameObject.SetActive(false);
-        classIdx = idx;
-        charBtns[classIdx].transform.GetChild(0).gameObject.SetActive(true);
+        charBtns[selectedCharacterIndex].transform.GetChild(0).gameObject.SetActive(false);
+        selectedCharacterIndex = idx;
+        charBtns[selectedCharacterIndex].transform.GetChild(0).gameObject.SetActive(true);
+
+        txtCharDescription.text = characterDescriptions[selectedCharacterIndex];
     }
 
-    private void SetServerUI()
+    private void SetRegisterUI()
     {
-        UpdateUI(WelcomeMessage, Color.white, DefaultServerMessage, false, true);
-        btnConfirm.onClick.RemoveAllListeners();
-        btnConfirm.onClick.AddListener(ConfirmServer);
+        registerPanel.SetActive(true);
+        loginPanel.SetActive(false);
+        characterPanel.SetActive(false);
+        txtMessage.text = string.Empty;
     }
 
-    private void SetNicknameUI()
+    private void ShowLoginUI()
     {
-        UpdateUI(WelcomeMessage, Color.white, DefaultNicknameMessage, true, false);
-        btnConfirm.onClick.RemoveAllListeners();
-        btnConfirm.onClick.AddListener(ConfirmNickname);
+        registerPanel.SetActive(false);
+        loginPanel.SetActive(true);
+        txtMessage.text = string.Empty;
     }
 
-    private void UpdateUI(string message, Color messageColor, string placeholderText, bool showCharList, bool showPortInput)
+    private void HandleRegistration()
     {
-        txtMessage.text = message;
-        txtMessage.color = messageColor;
-
-        placeHolder.text = placeholderText;
-        inputNickname.text = string.Empty;
-
-        charList.SetActive(showCharList);
-        btnBack.gameObject.SetActive(showCharList);
-        localServerBtn.gameObject.SetActive(showPortInput);
-        inputPort.gameObject.SetActive(showPortInput);
-    }
-
-    private void OnClickLocalServer()
-    {
-        serverUrl = "127.0.0.1";
-        port = "3000";
-        localServerBtn.gameObject.SetActive(false);
-        SetNicknameUI();
-    }
-
-    private void ConfirmServer()
-    {
-        if (string.IsNullOrWhiteSpace(inputNickname.text))
+        if (string.IsNullOrWhiteSpace(registerEmail.text) || string.IsNullOrWhiteSpace(registerPassword.text))
         {
-            DisplayError(DefaultServerMessage);
+            txtMessage.text = EmailPasswordError;
+            txtMessage.color = Color.red;
             return;
         }
 
-        serverUrl = inputNickname.text;
-        port = inputPort.text;
-        SetNicknameUI();
+        if (string.IsNullOrWhiteSpace(inputNickname.text) || inputNickname.text.Length < 2 || inputNickname.text.Length > 10)
+        {
+            txtMessage.text = NicknameError;
+            txtMessage.color = Color.red;
+            return;
+        }
+
+        txtMessage.text = "회원가입 성공! 로그인하세요.";
+        txtMessage.color = Color.green;
+
+        Invoke(nameof(ShowLoginUI), 1.5f);
     }
 
-    private void ConfirmNickname()
+    private void HandleLogin()
     {
-        if (inputNickname.text.Length < 2)
+        if (string.IsNullOrWhiteSpace(loginEmail.text) || string.IsNullOrWhiteSpace(loginPassword.text))
         {
-            DisplayError(ShortNicknameError);
+            txtMessage.text = EmailPasswordError;
+            txtMessage.color = Color.red;
             return;
         }
 
-        if (inputNickname.text.Length > 10)
-        {
-            DisplayError(LongNicknameError);
-            return;
-        }
+        txtMessage.text = "로그인 성공!";
+        txtMessage.color = Color.green;
 
-        nickname = inputNickname.text;
-        TownManager.Instance.GameStart(serverUrl, port, nickname, classIdx);
+        Invoke(nameof(ShowCharacterSelection), 0.5f);
+    }
+
+    private void ShowCharacterSelection()
+    {
+        loginPanel.SetActive(false);
+        characterPanel.SetActive(true);
+    }
+
+    private void StartGame()
+    {
+        // 서버 URL, 포트, 닉네임, 캐릭터 인덱스를 GameStart에 전달
+        string serverUrl = "127.0.0.1"; // 예시: 서버 URL 입력 필드
+        string port = "3000";  // 예시: 포트 입력 필드
+
+        // 캐릭터 선택과 닉네임은 이미 입력이 끝났다고 가정
+        string nickname = inputNickname.text;
+        int selectedCharacterIndex = this.selectedCharacterIndex;
+
+        TownManager.Instance.GameStart(serverUrl, port, nickname , selectedCharacterIndex);
         gameObject.SetActive(false);
-    }
-
-    private void DisplayError(string errorMessage)
-    {
-        txtMessage.text = errorMessage;
-        txtMessage.color = Color.red;
     }
 }
