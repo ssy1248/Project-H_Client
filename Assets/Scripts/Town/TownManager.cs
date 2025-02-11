@@ -64,6 +64,14 @@ public class TownManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PartyRequest(MyPlayer.PlayerId);
+        }
+    }
+
     private void InitializePlayerDatabase()
     {
         playerDb[1001] = "Player/Player1";
@@ -379,6 +387,15 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 리스판스 : {data}");
+        if(data.Success)
+        {
+            // 파티 생성
+        } 
+        else
+        {
+            // 파티 생성 실패
+        }
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
