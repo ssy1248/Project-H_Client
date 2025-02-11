@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIRegister : MonoBehaviour
+public class UIStartS : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputPort;
     [SerializeField] private Button localServerBtn;
@@ -30,6 +30,11 @@ public class UIRegister : MonoBehaviour
     [SerializeField] private Button[] charBtns;
     [SerializeField] private TMP_Text txtCharDescription;
     [SerializeField] private TMP_Text txtMessage;
+
+    [SerializeField] GameObject conectObject;
+    public GameObject loginObject;
+    [SerializeField] GameObject registerObject;
+    public GameObject chuseObject;
 
     private int classIdx = 0;
     private string serverUrl;
@@ -145,6 +150,19 @@ public class UIRegister : MonoBehaviour
         btnBack.gameObject.SetActive(true);
     }
 
+    public void Login()
+    {
+        Debug.Log(loginEmail.text + loginPassword.text);
+
+        TownManager.Instance.Login(loginEmail.text, loginPassword.text);
+    }
+    public void Register()
+    {
+        Debug.Log(inputNickname.text);
+
+        TownManager.Instance.Register(registerEmail.text, inputNickname.text, registerPassword.text);
+    }
+
     private void HandleRegistration()
     {
         if (string.IsNullOrWhiteSpace(registerEmail.text) || string.IsNullOrWhiteSpace(registerPassword.text))
@@ -178,6 +196,7 @@ public class UIRegister : MonoBehaviour
 
         txtMessage.text = "로그인 성공!";
         txtMessage.color = Color.green;
+
 
         Invoke(nameof(ShowCharacterSelection), 0.5f);
     }
