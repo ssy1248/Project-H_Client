@@ -389,24 +389,25 @@ public class TownManager : MonoBehaviour
         if (isPlayer)
         {
             Debug.Log("플레이어 입니다.");
-            Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
-            MyPlayer = CreatePlayer(playerInfo, spawnPos);
+            //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
+            MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
 
             ActivateGameUI();
             return;
         }
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
-        CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
+        Player player = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
+        player.SetIsMine(false);
     }
 
-    private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
-    {
-        Vector3 spawnPos = spawnArea.position;
-        spawnPos.x += transformInfo.PosX;
-        spawnPos.z += transformInfo.PosZ;
-        return spawnPos;
-    }
+    //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
+    //{
+    //    Vector3 spawnPos = spawnArea.position;
+    //    spawnPos.x += transformInfo.PosX;
+    //    spawnPos.z += transformInfo.PosZ;
+    //    return spawnPos;
+    //}
 
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {

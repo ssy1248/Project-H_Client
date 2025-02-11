@@ -1,6 +1,7 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SocialPlatforms;
 
 public class Player : MonoBehaviour
 {
@@ -83,15 +84,16 @@ public class Player : MonoBehaviour
 
     private void MoveSmoothly()
     {
-        float distance = Vector3.Distance(transform.position, goalPos);
+        float distance = Vector3.Distance(transform.localPosition, goalPos);
 
         if (distance > TeleportDistanceThreshold)
         {
-            transform.position = goalPos; 
+
+            transform.localPosition = goalPos; 
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, goalPos, Time.deltaTime * SmoothMoveSpeed);
+            transform.localPosition = Vector3.Lerp(transform.position, goalPos, Time.deltaTime * SmoothMoveSpeed);
         }
     }
 
