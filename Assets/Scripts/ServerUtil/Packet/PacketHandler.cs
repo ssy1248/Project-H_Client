@@ -64,6 +64,7 @@ class PacketHandler
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_PartyResponse enterPacket) return;
+        TownManager.Instance.PartyResponse(enterPacket);
     }
     public static void S_EnterDungeonHandler(PacketSession session, IMessage packet)
     {
