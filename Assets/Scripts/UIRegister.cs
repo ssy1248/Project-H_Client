@@ -87,6 +87,15 @@ public class UIRegister : MonoBehaviour
 
     private void HandleRegistration()
     {
+        // 이메일과 비밀번호 입력 확인
+        if (string.IsNullOrWhiteSpace(inputEmail.text) || string.IsNullOrWhiteSpace(inputPassword.text))
+        {
+            txtMessage.text = "이메일과 비밀번호를 입력하세요!";
+            txtMessage.color = Color.red;
+            return;
+        }
+
+        // 비밀번호와 비밀번호 확인이 일치하는지 확인
         if (inputPassword.text != inputPasswordConfirm.text)
         {
             txtMessage.text = PasswordMismatchError;
@@ -94,6 +103,7 @@ public class UIRegister : MonoBehaviour
             return;
         }
 
+        // 회원가입 성공 메시지
         txtMessage.text = "회원가입 성공! 로그인해주세요.";
         txtMessage.color = Color.green;
     }
