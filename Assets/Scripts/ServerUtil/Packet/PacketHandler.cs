@@ -39,6 +39,7 @@ class PacketHandler
     public static void S_AnimationHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Animation enterPacket) return;
+        TownManager.Instance.AllAnimation(enterPacket);
     }
     public static void S_ChatHandler(PacketSession session, IMessage packet)
     {

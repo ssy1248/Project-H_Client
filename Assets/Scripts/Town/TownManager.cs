@@ -428,7 +428,8 @@ public class TownManager : MonoBehaviour
 
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {
-        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, DefaultPlayerPath);
+        Debug.Log(playerInfo.Class);
+        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player"+ playerInfo.Class));
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);

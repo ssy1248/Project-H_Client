@@ -10,6 +10,7 @@ public class UIAnimation : MonoBehaviour
 
     [SerializeField] private MyPlayer mPlayer;
     [SerializeField] private GameObject inventory;
+    [SerializeField] GameObject marketplace;
 
     [SerializeField] int inventoryPage = 1;
     [SerializeField] int slotInPage = 10;
@@ -19,13 +20,12 @@ public class UIAnimation : MonoBehaviour
     void Start()
     {
         mPlayer = TownManager.Instance.MyPlayer?.MPlayer;
-
+        InitiallzeSlots();
         if (mPlayer == null)
         {
             Debug.LogError("MyPlayer instance is missing or not initialized.");
             return;
         }
-
         InitializeButtons();
     }
 
@@ -54,9 +54,11 @@ public class UIAnimation : MonoBehaviour
         for (int i = 0; i < slotInPage; i++)
         {
             GameObject slotTemp = Instantiate(slotObject, inventory.transform);
+            slotTemp.SetActive(false);
+            RectTransform slotTr = slotTemp.GetComponent<RectTransform>();
+            slotTr.localPosition = new Vector3(slotTr.localPosition.x, slotTr.localPosition.y - i* slotDistance, slotTr.localPosition.z);
             slots.Add(i, slotTemp);
         }
-        
     }
     private void Update()
     {
@@ -64,16 +66,29 @@ public class UIAnimation : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.I))
+        switch (true)
         {
-            if (inventory.activeSelf)
-            {
-                inventory.SetActive(false);
-            }
-            else
-            {
-                inventory.SetActive(true);
-            }
+            // 인벤토리 키 
+            case var _ when Input.GetKeyDown(KeyCode.I):
+                if (inventory.activeSelf)
+                {
+                    inventory.SetActive(false);
+                }
+                else
+                {
+                    inventory.SetActive(true);
+                }
+                break;
+            case var _ when Input.GetKeyDown(KeyCode.M):
+                if (marketplace.activeSelf)
+                {
+                    marketplace.SetActive(false);
+                }
+                else
+                {
+                    marketplace.SetActive(true);
+                }
+                break;
         }
     }
 }
