@@ -25,11 +25,11 @@ public class UIRegister : MonoBehaviour
 
     private readonly string[] characterDescriptions =
     {
-        "섭르탄 : 용감한 전사입니다.",
-        "클르탄 : 신비로운 마법사입니다.",
-        "디르탄 : 날렵한 궁수입니다.",
-        "큐르탄 : 강력한 탱커입니다.",
-        "기르탄 : 치유의 성직자입니다."
+        "섭르탄\n용감한 전사입니다.",
+        "클르탄\n신비로운 마법사입니다.",
+        "디르탄\n날렵한 궁수입니다.",
+        "큐르탄\n강력한 탱커입니다.",
+        "기르탄\n치유의 성직자입니다."
     };
 
     private const string PasswordMismatchError = "비밀번호가 일치하지 않습니다.";
