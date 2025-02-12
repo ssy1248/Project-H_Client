@@ -8,6 +8,7 @@ public class UIPartyPopUp : MonoBehaviour
 {
     [SerializeField] private GameObject PartyCreateObject;
     [SerializeField] private TMP_InputField partyNameInputField;
+    [SerializeField] private TMP_InputField partySearchInputField;
     void Start()
     {
         PartyCreateObject.SetActive(false);
@@ -18,14 +19,25 @@ public class UIPartyPopUp : MonoBehaviour
 
     }
 
+    public void PartySearchBtnClick()
+    {
+        PartySearch();
+    }
+
     public void PartyCreateBtnClick()
     {
-
+        PartyCreateRequest();
     }
 
     public void PartyBtnClick()
     {
         RequestPartyList();
+    }
+
+    private void PartySearch()
+    {
+        C_SearchPartyRequest partySearchPacket = new C_SearchPartyRequest { PartyName = partySearchInputField.text };
+        GameManager.Network.Send(partySearchPacket);
     }
 
     private void RequestPartyList()

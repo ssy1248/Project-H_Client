@@ -390,10 +390,18 @@ public class TownManager : MonoBehaviour
             // 파티 생성 실패
         }
     }
+    // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        //StartCoroutine("errorText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
+    }
+    // 한개 파티 조회
+    public void PartySearchResponse(S_PartySearchResponse data)
+    {
+        //StartCoroutine("errorText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
     // 던전 쪽 추후 추가 예정
