@@ -64,14 +64,6 @@ public class TownManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            PartyRequest(MyPlayer.PlayerId);
-        }
-    }
-
     private void InitializePlayerDatabase()
     {
         playerDb[1001] = "Player/Player1";
@@ -222,11 +214,12 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest(int userId)
+    public void PartyRequest(int userId, string partyName)
     {
         var partyPacket = new C_PartyRequest
         {
-            UserId = userId
+            UserId = userId,
+            PartyName = partyName,
         };
 
         GameManager.Network.Send(partyPacket);
@@ -387,7 +380,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"파티 리스판스 : {data}");
+        Debug.Log($"파티 생성 받은 데이터 : {data}");
         if(data.Success)
         {
             // 파티 생성
@@ -396,6 +389,20 @@ public class TownManager : MonoBehaviour
         {
             // 파티 생성 실패
         }
+    }
+    // 모든 파티 조회
+    public void PartyListResponse(S_PartySearchResponse data)
+    {
+        //StartCoroutine("errorText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
+    }
+    // 한개 파티 조회
+    public void PartySearchResponse(S_PartySearchResponse data)
+    {
+        //StartCoroutine("errorText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */

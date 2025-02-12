@@ -13,5 +13,6 @@ public class CharacterSelector : MonoBehaviour
     void Selector()
     {
         TownManager.Instance.SelectCharacterRequest(id);
+        Debug.Log($"선택한 플레이어 아이디 : {id}");
     }
 }
