@@ -58,6 +58,20 @@ class PacketManager
         _handler.Add((ushort)MsgId.SScreentext, PacketHandler.S_ScreenTextHandler);
         _onRecv.Add((ushort)MsgId.SScreendone, MakePacket<S_ScreenDone>);
         _handler.Add((ushort)MsgId.SScreendone, PacketHandler.S_ScreenDoneHandler);
+        _onRecv.Add((ushort)MsgId.SPartysearchresponse, MakePacket<S_PartySearchResponse>);
+        _handler.Add((ushort)MsgId.SPartysearchresponse, PacketHandler.S_PartySearchHandler);
+        _onRecv.Add((ushort)MsgId.SPartyresultresponse, MakePacket<S_PartyResultResponse>);
+        _handler.Add((ushort)MsgId.SPartyresultresponse, PacketHandler.S_PartyResultHandler);
+        _onRecv.Add((ushort)MsgId.SMarketlist, MakePacket<S_marketList>);
+        _handler.Add((ushort)MsgId.SMarketlist, PacketHandler.S_marketListHandler);
+        _onRecv.Add((ushort)MsgId.SMarketmylist, MakePacket<S_marketMyList>);
+        _handler.Add((ushort)MsgId.SMarketmylist, PacketHandler.S_marketMyListHandler);
+        _onRecv.Add((ushort)MsgId.SSellinmarket, MakePacket<S_SellInMarket>);
+        _handler.Add((ushort)MsgId.SSellinmarket, PacketHandler.S_SellInMarketHandler);
+        _onRecv.Add((ushort)MsgId.SBuyinmarket, MakePacket<S_BuyInMarket>);
+        _handler.Add((ushort)MsgId.SBuyinmarket, PacketHandler.S_BuyInMarketHandler);
+        _onRecv.Add((ushort)MsgId.SInventoryresponse, MakePacket<S_InventoryResponse>);
+        _handler.Add((ushort)MsgId.SInventoryresponse, PacketHandler.S_InventoryHandler);
         Debug.Log("핸들러 등록 완료");
     }
 

@@ -11,6 +11,7 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] private MyPlayer mPlayer;
     [SerializeField] private GameObject inventory;
     [SerializeField] GameObject marketplace;
+    [SerializeField] private GameObject party;
 
     [SerializeField] int inventoryPage = 1;
     [SerializeField] int slotInPage = 10;
@@ -27,6 +28,8 @@ public class UIAnimation : MonoBehaviour
             return;
         }
         InitializeButtons();
+        inventory.SetActive(false);
+        marketplace.SetActive(false);
     }
 
     private void InitializeButtons()
