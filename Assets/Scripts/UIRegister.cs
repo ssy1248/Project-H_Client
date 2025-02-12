@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIStartS : MonoBehaviour
+public class UIRegister : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputPort;
     [SerializeField] private Button localServerBtn;
@@ -59,7 +59,7 @@ public class UIStartS : MonoBehaviour
         InitializeCharacterButtons();
         btnRegister.onClick.AddListener(HandleRegistration);
         btnLogin.onClick.AddListener(HandleLogin);
-        btnConfirmCharacter.onClick.AddListener(StartGame);
+        btnConfirmCharacter.onClick.AddListener(Selector);
         localServerBtn.onClick.AddListener(OnClickLocalServer);
 
         btnBack.onClick.AddListener(ToggleScreens);
@@ -121,6 +121,12 @@ public class UIStartS : MonoBehaviour
         txtCharDescription.text = characterDescriptions[classIdx];
     }
 
+    void Selector()
+    {
+        TownManager.Instance.SelectCharacterRequest(classIdx);
+    }
+
+
     // 첫 화면에 서버와 포트 입력을 위한 UI 표시
     private void SetServerUI()
     {
@@ -133,12 +139,14 @@ public class UIStartS : MonoBehaviour
 
     private void ShowLoginUI()
     {
+        Debug.Log("ShowLoginUI() 호출됨");
+        loginPanel.SetActive(true);
         serverPanel.SetActive(false);
         registerPanel.SetActive(false);
-        loginPanel.SetActive(true);
         characterPanel.SetActive(false);
         txtMessage.text = string.Empty;
         btnBack.gameObject.SetActive(true);
+        StartGame();
     }
 
     private void ShowRegisterUI()
@@ -156,7 +164,7 @@ public class UIStartS : MonoBehaviour
 
         TownManager.Instance.Login(loginEmail.text, loginPassword.text);
     }
-    public void Register()
+    public void Registers()
     {
         Debug.Log(inputNickname.text);
 
@@ -182,7 +190,7 @@ public class UIStartS : MonoBehaviour
         txtMessage.text = "회원가입 성공! 로그인하세요.";
         txtMessage.color = Color.green;
 
-        Invoke(nameof(ShowLoginUI), 0.5f);
+        Invoke(nameof(Registers), 0.5f);
     }
 
     private void HandleLogin()
@@ -197,7 +205,7 @@ public class UIStartS : MonoBehaviour
         txtMessage.text = "로그인 성공!";
         txtMessage.color = Color.green;
 
-
+        Invoke(nameof(Login), 0.5f);
         Invoke(nameof(ShowCharacterSelection), 0.5f);
     }
 
@@ -213,6 +221,7 @@ public class UIStartS : MonoBehaviour
         serverUrl = "127.0.0.1";
         port = "3000";
         localServerBtn.gameObject.SetActive(false);
+        serverPanel.SetActive(false); // 서버 입력 화면 숨김
         ShowLoginUI();
     }
 
@@ -233,7 +242,7 @@ public class UIStartS : MonoBehaviour
     {
         nickname = inputNickname.text;
         TownManager.Instance.GameStart(serverUrl, port, nickname, classIdx);
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private void DisplayError(string errorMessage)
