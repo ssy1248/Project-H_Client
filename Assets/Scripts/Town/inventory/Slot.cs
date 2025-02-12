@@ -23,11 +23,11 @@ public class Slot : MonoBehaviour
     {
         if (!isEquip)
         {
-            TownManager.Instance.EquipItemRequest(itemData.ItemId);
+            //TownManager.Instance.EquipItemRequest(itemData.ItemId);
         }
         else
         {
-            TownManager.Instance.DisrobeItemRequest(itemData.ItemId);
+            //TownManager.Instance.DisrobeItemRequest(itemData.ItemId);
         }
     }
 

@@ -337,7 +337,7 @@ public class TownManager : MonoBehaviour
     public void AllAnimation(S_Animation data)
     {
         StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.ToString());
 
         // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
         Player player = GetPlayerAvatarById(data.PlayerId);
