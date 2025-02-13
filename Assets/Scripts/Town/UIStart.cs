@@ -102,7 +102,7 @@ public class UIStart : MonoBehaviour
     {
         Debug.Log(inputLoginEmail.text + inputLogipasword.text);
 
-        TownManager.Instance.Login(inputLoginEmail.text, inputLogipasword.text);
+        TownManager.Instance.Login(inputLoginEmail.text,inputLogipasword.text);
     }
     public void Register()
     {
