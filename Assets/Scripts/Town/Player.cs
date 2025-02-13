@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public Avatar Avatar { get; private set; }
     public MyPlayer MPlayer { get; private set; }
 
-    public string nickname;
+    private string nickname;
     private UIChat uiChat;
 
     private Vector3 goalPos;
