@@ -134,7 +134,7 @@ public class TownManager : MonoBehaviour
     {
         var selectCharacterPacket = new C_SelectCharacterRequest
         {
-           // Nickname = nickname,
+            // Nickname = nickname,
             Class = jobIndex
         };
         uiStart.chuseObject.SetActive(false);
@@ -292,7 +292,7 @@ public class TownManager : MonoBehaviour
             Debug.Log("포이치 들어옴");
             if (player.PlayerId == data.UserId)
             {
-                Spawn(player,true);
+                Spawn(player, true);
             }
             else
             {
@@ -304,7 +304,7 @@ public class TownManager : MonoBehaviour
     public void Despawn(S_Despawn data)
     {
         StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString());
     }
     public void AllMove(S_Move data)
     {
@@ -380,12 +380,41 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 생성 받은 데이터 : {data}");
+        if (data.Success)
+        {
+            // 파티 생성
+        }
+        else
+        {
+            // 파티 생성 실패
+        }
+    }
+    public void PartyInviteResponse(S_PartyResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 초대 후 받은 데이터 : {data}");
+    }
+    // 모든 파티 조회
+    public void PartyListResponse(S_PartySearchResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
+    }
+    // 한개 파티 조회
+    public void PartySearchResponse(S_PartySearchResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
 
     // 자기 자신 스폰용도 
-    public void Spawn(PlayerInfo playerInfo , bool isPlayer = false)
+    public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
         if (isPlayer)
         {
@@ -413,7 +442,7 @@ public class TownManager : MonoBehaviour
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {
         Debug.Log(playerInfo.Class);
-        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player"+ playerInfo.Class));
+        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player" + playerInfo.Class));
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
