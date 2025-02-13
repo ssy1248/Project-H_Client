@@ -18,13 +18,13 @@ public class TownManager : MonoBehaviour
     [SerializeField] private CinemachineFreeLook freeLook;
     [SerializeField] private Transform spawnArea;
     [SerializeField] private EventSystem eSystem;
-    [SerializeField] private UIStart uiStart;
+    [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
     [SerializeField] private GameObject partyPrefabSpawnPoint;
 
-    // Å×½ºÆ® ¿ëµµ·Î »ý¼º
+    // ï¿½×½ï¿½Æ® ï¿½ëµµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] GameObject errorText;
 
     private const string DefaultPlayerPath = "Player/Player1";
@@ -59,7 +59,7 @@ public class TownManager : MonoBehaviour
     {
         if (!GameManager.Network.IsConnected)
         {
-            uiStart.gameObject.SetActive(true);
+            UiRegister.gameObject.SetActive(true);
         }
         else
         {
@@ -89,10 +89,10 @@ public class TownManager : MonoBehaviour
         /*
         var enterPacket = new C_RegisterRequest
         {
-            //¿©±â¿¡ ÀÌ¸ÞÀÏ ¿¬°á 
+            //ï¿½ï¿½ï¿½â¿¡ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             Email = "aaaaaaa",
             Nickname = GameManager.Instance.UserName,
-            //¿©±â¿¡ ºñ¹Ð¹øÈ£ ¿¬°á
+            //ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½
             Password = "aaaaaaaa"
         };
 
@@ -106,16 +106,16 @@ public class TownManager : MonoBehaviour
         GameManager.Network.Send(enterPacket);*/
     }
 
-    /* ÀÓ½Ã·Î ¸¸µç º¸³»´Â ¸Þ¼­µå µé */
-    // ÇØ¾ßÇÒ ÀÏ ÆÐÅ¶¿¡ µé¾î°¥ ¸Å°³º¯¼ö·Î ¹Þ°Å³ª ´Ù¸¥°÷¿¡¼­ ¹Þ¾Æ¿À´Â Çü½ÄÀ¸·Î º¸³¾ ÆÐÅ¶ Â¥±â 
+    /* ï¿½Ó½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ */
+    // ï¿½Ø¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ°Å³ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ Â¥ï¿½ï¿½ 
     public void Register(string email, string nickname, string password)
     {
         var enterPacket = new C_RegisterRequest
         {
-            //¿©±â¿¡ ÀÌ¸ÞÀÏ ¿¬°á 
+            //ï¿½ï¿½ï¿½â¿¡ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             Email = email,
             Nickname = nickname,//GameManager.Instance.UserName,
-            //¿©±â¿¡ ºñ¹Ð¹øÈ£ ¿¬°á
+            //ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½
             Password = password
         };
         GameManager.Network.Send(enterPacket);
@@ -124,15 +124,15 @@ public class TownManager : MonoBehaviour
     {
         var enterPacket = new C_LoginRequest
         {
-            //¿©±â¿¡ ÀÌ¸ÞÀÏ ¿¬°á 
+            //ï¿½ï¿½ï¿½â¿¡ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             Email = email,
-            //¿©±â¿¡ ºñ¹Ð¹øÈ£ ¿¬°á
+            //ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½
             Password = password
         };
 
         GameManager.Network.Send(enterPacket);
     }
-    // ÆÐÅ¶ ¸í¼¼¿¡¼­´Â ´Ð³×ÀÓ, Å¬·¡½ºÀÎµ¥ »ý¼ºÀÚ¸¦ º¸´Ï Å¬·¡½º¹Û¿¡ ¾øÀ½
+    // ï¿½ï¿½Å¶ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½, Å¬ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void SelectCharacterRequest(/*string nickname*/ int jobIndex)
     {
         var selectCharacterPacket = new C_SelectCharacterRequest
@@ -140,7 +140,7 @@ public class TownManager : MonoBehaviour
             // Nickname = nickname,
             Class = jobIndex
         };
-        uiStart.chuseObject.SetActive(false);
+        UiRegister.chuseObject.SetActive(false);
         GameManager.Network.Send(selectCharacterPacket);
     }
 
@@ -217,12 +217,11 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest(int userId, string partyName)
+    public void PartyRequest(int userId)
     {
         var partyPacket = new C_PartyRequest
         {
-            UserId = userId,
-            PartyName = partyName,
+            UserId = userId
         };
 
         GameManager.Network.Send(partyPacket);
@@ -244,36 +243,36 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(enterDungeonPacket);
     }
-    /* ¿©±â±îÁö */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 
-    /* ÀÓ½Ã·Î ¸¸µç ¹Þ´Â ¸Þ¼­µå µé */
-    // ÇÚµé·¯¿Í ¿¬°áÈÄ °¢°¢ ÇÊ¿äÇÑ ±â´É ±¸Çö 
+    /* ï¿½Ó½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ */
+    // ï¿½Úµé·¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 
-    // È¸¿ø°¡ÀÔ È®ÀÎ ¸Þ¼¼Áö Ãâ·ÂÁ¤µµ.
+    // È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
     IEnumerator erroText()
     {
         errorText.SetActive(true);
         yield return new WaitForSeconds(1f);
         errorText.SetActive(false);
     }
-    // Å×½ºÆ® ÄÚµå 
+    // ï¿½×½ï¿½Æ® ï¿½Úµï¿½ 
     public void RegisterResponse(S_RegisterResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ·Î±×ÀÎ È®ÀÎÈÄ ´ÙÀ½ Ä³¸¯ÅÍ ¼±ÅÃÃ¢À¸·Î ÀÌµ¿ ±¸Çö
+    // ï¿½Î±ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¢ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
     public void LoginResponse(S_LoginResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            uiStart.loginObject.SetActive(false);
-            uiStart.chuseObject.SetActive(true);
+            UiRegister.loginObject.SetActive(false);
+            UiRegister.chuseObject.SetActive(true);
         }
     }
-    // ´Ù¸¥ ÇÃ·¹ÀÌ¾îµé µé¾î¿À¸é »ý¼ºÇØÁÖ±â // ¾Æ·¡ spanwn ÇÔ¼ö »ç¿ëÇÏ¸é ¾Æ¸¶ ±¸Çö
+    // ï¿½Ù¸ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ // ï¿½Æ·ï¿½ spanwn ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Æ¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void Enter(S_Enter data)
     {
         StartCoroutine("erroText");
@@ -282,17 +281,17 @@ public class TownManager : MonoBehaviour
     }
 
     //private Dictionary<int, Player> playerList = new();
-    // ³»°¡ ¸¶À»¿¡ Âü°¡ÇÏ¸é for¹®ÀÌµç ¹Ýº¹¹®ÀÌµç µ¹¸®¸é¼­ »ý¼ºÇØÁÖ±â.
-    // ¿©±â ÆÐÅ¶¿¡ ÀÚ±â ÀÚ½ÅÀÌ ¸î¹øÀÎÁö Ãß°¡ÇØÁáÀ¸¸é ÁÁ°Ú½À´Ï´Ù.
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ forï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ýºï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½é¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½.
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¶ï¿½ï¿½ ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Ï´ï¿½.
     public void AllSpawn(S_Spawn data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
         Debug.Log(data);
-        Debug.Log("ÇÃ·¹ÀÌ¾î ¼ö : " + data.Players.Count);
+        Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
-            Debug.Log("Æ÷ÀÌÄ¡ µé¾î¿È");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½");
             if (player.PlayerId == data.UserId)
             {
                 Spawn(player, true);
@@ -303,7 +302,7 @@ public class TownManager : MonoBehaviour
             }
         }
     }
-    // ³ª°¡¸é »èÁ¦ÇØÁÖ±â 
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ 
     public void Despawn(S_Despawn data)
     {
         StartCoroutine("erroText");
@@ -321,21 +320,21 @@ public class TownManager : MonoBehaviour
             return;
         }
 
-        // TransformInfo¸¦ ÀÌ¿ëÇØ »õ·Î¿î À§Ä¡¿Í È¸Àü°ªÀ» °è»êÇÕ´Ï´Ù.
+        // TransformInfoï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
-        // ¿©±â¼­´Â yÃà È¸Àü¸¸ Àû¿ëÇÑ´Ù°í °¡Á¤ (ÇÊ¿ä½Ã ´Ù¸¥ Ãàµµ Àû¿ë)
+        // ï¿½ï¿½ï¿½â¼­ï¿½ï¿½ yï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ê¿ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½àµµ ï¿½ï¿½ï¿½ï¿½)
         Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
 
-        // ÇÃ·¹ÀÌ¾îÀÇ Move() ¸Þ¼­µå¸¦ È£ÃâÇÏ¿© ºÎµå·¯¿î ÀÌµ¿ ¹× È¸Àü Ã³¸®¸¦ À§ÀÓÇÕ´Ï´Ù.
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ Move() ï¿½Þ¼ï¿½ï¿½å¸¦ È£ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½Îµå·¯ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ È¸ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         player.Move(targetPos, targetRot);
     }
-    //¾Æ¸¶ ¾ÆÀÌµð ¹ÞÀºµÚ ÇØ´ç id player ¾Ö´Ï¸ÞÀÌ¼Ç 
+    //ï¿½Æ¸ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ id player ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ 
     public void AllAnimation(S_Animation data)
     {
         StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.ToString());
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
 
-        // playerList µñ¼Å³Ê¸®³ª GetPlayerAvatarById¸¦ ÀÌ¿ëÇØ ÇØ´ç ÇÃ·¹ÀÌ¾î¸¦ Ã£½À´Ï´Ù.
+        // playerList ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ GetPlayerAvatarByIdï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ Ã£ï¿½ï¿½ï¿½Ï´ï¿½.
         Player player = GetPlayerAvatarById(data.PlayerId);
         if (player == null)
         {
@@ -343,46 +342,46 @@ public class TownManager : MonoBehaviour
             return;
         }
 
-        // ÇÃ·¹ÀÌ¾îÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý ¸Þ¼­µå È£Ãâ
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
         player.PlayAnimation(data.AnimCode);
     }
-    // Ã¤ÆÃ ¹Þ¾Æ¿À±â
+    // Ã¤ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
     public void ChatResponse(S_Chat data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
     }
-    //  ÁÖ¸» ¸ñÇ¥ ÀÔ´Ï´Ù¶÷Áã
+    //  ï¿½Ö¸ï¿½ ï¿½ï¿½Ç¥ ï¿½Ô´Ï´Ù¶ï¿½ï¿½ï¿½
 
-    // ¾ÆÀÌÅÛ »ç´Â°Å ÀÀ´ä Ã³¸®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     public void BuyItemResponse(S_BuyItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ¾ÆÀÌÅÛ ÀåÂø ÀÀ´ä Ã³¸®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     public void EquipItemResponse(S_EquipItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ¾ÆÀÌÅÛ Å»Âø ÀÀ´ä Ã³¸®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     public void DisrobeItemResponse(S_DisrobeItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ¼Òºñ ÀåÂø ÀÀ´ä Ã³¸®
+    // ï¿½Òºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     public void ActiveItemeResponse(S_ActiveItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ÆÄÆ¼ ÀÀ´ä Ã³¸®
+    // ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     /*
     message S_PartyResponse{
         PartyInfo party = 1;
-        int32 case = 2; // ºÐ±â Ã³¸® -> (1 -> ÆÄÆ¼ »ý¼º, 2 -> ÃÊ´ë, 3 -> °¡ÀÔ)
+        int32 case = 2; // ï¿½Ð±ï¿½ Ã³ï¿½ï¿½ -> (1 -> ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½, 2 -> ï¿½Ê´ï¿½, 3 -> ï¿½ï¿½ï¿½ï¿½)
         bool success = 3;
         string message = 4;
         GlobalFailCode failCode = 5;
@@ -392,65 +391,65 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ »ý¼º ¹ÞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : {data}");
         if (data.Success == true)
         {
-            // ÆÄÆ¼ »ý¼º
+            // ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½
             Debug.Log(data.Party.PartyLeaderId);
         }
         else
         {
-            // ÆÄÆ¼ »ý¼º ½ÇÆÐ
+            // ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ ÃÊ´ë ÈÄ ¹ÞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"ï¿½ï¿½Æ¼ ï¿½Ê´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : {data}");
     }
 
     /*
     message S_PartySearchResponse {
        repeated PartyInfo info = 1;
-       int32 case = 2; // case: (1 -> ¸ðµç ¸®½ºÆ® Á¶È¸, 2 -> °Ë»ö)
+       int32 case = 2; // case: (1 -> ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¸, 2 -> ï¿½Ë»ï¿½)
        bool success = 3;
        string message = 4;
        GlobalFailCode failCode = 5;
     }
     */
 
-    // ¸ðµç ÆÄÆ¼ Á¶È¸
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ ï¿½ï¿½È¸
     public void PartyListResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ ¼­Ä¡ ¹ÞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"ï¿½ï¿½Æ¼ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : {data}");
         if(data.Info.Count < 0)
         {
-            Debug.Log("¸®½ºÆ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
         else
         {
 
         }
     }
-    // ÇÑ°³ ÆÄÆ¼ Á¶È¸
+    // ï¿½Ñ°ï¿½ ï¿½ï¿½Æ¼ ï¿½ï¿½È¸
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ ¼­Ä¡ ¹ÞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"ï¿½ï¿½Æ¼ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : {data}");
     }
-    // ´øÀü ÂÊ ÃßÈÄ Ãß°¡ ¿¹Á¤
-    /* ¿©±â±îÁö */
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 
-    // ÀÚ±â ÀÚ½Å ½ºÆù¿ëµµ 
+    // ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ëµµ 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
         if (isPlayer)
         {
-            Debug.Log("ÇÃ·¹ÀÌ¾î ÀÔ´Ï´Ù.");
+            Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ô´Ï´ï¿½.");
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
@@ -505,7 +504,7 @@ public class TownManager : MonoBehaviour
 
     private void ActivateGameUI()
     {
-        uiStart.gameObject.SetActive(false);
+        UiRegister.gameObject.SetActive(false);
         uiChat.gameObject.SetActive(true);
         uiAnimation.gameObject.SetActive(true);
     }
