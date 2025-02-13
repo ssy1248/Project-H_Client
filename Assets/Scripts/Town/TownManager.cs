@@ -380,35 +380,6 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"파티 생성 받은 데이터 : {data}");
-        if(data.Success)
-        {
-            // 파티 생성
-        } 
-        else
-        {
-            // 파티 생성 실패
-        }
-    }
-    public void PartyInviteResponse(S_PartyResponse data)
-    {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"파티 초대 후 받은 데이터 : {data}");
-    }
-    // 모든 파티 조회
-    public void PartyListResponse(S_PartySearchResponse data)
-    {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"파티 서치 받은 데이터 : {data}");
-    }
-    // 한개 파티 조회
-    public void PartySearchResponse(S_PartySearchResponse data)
-    {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
