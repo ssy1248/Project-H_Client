@@ -146,7 +146,7 @@ public class UIRegister : MonoBehaviour
     public void SetSelectedCharacter(int id)
     {
         selectedCharacterId = id;
-        txtCharDescription.text = characterDescriptions[selectedCharacterId];
+        txtCharDescription.text = characterDescriptions[selectedCharacterId - 1];
     }
 
     private void SetServerUI()
