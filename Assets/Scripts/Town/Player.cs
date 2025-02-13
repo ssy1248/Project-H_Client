@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
 
     public void PlayAnimation(int animCode)
     {
-        animator?.SetTrigger(animCode);
+        animator?.SetTrigger("Anim"+animCode);
     }
 
     private void CheckMove()
