@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using Unity.AI.Navigation;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 public class MyPlayer : MonoBehaviour
 {
+
+    // 플레이어 정보.
+    private Player player;
+
     [SerializeField] private NavMeshAgent agent;
     private RaycastHit rayHit;
     private EventSystem eSystem;
@@ -17,7 +22,7 @@ public class MyPlayer : MonoBehaviour
     private readonly List<int> animHash = new List<int>();
 
     // 100ms마다 이동 패킷 전송 
-    private float sendMovePacketInterval = 1f; // 100ms
+    private float sendMovePacketInterval = 0.1f; // 100ms
     // 마지막으로 패킷을 전송한 시간
     private float lastSendTime = 0f;
 
@@ -31,6 +36,8 @@ public class MyPlayer : MonoBehaviour
         lastPos = transform.position;
 
         LoadAnimationHashes();
+
+        player = GetComponent<Player>(); // 같은 GameObject에 있는 Player 컴포넌트 가져오기
     }
 
     void Update()
@@ -100,6 +107,7 @@ public class MyPlayer : MonoBehaviour
 
     private void SendMovePacket()
     {
+
         var tr = new TransformInfo
         {
             PosX = transform.position.x,
@@ -108,7 +116,12 @@ public class MyPlayer : MonoBehaviour
             Rot = transform.eulerAngles.y
         };
 
-        var movePacket = new C_Move { Transform = tr };
+        long timestamp = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+        var movePacket = new C_Move { 
+            PlayerId: player.PlayerId,
+            Transform: tr,
+            Timestamp:  timestamp,
+            };
         GameManager.Network.Send(movePacket);
     }
 }
