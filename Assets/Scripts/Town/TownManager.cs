@@ -22,9 +22,18 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
-    [SerializeField] private GameObject partyPrefabSpawnPoint;
 
-    // �׽�Ʈ �뵵�� ����
+    #region 파티 UI
+    [Header("파티 UI 모음")]
+    [SerializeField] private GameObject PartyUI;
+    [SerializeField] private TMP_InputField PartyNameInputField;
+    [SerializeField] private GameObject PartyStatusSpawnPoint;
+    [SerializeField] private GameObject LeaderStatusPrefab;
+    [SerializeField] private GameObject MemberStatusPrefab;
+    #endregion
+    
+    [Header("테스트")]
+    // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
 
     private const string DefaultPlayerPath = "Player/Player1";
@@ -35,8 +44,6 @@ public class TownManager : MonoBehaviour
 
     private Dictionary<int, Player> playerList = new();
     private Dictionary<int, string> playerDb = new();
-
-    [SerializeField] private Player LeaderPlayer;
 
     public Player MyPlayer { get; private set; }
 
@@ -89,10 +96,10 @@ public class TownManager : MonoBehaviour
         /*
         var enterPacket = new C_RegisterRequest
         {
-            //���⿡ �̸��� ���� 
+            //여기에 이메일 연결 
             Email = "aaaaaaa",
             Nickname = GameManager.Instance.UserName,
-            //���⿡ ��й�ȣ ����
+            //여기에 비밀번호 연결
             Password = "aaaaaaaa"
         };
 
@@ -106,16 +113,16 @@ public class TownManager : MonoBehaviour
         GameManager.Network.Send(enterPacket);*/
     }
 
-    /* �ӽ÷� ���� ������ �޼��� �� */
-    // �ؾ��� �� ��Ŷ�� �� �Ű������� �ްų� �ٸ������� �޾ƿ��� �������� ���� ��Ŷ ¥�� 
+    /* 임시로 만든 보내는 메서드 들 */
+    // 해야할 일 패킷에 들어갈 매개변수로 받거나 다른곳에서 받아오는 형식으로 보낼 패킷 짜기 
     public void Register(string email, string nickname, string password)
     {
         var enterPacket = new C_RegisterRequest
         {
-            //���⿡ �̸��� ���� 
+            //여기에 이메일 연결 
             Email = email,
             Nickname = nickname,//GameManager.Instance.UserName,
-            //���⿡ ��й�ȣ ����
+            //여기에 비밀번호 연결
             Password = password
         };
         GameManager.Network.Send(enterPacket);
@@ -124,15 +131,15 @@ public class TownManager : MonoBehaviour
     {
         var enterPacket = new C_LoginRequest
         {
-            //���⿡ �̸��� ���� 
+            //여기에 이메일 연결 
             Email = email,
-            //���⿡ ��й�ȣ ����
+            //여기에 비밀번호 연결
             Password = password
         };
 
         GameManager.Network.Send(enterPacket);
     }
-    // ��Ŷ ���������� �г���, Ŭ�����ε� �����ڸ� ���� Ŭ�����ۿ� ����
+    // 패킷 명세에서는 닉네임, 클래스인데 생성자를 보니 클래스밖에 없음
     public void SelectCharacterRequest(/*string nickname*/ int jobIndex)
     {
         var selectCharacterPacket = new C_SelectCharacterRequest
@@ -243,25 +250,25 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(enterDungeonPacket);
     }
-    /* ������� */
+    /* 여기까지 */
 
-    /* �ӽ÷� ���� �޴� �޼��� �� */
-    // �ڵ鷯�� ������ ���� �ʿ��� ��� ���� 
+    /* 임시로 만든 받는 메서드 들 */
+    // 핸들러와 연결후 각각 필요한 기능 구현 
 
-    // ȸ������ Ȯ�� �޼��� �������.
+    // 회원가입 확인 메세지 출력정도.
     IEnumerator erroText()
     {
         errorText.SetActive(true);
         yield return new WaitForSeconds(1f);
         errorText.SetActive(false);
     }
-    // �׽�Ʈ �ڵ� 
+    // 테스트 코드 
     public void RegisterResponse(S_RegisterResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // �α��� Ȯ���� ���� ĳ���� ����â���� �̵� ����
+    // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
     public void LoginResponse(S_LoginResponse data)
     {
         StartCoroutine("erroText");
@@ -272,7 +279,7 @@ public class TownManager : MonoBehaviour
             UiRegister.chuseObject.SetActive(true);
         }
     }
-    // �ٸ� �÷��̾�� ������ �������ֱ� // �Ʒ� spanwn �Լ� ����ϸ� �Ƹ� ����
+    // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)
     {
         StartCoroutine("erroText");
@@ -281,17 +288,17 @@ public class TownManager : MonoBehaviour
     }
 
     //private Dictionary<int, Player> playerList = new();
-    // ���� ������ �����ϸ� for���̵� �ݺ����̵� �����鼭 �������ֱ�.
-    // ���� ��Ŷ�� �ڱ� �ڽ��� ������� �߰��������� ���ڽ��ϴ�.
+    // 내가 마을에 참가하면 for문이든 반복문이든 돌리면서 생성해주기.
+    // 여기 패킷에 자기 자신이 몇번인지 추가해줬으면 좋겠습니다.
     public void AllSpawn(S_Spawn data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
         Debug.Log(data);
-        Debug.Log("�÷��̾� �� : " + data.Players.Count);
+        Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
-            Debug.Log("����ġ ����");
+            Debug.Log("포이치 들어옴");
             if (player.PlayerId == data.UserId)
             {
                 Spawn(player, true);
@@ -302,7 +309,7 @@ public class TownManager : MonoBehaviour
             }
         }
     }
-    // ������ �������ֱ� 
+    // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
     {
         StartCoroutine("erroText");
@@ -320,21 +327,21 @@ public class TownManager : MonoBehaviour
             return;
         }
 
-        // TransformInfo�� �̿��� ���ο� ��ġ�� ȸ������ ����մϴ�.
+        // TransformInfo를 이용해 새로운 위치와 회전값을 계산합니다.
         Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
-        // ���⼭�� y�� ȸ���� �����Ѵٰ� ���� (�ʿ�� �ٸ� �൵ ����)
+        // 여기서는 y축 회전만 적용한다고 가정 (필요시 다른 축도 적용)
         Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
 
-        // �÷��̾��� Move() �޼��带 ȣ���Ͽ� �ε巯�� �̵� �� ȸ�� ó���� �����մϴ�.
+        // 플레이어의 Move() 메서드를 호출하여 부드러운 이동 및 회전 처리를 위임합니다.
         player.Move(targetPos, targetRot);
     }
-    //�Ƹ� ���̵� ������ �ش� id player �ִϸ��̼� 
+    //아마 아이디 받은뒤 해당 id player 애니메이션 
     public void AllAnimation(S_Animation data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
 
-        // playerList ��ųʸ��� GetPlayerAvatarById�� �̿��� �ش� �÷��̾ ã���ϴ�.
+        // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
         Player player = GetPlayerAvatarById(data.PlayerId);
         if (player == null)
         {
@@ -342,114 +349,103 @@ public class TownManager : MonoBehaviour
             return;
         }
 
-        // �÷��̾��� �ִϸ��̼� ��� �޼��� ȣ��
+        // 플레이어의 애니메이션 재생 메서드 호출
         player.PlayAnimation(data.AnimCode);
     }
-    // ä�� �޾ƿ���
+    // 채팅 받아오기
     public void ChatResponse(S_Chat data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
     }
-    //  �ָ� ��ǥ �Դϴٶ���
+    //  주말 목표 입니다람쥐
 
-    // ������ ��°� ���� ó��
+    // 아이템 사는거 응답 처리
     public void BuyItemResponse(S_BuyItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ������ ���� ���� ó��
+    // 아이템 장착 응답 처리
     public void EquipItemResponse(S_EquipItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ������ Ż�� ���� ó��
+    // 아이템 탈착 응답 처리
     public void DisrobeItemResponse(S_DisrobeItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // �Һ� ���� ���� ó��
+    // 소비 장착 응답 처리
     public void ActiveItemeResponse(S_ActiveItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ��Ƽ ���� ó��
-    /*
-    message S_PartyResponse{
-        PartyInfo party = 1;
-        int32 case = 2; // �б� ó�� -> (1 -> ��Ƽ ����, 2 -> �ʴ�, 3 -> ����)
-        bool success = 3;
-        string message = 4;
-        GlobalFailCode failCode = 5;
-    }
-     */
+    // 파티 응답 처리
     public void PartyResponse(S_PartyResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"��Ƽ ���� ���� ������ : {data}");
-        if (data.Success == true)
+        Debug.Log($"파티 생성 받은 데이터 : {data.Party}");
+        if (data.Success || data.Case == 1)
         {
-            // ��Ƽ ����
-            Debug.Log(data.Party.PartyLeaderId);
+            // 파티 생성
+            PartyUI.SetActive(true);
+            PartyNameInputField.text = data.Party.PartyName;
+            if (MyPlayer != null && MyPlayer.PlayerId == data.Party.PartyLeaderId)
+            {
+                // PartyStatusSpawnPoint의 자식으로 LeaderStatusPrefab 인스턴스 생성
+                GameObject leaderStatusObj = Instantiate(LeaderStatusPrefab, PartyStatusSpawnPoint.transform);
+
+                // 인스턴스된 오브젝트의 자식에서 TextMeshProUGUI 컴포넌트 찾기
+                TextMeshProUGUI leaderText = leaderStatusObj.GetComponentInChildren<TextMeshProUGUI>();
+                if (leaderText != null)
+                {
+                    leaderText.text = MyPlayer.nickname;
+                }
+                else
+                {
+                    Debug.LogWarning("LeaderStatusPrefab에 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+                }
+            }
         }
-        else
+        else if (data.Success || data.Case == 2)
         {
-            // ��Ƽ ���� ����
+            // 파티 생성 실패
         }
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"��Ƽ �ʴ� �� ���� ������ : {data}");
+        Debug.Log($"파티 초대 후 받은 데이터 : {data}");
     }
-
-    /*
-    message S_PartySearchResponse {
-       repeated PartyInfo info = 1;
-       int32 case = 2; // case: (1 -> ��� ����Ʈ ��ȸ, 2 -> �˻�)
-       bool success = 3;
-       string message = 4;
-       GlobalFailCode failCode = 5;
-    }
-    */
-
-    // ��� ��Ƽ ��ȸ
+    // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"��Ƽ ��ġ ���� ������ : {data}");
-        if(data.Info.Count < 0)
-        {
-            Debug.Log("����Ʈ�� �����ϴ�.");
-        }
-        else
-        {
-
-        }
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
-    // �Ѱ� ��Ƽ ��ȸ
+    // 한개 파티 조회
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"��Ƽ ��ġ ���� ������ : {data}");
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
-    // ���� �� ���� �߰� ����
-    /* ������� */
+    // 던전 쪽 추후 추가 예정
+    /* 여기까지 */
 
-    // �ڱ� �ڽ� �����뵵 
+    // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
         if (isPlayer)
         {
-            Debug.Log("�÷��̾� �Դϴ�.");
+            Debug.Log("플레이어 입니다.");
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
