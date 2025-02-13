@@ -64,20 +64,7 @@ class PacketHandler
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_PartyResponse enterPacket) return;
-        if(enterPacket.Case == 1)
-        {
-            // 파티 생성 핸들러
-            TownManager.Instance.PartyResponse(enterPacket);
-        }
-        else if(enterPacket.Case == 2)
-        {
-            // 파티 초대 핸들러
-            TownManager.Instance.PartyInviteResponse(enterPacket);
-        }
-        else if(enterPacket.Case == 3)
-        {
-            // 파티 가입 핸들러
-        }
+        TownManager.Instance.PartyResponse(enterPacket);
     }
     public static void S_EnterDungeonHandler(PacketSession session, IMessage packet)
     {
@@ -99,16 +86,9 @@ class PacketHandler
     public static void S_PartySearchHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_PartySearchResponse enterPacket) return;
-        if(enterPacket.Case == 1)
-        {
-            // 모든 파티 조회
-            TownManager.Instance.PartyListResponse(enterPacket);
-        }
-        else if(enterPacket.Case == 2)
-        {
-            // 파티 검색 핸들러
-            TownManager.Instance.PartySearchResponse(enterPacket);
-        }
+        // 분기를 나눌 것을 던져줘야 할듯?
+        TownManager.Instance.PartyListResponse(enterPacket);
+        TownManager.Instance.PartySearchResponse(enterPacket);
     }
     // 해체 관련 패킷
     public static void S_PartyResultHandler(PacketSession session, IMessage packet)
