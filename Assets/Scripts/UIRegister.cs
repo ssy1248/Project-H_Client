@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UIRegister : MonoBehaviour
 {
+    public static UIRegister Instance { get; private set; }  // 싱글톤 패턴으로 UIRegister 접근
+
     [SerializeField] private TMP_InputField inputPort;
     [SerializeField] private Button localServerBtn;
     [SerializeField] private Button btnBack; // 이전 화면으로 돌아가는 버튼
@@ -36,7 +38,7 @@ public class UIRegister : MonoBehaviour
     [SerializeField] GameObject registerObject;
     public GameObject chuseObject;
 
-    private int classIdx = 0;
+    private int selectedCharacterId = -1;
     private string serverUrl;
     private string nickname;
     private string port;
@@ -56,13 +58,16 @@ public class UIRegister : MonoBehaviour
 
     void Start()
     {
+        Instance = this;  // UIRegister 인스턴스를 싱글톤으로 설정
+
         InitializeCharacterButtons();
         btnRegister.onClick.AddListener(HandleRegistration);
         btnLogin.onClick.AddListener(HandleLogin);
-        btnConfirmCharacter.onClick.AddListener(Selector);
         localServerBtn.onClick.AddListener(OnClickLocalServer);
-
         btnBack.onClick.AddListener(ToggleScreens);
+
+        btnConfirmCharacter.onClick.AddListener(ConfirmCharacter);
+
         btnGoToRegister.onClick.AddListener(GoToRegisterScreen);
         SetServerUI(); // 첫 화면인 서버 입력 UI 표시
     }
@@ -71,26 +76,22 @@ public class UIRegister : MonoBehaviour
     {
         if (serverPanel.activeSelf)
         {
-            // 서버 입력 화면에서 로그인 화면으로
             serverPanel.SetActive(false);
             loginPanel.SetActive(true);
         }
         else if (loginPanel.activeSelf)
         {
-            // 로그인 화면에서 서버 입력 화면으로
             loginPanel.SetActive(false);
             serverPanel.SetActive(true);
             localServerBtn.gameObject.SetActive(true); // 로컬 서버 버튼 활성화
         }
         else if (registerPanel.activeSelf)
         {
-            // 회원가입 화면에서 로그인 화면으로
             registerPanel.SetActive(false);
             loginPanel.SetActive(true);
         }
         else if (characterPanel.activeSelf)
         {
-            //캐릭터 선택창에서 로그인화면으로
             characterPanel.SetActive(false);
             loginPanel.SetActive(true);
         }
@@ -107,27 +108,47 @@ public class UIRegister : MonoBehaviour
     {
         for (int i = 0; i < charBtns.Length; i++)
         {
-            int idx = i;
+            int idx = i + 1;
             charBtns[i].onClick.AddListener(() => SelectCharacter(idx));
         }
     }
 
     private void SelectCharacter(int idx)
     {
-        charBtns[classIdx].transform.GetChild(0).gameObject.SetActive(false);
-        classIdx = idx;
-        charBtns[classIdx].transform.GetChild(0).gameObject.SetActive(true);
+        // 이전 선택된 캐릭터 표시 해제
+        if (selectedCharacterId != -1)
+            charBtns[selectedCharacterId - 1].transform.GetChild(0).gameObject.SetActive(false);
 
-        txtCharDescription.text = characterDescriptions[classIdx];
+        selectedCharacterId = idx;
+        charBtns[selectedCharacterId - 1].transform.GetChild(0).gameObject.SetActive(true); // 선택된 캐릭터 표시
+
+        txtCharDescription.text = characterDescriptions[selectedCharacterId - 1];
+        if (idx >= 0 && idx <= 5)
+        {
+            Debug.Log($"Character selected with id: {selectedCharacterId}");  // 선택된 캐릭터의 id 로그 출력
+        }
+
     }
 
-    void Selector()
+    private void ConfirmCharacter()
     {
-        TownManager.Instance.SelectCharacterRequest(classIdx);
+        if (selectedCharacterId >= 0 && selectedCharacterId <= 5)
+        {
+            TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // 선택된 캐릭터의 id로 게임 시작 요청
+        }
+        else
+        {
+            Debug.LogError("No character selected!");
+        }
     }
 
+    // 캐릭터 선택을 classIdx에 반영
+    public void SetSelectedCharacter(int id)
+    {
+        selectedCharacterId = id;
+        txtCharDescription.text = characterDescriptions[selectedCharacterId];
+    }
 
-    // 첫 화면에 서버와 포트 입력을 위한 UI 표시
     private void SetServerUI()
     {
         serverPanel.SetActive(true);
@@ -139,7 +160,6 @@ public class UIRegister : MonoBehaviour
 
     private void ShowLoginUI()
     {
-        Debug.Log("ShowLoginUI() 호출됨");
         loginPanel.SetActive(true);
         serverPanel.SetActive(false);
         registerPanel.SetActive(false);
@@ -160,14 +180,11 @@ public class UIRegister : MonoBehaviour
 
     public void Login()
     {
-        Debug.Log(loginEmail.text + loginPassword.text);
-
         TownManager.Instance.Login(loginEmail.text, loginPassword.text);
     }
+
     public void Registers()
     {
-        Debug.Log(inputNickname.text);
-
         TownManager.Instance.Register(registerEmail.text, inputNickname.text, registerPassword.text);
     }
 
@@ -225,24 +242,10 @@ public class UIRegister : MonoBehaviour
         ShowLoginUI();
     }
 
-    private void ConfirmServer()
-    {
-        if (string.IsNullOrWhiteSpace(inputNickname.text))
-        {
-            DisplayError(DefaultServerMessage);
-            return;
-        }
-
-        serverUrl = inputNickname.text;
-        port = inputPort.text;
-        ShowLoginUI();
-    }
-
     private void StartGame()
     {
         nickname = inputNickname.text;
-        TownManager.Instance.GameStart(serverUrl, port, nickname, classIdx);
-        //gameObject.SetActive(false);
+        TownManager.Instance.GameStart(serverUrl, port, nickname, selectedCharacterId);
     }
 
     private void DisplayError(string errorMessage)
@@ -251,7 +254,7 @@ public class UIRegister : MonoBehaviour
         txtMessage.color = Color.red;
     }
 
-    // 회원가입 화면으로 이동하는 메서드
+
     public void ShowRegisterPanel()
     {
         ShowRegisterUI();
