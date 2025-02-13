@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public Avatar Avatar { get; private set; }
     public MyPlayer MPlayer { get; private set; }
 
-    private string nickname;
+    public string nickname;
     private UIChat uiChat;
 
     private Vector3 goalPos;
@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
 
     public void PlayAnimation(int animCode)
     {
-        animator?.SetTrigger(animCode);
+        animator?.SetTrigger("Anim"+animCode);
     }
 
     private void CheckMove()
