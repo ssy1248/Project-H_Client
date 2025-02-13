@@ -18,7 +18,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private CinemachineFreeLook freeLook;
     [SerializeField] private Transform spawnArea;
     [SerializeField] private EventSystem eSystem;
-    [SerializeField] private UIStart uiStart;
+    [SerializeField] private UIRegister uiStart;
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
