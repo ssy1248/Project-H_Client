@@ -18,7 +18,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private CinemachineFreeLook freeLook;
     [SerializeField] private Transform spawnArea;
     [SerializeField] private EventSystem eSystem;
-    [SerializeField] private UIRegister UiRegister;
+    [SerializeField] private UIStart uiStart;
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
@@ -56,7 +56,7 @@ public class TownManager : MonoBehaviour
     {
         if (!GameManager.Network.IsConnected)
         {
-            UiRegister.gameObject.SetActive(true);
+            uiStart.gameObject.SetActive(true);
         }
         else
         {
@@ -137,7 +137,7 @@ public class TownManager : MonoBehaviour
            // Nickname = nickname,
             Class = jobIndex
         };
-        UiRegister.chuseObject.SetActive(false);
+        uiStart.chuseObject.SetActive(false);
         GameManager.Network.Send(selectCharacterPacket);
     }
 
@@ -214,11 +214,12 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest(int userId)
+    public void PartyRequest(int userId, string partyName)
     {
         var partyPacket = new C_PartyRequest
         {
-            UserId = userId
+            UserId = userId,
+            PartyName = partyName,
         };
 
         GameManager.Network.Send(partyPacket);
@@ -265,8 +266,8 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            UiRegister.loginObject.SetActive(false);
-            UiRegister.chuseObject.SetActive(true);
+            uiStart.loginObject.SetActive(false);
+            uiStart.chuseObject.SetActive(true);
         }
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
@@ -329,7 +330,7 @@ public class TownManager : MonoBehaviour
     public void AllAnimation(S_Animation data)
     {
         StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.ToString());
 
         // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
         Player player = GetPlayerAvatarById(data.PlayerId);
@@ -379,6 +380,29 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 생성 받은 데이터 : {data}");
+        if(data.Success)
+        {
+            // 파티 생성
+        } 
+        else
+        {
+            // 파티 생성 실패
+        }
+    }
+    // 모든 파티 조회
+    public void PartyListResponse(S_PartySearchResponse data)
+    {
+        //StartCoroutine("errorText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
+    }
+    // 한개 파티 조회
+    public void PartySearchResponse(S_PartySearchResponse data)
+    {
+        //StartCoroutine("errorText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 서치 받은 데이터 : {data}");
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
@@ -412,7 +436,7 @@ public class TownManager : MonoBehaviour
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {
         Debug.Log(playerInfo.Class);
-        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player" + playerInfo.Class));
+        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player"+ playerInfo.Class));
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
@@ -443,7 +467,7 @@ public class TownManager : MonoBehaviour
 
     private void ActivateGameUI()
     {
-        UiRegister.gameObject.SetActive(false);
+        uiStart.gameObject.SetActive(false);
         uiChat.gameObject.SetActive(true);
         uiAnimation.gameObject.SetActive(true);
     }
