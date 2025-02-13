@@ -39,6 +39,7 @@ class PacketHandler
     public static void S_AnimationHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Animation enterPacket) return;
+        TownManager.Instance.AllAnimation(enterPacket);
     }
     public static void S_ChatHandler(PacketSession session, IMessage packet)
     {
@@ -63,6 +64,7 @@ class PacketHandler
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_PartyResponse enterPacket) return;
+        TownManager.Instance.PartyResponse(enterPacket);
     }
     public static void S_EnterDungeonHandler(PacketSession session, IMessage packet)
     {
@@ -80,7 +82,39 @@ class PacketHandler
     {
         if (packet is not S_ScreenDone enterPacket) return;
     }
-
+    // 조회 관련 
+    public static void S_PartySearchHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_PartySearchResponse enterPacket) return;
+        // 분기를 나눌 것을 던져줘야 할듯?
+        TownManager.Instance.PartyListResponse(enterPacket);
+        TownManager.Instance.PartySearchResponse(enterPacket);
+    }
+    // 해체 관련 패킷
+    public static void S_PartyResultHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_PartyResultResponse enterPacket) return;
+    }
+    public static void S_marketMyListHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_marketMyList enterPacket) return;
+    }
+    public static void S_marketListHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_marketList enterPacket) return;
+    }
+    public static void S_SellInMarketHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SellInMarket enterPacket) return;
+    }
+    public static void S_BuyInMarketHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BuyInMarket enterPacket) return;
+    }
+    public static void S_InventoryHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_InventoryResponse enterPacket) return;
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {

@@ -73,7 +73,7 @@ public class MyPlayer : MonoBehaviour
         int animKey = animHash[animIdx];
         agent.SetDestination(transform.position);
 
-        TownManager.Instance.Animation(animKey);
+        TownManager.Instance.Animation(animIdx);
     }
 
 
