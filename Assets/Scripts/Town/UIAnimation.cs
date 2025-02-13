@@ -21,7 +21,7 @@ public class UIAnimation : MonoBehaviour
     void Start()
     {
         mPlayer = TownManager.Instance.MyPlayer?.MPlayer;
-        InitiallzeSlots();
+        //InitiallzeSlots();
         if (mPlayer == null)
         {
             Debug.LogError("MyPlayer instance is missing or not initialized.");
@@ -29,7 +29,7 @@ public class UIAnimation : MonoBehaviour
         }
         InitializeButtons();
         inventory.SetActive(false);
-        marketplace.SetActive(false);
+        //marketplace.SetActive(false);
     }
 
     private void InitializeButtons()
