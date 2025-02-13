@@ -6,14 +6,9 @@ using UnityEngine;
 
 public class UIPartyPopUp : MonoBehaviour
 {
-    [SerializeField] private GameObject PartyCreateObject;
     [SerializeField] private TMP_InputField partyNameInputField;
     [SerializeField] private TMP_InputField partySearchInputField;
     [SerializeField] private TMP_InputField partyInviteInputField;
-    void Start()
-    {
-        PartyCreateObject.SetActive(false);
-    }
 
     void Update()
     {

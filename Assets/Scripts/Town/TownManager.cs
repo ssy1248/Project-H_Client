@@ -22,6 +22,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+    [SerializeField] private GameObject partyPrefabSpawnPoint;
 
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
@@ -34,6 +35,8 @@ public class TownManager : MonoBehaviour
 
     private Dictionary<int, Player> playerList = new();
     private Dictionary<int, string> playerDb = new();
+
+    [SerializeField] private Player LeaderPlayer;
 
     public Player MyPlayer { get; private set; }
 
@@ -376,14 +379,24 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 파티 응답 처리
+    /*
+    message S_PartyResponse{
+        PartyInfo party = 1;
+        int32 case = 2; // 분기 처리 -> (1 -> 파티 생성, 2 -> 초대, 3 -> 가입)
+        bool success = 3;
+        string message = 4;
+        GlobalFailCode failCode = 5;
+    }
+     */
     public void PartyResponse(S_PartyResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 생성 받은 데이터 : {data}");
-        if (data.Success)
+        if (data.Success == true)
         {
             // 파티 생성
+            Debug.Log(data.Party.PartyLeaderId);
         }
         else
         {
@@ -396,12 +409,31 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 초대 후 받은 데이터 : {data}");
     }
+
+    /*
+    message S_PartySearchResponse {
+       repeated PartyInfo info = 1;
+       int32 case = 2; // case: (1 -> 모든 리스트 조회, 2 -> 검색)
+       bool success = 3;
+       string message = 4;
+       GlobalFailCode failCode = 5;
+    }
+    */
+
     // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 서치 받은 데이터 : {data}");
+        if(data.Info.Count < 0)
+        {
+            Debug.Log("리스트가 없습니다.");
+        }
+        else
+        {
+
+        }
     }
     // 한개 파티 조회
     public void PartySearchResponse(S_PartySearchResponse data)
