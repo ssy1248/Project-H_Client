@@ -76,11 +76,16 @@ namespace ServerCore
 			}
 		}
 
-		public void Start(Socket socket)
-		{
+        public void Start(Socket socket)
+        {
             Debug.Log("Session Start 호출됨");
-            _socket = socket;
+            if (socket == null)
+            {
+                Debug.LogError("Socket is null!");
+                return;  // 소켓이 null인 경우에 처리를 멈춘다.
+            }
 
+            _socket = socket;
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
@@ -88,7 +93,7 @@ namespace ServerCore
             Debug.Log("RegisterRecv 호출됨");
         }
 
-		public void Send(List<ArraySegment<byte>> sendBuffList)
+        public void Send(List<ArraySegment<byte>> sendBuffList)
 		{
 			if (sendBuffList.Count == 0)
 				return;

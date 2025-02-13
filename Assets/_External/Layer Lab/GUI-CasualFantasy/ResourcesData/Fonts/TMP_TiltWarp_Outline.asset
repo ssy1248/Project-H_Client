@@ -22,7 +22,8 @@ Texture2D:
   m_MipCount: 1
   m_IsReadable: 0
   m_IsPreProcessed: 0
-  m_IgnoreMasterTextureLimit: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
   m_StreamingMipmaps: 0
   m_StreamingMipmapsPriority: 0
   m_VTOnly: 0
@@ -56,6 +57,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: TiltWarp-Regular-VariableFont_XROT,YROT Atlas Material
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - UNDERLAY_ON
   m_InvalidKeywords: []
@@ -65,6 +68,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -120,7 +124,7 @@ Material:
     - _Reflectivity: 10
     - _ScaleRatioA: 0.9
     - _ScaleRatioB: 0.52335
-    - _ScaleRatioC: 0.80415
+    - _ScaleRatioC: 0.5161425
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -134,8 +138,8 @@ Material:
     - _TextureHeight: 1024
     - _TextureWidth: 1024
     - _UnderlayDilate: 0.558
-    - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: -0.196
+    - _UnderlayOffsetX: 1
+    - _UnderlayOffsetY: -1
     - _UnderlaySoftness: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
@@ -170,7 +174,8 @@ MonoBehaviour:
   materialHashCode: -3526056
   m_Version: 1.1.0
   m_SourceFontFileGUID: bd4fcb934faa04c5089a975befc751a5
-  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: bd4fcb934faa04c5089a975befc751a5, type: 3}
+  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: bd4fcb934faa04c5089a975befc751a5,
+    type: 3}
   m_SourceFontFile: {fileID: 12800000, guid: bd4fcb934faa04c5089a975befc751a5, type: 3}
   m_AtlasPopulationMode: 1
   m_FaceInfo:
