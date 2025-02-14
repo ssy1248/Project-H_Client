@@ -95,13 +95,14 @@ class PacketHandler
     {
         if (packet is not S_PartyResultResponse enterPacket) return;
     }
+    // 마케 관련 패킷
     public static void S_marketMyListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_marketMyList enterPacket) return;
+        if (packet is not S_MarketMyList enterPacket) return;
     }
     public static void S_marketListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_marketList enterPacket) return;
+        if (packet is not S_MarketList enterPacket) return;
     }
     public static void S_SellInMarketHandler(PacketSession session, IMessage packet)
     {
