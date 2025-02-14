@@ -227,7 +227,6 @@ public class TownManager : MonoBehaviour
     {
         var enterDungeonPacket = new C_EnterDungeon
         {
-            DungeonCode = duneonCode,
             //Players = new PlayerInfo
             //{
             //    PlayerId = player.PlayerId,
@@ -245,11 +244,12 @@ public class TownManager : MonoBehaviour
 
     // 마켓 추가
 
-    public void MarketListRequest(int page)
+    public void MarketListRequest(int page , int count)
     {
         var marketListPacket = new C_MarketList
         {
             Page = page,
+            Count = count,
         };
         GameManager.Network.Send(marketListPacket);
     }
@@ -270,11 +270,12 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(BuyInMarketPacket);
     }
-    public void MarketMyListRequest(int page)
+    public void MarketMyListRequest(int page, int count)
     {
         var marketListPacket = new C_MarketMyList
         {
             Page = page,
+            Count = count,
         };
         GameManager.Network.Send(marketListPacket);
     }
@@ -451,22 +452,26 @@ public class TownManager : MonoBehaviour
     public void MarketListResponse(S_MarketList data)
     {
         StartCoroutine("errorText");
+        Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
     }
     public void SellInMarketResponse(S_SellInMarket data)
     {
         StartCoroutine("errorText");
+        Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     public void BuyInMarketResponse(S_BuyInMarket data)
     {
         StartCoroutine("errorText");
+        Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
 
     }
     public void MarketMyListResponse(S_MarketMyList data)
     {
         StartCoroutine("errorText");
+        Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
     }
     // 자기 자신 스폰용도 
