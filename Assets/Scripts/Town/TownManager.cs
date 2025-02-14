@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
@@ -30,8 +31,13 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject PartyStatusSpawnPoint;
     [SerializeField] private GameObject LeaderStatusPrefab;
     [SerializeField] private GameObject MemberStatusPrefab;
+    [SerializeField] private GameObject PartyListSpawnPoint;
+    [SerializeField] private GameObject PartyListPrefab;
+    [SerializeField] private GameObject PartyMemberSpawnPoint;
+    [SerializeField] private GameObject LeaderMemberPrefab;
+    [SerializeField] private GameObject NormalMemberPrefab;
     #endregion
-    
+
     [Header("테스트")]
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
@@ -44,6 +50,9 @@ public class TownManager : MonoBehaviour
 
     private Dictionary<int, Player> playerList = new();
     private Dictionary<int, string> playerDb = new();
+
+    // 파티 인포를 저장할 딕셔너리
+    private Dictionary<int, PartyInfo> partyInfoDict = new Dictionary<int, PartyInfo>();
 
     public Player MyPlayer { get; private set; }
 
@@ -100,6 +109,43 @@ public class TownManager : MonoBehaviour
                 return player;
         }
         return null;
+    }
+
+    public void UpdatePartyMembersUI(PartyInfo partyData)
+    {
+        // PartyMemberSpawnPoint 아래의 기존 UI 제거
+        foreach (Transform child in PartyMemberSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // partyData.Players를 순회하면서, 파티 리더이면 LeaderMemberPrefab, 그렇지 않으면 NormalMemberPrefab 생성
+        foreach (var playerStatus in partyData.Players)
+        {
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            GameObject prefabToInstantiate = (playerId == partyData.PartyLeaderId)
+                ? LeaderMemberPrefab
+                : NormalMemberPrefab;
+
+            GameObject memberObj = Instantiate(prefabToInstantiate, PartyMemberSpawnPoint.transform);
+
+            // memberObj의 자식에 TextMeshProUGUI 컴포넌트가 있다고 가정하고, 해당 텍스트를 플레이어 닉네임으로 설정
+            TextMeshProUGUI memberText = memberObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (memberText != null)
+            {
+                memberText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("Member prefab에서 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
     }
 
     public void Connected()
@@ -413,6 +459,17 @@ public class TownManager : MonoBehaviour
         {
             PartyUI.SetActive(true);
             PartyNameInputField.text = data.Party.PartyName;
+
+            // 파티 정보 딕셔너리에 저장 (키: partyId, 값: PartyInfo)
+            if (partyInfoDict.ContainsKey(data.Party.PartyId))
+            {
+                partyInfoDict[data.Party.PartyId] = data.Party;
+            }
+            else
+            {
+                partyInfoDict.Add(data.Party.PartyId, data.Party);
+            }
+
             if (MyPlayer != null && MyPlayer.PlayerId == data.Party.PartyLeaderId)
             {
                 // PartyStatusSpawnPoint의 자식으로 LeaderStatusPrefab 인스턴스 생성
@@ -446,6 +503,12 @@ public class TownManager : MonoBehaviour
         PartyUI.SetActive(true);
         // 파티원 추방 버튼은 비활성화 해야할듯? 리더만 활성화해서 
         PartyNameInputField.text = data.Party.PartyName;
+
+        // 응답받은 PartyInfo를 딕셔너리에 업데이트
+        if (partyInfoDict.ContainsKey(data.Party.PartyId))
+        {
+            partyInfoDict[data.Party.PartyId] = data.Party;
+        }
 
         // 기존에 생성된 파티원 UI가 있다면 먼저 제거
         foreach (Transform child in PartyStatusSpawnPoint.transform)
@@ -496,9 +559,38 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"파티 서치 받은 데이터 : {data}");
+        Debug.Log($"파티 리스트 조회 받은 데이터 : {data}");
+
+        int count = data.Info.Count;
+        for(int i = 0; i < count; i++)
+        {
+            // 기존에 생성된 파티원 UI가 있다면 먼저 제거
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
+            partyListObj.GetComponent<PartyListItem>().partyData = data.Info[i];
+            TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>();
+            if (texts.Length >= 3)
+            {
+                // 첫 번째 텍스트: DungeonName -> 나중에 추가할 던전 선택 생기면 그것으로 대체
+                texts[0].text = data.Info[i].PartyId.ToString();
+
+                // 두 번째 텍스트: 파티 이름
+                texts[1].text = data.Info[i].PartyName;
+
+                // 세 번째 텍스트: 현재 멤버 수 / 최대 멤버 수
+                texts[2].text = $"{data.Info[i].Players.Count} / {data.Info[i].Maximum}";
+            }
+            else
+            {
+                Debug.LogWarning("PartyListPrefab 내에 TextMeshProUGUI 컴포넌트가 3개 이상 존재하지 않습니다.");
+            }
+        }
     }
-    // 한개 파티 조회
+    // 파티 검색 결과
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
@@ -512,6 +604,15 @@ public class TownManager : MonoBehaviour
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 추방 받은 데이터 : {data}");
+
+        if(data.Success)
+        {
+            PartyUI.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("강퇴 권한 X");
+        }
     }
 
     // 파티 탈퇴
@@ -529,6 +630,17 @@ public class TownManager : MonoBehaviour
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 업데이트 받은 데이터 : {data}");
+
+        if (MyPlayer == null || !data.Party.Players.Any(ps => {
+            Player p = GetPlayerByNickname(ps.PlayerName);
+            return p != null && p.PlayerId == MyPlayer.PlayerId;
+        }))
+        {
+            // 내 플레이어가 해당 파티에 없다면 파티 UI를 숨기고 업데이트 중단
+            PartyUI.SetActive(false);
+            Debug.Log("내 플레이어가 업데이트된 파티에 포함되어 있지 않습니다. 파티 UI를 숨깁니다.");
+            return;
+        }
 
         // 파티 UI 활성화 및 파티 이름 업데이트
         PartyUI.SetActive(true);

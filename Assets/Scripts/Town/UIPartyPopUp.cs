@@ -9,6 +9,7 @@ public class UIPartyPopUp : MonoBehaviour
     [SerializeField] private TMP_InputField partyNameInputField;
     [SerializeField] private TMP_InputField partySearchInputField;
     [SerializeField] private TMP_InputField partyInviteInputField;
+    [SerializeField] private TMP_InputField partyKickInputField;
 
     void Update()
     {
@@ -38,6 +39,18 @@ public class UIPartyPopUp : MonoBehaviour
     public void PartyExitBtnClick()
     {
         PartyExitRequest();
+    }
+
+    public void PartyKickBtnClick()
+    {
+        PartyKickRequest();
+    }
+
+    private void PartyKickRequest()
+    {
+        int kickUserId = TownManager.Instance.GetPlayerByNickname(partyKickInputField.text).PlayerId;
+        C_PartyKickRequest partyKickPacket = new C_PartyKickRequest { RequesterUserId = TownManager.Instance.MyPlayer.PlayerId, KickUserUserId = kickUserId };
+        GameManager.Network.Send(partyKickPacket);
     }
 
     private void PartyExitRequest()
