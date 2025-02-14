@@ -45,11 +45,11 @@ public class UIRegister : MonoBehaviour
 
     private readonly string[] characterDescriptions =
     {
-        "섭르탄\n용감한 전사입니다.",
-        "클르탄\n신비로운 마법사입니다.",
-        "디르탄\n날렵한 궁수입니다.",
-        "큐르탄\n강력한 탱커입니다.",
-        "기르탄\n치유의 성직자입니다."
+        "이름구함\n용감한 전사입니다.",
+        "이름구함\n신비로운 마법사입니다.",
+        "이름구함\n날렵한 궁수입니다.",
+        "이름구함\n강력한 탱커입니다.",
+        "이름구함\n치유의 성직자입니다."
     };
 
     private const string DefaultServerMessage = "Input Server";
