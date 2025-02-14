@@ -310,20 +310,18 @@ public class TownManager : MonoBehaviour
     {
         // 받은 배열 만큼 반복문을 돌려야함
         // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
-        foreach (var syncTransformInfo  in data.transformInfos) {
+        foreach (var syncTransformInfo  in data.TransformInfos) {
             // 플레이어 ID
             int playerId = syncTransformInfo.PlayerId;
             
             // 트랜스폼 정보 (위치 회전)
-            TransformInfo transformInfo = syncTransformInfo.transform;
+            TransformInfo transformInfo = syncTransformInfo.Transform;
             Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
             Quaternion targetRot = Quaternion.Euler(0, transformInfo.Rot, 0);
-            
-            // 예상 도착시갖
-            long estimatedArrivalTime = syncTransformInfo.estimatedArrivalTime;
-            
-            // 레이턴시
-            int latency = syncTransformInfo.latency;
+
+            // 스피드
+            float speed = syncTransformInfo.Speed;
+
 
             // 플레이어가 존재하는지 검증.
             Player player = GetPlayerAvatarById(playerId);
@@ -336,9 +334,12 @@ public class TownManager : MonoBehaviour
                 continue;
             }
 
+            
             // 플레이어에게 이동 정보를 넘긴다.
-            player.Move(targetPos, targetRot, estimatedArrivalTime);
+            player.Move(targetPos, targetRot, speed);
         }
+
+
 
         // StartCoroutine("erroText");
         // errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
@@ -474,7 +475,7 @@ public class TownManager : MonoBehaviour
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-        player.Move(spawnPos, Quaternion.identity);
+        player.Move(spawnPos, Quaternion.identity, 0);
         player.SetPlayerId(playerInfo.PlayerId);
         player.SetNickname(playerInfo.Nickname);
 

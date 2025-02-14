@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     [Header("Movement Settings")]
     public float SmoothMoveSpeed = 10f; // 위치 보간 속도
     public float SmoothRotateSpeed = 10f; // 회전 보간 속도
-    public float TeleportDistanceThreshold = 0.5f; // 순간 이동 거리 임계값
+    public float TeleportDistanceThreshold = 10f; // 순간 이동 거리 임계값 (0.5)
+
+
 
     public Avatar Avatar { get; private set; }
     public MyPlayer MPlayer { get; private set; }
@@ -31,7 +33,7 @@ public class Player : MonoBehaviour
 
     private Vector3 lastPos;
 
-    private long EstimatedArrivalTime; 
+    private float agentSpeed; 
 
 
 
@@ -90,65 +92,22 @@ public class Player : MonoBehaviour
         RotateSmoothly();
     }
 
+    
+
     private void MoveSmoothly()
-{
-    // 도착시간 계산.
-    long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-    int deltaTime = (int)(EstimatedArrivalTime - now);
-
-    if (deltaTime <= 0) 
     {
-        // 이미 목표 시간 지났으면 즉시 위치 업데이트
-        transform.localPosition = goalPos;
-        return;
+        // 목표 위치까지 부드럽게 이동
+        transform.position = Vector3.MoveTowards(transform.position, goalPos, agentSpeed * Time.deltaTime);
     }
 
-    // 현재 트랜스폼 좌표랑 도착좌표 거리 계산.
-    float distance = Vector3.Distance(transform.localPosition, goalPos);
-
-    // 이동해야 할 시간 동안 예상 이동 속도 (거리 / 남은 시간)
-    float timeToReachGoal = Mathf.Max(deltaTime / 1000f, 0.1f); // 1000f는 ms를 초로 변환
-    float speed = distance / timeToReachGoal;
-
-    if (distance > TeleportDistanceThreshold)
+    private void RotateSmoothly()
     {
-        // 순간이동이면 바로 넣기. 
-        transform.localPosition = goalPos; 
-    }
-    else
-    {
-        // 예측된 위치 계산 (이동 속도에 맞춰 보간)
-        float step = speed * Time.deltaTime;
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition, goalPos, step);
-    }
-}
-
-private void RotateSmoothly()
-{
-    if (goalRot != Quaternion.identity)
-    {
-        // 현재 시간과 예상 도착 시간의 차이 계산
-        long now = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-        int deltaTime = (int)(EstimatedArrivalTime - now);
-
-        if (deltaTime <= 0)
+        if (goalRot != Quaternion.identity)
         {
-            // 목표 시간 이미 지났으면 바로 회전
-            transform.rotation = goalRot;
-            return;
+            float t = Mathf.Clamp(Time.deltaTime * SmoothRotateSpeed, 0, 0.99f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, goalRot, t);
         }
-
-        // 회전이 완료될 때까지 걸리는 시간 (초 단위)
-        float timeToReachGoal = Mathf.Max(deltaTime / 1000f, 0.1f); // 1000f는 ms -> 초로 변환
-
-        // 회전 속도 계산 (회전값 / 예상 시간)
-        float rotationSpeed = Vector3.Angle(transform.forward, goalRot * Vector3.forward) / timeToReachGoal;
-
-        // 회전 보간을 통해 목표 회전값으로 부드럽게 회전
-        float step = rotationSpeed * Time.deltaTime;
-        transform.rotation = Quaternion.Slerp(transform.rotation, goalRot, step);
     }
-}
 
 
     public void SendMessage(string msg)
@@ -172,12 +131,29 @@ private void RotateSmoothly()
         uiChat.PushMessage(nickname, msg, IsMine);
     }
 
-    public void Move(Vector3 move, Quaternion rot, long estimatedArrivalTime)
+    public void Move(Vector3 move, Quaternion rot, float speed )
     {
         goalPos = move;
         goalRot = rot;
-        EstimatedArrivalTime = estimatedArrivalTime;
+        agentSpeed = speed;
+
+        //Debug.Log($"예상 목표 좌표 : {goalPos}, 예상 목표 각도 : {goalRot}, 스피드 : {agentSpeed}, ");
     }
+
+    private float updateInterval = 0.1f; // 100ms
+    private float lastUpdateTime = 0f;
+    private float MinMoveDistance = 0.05f; // 5cm 이상 차이나야 갱신
+
+    private void UpdateGoalPosition(Vector3 newGoalPos)
+    {
+        if (Time.time - lastUpdateTime < updateInterval) return;
+        if (Vector3.Distance(goalPos, newGoalPos) < MinMoveDistance) return;
+
+        goalPos = newGoalPos;
+        lastUpdateTime = Time.time;
+    }
+
+
 
     public void PlayAnimation(int animCode)
     {

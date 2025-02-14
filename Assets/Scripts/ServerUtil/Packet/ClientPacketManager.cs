@@ -77,7 +77,7 @@ class PacketManager
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
     {
-        Debug.Log($"PacketManager.OnRecvPacket 호출: {BitConverter.ToString(buffer.Array, buffer.Offset, buffer.Count)}");
+        //Debug.Log($"PacketManager.OnRecvPacket 호출: {BitConverter.ToString(buffer.Array, buffer.Offset, buffer.Count)}");
 
         ushort count = 0;
 
