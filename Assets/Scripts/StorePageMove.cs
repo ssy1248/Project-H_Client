@@ -1,26 +1,26 @@
-using UnityEngine;
-using TMPro; // TextMeshPro °ü·Ã ³×ÀÓ½ºÆäÀÌ½º Ãß°¡
+ï»¿using UnityEngine;
+using TMPro; // TextMeshPro ê´€ë ¨ ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ì¶”ê°€
 
 public class PageManager : MonoBehaviour
 {
-    public GameObject[] consumablePages; // ¼Ò¸ğÇ° ÆäÀÌÁöµé
-    public GameObject[] equipmentPages;  // Àåºñ ÆäÀÌÁöµé
-    public GameObject[] sellPages;  // Àåºñ ÆäÀÌÁöµé
-    private GameObject[] currentPages;   // ÇöÀç È°¼ºÈ­µÈ ÆäÀÌÁö ¸®½ºÆ®
+    public GameObject[] consumablePages; // ì†Œëª¨í’ˆ í˜ì´ì§€ë“¤
+    public GameObject[] equipmentPages;  // ì¥ë¹„ í˜ì´ì§€ë“¤
+    public GameObject[] sellPages;  // ì¥ë¹„ í˜ì´ì§€ë“¤
+    private GameObject[] currentPages;   // í˜„ì¬ í™œì„±í™”ëœ í˜ì´ì§€ ë¦¬ìŠ¤íŠ¸
     private int currentPageIndex = 0;
 
-    public TextMeshProUGUI pageNumberText; // ÇöÀç ÆäÀÌÁö ¹øÈ£¸¦ Ç¥½ÃÇÒ TextMeshProUGUI UI
+    public TextMeshProUGUI pageNumberText; // í˜„ì¬ í˜ì´ì§€ ë²ˆí˜¸ë¥¼ í‘œì‹œí•  TextMeshProUGUI UI
 
     private void Start()
     {
-        // ±âº»ÀûÀ¸·Î ¼Ò¸ğÇ° ÆäÀÌÁö È°¼ºÈ­
+        // ê¸°ë³¸ì ìœ¼ë¡œ ì†Œëª¨í’ˆ í˜ì´ì§€ í™œì„±í™”
         currentPages = consumablePages;
         UpdatePageVisibility();
     }
 
     public void ShowNextPage()
     {
-        Debug.Log("Next Page Button Clicked!"); // ¹öÆ° Å¬¸¯ ½Ã Ãâ·ÂµÉ ·Î±×
+        Debug.Log("Next Page Button Clicked!"); // ë²„íŠ¼ í´ë¦­ ì‹œ ì¶œë ¥ë  ë¡œê·¸
         if (currentPageIndex < currentPages.Length - 1)
         {
             currentPageIndex++;
@@ -69,7 +69,7 @@ public class PageManager : MonoBehaviour
 
     private void UpdatePageVisibility()
     {
-        // ¸ğµç ÆäÀÌÁö ºñÈ°¼ºÈ­ ÈÄ ÇöÀç ÆäÀÌÁö È°¼ºÈ­
+        // ëª¨ë“  í˜ì´ì§€ ë¹„í™œì„±í™” í›„ í˜„ì¬ í˜ì´ì§€ í™œì„±í™”
         DisableAllPages(consumablePages);
         DisableAllPages(equipmentPages);
         DisableAllPages(sellPages);
@@ -79,7 +79,7 @@ public class PageManager : MonoBehaviour
             currentPages[currentPageIndex].SetActive(true);
         }
 
-        // ÆäÀÌÁö ¹øÈ£ ¾÷µ¥ÀÌÆ®
+        // í˜ì´ì§€ ë²ˆí˜¸ ì—…ë°ì´íŠ¸
         UpdatePageNumberText();
     }
 
@@ -96,7 +96,7 @@ public class PageManager : MonoBehaviour
 
     private void UpdatePageNumberText()
     {
-        // ÇöÀç ÆäÀÌÁö ¹øÈ£¸¦ ÅØ½ºÆ®·Î Ç¥½Ã (TextMeshPro »ç¿ë)
+        // í˜„ì¬ í˜ì´ì§€ ë²ˆí˜¸ë¥¼ í…ìŠ¤íŠ¸ë¡œ í‘œì‹œ (TextMeshPro ì‚¬ìš©)
         if (pageNumberText != null)
         {
             pageNumberText.text = $"{currentPageIndex + 1} / {currentPages.Length}";
