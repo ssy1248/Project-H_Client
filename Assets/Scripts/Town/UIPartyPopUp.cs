@@ -35,6 +35,17 @@ public class UIPartyPopUp : MonoBehaviour
         PartyInviteRequest();
     }
 
+    public void PartyExitBtnClick()
+    {
+        PartyExitRequest();
+    }
+
+    private void PartyExitRequest()
+    {
+        C_PartyExitRequest partyExitPacket = new C_PartyExitRequest { UserId = TownManager.Instance.MyPlayer.PlayerId };
+        GameManager.Network.Send(partyExitPacket);
+    }
+
     private void PartySearch()
     {
         C_SearchPartyRequest partySearchPacket = new C_SearchPartyRequest { PartyName = partySearchInputField.text };

@@ -91,6 +91,17 @@ public class TownManager : MonoBehaviour
         txtServer.text = gameServer;
     }
 
+    // 닉네임으로 플레이어 조회 함수
+    public Player GetPlayerByNickname(string nickname)
+    {
+        foreach (var player in playerList.Values)
+        {
+            if (player.nickname.Equals(nickname, StringComparison.OrdinalIgnoreCase))
+                return player;
+        }
+        return null;
+    }
+
     public void Connected()
     {
         /*
@@ -357,6 +368,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
+        uiChat.PushMessage(MyPlayer.nickname, data.ChatMsg, data.PlayerId == MyPlayer.PlayerId);
     }
     //  주말 목표 입니다람쥐
 
@@ -390,9 +402,16 @@ public class TownManager : MonoBehaviour
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 생성 받은 데이터 : {data.Party}");
+
+        // 기존에 생성된 파티원 UI가 있다면 먼저 제거
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 파티 생성
         if (data.Success || data.Case == 1)
         {
-            // 파티 생성
             PartyUI.SetActive(true);
             PartyNameInputField.text = data.Party.PartyName;
             if (MyPlayer != null && MyPlayer.PlayerId == data.Party.PartyLeaderId)
@@ -412,9 +431,10 @@ public class TownManager : MonoBehaviour
                 }
             }
         }
-        else if (data.Success || data.Case == 2)
+        // 가입
+        else if (data.Success || data.Case == 3)
         {
-            // 파티 생성 실패
+
         }
     }
     public void PartyInviteResponse(S_PartyResponse data)
@@ -422,6 +442,55 @@ public class TownManager : MonoBehaviour
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 초대 후 받은 데이터 : {data}");
+
+        // 파티 UI 활성화
+        PartyUI.SetActive(true);
+        // 파티원 추방 버튼은 비활성화 해야할듯? 리더만 활성화해서 
+        PartyNameInputField.text = data.Party.PartyName;
+
+        // 기존에 생성된 파티원 UI가 있다면 먼저 제거
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // PartyInfo의 Players 리스트 순회
+        foreach (var playerStatus in data.Party.Players)
+        {
+            GameObject prefabToInstantiate;
+
+            // PlayerStatus에 PlayerId가 0(또는 기본값)인 경우, 닉네임을 통해 플레이어를 찾아 보완합니다.
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            // 파티 리더이면 LeaderStatusPrefab, 아니면 MemberStatusPrefab 사용
+            if (playerId == data.Party.PartyLeaderId)
+            {
+                prefabToInstantiate = LeaderStatusPrefab;
+            }
+            else
+            {
+                prefabToInstantiate = MemberStatusPrefab;
+            }
+
+            // 프리팹 인스턴스 생성 및 PartyStatusSpawnPoint의 자식으로 추가
+            GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
+
+            // 인스턴스의 자식에서 TextMeshProUGUI 컴포넌트 찾기 및 닉네임 설정
+            TextMeshProUGUI statusText = statusObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (statusText != null)
+            {
+                statusText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("프리팹에서 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
     }
     // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
@@ -436,6 +505,79 @@ public class TownManager : MonoBehaviour
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 서치 받은 데이터 : {data}");
+    }
+
+    // 파티 추방
+    public void PartyKickResponse(S_PartyResultResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 추방 받은 데이터 : {data}");
+    }
+
+    // 파티 탈퇴
+    public void PartyExitResponse(S_PartyResultResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 탈퇴 받은 데이터 : {data}");
+
+        PartyUI.SetActive(false);
+    }
+
+    public void PartyUpdateResponse(S_PartyResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 업데이트 받은 데이터 : {data}");
+
+        // 파티 UI 활성화 및 파티 이름 업데이트
+        PartyUI.SetActive(true);
+        PartyNameInputField.text = data.Party.PartyName;
+
+        // 기존에 생성된 파티원 UI 제거 (중복 갱신 방지)
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
+        foreach (var playerStatus in data.Party.Players)
+        {
+            GameObject prefabToInstantiate;
+
+            // 만약 PlayerStatus에 PlayerId 값이 0이라면, 닉네임으로 플레이어를 찾아 보완
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            // 파티 리더이면 LeaderStatusPrefab, 그렇지 않으면 MemberStatusPrefab 사용
+            if (playerId == data.Party.PartyLeaderId)
+            {
+                prefabToInstantiate = LeaderStatusPrefab;
+            }
+            else
+            {
+                prefabToInstantiate = MemberStatusPrefab;
+            }
+
+            // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
+            GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
+
+            // 인스턴스된 오브젝트의 자식에서 TextMeshProUGUI 컴포넌트를 찾아 파티원 닉네임 설정
+            TextMeshProUGUI statusText = statusObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (statusText != null)
+            {
+                statusText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("프리팹에서 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */

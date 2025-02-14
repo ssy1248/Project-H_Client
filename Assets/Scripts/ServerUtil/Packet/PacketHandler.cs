@@ -78,6 +78,11 @@ class PacketHandler
         {
             // 파티 가입 핸들러
         }
+        else if (enterPacket.Case == 4)
+        {
+            // 파티 업데이트 
+            TownManager.Instance.PartyUpdateResponse(enterPacket);
+        }
     }
     public static void S_EnterDungeonHandler(PacketSession session, IMessage packet)
     {
@@ -114,6 +119,14 @@ class PacketHandler
     public static void S_PartyResultHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_PartyResultResponse enterPacket) return;
+        if (enterPacket.Case == 1)
+        {
+            TownManager.Instance.PartyKickResponse(enterPacket);
+        }
+        else if (enterPacket.Case == 2)
+        {
+            TownManager.Instance.PartyExitResponse(enterPacket);
+        }
     }
     public static void S_marketMyListHandler(PacketSession session, IMessage packet)
     {
