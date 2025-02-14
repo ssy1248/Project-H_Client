@@ -23,7 +23,17 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
 
-    // Å×½ºÆ® ¿ëµµ·Î »ı¼º
+    #region íŒŒí‹° UI
+    [Header("íŒŒí‹° UI ëª¨ìŒ")]
+    [SerializeField] private GameObject PartyUI;
+    [SerializeField] private TMP_InputField PartyNameInputField;
+    [SerializeField] private GameObject PartyStatusSpawnPoint;
+    [SerializeField] private GameObject LeaderStatusPrefab;
+    [SerializeField] private GameObject MemberStatusPrefab;
+    #endregion
+    
+    [Header("í…ŒìŠ¤íŠ¸")]
+    // í…ŒìŠ¤íŠ¸ ìš©ë„ë¡œ ìƒì„±
     [SerializeField] GameObject errorText;
 
     private const string DefaultPlayerPath = "Player/Player1";
@@ -81,15 +91,26 @@ public class TownManager : MonoBehaviour
         txtServer.text = gameServer;
     }
 
+    // ë‹‰ë„¤ì„ìœ¼ë¡œ í”Œë ˆì´ì–´ ì¡°íšŒ í•¨ìˆ˜
+    public Player GetPlayerByNickname(string nickname)
+    {
+        foreach (var player in playerList.Values)
+        {
+            if (player.nickname.Equals(nickname, StringComparison.OrdinalIgnoreCase))
+                return player;
+        }
+        return null;
+    }
+
     public void Connected()
     {
         /*
         var enterPacket = new C_RegisterRequest
         {
-            //¿©±â¿¡ ÀÌ¸ŞÀÏ ¿¬°á 
+            //ì—¬ê¸°ì— ì´ë©”ì¼ ì—°ê²° 
             Email = "aaaaaaa",
             Nickname = GameManager.Instance.UserName,
-            //¿©±â¿¡ ºñ¹Ğ¹øÈ£ ¿¬°á
+            //ì—¬ê¸°ì— ë¹„ë°€ë²ˆí˜¸ ì—°ê²°
             Password = "aaaaaaaa"
         };
 
@@ -103,16 +124,16 @@ public class TownManager : MonoBehaviour
         GameManager.Network.Send(enterPacket);*/
     }
 
-    /* ÀÓ½Ã·Î ¸¸µç º¸³»´Â ¸Ş¼­µå µé */
-    // ÇØ¾ßÇÒ ÀÏ ÆĞÅ¶¿¡ µé¾î°¥ ¸Å°³º¯¼ö·Î ¹Ş°Å³ª ´Ù¸¥°÷¿¡¼­ ¹Ş¾Æ¿À´Â Çü½ÄÀ¸·Î º¸³¾ ÆĞÅ¶ Â¥±â 
+    /* ì„ì‹œë¡œ ë§Œë“  ë³´ë‚´ëŠ” ë©”ì„œë“œ ë“¤ */
+    // í•´ì•¼í•  ì¼ íŒ¨í‚·ì— ë“¤ì–´ê°ˆ ë§¤ê°œë³€ìˆ˜ë¡œ ë°›ê±°ë‚˜ ë‹¤ë¥¸ê³³ì—ì„œ ë°›ì•„ì˜¤ëŠ” í˜•ì‹ìœ¼ë¡œ ë³´ë‚¼ íŒ¨í‚· ì§œê¸° 
     public void Register(string email, string nickname, string password)
     {
         var enterPacket = new C_RegisterRequest
         {
-            //¿©±â¿¡ ÀÌ¸ŞÀÏ ¿¬°á 
+            //ì—¬ê¸°ì— ì´ë©”ì¼ ì—°ê²° 
             Email = email,
             Nickname = nickname,//GameManager.Instance.UserName,
-            //¿©±â¿¡ ºñ¹Ğ¹øÈ£ ¿¬°á
+            //ì—¬ê¸°ì— ë¹„ë°€ë²ˆí˜¸ ì—°ê²°
             Password = password
         };
         GameManager.Network.Send(enterPacket);
@@ -121,15 +142,15 @@ public class TownManager : MonoBehaviour
     {
         var enterPacket = new C_LoginRequest
         {
-            //¿©±â¿¡ ÀÌ¸ŞÀÏ ¿¬°á 
+            //ì—¬ê¸°ì— ì´ë©”ì¼ ì—°ê²° 
             Email = email,
-            //¿©±â¿¡ ºñ¹Ğ¹øÈ£ ¿¬°á
+            //ì—¬ê¸°ì— ë¹„ë°€ë²ˆí˜¸ ì—°ê²°
             Password = password
         };
 
         GameManager.Network.Send(enterPacket);
     }
-    // ÆĞÅ¶ ¸í¼¼¿¡¼­´Â ´Ğ³×ÀÓ, Å¬·¡½ºÀÎµ¥ »ı¼ºÀÚ¸¦ º¸´Ï Å¬·¡½º¹Û¿¡ ¾øÀ½
+    // íŒ¨í‚· ëª…ì„¸ì—ì„œëŠ” ë‹‰ë„¤ì„, í´ë˜ìŠ¤ì¸ë° ìƒì„±ìë¥¼ ë³´ë‹ˆ í´ë˜ìŠ¤ë°–ì— ì—†ìŒ
     public void SelectCharacterRequest(/*string nickname*/ int jobIndex)
     {
         var selectCharacterPacket = new C_SelectCharacterRequest
@@ -240,25 +261,25 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(enterDungeonPacket);
     }
-    /* ¿©±â±îÁö */
+    /* ì—¬ê¸°ê¹Œì§€ */
 
-    /* ÀÓ½Ã·Î ¸¸µç ¹Ş´Â ¸Ş¼­µå µé */
-    // ÇÚµé·¯¿Í ¿¬°áÈÄ °¢°¢ ÇÊ¿äÇÑ ±â´É ±¸Çö 
+    /* ì„ì‹œë¡œ ë§Œë“  ë°›ëŠ” ë©”ì„œë“œ ë“¤ */
+    // í•¸ë“¤ëŸ¬ì™€ ì—°ê²°í›„ ê°ê° í•„ìš”í•œ ê¸°ëŠ¥ êµ¬í˜„ 
 
-    // È¸¿ø°¡ÀÔ È®ÀÎ ¸Ş¼¼Áö Ãâ·ÂÁ¤µµ.
+    // íšŒì›ê°€ì… í™•ì¸ ë©”ì„¸ì§€ ì¶œë ¥ì •ë„.
     IEnumerator erroText()
     {
         errorText.SetActive(true);
         yield return new WaitForSeconds(1f);
         errorText.SetActive(false);
     }
-    // Å×½ºÆ® ÄÚµå 
+    // í…ŒìŠ¤íŠ¸ ì½”ë“œ 
     public void RegisterResponse(S_RegisterResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ·Î±×ÀÎ È®ÀÎÈÄ ´ÙÀ½ Ä³¸¯ÅÍ ¼±ÅÃÃ¢À¸·Î ÀÌµ¿ ±¸Çö
+    // ë¡œê·¸ì¸ í™•ì¸í›„ ë‹¤ìŒ ìºë¦­í„° ì„ íƒì°½ìœ¼ë¡œ ì´ë™ êµ¬í˜„
     public void LoginResponse(S_LoginResponse data)
     {
         StartCoroutine("erroText");
@@ -269,7 +290,7 @@ public class TownManager : MonoBehaviour
             UiRegister.chuseObject.SetActive(true);
         }
     }
-    // ´Ù¸¥ ÇÃ·¹ÀÌ¾îµé µé¾î¿À¸é »ı¼ºÇØÁÖ±â // ¾Æ·¡ spanwn ÇÔ¼ö »ç¿ëÇÏ¸é ¾Æ¸¶ ±¸Çö
+    // ë‹¤ë¥¸ í”Œë ˆì´ì–´ë“¤ ë“¤ì–´ì˜¤ë©´ ìƒì„±í•´ì£¼ê¸° // ì•„ë˜ spanwn í•¨ìˆ˜ ì‚¬ìš©í•˜ë©´ ì•„ë§ˆ êµ¬í˜„
     public void Enter(S_Enter data)
     {
         StartCoroutine("erroText");
@@ -278,17 +299,17 @@ public class TownManager : MonoBehaviour
     }
 
     //private Dictionary<int, Player> playerList = new();
-    // ³»°¡ ¸¶À»¿¡ Âü°¡ÇÏ¸é for¹®ÀÌµç ¹İº¹¹®ÀÌµç µ¹¸®¸é¼­ »ı¼ºÇØÁÖ±â.
-    // ¿©±â ÆĞÅ¶¿¡ ÀÚ±â ÀÚ½ÅÀÌ ¸î¹øÀÎÁö Ãß°¡ÇØÁáÀ¸¸é ÁÁ°Ú½À´Ï´Ù.
+    // ë‚´ê°€ ë§ˆì„ì— ì°¸ê°€í•˜ë©´ forë¬¸ì´ë“  ë°˜ë³µë¬¸ì´ë“  ëŒë¦¬ë©´ì„œ ìƒì„±í•´ì£¼ê¸°.
+    // ì—¬ê¸° íŒ¨í‚·ì— ìê¸° ìì‹ ì´ ëª‡ë²ˆì¸ì§€ ì¶”ê°€í•´ì¤¬ìœ¼ë©´ ì¢‹ê² ìŠµë‹ˆë‹¤.
     public void AllSpawn(S_Spawn data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
         Debug.Log(data);
-        Debug.Log("ÇÃ·¹ÀÌ¾î ¼ö : " + data.Players.Count);
+        Debug.Log("í”Œë ˆì´ì–´ ìˆ˜ : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
-            Debug.Log("Æ÷ÀÌÄ¡ µé¾î¿È");
+            Debug.Log("í¬ì´ì¹˜ ë“¤ì–´ì˜´");
             if (player.PlayerId == data.UserId)
             {
                 Spawn(player, true);
@@ -299,7 +320,7 @@ public class TownManager : MonoBehaviour
             }
         }
     }
-    // ³ª°¡¸é »èÁ¦ÇØÁÖ±â 
+    // ë‚˜ê°€ë©´ ì‚­ì œí•´ì£¼ê¸° 
     public void Despawn(S_Despawn data)
     {
         StartCoroutine("erroText");
@@ -317,21 +338,21 @@ public class TownManager : MonoBehaviour
             return;
         }
 
-        // TransformInfo¸¦ ÀÌ¿ëÇØ »õ·Î¿î À§Ä¡¿Í È¸Àü°ªÀ» °è»êÇÕ´Ï´Ù.
+        // TransformInfoë¥¼ ì´ìš©í•´ ìƒˆë¡œìš´ ìœ„ì¹˜ì™€ íšŒì „ê°’ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
         Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
-        // ¿©±â¼­´Â yÃà È¸Àü¸¸ Àû¿ëÇÑ´Ù°í °¡Á¤ (ÇÊ¿ä½Ã ´Ù¸¥ Ãàµµ Àû¿ë)
+        // ì—¬ê¸°ì„œëŠ” yì¶• íšŒì „ë§Œ ì ìš©í•œë‹¤ê³  ê°€ì • (í•„ìš”ì‹œ ë‹¤ë¥¸ ì¶•ë„ ì ìš©)
         Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
 
-        // ÇÃ·¹ÀÌ¾îÀÇ Move() ¸Ş¼­µå¸¦ È£ÃâÇÏ¿© ºÎµå·¯¿î ÀÌµ¿ ¹× È¸Àü Ã³¸®¸¦ À§ÀÓÇÕ´Ï´Ù.
+        // í”Œë ˆì´ì–´ì˜ Move() ë©”ì„œë“œë¥¼ í˜¸ì¶œí•˜ì—¬ ë¶€ë“œëŸ¬ìš´ ì´ë™ ë° íšŒì „ ì²˜ë¦¬ë¥¼ ìœ„ì„í•©ë‹ˆë‹¤.
         player.Move(targetPos, targetRot);
     }
-    //¾Æ¸¶ ¾ÆÀÌµğ ¹ŞÀºµÚ ÇØ´ç id player ¾Ö´Ï¸ŞÀÌ¼Ç 
+    //ì•„ë§ˆ ì•„ì´ë”” ë°›ì€ë’¤ í•´ë‹¹ id player ì• ë‹ˆë©”ì´ì…˜ 
     public void AllAnimation(S_Animation data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
 
-        // playerList µñ¼Å³Ê¸®³ª GetPlayerAvatarById¸¦ ÀÌ¿ëÇØ ÇØ´ç ÇÃ·¹ÀÌ¾î¸¦ Ã£½À´Ï´Ù.
+        // playerList ë”•ì…”ë„ˆë¦¬ë‚˜ GetPlayerAvatarByIdë¥¼ ì´ìš©í•´ í•´ë‹¹ í”Œë ˆì´ì–´ë¥¼ ì°¾ìŠµë‹ˆë‹¤.
         Player player = GetPlayerAvatarById(data.PlayerId);
         if (player == null)
         {
@@ -339,85 +360,234 @@ public class TownManager : MonoBehaviour
             return;
         }
 
-        // ÇÃ·¹ÀÌ¾îÀÇ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ¸Ş¼­µå È£Ãâ
+        // í”Œë ˆì´ì–´ì˜ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ë©”ì„œë“œ í˜¸ì¶œ
         player.PlayAnimation(data.AnimCode);
     }
-    // Ã¤ÆÃ ¹Ş¾Æ¿À±â
+    // ì±„íŒ… ë°›ì•„ì˜¤ê¸°
     public void ChatResponse(S_Chat data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
+        uiChat.PushMessage(MyPlayer.nickname, data.ChatMsg, data.PlayerId == MyPlayer.PlayerId);
     }
-    //  ÁÖ¸» ¸ñÇ¥ ÀÔ´Ï´Ù¶÷Áã
+    //  ì£¼ë§ ëª©í‘œ ì…ë‹ˆë‹¤ëŒì¥
 
-    // ¾ÆÀÌÅÛ »ç´Â°Å ÀÀ´ä Ã³¸®
+    // ì•„ì´í…œ ì‚¬ëŠ”ê±° ì‘ë‹µ ì²˜ë¦¬
     public void BuyItemResponse(S_BuyItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ¾ÆÀÌÅÛ ÀåÂø ÀÀ´ä Ã³¸®
+    // ì•„ì´í…œ ì¥ì°© ì‘ë‹µ ì²˜ë¦¬
     public void EquipItemResponse(S_EquipItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ¾ÆÀÌÅÛ Å»Âø ÀÀ´ä Ã³¸®
+    // ì•„ì´í…œ íƒˆì°© ì‘ë‹µ ì²˜ë¦¬
     public void DisrobeItemResponse(S_DisrobeItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ¼Òºñ ÀåÂø ÀÀ´ä Ã³¸®
+    // ì†Œë¹„ ì¥ì°© ì‘ë‹µ ì²˜ë¦¬
     public void ActiveItemeResponse(S_ActiveItemResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
-    // ÆÄÆ¼ ÀÀ´ä Ã³¸®
+    // íŒŒí‹° ì‘ë‹µ ì²˜ë¦¬
     public void PartyResponse(S_PartyResponse data)
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ »ı¼º ¹ŞÀº µ¥ÀÌÅÍ : {data}");
-        if (data.Success)
+        Debug.Log($"íŒŒí‹° ìƒì„± ë°›ì€ ë°ì´í„° : {data.Party}");
+
+        // ê¸°ì¡´ì— ìƒì„±ëœ íŒŒí‹°ì› UIê°€ ìˆë‹¤ë©´ ë¨¼ì € ì œê±°
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
         {
-            // ÆÄÆ¼ »ı¼º
+            Destroy(child.gameObject);
         }
-        else
+
+        // íŒŒí‹° ìƒì„±
+        if (data.Success || data.Case == 1)
         {
-            // ÆÄÆ¼ »ı¼º ½ÇÆĞ
+            PartyUI.SetActive(true);
+            PartyNameInputField.text = data.Party.PartyName;
+            if (MyPlayer != null && MyPlayer.PlayerId == data.Party.PartyLeaderId)
+            {
+                // PartyStatusSpawnPointì˜ ìì‹ìœ¼ë¡œ LeaderStatusPrefab ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+                GameObject leaderStatusObj = Instantiate(LeaderStatusPrefab, PartyStatusSpawnPoint.transform);
+
+                // ì¸ìŠ¤í„´ìŠ¤ëœ ì˜¤ë¸Œì íŠ¸ì˜ ìì‹ì—ì„œ TextMeshProUGUI ì»´í¬ë„ŒíŠ¸ ì°¾ê¸°
+                TextMeshProUGUI leaderText = leaderStatusObj.GetComponentInChildren<TextMeshProUGUI>();
+                if (leaderText != null)
+                {
+                    leaderText.text = MyPlayer.nickname;
+                }
+                else
+                {
+                    Debug.LogWarning("LeaderStatusPrefabì— TextMeshProUGUI ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+                }
+            }
+        }
+        // ê°€ì…
+        else if (data.Success || data.Case == 3)
+        {
+
         }
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ ÃÊ´ë ÈÄ ¹ŞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"íŒŒí‹° ì´ˆëŒ€ í›„ ë°›ì€ ë°ì´í„° : {data}");
+
+        // íŒŒí‹° UI í™œì„±í™”
+        PartyUI.SetActive(true);
+        // íŒŒí‹°ì› ì¶”ë°© ë²„íŠ¼ì€ ë¹„í™œì„±í™” í•´ì•¼í• ë“¯? ë¦¬ë”ë§Œ í™œì„±í™”í•´ì„œ 
+        PartyNameInputField.text = data.Party.PartyName;
+
+        // ê¸°ì¡´ì— ìƒì„±ëœ íŒŒí‹°ì› UIê°€ ìˆë‹¤ë©´ ë¨¼ì € ì œê±°
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // PartyInfoì˜ Players ë¦¬ìŠ¤íŠ¸ ìˆœíšŒ
+        foreach (var playerStatus in data.Party.Players)
+        {
+            GameObject prefabToInstantiate;
+
+            // PlayerStatusì— PlayerIdê°€ 0(ë˜ëŠ” ê¸°ë³¸ê°’)ì¸ ê²½ìš°, ë‹‰ë„¤ì„ì„ í†µí•´ í”Œë ˆì´ì–´ë¥¼ ì°¾ì•„ ë³´ì™„í•©ë‹ˆë‹¤.
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            // íŒŒí‹° ë¦¬ë”ì´ë©´ LeaderStatusPrefab, ì•„ë‹ˆë©´ MemberStatusPrefab ì‚¬ìš©
+            if (playerId == data.Party.PartyLeaderId)
+            {
+                prefabToInstantiate = LeaderStatusPrefab;
+            }
+            else
+            {
+                prefabToInstantiate = MemberStatusPrefab;
+            }
+
+            // í”„ë¦¬íŒ¹ ì¸ìŠ¤í„´ìŠ¤ ìƒì„± ë° PartyStatusSpawnPointì˜ ìì‹ìœ¼ë¡œ ì¶”ê°€
+            GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
+
+            // ì¸ìŠ¤í„´ìŠ¤ì˜ ìì‹ì—ì„œ TextMeshProUGUI ì»´í¬ë„ŒíŠ¸ ì°¾ê¸° ë° ë‹‰ë„¤ì„ ì„¤ì •
+            TextMeshProUGUI statusText = statusObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (statusText != null)
+            {
+                statusText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("í”„ë¦¬íŒ¹ì—ì„œ TextMeshProUGUI ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+            }
+        }
     }
-    // ¸ğµç ÆÄÆ¼ Á¶È¸
+    // ëª¨ë“  íŒŒí‹° ì¡°íšŒ
     public void PartyListResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ ¼­Ä¡ ¹ŞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"íŒŒí‹° ì„œì¹˜ ë°›ì€ ë°ì´í„° : {data}");
     }
-    // ÇÑ°³ ÆÄÆ¼ Á¶È¸
+    // í•œê°œ íŒŒí‹° ì¡°íšŒ
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-        Debug.Log($"ÆÄÆ¼ ¼­Ä¡ ¹ŞÀº µ¥ÀÌÅÍ : {data}");
+        Debug.Log($"íŒŒí‹° ì„œì¹˜ ë°›ì€ ë°ì´í„° : {data}");
     }
-    // ´øÀü ÂÊ ÃßÈÄ Ãß°¡ ¿¹Á¤
-    /* ¿©±â±îÁö */
 
-    // ÀÚ±â ÀÚ½Å ½ºÆù¿ëµµ 
+    // íŒŒí‹° ì¶”ë°©
+    public void PartyKickResponse(S_PartyResultResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"íŒŒí‹° ì¶”ë°© ë°›ì€ ë°ì´í„° : {data}");
+    }
+
+    // íŒŒí‹° íƒˆí‡´
+    public void PartyExitResponse(S_PartyResultResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"íŒŒí‹° íƒˆí‡´ ë°›ì€ ë°ì´í„° : {data}");
+
+        PartyUI.SetActive(false);
+    }
+
+    public void PartyUpdateResponse(S_PartyResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"íŒŒí‹° ì—…ë°ì´íŠ¸ ë°›ì€ ë°ì´í„° : {data}");
+
+        // íŒŒí‹° UI í™œì„±í™” ë° íŒŒí‹° ì´ë¦„ ì—…ë°ì´íŠ¸
+        PartyUI.SetActive(true);
+        PartyNameInputField.text = data.Party.PartyName;
+
+        // ê¸°ì¡´ì— ìƒì„±ëœ íŒŒí‹°ì› UI ì œê±° (ì¤‘ë³µ ê°±ì‹  ë°©ì§€)
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // ìƒˆë¡­ê²Œ ì—…ë°ì´íŠ¸ëœ PartyInfoì˜ Players ë¦¬ìŠ¤íŠ¸ë¥¼ ìˆœíšŒí•˜ì—¬ UI ìƒì„±
+        foreach (var playerStatus in data.Party.Players)
+        {
+            GameObject prefabToInstantiate;
+
+            // ë§Œì•½ PlayerStatusì— PlayerId ê°’ì´ 0ì´ë¼ë©´, ë‹‰ë„¤ì„ìœ¼ë¡œ í”Œë ˆì´ì–´ë¥¼ ì°¾ì•„ ë³´ì™„
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            // íŒŒí‹° ë¦¬ë”ì´ë©´ LeaderStatusPrefab, ê·¸ë ‡ì§€ ì•Šìœ¼ë©´ MemberStatusPrefab ì‚¬ìš©
+            if (playerId == data.Party.PartyLeaderId)
+            {
+                prefabToInstantiate = LeaderStatusPrefab;
+            }
+            else
+            {
+                prefabToInstantiate = MemberStatusPrefab;
+            }
+
+            // í”„ë¦¬íŒ¹ ì¸ìŠ¤í„´ìŠ¤ ìƒì„± í›„ PartyStatusSpawnPointì˜ ìì‹ìœ¼ë¡œ ì¶”ê°€
+            GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
+
+            // ì¸ìŠ¤í„´ìŠ¤ëœ ì˜¤ë¸Œì íŠ¸ì˜ ìì‹ì—ì„œ TextMeshProUGUI ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì•„ íŒŒí‹°ì› ë‹‰ë„¤ì„ ì„¤ì •
+            TextMeshProUGUI statusText = statusObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (statusText != null)
+            {
+                statusText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("í”„ë¦¬íŒ¹ì—ì„œ TextMeshProUGUI ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+            }
+        }
+    }
+    // ë˜ì „ ìª½ ì¶”í›„ ì¶”ê°€ ì˜ˆì •
+    /* ì—¬ê¸°ê¹Œì§€ */
+
+    // ìê¸° ìì‹  ìŠ¤í°ìš©ë„ 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
         if (isPlayer)
         {
-            Debug.Log("ÇÃ·¹ÀÌ¾î ÀÔ´Ï´Ù.");
+            Debug.Log("í”Œë ˆì´ì–´ ì…ë‹ˆë‹¤.");
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
