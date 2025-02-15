@@ -21,10 +21,6 @@ public class MyPlayer : MonoBehaviour
 
     private readonly List<int> animHash = new List<int>();
 
-    // 100ms마다 이동 패킷 전송 
-    private float sendMovePacketInterval = 0.1f; // 100ms
-    // 마지막으로 패킷을 전송한 시간
-    private float lastSendTime = 0f;
 
     void Awake()
     {
@@ -74,12 +70,12 @@ public class MyPlayer : MonoBehaviour
                 {
                     agent.SetDestination(navHit.position);
 
+                    // 방향 + 속도 velocity 구하는 로직.
                     Vector3 directionToGoal = (navHit.position - transform.position).normalized;
                     float speed = agent.speed;
                     Vector3 velocity = directionToGoal * speed;
 
-                    Debug.Log($"목표 좌표: {navHit.position}");
-                    SendMoveRaycastPacket(navHit.position, velocity, speed, speed);
+                    SendMovePacket(navHit.position, velocity, speed, speed);
                 }
             }
         }
@@ -105,15 +101,6 @@ public class MyPlayer : MonoBehaviour
         // 애니메이터? 관련된 설정?
         animator.SetFloat(Constants.TownPlayerMove, distanceMoved * 100);
 
-        // 일정 거리 이상 이동했고, 마지막 전송 이후 지정된 시간이 지났다면 패킷 전송
-        // && Time.time - lastSendTime > sendMovePacketInterval
-        if (distanceMoved > 0.01f)
-        {
-            // 이동 패킷 전송
-            //SendMovePacket();
-            // 마지막 전송 시간 업데이트
-            lastSendTime = Time.time; 
-        }
 
         // 현재 위치를 마지막 위치로 저장
         lastPos = transform.position;
@@ -121,43 +108,24 @@ public class MyPlayer : MonoBehaviour
 
    
 
-    private void SendMovePacket()
+    private void SendMovePacket(Vector3 position, Vector3 velocity, float speed, float rotationSpeed)
     {
+        // 마우스 클릭 좌표를 목표 지점으로 계산
+        Vector3 targetPosition = position; // 마우스 클릭 좌표
 
-        var tr = new TransformInfo
-        {
-            PosX = transform.position.x,
-            PosY = transform.position.y,
-            PosZ = transform.position.z,
-            Rot = transform.eulerAngles.y
-        };
+        // 현재 오브젝트 위치에서 목표 지점까지의 방향을 계산
+        Vector3 directionToTarget = targetPosition - transform.position;
+        directionToTarget.y = 0;  // 수평 방향으로만 회전하도록 y 값을 0으로 설정
 
-        long timestamp = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-        var movePacket = new C_Move
-        {
-            PlayerId = player.PlayerId,
-            Transform = tr,
-            Timestamp = timestamp
-        };
-
-  
-
-        GameManager.Network.Send(movePacket);
-    }
-
-    private void SendMoveRaycastPacket(Vector3 position, Vector3 velocity, float speed, float rotationSpeed)
-    {
-        // 회전 값이 없다면 기본값을 설정
-        float rotationY = transform.eulerAngles.y;
+        // 목표 지점 방향으로 회전 계산 (단위: 라디안 -> 도 단위 변환)
+        float rotationY = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
 
         // 회전 값이 NaN 또는 이상한 값이라면 초기화
-        if (rotationY == 0)
+        if (rotationY == 0 || rotationY == 0)
         {
             rotationY = 0.1f;  // 기본 회전 값
-            Debug.Log("여기오네요");
         }
 
-        Debug.Log($"rot {rotationY}");
         var tr = new TransformInfo
         {
             PosX = position.x,
@@ -165,8 +133,6 @@ public class MyPlayer : MonoBehaviour
             PosZ = position.z,
             Rot = rotationY
         };
-
-        Debug.Log(tr);
 
         var vel = new Velocity
         {
@@ -183,11 +149,8 @@ public class MyPlayer : MonoBehaviour
             Timestamp = timestamp,
             IsMoving = true,
             Velocity = vel,
-            Speed = speed,
-            RotationSpeed = rotationSpeed,
+            Speed = agent.speed,
         };
-
-
 
         GameManager.Network.Send(movePacket);
     }

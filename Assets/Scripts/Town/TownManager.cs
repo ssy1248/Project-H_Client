@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
@@ -8,6 +9,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
+// using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TownManager : MonoBehaviour
@@ -36,6 +38,9 @@ public class TownManager : MonoBehaviour
     private Dictionary<int, string> playerDb = new();
 
     public Player MyPlayer { get; private set; }
+
+    // 유저들 동기화에 사용할 딕셔너리
+    private List<Player> players = new List<Player>();
 
     private void Awake()
     {
@@ -303,8 +308,21 @@ public class TownManager : MonoBehaviour
     // ������ �������ֱ� 
     public void Despawn(S_Despawn data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
+        //StartCoroutine("erroText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
+
+        // 나중에 주석풀자.
+
+
+        Player playerToRemove = players.FirstOrDefault(p => p.PlayerId == data.PlayerId);
+
+        if (playerToRemove != null)
+        {
+            players.Remove(playerToRemove);
+            playerList.Remove(data.PlayerId);
+            playerToRemove.Despawn();
+
+        }
     }
     public void AllMove(S_Move data)
     {
@@ -458,6 +476,9 @@ public class TownManager : MonoBehaviour
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
         Player player = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
         player.SetIsMine(false);
+
+        // 플레이어를 리스트에 추가
+        players.Add(player);
     }
 
     //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)

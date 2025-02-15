@@ -44,6 +44,11 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    public void Despawn()
+    {
+        Destroy(gameObject);  // 게임 오브젝트 제거
+    }
+
     public void SetPlayerId(int playerId)
     {
         PlayerId = playerId;
@@ -96,8 +101,10 @@ public class Player : MonoBehaviour
 
     private void MoveSmoothly()
     {
+
         // 목표 위치까지 부드럽게 이동
         transform.position = Vector3.MoveTowards(transform.position, goalPos, agentSpeed * Time.deltaTime);
+        Debug.Log(transform.position);
     }
 
     private void RotateSmoothly()
@@ -136,24 +143,10 @@ public class Player : MonoBehaviour
         goalPos = move;
         goalRot = rot;
         agentSpeed = speed;
-
-        //Debug.Log($"예상 목표 좌표 : {goalPos}, 예상 목표 각도 : {goalRot}, 스피드 : {agentSpeed}, ");
+        Debug.Log(goalPos);
     }
 
-    private float updateInterval = 0.1f; // 100ms
-    private float lastUpdateTime = 0f;
-    private float MinMoveDistance = 0.05f; // 5cm 이상 차이나야 갱신
-
-    private void UpdateGoalPosition(Vector3 newGoalPos)
-    {
-        if (Time.time - lastUpdateTime < updateInterval) return;
-        if (Vector3.Distance(goalPos, newGoalPos) < MinMoveDistance) return;
-
-        goalPos = newGoalPos;
-        lastUpdateTime = Time.time;
-    }
-
-
+  
 
     public void PlayAnimation(int animCode)
     {
