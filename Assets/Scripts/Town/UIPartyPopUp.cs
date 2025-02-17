@@ -10,11 +10,7 @@ public class UIPartyPopUp : MonoBehaviour
     [SerializeField] private TMP_InputField partySearchInputField;
     [SerializeField] private TMP_InputField partyInviteInputField;
     [SerializeField] private TMP_InputField partyKickInputField;
-
-    void Update()
-    {
-
-    }
+    [SerializeField] public int selectPartyId;
 
     public void PartySearchBtnClick()
     {
@@ -46,6 +42,17 @@ public class UIPartyPopUp : MonoBehaviour
         PartyKickRequest();
     }
 
+    public void ParticipateBtnClick()
+    {
+        ParticipateRequest();
+    }
+
+    private void ParticipateRequest()
+    {
+        C_PartyJoinRequest partyJoinPacket = new C_PartyJoinRequest { PartyId = selectPartyId, UserId = TownManager.Instance.MyPlayer.PlayerId };
+        GameManager.Network.Send(partyJoinPacket);
+    }
+
     private void PartyKickRequest()
     {
         int kickUserId = TownManager.Instance.GetPlayerByNickname(partyKickInputField.text).PlayerId;
@@ -63,6 +70,7 @@ public class UIPartyPopUp : MonoBehaviour
     {
         C_SearchPartyRequest partySearchPacket = new C_SearchPartyRequest { PartyName = partySearchInputField.text };
         GameManager.Network.Send(partySearchPacket);
+        //partySearchInputField.text = "";
     }
 
     private void RequestPartyList()
@@ -75,11 +83,13 @@ public class UIPartyPopUp : MonoBehaviour
     {
         C_PartyRequest partyRequestPacket = new C_PartyRequest { UserId = TownManager.Instance.MyPlayer.PlayerId, PartyName = partyNameInputField.text };
         GameManager.Network.Send(partyRequestPacket);
+        //partyNameInputField.text = "";
     }
 
     private void PartyInviteRequest()
     {
         C_PartyInviteRequest partyInviteRequestPacket = new C_PartyInviteRequest { RequesterUserNickname = TownManager.Instance.MyPlayer.nickname, ParticipaterUserNickname = partyInviteInputField.text };
         GameManager.Network.Send(partyInviteRequestPacket);
+        //partyInviteInputField.text = "";
     }
 }
