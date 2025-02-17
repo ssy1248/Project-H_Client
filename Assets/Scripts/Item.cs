@@ -1,23 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public enum ItemType
-{
- Equipment,
- Consumbles,
- Etc
-}
 
 [System.Serializable]
 public class Item
 {
-    public ItemType itemType;
-    public string itemName;
-    public Sprite itemImage;
+    public string itemTitle;
+    public string itemDescription;
+    public int itemPrice;
+    public Sprite itemIcon;
 
-    public bool Use()
+    public Item(string title, string description, Sprite icon, int price)
     {
-        return false;
+        itemTitle = title;
+        itemDescription = description;
+        itemIcon = icon;
+        itemPrice = price;
     }
 }
