@@ -730,7 +730,31 @@ public class TownManager : MonoBehaviour
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
+    public void MarketListResponse(S_MarketList data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+    }
+    public void SellInMarketResponse(S_SellInMarket data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+    }
+    public void BuyInMarketResponse(S_BuyInMarket data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
 
+    }
+    public void MarketMyListResponse(S_MarketMyList data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+    }
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
