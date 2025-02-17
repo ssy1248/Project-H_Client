@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using System.Diagnostics;
 
 class PacketHandler
 {
@@ -44,6 +45,7 @@ class PacketHandler
     public static void S_ChatHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Chat enterPacket) return;
+        TownManager.Instance.ChatResponse(enterPacket);
     }
     public static void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
@@ -77,6 +79,7 @@ class PacketHandler
         else if (enterPacket.Case == 3)
         {
             // 파티 가입 핸들러
+            TownManager.Instance.PartyJoinHandler(enterPacket);
         }
         else if (enterPacket.Case == 4)
         {
@@ -128,21 +131,25 @@ class PacketHandler
             TownManager.Instance.PartyExitResponse(enterPacket);
         }
     }
-    public static void S_marketMyListHandler(PacketSession session, IMessage packet)
+    public static void S_MarketMyListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_marketMyList enterPacket) return;
+        if (packet is not S_MarketMyList enterPacket) return;
+        TownManager.Instance.MarketMyListResponse(enterPacket);
     }
-    public static void S_marketListHandler(PacketSession session, IMessage packet)
+    public static void S_MarketListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_marketList enterPacket) return;
+        if (packet is not S_MarketList enterPacket) return;
+        TownManager.Instance.MarketListResponse(enterPacket);
     }
     public static void S_SellInMarketHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_SellInMarket enterPacket) return;
+        TownManager.Instance.SellInMarketResponse(enterPacket);
     }
     public static void S_BuyInMarketHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BuyInMarket enterPacket) return;
+        TownManager.Instance.BuyInMarketResponse(enterPacket);
     }
     public static void S_InventoryHandler(PacketSession session, IMessage packet)
     {
