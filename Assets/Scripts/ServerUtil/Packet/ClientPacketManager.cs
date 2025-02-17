@@ -62,10 +62,10 @@ class PacketManager
         _handler.Add((ushort)MsgId.SPartysearchresponse, PacketHandler.S_PartySearchHandler);
         _onRecv.Add((ushort)MsgId.SPartyresultresponse, MakePacket<S_PartyResultResponse>);
         _handler.Add((ushort)MsgId.SPartyresultresponse, PacketHandler.S_PartyResultHandler);
-        _onRecv.Add((ushort)MsgId.SMarketlist, MakePacket<S_marketList>);
-        _handler.Add((ushort)MsgId.SMarketlist, PacketHandler.S_marketListHandler);
-        _onRecv.Add((ushort)MsgId.SMarketmylist, MakePacket<S_marketMyList>);
-        _handler.Add((ushort)MsgId.SMarketmylist, PacketHandler.S_marketMyListHandler);
+        _onRecv.Add((ushort)MsgId.SMarketlist, MakePacket<S_MarketList>);
+        _handler.Add((ushort)MsgId.SMarketlist, PacketHandler.S_MarketListHandler);
+        _onRecv.Add((ushort)MsgId.SMarketmylist, MakePacket<S_MarketMyList>);
+        _handler.Add((ushort)MsgId.SMarketmylist, PacketHandler.S_MarketMyListHandler);
         _onRecv.Add((ushort)MsgId.SSellinmarket, MakePacket<S_SellInMarket>);
         _handler.Add((ushort)MsgId.SSellinmarket, PacketHandler.S_SellInMarketHandler);
         _onRecv.Add((ushort)MsgId.SBuyinmarket, MakePacket<S_BuyInMarket>);
@@ -77,7 +77,7 @@ class PacketManager
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
     {
-        Debug.Log($"PacketManager.OnRecvPacket 호출: {BitConverter.ToString(buffer.Array, buffer.Offset, buffer.Count)}");
+        //Debug.Log($"PacketManager.OnRecvPacket 호출: {BitConverter.ToString(buffer.Array, buffer.Offset, buffer.Count)}");
 
         ushort count = 0;
 
