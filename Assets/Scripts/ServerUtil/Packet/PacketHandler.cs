@@ -132,11 +132,11 @@ class PacketHandler
     }
     public static void S_marketMyListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_marketMyList enterPacket) return;
+        if (packet is not S_MarketMyList enterPacket) return;
     }
     public static void S_marketListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_marketList enterPacket) return;
+        if (packet is not S_MarketMyList enterPacket) return;
     }
     public static void S_SellInMarketHandler(PacketSession session, IMessage packet)
     {

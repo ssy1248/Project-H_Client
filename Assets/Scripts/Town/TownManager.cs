@@ -298,7 +298,7 @@ public class TownManager : MonoBehaviour
     {
         var enterDungeonPacket = new C_EnterDungeon
         {
-            DungeonCode = duneonCode,
+            //DungeonCode = duneonCode,
             //Players = new PlayerInfo
             //{
             //    PlayerId = player.PlayerId,
