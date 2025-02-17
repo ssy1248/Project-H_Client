@@ -487,11 +487,6 @@ public class TownManager : MonoBehaviour
                 }
             }
         }
-        // 가입
-        else if (data.Success || data.Case == 3)
-        {
-
-        }
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
@@ -647,7 +642,7 @@ public class TownManager : MonoBehaviour
             }
         }
     }
-    // 파티 검색 결과
+    // 파티 검색 결과 // 코드 구현
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
