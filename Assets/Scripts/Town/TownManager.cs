@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
+// using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TownManager : MonoBehaviour
@@ -55,6 +56,9 @@ public class TownManager : MonoBehaviour
     private Dictionary<int, PartyInfo> partyInfoDict = new Dictionary<int, PartyInfo>();
 
     public Player MyPlayer { get; private set; }
+
+    // 유저들 동기화에 사용할 딕셔너리
+    private List<Player> players = new List<Player>();
 
     private void Awake()
     {
@@ -294,7 +298,7 @@ public class TownManager : MonoBehaviour
     {
         var enterDungeonPacket = new C_EnterDungeon
         {
-            DungeonCode = duneonCode,
+            //DungeonCode = duneonCode,
             //Players = new PlayerInfo
             //{
             //    PlayerId = player.PlayerId,
@@ -369,28 +373,76 @@ public class TownManager : MonoBehaviour
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString());
+        //StartCoroutine("erroText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
+
+        // 나중에 주석풀자.
+
+
+        Player playerToRemove = players.FirstOrDefault(p => p.PlayerId == data.PlayerId);
+
+        if (playerToRemove != null)
+        {
+            players.Remove(playerToRemove);
+            playerList.Remove(data.PlayerId);
+            playerToRemove.Despawn();
+
+        }
     }
     public void AllMove(S_Move data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+        // 받은 배열 만큼 반복문을 돌려야함
+        // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
+        foreach (var syncTransformInfo  in data.TransformInfos) {
+            // 플레이어 ID
+            int playerId = syncTransformInfo.PlayerId;
+            
+            // 트랜스폼 정보 (위치 회전)
+            TransformInfo transformInfo = syncTransformInfo.Transform;
+            Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
+            Quaternion targetRot = Quaternion.Euler(0, transformInfo.Rot, 0);
 
-        Player player = GetPlayerAvatarById(data.PlayerId);
-        if (player == null)
-        {
-            Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
-            return;
+            // 스피드
+            float speed = syncTransformInfo.Speed;
+
+
+            // 플레이어가 존재하는지 검증.
+            Player player = GetPlayerAvatarById(playerId);
+            if(player == null) {
+                continue;
+            }
+
+            // 플레이어가 본인인지 검증.
+            if(MyPlayer.PlayerId == playerId) {
+                continue;
+            }
+
+            
+            // 플레이어에게 이동 정보를 넘긴다.
+            player.Move(targetPos, targetRot, speed);
         }
 
-        // TransformInfo를 이용해 새로운 위치와 회전값을 계산합니다.
-        Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
-        // 여기서는 y축 회전만 적용한다고 가정 (필요시 다른 축도 적용)
-        Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
 
-        // 플레이어의 Move() 메서드를 호출하여 부드러운 이동 및 회전 처리를 위임합니다.
-        player.Move(targetPos, targetRot);
+
+        // StartCoroutine("erroText");
+        // errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+
+        // Player player = GetPlayerAvatarById(data.PlayerId);
+        // if (player == null)
+        // {
+        //     Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
+        //     return;
+        // }
+
+        // if(MyPlayer.PlayerId != data.PlayerId)
+
+        // // TransformInfo�� �̿��� ���ο� ��ġ�� ȸ������ ����մϴ�.
+        // Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
+        // // ���⼭�� y�� ȸ���� �����Ѵٰ� ���� (�ʿ�� �ٸ� �൵ ����)
+        // Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
+
+        // // �÷��̾��� Move() �޼��带 ȣ���Ͽ� �ε巯�� �̵� �� ȸ�� ó���� �����մϴ�.
+        // player.Move(targetPos, targetRot);
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
     public void AllAnimation(S_Animation data)
@@ -769,6 +821,9 @@ public class TownManager : MonoBehaviour
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
         Player player = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
         player.SetIsMine(false);
+
+        // 플레이어를 리스트에 추가
+        players.Add(player);
     }
 
     //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
@@ -786,7 +841,7 @@ public class TownManager : MonoBehaviour
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-        player.Move(spawnPos, Quaternion.identity);
+        player.Move(spawnPos, Quaternion.identity, 0);
         player.SetPlayerId(playerInfo.PlayerId);
         player.SetNickname(playerInfo.Nickname);
 
