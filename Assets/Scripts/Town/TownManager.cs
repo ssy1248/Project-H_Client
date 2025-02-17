@@ -314,6 +314,42 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(enterDungeonPacket);
     }
+
+    public void MarketListRequest(int page, int count)
+    {
+        var marketListPacket = new C_MarketList
+        {
+            Page = page,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
+    public void SellInMarketRequest(int inventoryId, int itemId)
+    {
+        var SellInMarketPacket = new C_SellInMarket
+        {
+            InventoryId = inventoryId,
+            ItemId = itemId,
+        };
+        GameManager.Network.Send(SellInMarketPacket);
+    }
+    public void BuyInMarketRequest(int marketId)
+    {
+        var BuyInMarketPacket = new C_BuyInMarket
+        {
+            MarketId = marketId,
+        };
+        GameManager.Network.Send(BuyInMarketPacket);
+    }
+    public void MarketMyListRequest(int page, int count)
+    {
+        var marketListPacket = new C_MarketMyList
+        {
+            Page = page,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -853,6 +889,32 @@ public class TownManager : MonoBehaviour
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
+    // 마켓 관련 패킷 추가 
+    public void MarketListResponse(S_MarketList data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+    }
+    public void SellInMarketResponse(S_SellInMarket data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+    }
+    public void BuyInMarketResponse(S_BuyInMarket data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
+    }
+    public void MarketMyListResponse(S_MarketMyList data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+    }
 
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
