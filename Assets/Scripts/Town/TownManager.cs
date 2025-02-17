@@ -347,6 +347,8 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
+        Debug.Log(data);
+        uiChat.PushMessage(playerList[data.PlayerId].nickname, data.ChatMsg, data.PlayerId == MyPlayer.PlayerId);
     }
     //  주말 목표 입니다람쥐
 
