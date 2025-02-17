@@ -130,11 +130,11 @@ class PacketHandler
             TownManager.Instance.PartyExitResponse(enterPacket);
         }
     }
-    public static void S_marketMyListHandler(PacketSession session, IMessage packet)
+    public static void S_MarketMyListHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MarketMyList enterPacket) return;
     }
-    public static void S_marketListHandler(PacketSession session, IMessage packet)
+    public static void S_MarketListHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MarketMyList enterPacket) return;
     }
