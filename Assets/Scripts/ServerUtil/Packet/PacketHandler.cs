@@ -77,6 +77,7 @@ class PacketHandler
         else if (enterPacket.Case == 3)
         {
             // 파티 가입 핸들러
+            TownManager.Instance.PartyJoinHandler(enterPacket);
         }
         else if (enterPacket.Case == 4)
         {

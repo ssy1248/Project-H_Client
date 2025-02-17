@@ -487,11 +487,6 @@ public class TownManager : MonoBehaviour
                 }
             }
         }
-        // 가입
-        else if (data.Success || data.Case == 3)
-        {
-
-        }
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
@@ -554,6 +549,61 @@ public class TownManager : MonoBehaviour
             }
         }
     }
+    //파티 가입
+    public void PartyJoinHandler(S_PartyResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 가입 받은 데이터 : {data}");
+
+        // 파티 UI 활성화 및 파티 이름 업데이트
+        PartyUI.SetActive(true);
+        PartyNameInputField.text = data.Party.PartyName;
+
+        // 기존에 생성된 파티원 UI 제거 (중복 갱신 방지)
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
+        foreach (var playerStatus in data.Party.Players)
+        {
+            GameObject prefabToInstantiate;
+
+            // 만약 PlayerStatus에 PlayerId 값이 0이라면, 닉네임으로 플레이어를 찾아 보완
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            // 파티 리더이면 LeaderStatusPrefab, 그렇지 않으면 MemberStatusPrefab 사용
+            if (playerId == data.Party.PartyLeaderId)
+            {
+                prefabToInstantiate = LeaderStatusPrefab;
+            }
+            else
+            {
+                prefabToInstantiate = MemberStatusPrefab;
+            }
+
+            // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
+            GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
+
+            // 인스턴스된 오브젝트의 자식에서 TextMeshProUGUI 컴포넌트를 찾아 파티원 닉네임 설정
+            TextMeshProUGUI statusText = statusObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (statusText != null)
+            {
+                statusText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("프리팹에서 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
+    }
     // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
     {
@@ -572,8 +622,8 @@ public class TownManager : MonoBehaviour
 
             GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
             partyListObj.GetComponent<PartyListItem>().partyData = data.Info[i];
-            TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>();
-            if (texts.Length >= 3)
+            TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>(true);
+            if (texts.Length >= 4)
             {
                 // 첫 번째 텍스트: DungeonName -> 나중에 추가할 던전 선택 생기면 그것으로 대체
                 texts[0].text = data.Info[i].PartyId.ToString();
@@ -583,6 +633,8 @@ public class TownManager : MonoBehaviour
 
                 // 세 번째 텍스트: 현재 멤버 수 / 최대 멤버 수
                 texts[2].text = $"{data.Info[i].Players.Count} / {data.Info[i].Maximum}";
+
+                texts[3].text = data.Info[i].PartyId.ToString();
             }
             else
             {
@@ -590,7 +642,7 @@ public class TownManager : MonoBehaviour
             }
         }
     }
-    // 파티 검색 결과
+    // 파티 검색 결과 // 코드 구현
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
@@ -608,6 +660,10 @@ public class TownManager : MonoBehaviour
         if(data.Success)
         {
             PartyUI.SetActive(false);
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
         else
         {
@@ -623,6 +679,10 @@ public class TownManager : MonoBehaviour
         Debug.Log($"파티 탈퇴 받은 데이터 : {data}");
 
         PartyUI.SetActive(false);
+        foreach (Transform child in PartyListSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public void PartyUpdateResponse(S_PartyResponse data)
