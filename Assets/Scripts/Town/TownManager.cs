@@ -758,6 +758,11 @@ public class TownManager : MonoBehaviour
         uiAnimation.gameObject.SetActive(true);
     }
 
+    public void UpdateInventory(S_InventoryResponse data){
+        // 인벤토리 갱신
+        uiAnimation.UpdateInventory(data);
+    }
+
     public Player GetPlayerAvatarById(int playerId)
     {
         return playerList.TryGetValue(playerId, out var player) ? player : null;

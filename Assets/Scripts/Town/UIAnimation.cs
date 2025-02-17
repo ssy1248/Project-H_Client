@@ -9,7 +9,7 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] private Button[] btnList;
 
     [SerializeField] private MyPlayer mPlayer;
-    [SerializeField] private GameObject inventory;
+    [SerializeField] private InventoryContainer inventory;
     [SerializeField] GameObject marketplace;
     [SerializeField] private GameObject party;
 
@@ -28,7 +28,7 @@ public class UIAnimation : MonoBehaviour
             return;
         }
         InitializeButtons();
-        inventory.SetActive(false);
+        inventory.gameObject.SetActive(false);
         //marketplace.SetActive(false);
     }
 
@@ -63,6 +63,7 @@ public class UIAnimation : MonoBehaviour
             slots.Add(i, slotTemp);
         }
     }
+
     private void Update()
     {
         if (mPlayer == null)
@@ -71,15 +72,15 @@ public class UIAnimation : MonoBehaviour
         }
         switch (true)
         {
-            // �κ��丮 Ű 
+            // �κ��丮 Ű 
             case var _ when Input.GetKeyDown(KeyCode.I):
-                if (inventory.activeSelf)
+                if (inventory.gameObject.activeSelf)
                 {
-                    inventory.SetActive(false);
+                    inventory.gameObject.SetActive(false);
                 }
                 else
                 {
-                    inventory.SetActive(true);
+                    inventory.gameObject.SetActive(true);
                 }
                 break;
             case var _ when Input.GetKeyDown(KeyCode.M):
@@ -93,5 +94,10 @@ public class UIAnimation : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void UpdateInventory(S_InventoryResponse data){
+        // 인벤토리 갱신
+        inventory.UpdateInventory(data);
     }
 }
