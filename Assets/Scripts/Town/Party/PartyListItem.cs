@@ -28,16 +28,4 @@ public class PartyListItem : MonoBehaviour
         // 예: 해당 파티의 정보를 PartyMemberSpawnPoint에 UI로 표시.
         TownManager.Instance.UpdatePartyMembersUI(partyData);
     }
-
-    // 좀더 고민
-    public void ParticipateBtnClick()
-    {
-        ParticipateRequest();
-    }
-
-    private void ParticipateRequest()
-    {
-        C_PartyJoinRequest partyJoinPacket = new C_PartyJoinRequest { PartyId = partyData.PartyId , UserId = TownManager.Instance.MyPlayer.PlayerId};
-        GameManager.Network.Send(partyJoinPacket);
-    }
 }

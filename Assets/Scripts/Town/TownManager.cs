@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
+// using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TownManager : MonoBehaviour
@@ -55,6 +56,9 @@ public class TownManager : MonoBehaviour
     private Dictionary<int, PartyInfo> partyInfoDict = new Dictionary<int, PartyInfo>();
 
     public Player MyPlayer { get; private set; }
+
+    // 유저들 동기화에 사용할 딕셔너리
+    private List<Player> players = new List<Player>();
 
     private void Awake()
     {
@@ -294,6 +298,7 @@ public class TownManager : MonoBehaviour
     {
         var enterDungeonPacket = new C_EnterDungeon
         {
+            //DungeonCode = duneonCode,
             //Players = new PlayerInfo
             //{
             //    PlayerId = player.PlayerId,
@@ -308,46 +313,8 @@ public class TownManager : MonoBehaviour
     }
     /* 여기까지 */
 
-
-    // ���� �߰�
-
-    public void MarketListRequest(int page, int count)
-    {
-        var marketListPacket = new C_MarketList
-        {
-            Page = page,
-            Count = count,
-        };
-        GameManager.Network.Send(marketListPacket);
-    }
-    public void SellInMarketRequest(int inventoryId, int itemId)
-    {
-        var SellInMarketPacket = new C_SellInMarket
-        {
-            InventoryId = inventoryId,
-            ItemId = itemId,
-        };
-        GameManager.Network.Send(SellInMarketPacket);
-    }
-    public void BuyInMarketRequest(int marketId)
-    {
-        var BuyInMarketPacket = new C_BuyInMarket
-        {
-            MarketId = marketId,
-        };
-        GameManager.Network.Send(BuyInMarketPacket);
-    }
-    public void MarketMyListRequest(int page, int count)
-    {
-        var marketListPacket = new C_MarketMyList
-        {
-            Page = page,
-            Count = count,
-        };
-        GameManager.Network.Send(marketListPacket);
-    }
-    /* �ӽ÷� ���� �޴� �޼��� �� */
-    // �ڵ鷯�� ������ ���� �ʿ��� ��� ���� 
+    /* 임시로 만든 받는 메서드 들 */
+    // 핸들러와 연결후 각각 필요한 기능 구현 
 
     // 회원가입 확인 메세지 출력정도.
     IEnumerator erroText()
@@ -406,28 +373,76 @@ public class TownManager : MonoBehaviour
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString());
+        //StartCoroutine("erroText");
+        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
+
+        // 나중에 주석풀자.
+
+
+        Player playerToRemove = players.FirstOrDefault(p => p.PlayerId == data.PlayerId);
+
+        if (playerToRemove != null)
+        {
+            players.Remove(playerToRemove);
+            playerList.Remove(data.PlayerId);
+            playerToRemove.Despawn();
+
+        }
     }
     public void AllMove(S_Move data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+        // 받은 배열 만큼 반복문을 돌려야함
+        // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
+        foreach (var syncTransformInfo  in data.TransformInfos) {
+            // 플레이어 ID
+            int playerId = syncTransformInfo.PlayerId;
+            
+            // 트랜스폼 정보 (위치 회전)
+            TransformInfo transformInfo = syncTransformInfo.Transform;
+            Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
+            Quaternion targetRot = Quaternion.Euler(0, transformInfo.Rot, 0);
 
-        Player player = GetPlayerAvatarById(data.PlayerId);
-        if (player == null)
-        {
-            Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
-            return;
+            // 스피드
+            float speed = syncTransformInfo.Speed;
+
+
+            // 플레이어가 존재하는지 검증.
+            Player player = GetPlayerAvatarById(playerId);
+            if(player == null) {
+                continue;
+            }
+
+            // 플레이어가 본인인지 검증.
+            if(MyPlayer.PlayerId == playerId) {
+                continue;
+            }
+
+            
+            // 플레이어에게 이동 정보를 넘긴다.
+            player.Move(targetPos, targetRot, speed);
         }
 
-        // TransformInfo를 이용해 새로운 위치와 회전값을 계산합니다.
-        Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
-        // 여기서는 y축 회전만 적용한다고 가정 (필요시 다른 축도 적용)
-        Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
 
-        // 플레이어의 Move() 메서드를 호출하여 부드러운 이동 및 회전 처리를 위임합니다.
-        player.Move(targetPos, targetRot);
+
+        // StartCoroutine("erroText");
+        // errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
+
+        // Player player = GetPlayerAvatarById(data.PlayerId);
+        // if (player == null)
+        // {
+        //     Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
+        //     return;
+        // }
+
+        // if(MyPlayer.PlayerId != data.PlayerId)
+
+        // // TransformInfo�� �̿��� ���ο� ��ġ�� ȸ������ ����մϴ�.
+        // Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
+        // // ���⼭�� y�� ȸ���� �����Ѵٰ� ���� (�ʿ�� �ٸ� �൵ ����)
+        // Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
+
+        // // �÷��̾��� Move() �޼��带 ȣ���Ͽ� �ε巯�� �̵� �� ȸ�� ó���� �����մϴ�.
+        // player.Move(targetPos, targetRot);
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
     public void AllAnimation(S_Animation data)
@@ -524,11 +539,6 @@ public class TownManager : MonoBehaviour
                 }
             }
         }
-        // 가입
-        else if (data.Success || data.Case == 3)
-        {
-
-        }
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
@@ -591,6 +601,61 @@ public class TownManager : MonoBehaviour
             }
         }
     }
+    //파티 가입
+    public void PartyJoinHandler(S_PartyResponse data)
+    {
+        StartCoroutine("errorText");
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+        Debug.Log($"파티 가입 받은 데이터 : {data}");
+
+        // 파티 UI 활성화 및 파티 이름 업데이트
+        PartyUI.SetActive(true);
+        PartyNameInputField.text = data.Party.PartyName;
+
+        // 기존에 생성된 파티원 UI 제거 (중복 갱신 방지)
+        foreach (Transform child in PartyStatusSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
+        foreach (var playerStatus in data.Party.Players)
+        {
+            GameObject prefabToInstantiate;
+
+            // 만약 PlayerStatus에 PlayerId 값이 0이라면, 닉네임으로 플레이어를 찾아 보완
+            int playerId = 0;
+            Player player = GetPlayerByNickname(playerStatus.PlayerName);
+            if (player != null)
+            {
+                playerId = player.PlayerId;
+            }
+
+            // 파티 리더이면 LeaderStatusPrefab, 그렇지 않으면 MemberStatusPrefab 사용
+            if (playerId == data.Party.PartyLeaderId)
+            {
+                prefabToInstantiate = LeaderStatusPrefab;
+            }
+            else
+            {
+                prefabToInstantiate = MemberStatusPrefab;
+            }
+
+            // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
+            GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
+
+            // 인스턴스된 오브젝트의 자식에서 TextMeshProUGUI 컴포넌트를 찾아 파티원 닉네임 설정
+            TextMeshProUGUI statusText = statusObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (statusText != null)
+            {
+                statusText.text = playerStatus.PlayerName;
+            }
+            else
+            {
+                Debug.LogWarning("프리팹에서 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
+    }
     // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
     {
@@ -599,7 +664,7 @@ public class TownManager : MonoBehaviour
         Debug.Log($"파티 리스트 조회 받은 데이터 : {data}");
 
         int count = data.Info.Count;
-        for (int i = 0; i < count; i++)
+        for(int i = 0; i < count; i++)
         {
             // 기존에 생성된 파티원 UI가 있다면 먼저 제거
             foreach (Transform child in PartyListSpawnPoint.transform)
@@ -609,8 +674,8 @@ public class TownManager : MonoBehaviour
 
             GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
             partyListObj.GetComponent<PartyListItem>().partyData = data.Info[i];
-            TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>();
-            if (texts.Length >= 3)
+            TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>(true);
+            if (texts.Length >= 4)
             {
                 // 첫 번째 텍스트: DungeonName -> 나중에 추가할 던전 선택 생기면 그것으로 대체
                 texts[0].text = data.Info[i].PartyId.ToString();
@@ -620,6 +685,8 @@ public class TownManager : MonoBehaviour
 
                 // 세 번째 텍스트: 현재 멤버 수 / 최대 멤버 수
                 texts[2].text = $"{data.Info[i].Players.Count} / {data.Info[i].Maximum}";
+
+                texts[3].text = data.Info[i].PartyId.ToString();
             }
             else
             {
@@ -627,7 +694,7 @@ public class TownManager : MonoBehaviour
             }
         }
     }
-    // 파티 검색 결과
+    // 파티 검색 결과 // 코드 구현
     public void PartySearchResponse(S_PartySearchResponse data)
     {
         StartCoroutine("errorText");
@@ -642,9 +709,13 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 추방 받은 데이터 : {data}");
 
-        if (data.Success)
+        if(data.Success)
         {
             PartyUI.SetActive(false);
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
         else
         {
@@ -660,6 +731,10 @@ public class TownManager : MonoBehaviour
         Debug.Log($"파티 탈퇴 받은 데이터 : {data}");
 
         PartyUI.SetActive(false);
+        foreach (Transform child in PartyListSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public void PartyUpdateResponse(S_PartyResponse data)
@@ -668,8 +743,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 업데이트 받은 데이터 : {data}");
 
-        if (MyPlayer == null || !data.Party.Players.Any(ps =>
-        {
+        if (MyPlayer == null || !data.Party.Players.Any(ps => {
             Player p = GetPlayerByNickname(ps.PlayerName);
             return p != null && p.PlayerId == MyPlayer.PlayerId;
         }))
@@ -730,31 +804,7 @@ public class TownManager : MonoBehaviour
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
-    public void MarketListResponse(S_MarketList data)
-    {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
-    }
-    public void SellInMarketResponse(S_SellInMarket data)
-    {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
-    }
-    public void BuyInMarketResponse(S_BuyInMarket data)
-    {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
 
-    }
-    public void MarketMyListResponse(S_MarketMyList data)
-    {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
-    }
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
@@ -771,6 +821,9 @@ public class TownManager : MonoBehaviour
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
         Player player = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
         player.SetIsMine(false);
+
+        // 플레이어를 리스트에 추가
+        players.Add(player);
     }
 
     //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)
@@ -788,7 +841,7 @@ public class TownManager : MonoBehaviour
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-        player.Move(spawnPos, Quaternion.identity);
+        player.Move(spawnPos, Quaternion.identity, 0);
         player.SetPlayerId(playerInfo.PlayerId);
         player.SetNickname(playerInfo.Nickname);
 
