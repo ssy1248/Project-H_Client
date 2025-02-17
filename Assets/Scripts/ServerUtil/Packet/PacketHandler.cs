@@ -45,6 +45,7 @@ class PacketHandler
     public static void S_ChatHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Chat enterPacket) return;
+        TownManager.Instance.ChatResponse(enterPacket);
     }
     public static void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
