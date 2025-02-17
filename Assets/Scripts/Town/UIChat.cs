@@ -177,7 +177,7 @@ public class UIChat : MonoBehaviour
         inputChat.caretPosition = 0;
         ResetIME();
     }
-
+    
     public void PushMessage(string msg, bool myChat, ChatType type)
     {
         chatMessages.Add((type, msg, myChat));
