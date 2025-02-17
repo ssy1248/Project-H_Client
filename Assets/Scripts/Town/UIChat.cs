@@ -45,7 +45,7 @@ public class UIChat : MonoBehaviour
     void Start()
     {
         baseChatItemWidth = txtChatItemBase.rectTransform.sizeDelta.x;
-        player = TownManager.Instance.MyPlayer;
+        //player = TownManager.Instance.MyPlayer;
 
         btnSend.onClick.AddListener(SendMessage);
         btnToggle.onClick.AddListener(ToggleChatWindow);
