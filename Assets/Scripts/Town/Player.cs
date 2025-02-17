@@ -121,10 +121,10 @@ public class Player : MonoBehaviour
         GameManager.Network.Send(chatPacket);
     }
 
-    public void RecvMessage(string msg)
+    public void RecvMessage(string msg, UIChat.ChatType type)
     {
         uiNameChat.PushText(msg);
-        uiChat.PushMessage(nickname, msg, IsMine);
+        uiChat.PushMessage(msg, IsMine, type);
     }
 
     public void Move(Vector3 move, Quaternion rot)

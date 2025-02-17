@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -13,20 +14,33 @@ public class UIChat : MonoBehaviour
     [SerializeField] private TMP_InputField inputChat;
     [SerializeField] private Button btnSend;
     [SerializeField] private Button btnToggle;
+    [SerializeField] private Button btnWhisper;
+    [SerializeField] private Button btnParty;
     [SerializeField] private Transform icon;
     [SerializeField] private Transform alarm;
 
     private float baseChatItemWidth;
     private Player player;
     private bool isOpen = true;
+    private ChatType currentChatType = ChatType.Global;
+    private List<(ChatType type, string msg, bool myChat)> chatMessages = new();
+
+    public enum ChatType
+    {
+        Global,
+        Whisper,
+        Party
+    }
 
     void Start()
     {
         baseChatItemWidth = txtChatItemBase.rectTransform.sizeDelta.x;
-        player = TownManager.Instance.MyPlayer;
+        //player = TownManager.Instance.MyPlayer;
 
         btnSend.onClick.AddListener(SendMessage);
         btnToggle.onClick.AddListener(ToggleChatWindow);
+        btnWhisper.onClick.AddListener(() => SetChatType(ChatType.Whisper));
+        btnParty.onClick.AddListener(() => SetChatType(ChatType.Party));
 
         inputChat.onSubmit.AddListener((text) =>
         {
@@ -58,52 +72,104 @@ public class UIChat : MonoBehaviour
         {
             rectBg.DOSizeDelta(new Vector2(100, 40), 0.3f);
             icon.DORotate(new Vector3(0, 0, 180), 0.3f);
+            icon.DOMove(new Vector3(14, 6, 0), 0.3f);
         }
         else
         {
             alarm.gameObject.SetActive(false);
             rectBg.DOSizeDelta(new Vector2(550, 500), 0.3f);
             icon.DORotate(new Vector3(0, 0, 0), 0.3f);
+            icon.DOMove(new Vector3(142, 138, 0), 0.3f);
+
         }
 
         isOpen = !isOpen;
+    }
+
+    private void SetChatType(ChatType type)
+    {
+        currentChatType = type;
+        RefreshChatWindow();
     }
 
     public void SendMessage()
     {
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
 
-        player.SendMessage(inputChat.text);
+        // 파티 채팅일 경우
+        if (currentChatType == ChatType.Party)
+        {
+            SendMessageToParty(inputChat.text);
+        }
+        // 귓속말일 경우
+        else if (currentChatType == ChatType.Whisper)
+        {
+            SendWhisperToUser(inputChat.text, selectedWhisperUser);
+        }
+        else // 일반 채팅
+        {
+            player.SendMessage(inputChat.text);
+        }
 
-        inputChat.text = string.Empty; 
-        ActivateInputFieldProperly();  
+        PushMessage(inputChat.text, true, currentChatType);
+        inputChat.text = string.Empty;
+        ActivateInputFieldProperly();
     }
 
+    private void SendMessageToParty(string message)
+    {
+        // 파티 채팅 처리 로직
+        // 예: TownManager.Instance.SendMessageToParty(message);
+    }
+
+    private void SendWhisperToUser(string message, string targetUser)
+    {
+        // 귓속말 처리 로직
+        // 예: TownManager.Instance.SendWhisper(message, targetUser);
+    }
 
     private void ActivateInputFieldProperly()
     {
-        inputChat.ActivateInputField(); 
-        inputChat.caretPosition = 0;  
-        ResetIME();                    
+        inputChat.ActivateInputField();
+        inputChat.caretPosition = 0;
+        ResetIME();
     }
 
-    public void PushMessage(string nickName, string msg, bool myChat)
+    public void PushMessage(string msg, bool myChat, ChatType type)
     {
-        if (!isOpen)
+        chatMessages.Add((type, msg, myChat));
+        
+        if (type == currentChatType || type == ChatType.Global)
         {
-            alarm.gameObject.SetActive(true);
-            alarm.DOShakePosition(1f, 10);
+            DisplayMessage(msg, myChat);
         }
+    }
 
-        StopAllCoroutines();
-
+    private void DisplayMessage(string msg, bool myChat)
+    {
         var msgItem = Instantiate(txtChatItemBase, chatItemRoot);
         msgItem.color = myChat ? Color.green : Color.white;
-        msgItem.text = $"[{nickName}] {msg}";
+        msgItem.text = msg;
         msgItem.gameObject.SetActive(true);
 
         StartCoroutine(AdjustTextSize(msgItem));
         StartCoroutine(ScrollToBottom());
+    }
+
+    private void RefreshChatWindow()
+    {
+        foreach (Transform child in chatItemRoot)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var (type, msg, myChat) in chatMessages)
+        {
+            if (type == currentChatType || type == ChatType.Global)
+            {
+                DisplayMessage(msg, myChat);
+            }
+        }
     }
 
     private IEnumerator ScrollToBottom()
