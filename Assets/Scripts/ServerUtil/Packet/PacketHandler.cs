@@ -133,18 +133,22 @@ class PacketHandler
     public static void S_MarketMyListHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MarketMyList enterPacket) return;
+        TownManager.Instance.MarketMyListResponse(enterPacket);
     }
     public static void S_MarketListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_MarketMyList enterPacket) return;
+        if (packet is not S_MarketList enterPacket) return;
+        TownManager.Instance.MarketListResponse(enterPacket);
     }
     public static void S_SellInMarketHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_SellInMarket enterPacket) return;
+        TownManager.Instance.SellInMarketResponse(enterPacket);
     }
     public static void S_BuyInMarketHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BuyInMarket enterPacket) return;
+        TownManager.Instance.BuyInMarketResponse(enterPacket);
     }
     public static void S_InventoryHandler(PacketSession session, IMessage packet)
     {
