@@ -15,6 +15,7 @@ public class DropdownMenu : MonoBehaviour
     public float maxExpandedHeight = 300f; // 최대 확장 높이
     public float collapsedHeight = 10f; // 최소 높이
     public float animationSpeed = 5f;   // 애니메이션 속도
+    public TMP_Text headerTextElement; // 헤더 텍스트 (버튼 클릭 시 텍스트 변경)
     public ScrollRect scrollRect;      // ScrollRect 컴포넌트
 
     private bool isExpanded = false;
@@ -146,6 +147,11 @@ public class DropdownMenu : MonoBehaviour
         UIPartyPopUp popUp = FindAnyObjectByType<UIPartyPopUp>();
         popUp.dungeonIndex = dungeonIndex;  // 여기서 dungeonIndex 사용
         Debug.Log($"던전 인덱스 : {dungeonIndex}");
+
+       if (headerTextElement != null)
+       {
+           headerTextElement.text = dungeonName;  // 던전 이름을 헤더 텍스트에 설정
+       }
     }
 
     // ⚡ 버튼 개수가 바뀌면 자동으로 업데이트하는 함수
