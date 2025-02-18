@@ -983,7 +983,13 @@ public class TownManager : MonoBehaviour
     {
         UiRegister.gameObject.SetActive(false);
         uiChat.gameObject.SetActive(true);
-        uiAnimation.gameObject.SetActive(true);
+        uiAnimation.Init();
+        uiAnimation.Show();
+    }
+
+    public void UpdateInventory(S_InventoryResponse data){
+        // 인벤토리 갱신
+        uiAnimation.UpdateInventory(data);
     }
 
     public Player GetPlayerAvatarById(int playerId)
