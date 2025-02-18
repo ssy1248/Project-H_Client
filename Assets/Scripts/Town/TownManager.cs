@@ -22,6 +22,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private EventSystem eSystem;
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
+    [SerializeField] Marketplace market;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
 
@@ -115,6 +116,33 @@ public class TownManager : MonoBehaviour
             if (player.nickname.Equals(nickname, StringComparison.OrdinalIgnoreCase))
                 return player;
         }
+        return null;
+    }
+
+    public PartyInfo GetPartyInfoByPlayerId(int playerId)
+    {
+        // partyInfoDict:  Key = partyId,  Value = PartyInfo
+        foreach (PartyInfo partyInfo in partyInfoDict.Values)
+        {
+            // PartyInfo.Players는 PlayerStatus 리스트(닉네임, 레벨, HP 등)
+            // 각 PlayerStatus와 실제 TownManager의 Player 객체를 대조해봐야 할 수도 있음
+            foreach (var pStatus in partyInfo.Players)
+            {
+                // TownManager에는 GetPlayerByNickname()이 존재하므로 닉네임으로 Player 객체를 찾는다
+                Player player = GetPlayerByNickname(pStatus.PlayerName);
+                if (player == null)
+                    continue;
+
+                // 찾은 Player의 PlayerId가 우리가 찾고자 하는 playerId와 같다면,
+                // 이 PartyInfo가 해당 플레이어가 속한 파티!
+                if (player.PlayerId == playerId)
+                {
+                    return partyInfo;
+                }
+            }
+        }
+
+        // 못 찾으면 null 반환
         return null;
     }
 
@@ -288,15 +316,6 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest(int userId)
-    {
-        var partyPacket = new C_PartyRequest
-        {
-            UserId = userId
-        };
-
-        GameManager.Network.Send(partyPacket);
-    }
     public void EnterDungeon(int duneonCode, PlayerInfo player)
     {
         var enterDungeonPacket = new C_EnterDungeon
@@ -347,6 +366,16 @@ public class TownManager : MonoBehaviour
         {
             Page = page,
             Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
+    public void MarketSelectBuyNameRequest(int page, int count ,string name)
+    {
+        var marketListPacket = new C_MarketSelectBuyName
+        {
+            Page = page,
+            Count = count,
+            Name = name,
         };
         GameManager.Network.Send(marketListPacket);
     }
@@ -720,7 +749,7 @@ public class TownManager : MonoBehaviour
             if (texts.Length >= 4)
             {
                 // 첫 번째 텍스트: DungeonName -> 나중에 추가할 던전 선택 생기면 그것으로 대체
-                texts[0].text = data.Info[i].PartyId.ToString();
+                texts[0].text = "Dungeon " + data.Info[i].DungeonIndex.ToString();
 
                 // 두 번째 텍스트: 파티 이름
                 texts[1].text = data.Info[i].PartyName;
@@ -894,12 +923,11 @@ public class TownManager : MonoBehaviour
     // 마켓 관련 패킷 추가 
     public void MarketListResponse(S_MarketList data)
     {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+        market.SetBuyData(data);
     }
     public void SellInMarketResponse(S_SellInMarket data)
     {
+        
         StartCoroutine("errorText");
         Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
@@ -913,9 +941,11 @@ public class TownManager : MonoBehaviour
     }
     public void MarketMyListResponse(S_MarketMyList data)
     {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+        market.SetSellData(data);
+    }
+    public void MarketSelectBuyName(S_MarketSelectBuyName data)
+    {
+        market.SetSelectData(data);
     }
 
     // 자기 자신 스폰용도 
