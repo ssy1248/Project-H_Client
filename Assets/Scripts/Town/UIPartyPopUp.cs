@@ -7,10 +7,11 @@ using UnityEngine;
 public class UIPartyPopUp : MonoBehaviour
 {
     [SerializeField] private TMP_InputField partyNameInputField;
-    [SerializeField] private TMP_InputField partySearchInputField;
+    [SerializeField] public TMP_InputField partySearchInputField;
     [SerializeField] private TMP_InputField partyInviteInputField;
     [SerializeField] private TMP_InputField partyKickInputField;
     [SerializeField] public int selectPartyId;
+    [SerializeField] public int dungeonIndex;
 
     public void PartySearchBtnClick()
     {
@@ -81,7 +82,7 @@ public class UIPartyPopUp : MonoBehaviour
 
     private void PartyCreateRequest()
     {
-        C_PartyRequest partyRequestPacket = new C_PartyRequest { UserId = TownManager.Instance.MyPlayer.PlayerId, PartyName = partyNameInputField.text };
+        C_PartyRequest partyRequestPacket = new C_PartyRequest { UserId = TownManager.Instance.MyPlayer.PlayerId, PartyName = partyNameInputField.text, DungeonIndex = dungeonIndex };
         GameManager.Network.Send(partyRequestPacket);
         //partyNameInputField.text = "";
     }

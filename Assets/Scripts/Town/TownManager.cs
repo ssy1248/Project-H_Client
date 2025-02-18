@@ -38,6 +38,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject PartyMemberSpawnPoint;
     [SerializeField] private GameObject LeaderMemberPrefab;
     [SerializeField] private GameObject NormalMemberPrefab;
+    [SerializeField] private GameObject SearchResultUI;
     #endregion
 
     [Header("테스트")]
@@ -60,6 +61,8 @@ public class TownManager : MonoBehaviour
 
     // 유저들 동기화에 사용할 딕셔너리
     private List<Player> players = new List<Player>();
+
+    // partyInfoDict -> 파티 아이디로 파티 인포를 저장
 
     private void Awake()
     {
@@ -286,15 +289,6 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest(int userId)
-    {
-        var partyPacket = new C_PartyRequest
-        {
-            UserId = userId
-        };
-
-        GameManager.Network.Send(partyPacket);
-    }
     public void EnterDungeon(int duneonCode, PlayerInfo player)
     {
         var enterDungeonPacket = new C_EnterDungeon
@@ -513,6 +507,8 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
+        Debug.Log(data);
+        uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global);
     }
     //  주말 목표 입니다람쥐
 
@@ -710,15 +706,16 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 리스트 조회 받은 데이터 : {data}");
 
+        // 기존에 생성된 파티원 UI가 있다면 먼저 제거
+        foreach (Transform child in PartyListSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
         int count = data.Info.Count;
+        Debug.Log($"파티 인포 : {count}");
         for(int i = 0; i < count; i++)
         {
-            // 기존에 생성된 파티원 UI가 있다면 먼저 제거
-            foreach (Transform child in PartyListSpawnPoint.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
             GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
             partyListObj.GetComponent<PartyListItem>().partyData = data.Info[i];
             TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>(true);
@@ -737,7 +734,7 @@ public class TownManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("PartyListPrefab 내에 TextMeshProUGUI 컴포넌트가 3개 이상 존재하지 않습니다.");
+                Debug.LogWarning("PartyListPrefab 내에 TextMeshProUGUI 컴포넌트가 4개 이상 존재하지 않습니다.");
             }
         }
     }
@@ -747,6 +744,51 @@ public class TownManager : MonoBehaviour
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 서치 받은 데이터 : {data}");
+
+        // 검색 성공
+        if (data.Success)
+        {
+            UIPartyPopUp input = FindAnyObjectByType<UIPartyPopUp>();
+            string searchTerm = input.partySearchInputField.text;
+            Debug.Log($"클라 값 : {searchTerm}");
+
+            // PartyListSpawnPoint 아래에 있는 기존 파티 리스트 UI 제거
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // data.Info에서 검색어에 맞는 파티들을 LINQ로 찾기 (대소문자 무시)
+            var matchingParties = data.Info
+                .Where(p => p.PartyName.ToLower().Contains(searchTerm.ToLower()))
+                .ToList();
+
+            if (matchingParties.Count > 0)
+            {
+                foreach (var partyInfo in matchingParties)
+                {
+                    GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
+                    partyListObj.GetComponent<PartyListItem>().partyData = partyInfo;
+                    TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>(true);
+                    if (texts.Length >= 4)
+                    {
+                        texts[0].text = partyInfo.PartyId.ToString();
+                        texts[1].text = partyInfo.PartyName;
+                        texts[2].text = $"{partyInfo.Players.Count} / {partyInfo.Maximum}";
+                        texts[3].text = partyInfo.PartyId.ToString();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("PartyListPrefab 내에 예상된 TextMeshProUGUI 컴포넌트가 부족합니다.");
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("검색 결과가 없습니다.");
+                SearchResultUI.SetActive(true);
+            }
+        }
     }
 
     // 파티 추방
@@ -944,7 +986,13 @@ public class TownManager : MonoBehaviour
     {
         UiRegister.gameObject.SetActive(false);
         uiChat.gameObject.SetActive(true);
-        uiAnimation.gameObject.SetActive(true);
+        uiAnimation.Init();
+        uiAnimation.Show();
+    }
+
+    public void UpdateInventory(S_InventoryResponse data){
+        // 인벤토리 갱신
+        uiAnimation.UpdateInventory(data);
     }
 
     public Player GetPlayerAvatarById(int playerId)
