@@ -288,15 +288,6 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(activeItemPacket);
     }
-    public void PartyRequest(int userId)
-    {
-        var partyPacket = new C_PartyRequest
-        {
-            UserId = userId
-        };
-
-        GameManager.Network.Send(partyPacket);
-    }
     public void EnterDungeon(int duneonCode, PlayerInfo player)
     {
         var enterDungeonPacket = new C_EnterDungeon

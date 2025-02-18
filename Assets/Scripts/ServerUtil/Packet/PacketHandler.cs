@@ -157,6 +157,14 @@ class PacketHandler
         // TODO : 인벤토리 갱신 핸들러
         TownManager.Instance.UpdateInventory(enterPacket);
     }
+    public static void S_MatchResponse(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchResponse enterPacket) return;
+    }
+    public static void S_MatchStopResponse(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchStopResponse enterPacket) return;
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
