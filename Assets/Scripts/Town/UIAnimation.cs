@@ -6,7 +6,7 @@ using Google.Protobuf.Protocol;
 public class UIAnimation : MonoBehaviour
 {
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Button btnBattle;
+    [SerializeField] private Button btnMatch;
     [SerializeField] private Button[] btnList;
 
     [SerializeField] private MyPlayer mPlayer;
@@ -98,6 +98,37 @@ public class UIAnimation : MonoBehaviour
     {
         // 인벤토리 갱신
         inventory.UpdateInventory(data);
+    }
+
+    public void MatchRequest()
+    {
+        // 1) 내 플레이어가 누군지 확인
+        Player myPlayer = TownManager.Instance.MyPlayer;
+        if (myPlayer == null)
+        {
+            Debug.LogWarning("내 플레이어가 존재하지 않아 매칭 요청을 보낼 수 없습니다.");
+            return;
+        }
+
+        // 2) TownManager에서 “내 플레이어가 속한 파티” 가져오기
+        PartyInfo myPartyInfo = TownManager.Instance.GetPartyInfoByPlayerId(myPlayer.PlayerId);
+        if (myPartyInfo == null)
+        {
+            Debug.Log("파티를 생성하고 매칭 신청을 해주세요");
+            return;
+        }
+
+        Debug.Log($"찾은 파티 인포 : {myPartyInfo}");
+
+        // 3) MatchRequest 패킷 생성해서 파티 정보 넣기
+        C_MatchRequest matchRequestPacket = new C_MatchRequest
+        {
+            Party = myPartyInfo
+        };
+
+        // 4) 서버로 전송
+        GameManager.Network.Send(matchRequestPacket);
+        Debug.Log("매칭 요청 패킷 전송 완료!");
     }
 
     public void Show()
