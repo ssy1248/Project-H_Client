@@ -1,10 +1,15 @@
 using Google.Protobuf.Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image itemImage;
+    public UnityAction<ItemInfo> onPointerEnterAction;
+    public UnityAction onPointerExitAction;
 
     private ItemInfo _data;
 
@@ -35,5 +40,16 @@ public class InventorySlot : MonoBehaviour
         _data = null;
         itemImage.sprite = null;
         itemImage.color = new UnityEngine.Color(1, 1, 1, 0);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (_data != null)
+            onPointerEnterAction?.Invoke(_data);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        onPointerExitAction?.Invoke();
     }
 }

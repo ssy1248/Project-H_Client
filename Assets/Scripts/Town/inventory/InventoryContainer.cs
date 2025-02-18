@@ -8,6 +8,8 @@ public class InventoryContainer : MonoBehaviour
     public CanvasGroup canvasGroup;
     public Transform itemSlotParent;
     public Button btn_close;
+    public ItemInfoPanel itemInfoPanel;
+
     private List<InventorySlot> itemSlots = new List<InventorySlot>();
     private bool isShowing = false;
     // Start is called before the first frame update
@@ -20,6 +22,8 @@ public class InventoryContainer : MonoBehaviour
             if (child.gameObject.TryGetComponent(out InventorySlot slot))
             {
                 itemSlots.Add(slot);
+                slot.onPointerEnterAction += ShowItemInfoPanel;
+                slot.onPointerExitAction += HideItemInfoPanel;
             }
         }
     }
@@ -33,10 +37,8 @@ public class InventoryContainer : MonoBehaviour
     public void Toggle(){
         if(isShowing){
             Hide();
-            isShowing = false;
         }else{
             Show();
-            isShowing = true;
         }
     }
 
@@ -45,6 +47,7 @@ public class InventoryContainer : MonoBehaviour
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+        isShowing = true;
     }
 
     public void Hide()
@@ -52,6 +55,7 @@ public class InventoryContainer : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+        isShowing = false;
     }
 
     public void UpdateInventory(S_InventoryResponse data)
@@ -71,12 +75,21 @@ public class InventoryContainer : MonoBehaviour
     private void ClearItems(){
         foreach(var slot in itemSlots){
             // 슬롯 데이터 초기화
-            
+            slot.ClearSlot();
         }
+    }
+
+    private void ShowItemInfoPanel(ItemInfo info){
+        itemInfoPanel.Init(info);
+        itemInfoPanel.Show();
+    }
+
+    private void HideItemInfoPanel(){
+        itemInfoPanel.Hide();
     }
 
     private void Btn_Close()
     {
-        gameObject.SetActive(false);
+        Hide();
     }
 }

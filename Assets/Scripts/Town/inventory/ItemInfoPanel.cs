@@ -13,29 +13,23 @@ public class ItemInfoPanel : MonoBehaviour
     public TMPro.TextMeshProUGUI text_description;
     public TMPro.TextMeshProUGUI text_manual;
 
-    private RectTransform canvasRect;
+    public RectTransform parentTransform;
     private bool isShowing = false;
-
-    private void Awake()
-    {
-        Canvas canvas = gameObject.GetComponentInParent<Canvas>();
-        if (canvas == null)
-        {
-            Debug.LogError("캔버스를 찾을 수 없습니다");
-        }
-        canvasRect = canvas.GetComponent<RectTransform>();
-    }
 
     private void Update()
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, Camera.main, out Vector2 localPoint);
-        rectTransform.localPosition = localPoint;
+        if (isShowing)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentTransform, Input.mousePosition, null, out Vector2 localPoint);
+            rectTransform.localPosition = localPoint;
+        }
     }
 
     public void Init(ItemInfo info)
     {
         text_itemName.text = info.Name;
         string newString = $"{info.Rarity}\n${info.ItemType}"; // TODO: 희귀도랑 아이템 타입 매핑 필요
+        // TODO : 아이템 이미지 매핑
         text_itemType.text = newString;
     }
 
@@ -44,26 +38,22 @@ public class ItemInfoPanel : MonoBehaviour
         if (isShowing)
         {
             Hide();
-            isShowing = false;
         }
         else
         {
             Show();
-            isShowing = true;
         }
     }
 
     public void Show()
     {
         canvasGroup.alpha = 1;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
+        isShowing = true;
     }
 
     public void Hide()
     {
         canvasGroup.alpha = 0;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
+        isShowing = false;
     }
 }
