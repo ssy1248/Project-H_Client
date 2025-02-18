@@ -1331,6 +1331,7 @@ GameObject:
   - component: {fileID: 726964353}
   - component: {fileID: 726964352}
   - component: {fileID: 726964356}
+  - component: {fileID: 726964357}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1433,11 +1434,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d4e9ae7f9fd6241876954ac4c33799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &726964357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726964351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9155d81301f895d43b277819cdb4e7f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   buySlotParent: {fileID: 1370378470}
   sellSlotParent: {fileID: 1910963228}
-  buySlotPrefab: {fileID: 5243000200465636518, guid: 9cc3bb7163eb3e04a853609703c5700f,
+  buySlotPrefab: {fileID: 5243000200465636518, guid: 4fdcef7ec675efa4badd6169ee53479c,
     type: 3}
-  sellSlotPrefab: {fileID: 4688925772803948952, guid: d4b636692a3d0d54fa4d8622b328945f,
+  sellSlotPrefab: {fileID: 4688925772803948952, guid: 61642ec363e41b24a85a2206c94f5b69,
     type: 3}
   nextBuyPageButton: {fileID: 296871578}
   prevBuyPageButton: {fileID: 1209982412}
