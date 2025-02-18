@@ -15,7 +15,6 @@ public class InventoryContainer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("inventory init");
         btn_close.onClick.AddListener(Btn_Close);
         foreach (Transform child in itemSlotParent)
         {
