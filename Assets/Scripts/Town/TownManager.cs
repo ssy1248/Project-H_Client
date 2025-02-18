@@ -983,7 +983,8 @@ public class TownManager : MonoBehaviour
     {
         UiRegister.gameObject.SetActive(false);
         uiChat.gameObject.SetActive(true);
-        uiAnimation.gameObject.SetActive(true);
+        uiAnimation.Init();
+        uiAnimation.Show();
     }
 
     public void UpdateInventory(S_InventoryResponse data){

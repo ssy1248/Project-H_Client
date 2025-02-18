@@ -1,20 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using SRF;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryContainer : MonoBehaviour
 {
+    public CanvasGroup canvasGroup;
     public Transform itemSlotParent;
     public Button btn_close;
     private List<InventorySlot> itemSlots = new List<InventorySlot>();
-
+    private bool isShowing = false;
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("inventory init");
         btn_close.onClick.AddListener(Btn_Close);
         foreach (Transform child in itemSlotParent)
         {
@@ -31,18 +30,34 @@ public class InventoryContainer : MonoBehaviour
 
     }
 
+    public void Toggle(){
+        if(isShowing){
+            Hide();
+            isShowing = false;
+        }else{
+            Show();
+            isShowing = true;
+        }
+    }
+
     public void Show()
     {
-
+        canvasGroup.alpha = 1;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
     }
 
     public void Hide()
     {
-        this.gameObject.SetActive(false);
+        canvasGroup.alpha = 0;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void UpdateInventory(S_InventoryResponse data)
     {
+        Debug.Log(data.Inventory);
+
         // 인벤토리 갱신
         ClearItems();
 

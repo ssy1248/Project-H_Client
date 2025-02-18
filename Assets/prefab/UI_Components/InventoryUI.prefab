@@ -679,6 +679,7 @@ GameObject:
   - component: {fileID: 1930744222219137779}
   - component: {fileID: 1312437511143914282}
   - component: {fileID: 4046145361517818841}
+  - component: {fileID: 2735354004980818274}
   m_Layer: 5
   m_Name: InventoryUI
   m_TagString: Untagged
@@ -773,8 +774,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f03402c556dc85c448fdb1b1479978a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 2735354004980818274}
   itemSlotParent: {fileID: 138505912734272370}
   btn_close: {fileID: 8329831663563873351}
+--- !u!225 &2735354004980818274
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8272665942705455470}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1001 &381053050936044800
 PrefabInstance:
   m_ObjectHideFlags: 0
