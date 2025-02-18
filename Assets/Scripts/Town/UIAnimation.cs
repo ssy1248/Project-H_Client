@@ -133,6 +133,7 @@ public class UIAnimation : MonoBehaviour
 
     public void Show()
     {
+        gameObject.SetActive(true);
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
