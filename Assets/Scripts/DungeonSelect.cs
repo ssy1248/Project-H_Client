@@ -128,7 +128,24 @@ public class DropdownMenu : MonoBehaviour
     void OnDungeonSelected(string dungeonName)
     {
         Debug.Log($"Selected Dungeon: {dungeonName}");
-        // 던전 선택 후 로직을 추가하세요 (예: 던전 입장)
+
+        // 1) 문자열에서 숫자만 추출
+        int dungeonIndex = 0;
+        // 예: "Dungeon 1" -> ["Dungeon", "1"]
+        string[] parts = dungeonName.Split(' ');
+        if (parts.Length > 1)
+        {
+            // 마지막 문자열이 숫자라면 int로 파싱
+            if (int.TryParse(parts[parts.Length - 1], out int parsedNumber))
+            {
+                dungeonIndex = parsedNumber;
+            }
+        }
+
+        // 2) 추출한 숫자를 원하는 곳에 할당
+        UIPartyPopUp popUp = FindAnyObjectByType<UIPartyPopUp>();
+        popUp.dungeonIndex = dungeonIndex;  // 여기서 dungeonIndex 사용
+        Debug.Log($"던전 인덱스 : {dungeonIndex}");
     }
 
     // ⚡ 버튼 개수가 바뀌면 자동으로 업데이트하는 함수
