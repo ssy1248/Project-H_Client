@@ -81,7 +81,7 @@ public class UIPartyPopUp : MonoBehaviour
 
     private void PartyCreateRequest()
     {
-        C_PartyRequest partyRequestPacket = new C_PartyRequest { UserId = TownManager.Instance.MyPlayer.PlayerId, PartyName = partyNameInputField.text };
+        C_PartyRequest partyRequestPacket = new C_PartyRequest { UserId = TownManager.Instance.MyPlayer.PlayerId, PartyName = partyNameInputField.text, DungeonIndex = 1 };
         GameManager.Network.Send(partyRequestPacket);
         //partyNameInputField.text = "";
     }

@@ -155,6 +155,14 @@ class PacketHandler
     {
         if (packet is not S_InventoryResponse enterPacket) return;
     }
+    public static void S_MatchResponse(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchResponse enterPacket) return;
+    }
+    public static void S_MatchStopResponse(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchStopResponse enterPacket) return;
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
