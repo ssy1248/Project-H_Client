@@ -7,23 +7,23 @@ using UnityEngine;
 
 class PacketManager
 {
-    #region Singleton
-    static PacketManager _instance = new();
-    public static PacketManager Instance { get { return _instance; } }
-    #endregion
+	#region Singleton
+	static PacketManager _instance = new();
+	public static PacketManager Instance { get { return _instance; } }
+	#endregion
 
-    PacketManager()
-    {
-        Register();
-    }
+	PacketManager()
+	{
+		Register();
+	}
 
-    Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
-    Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
+	Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>, ushort>>();
+	Dictionary<ushort, Action<PacketSession, IMessage>> _handler = new Dictionary<ushort, Action<PacketSession, IMessage>>();
+		
+	public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
 
-    public Action<PacketSession, IMessage, ushort> CustomHandler { get; set; }
-
-    public void Register()
-    {
+	public void Register()
+	{
         _onRecv.Add((ushort)MsgId.SRegisterresponse, MakePacket<S_RegisterResponse>);
         _handler.Add((ushort)MsgId.SRegisterresponse, PacketHandler.S_RegisterHandler);
         _onRecv.Add((ushort)MsgId.SLoginresponse, MakePacket<S_LoginResponse>);
@@ -72,8 +72,6 @@ class PacketManager
         _handler.Add((ushort)MsgId.SBuyinmarket, PacketHandler.S_BuyInMarketHandler);
         _onRecv.Add((ushort)MsgId.SInventoryresponse, MakePacket<S_InventoryResponse>);
         _handler.Add((ushort)MsgId.SInventoryresponse, PacketHandler.S_InventoryHandler);
-        _onRecv.Add((ushort)MsgId.SMarketselectbuyname, MakePacket<S_MarketSelectBuyName>);
-        _handler.Add((ushort)MsgId.SMarketselectbuyname, PacketHandler.S_MarketSelectBuyNameHandler);
         _onRecv.Add((ushort)MsgId.SMatchresponse, MakePacket<S_MatchResponse>);
         _handler.Add((ushort)MsgId.SMatchresponse, PacketHandler.S_MatchResponse);
         _onRecv.Add((ushort)MsgId.SMatchstopresponse, MakePacket<S_MatchStopResponse>);
@@ -125,7 +123,7 @@ class PacketManager
     }
 
     void MakePacket<T>(PacketSession session, ArraySegment<byte> buffer, ushort id) where T : IMessage, new()
-    {
+	{
         try
         {
             T pkt = new T();
@@ -156,11 +154,11 @@ class PacketManager
         }
     }
 
-    public Action<PacketSession, IMessage> GetPacketHandler(ushort id)
-    {
-        Action<PacketSession, IMessage> action = null;
-        if (_handler.TryGetValue(id, out action))
-            return action;
-        return null;
-    }
+	public Action<PacketSession, IMessage> GetPacketHandler(ushort id)
+	{
+		Action<PacketSession, IMessage> action = null;
+		if (_handler.TryGetValue(id, out action))
+			return action;
+		return null;
+	}
 }

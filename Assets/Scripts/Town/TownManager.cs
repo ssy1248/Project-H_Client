@@ -22,7 +22,6 @@ public class TownManager : MonoBehaviour
     [SerializeField] private EventSystem eSystem;
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
-    [SerializeField] Marketplace market;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
 
@@ -366,16 +365,6 @@ public class TownManager : MonoBehaviour
         {
             Page = page,
             Count = count,
-        };
-        GameManager.Network.Send(marketListPacket);
-    }
-    public void MarketSelectBuyNameRequest(int page, int count ,string name)
-    {
-        var marketListPacket = new C_MarketSelectBuyName
-        {
-            Page = page,
-            Count = count,
-            Name = name,
         };
         GameManager.Network.Send(marketListPacket);
     }
@@ -923,11 +912,12 @@ public class TownManager : MonoBehaviour
     // 마켓 관련 패킷 추가 
     public void MarketListResponse(S_MarketList data)
     {
-        market.SetBuyData(data);
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
     }
     public void SellInMarketResponse(S_SellInMarket data)
     {
-        
         StartCoroutine("errorText");
         Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
@@ -941,11 +931,9 @@ public class TownManager : MonoBehaviour
     }
     public void MarketMyListResponse(S_MarketMyList data)
     {
-        market.SetSellData(data);
-    }
-    public void MarketSelectBuyName(S_MarketSelectBuyName data)
-    {
-        market.SetSelectData(data);
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
     }
 
     // 자기 자신 스폰용도 
