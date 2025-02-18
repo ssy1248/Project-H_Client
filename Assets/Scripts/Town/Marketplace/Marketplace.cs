@@ -165,7 +165,7 @@ public class Marketplace : MonoBehaviour
         {
             if (i < data.Itemdata.Count)
             {
-                buyslots[i].GetComponent<MarkeBuySlot>().SetData(data.Itemdata[i]);
+                //buyslots[i].GetComponent<MarkeBuySlot>().SetData(data.Itemdata[i]);
             }
             else
             {
