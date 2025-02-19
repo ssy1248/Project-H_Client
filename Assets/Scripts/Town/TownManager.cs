@@ -396,7 +396,15 @@ public class TownManager : MonoBehaviour
         GameManager.Network.Send(marketListPacket);
     }
 
-   
+   public void ShopInventoryRequest(uint page, uint count)
+    {
+        var marketListPacket = new C_ShopInventoryRequest
+        {
+            Page = page ,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -422,8 +430,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            Invoke(nameof(UiRegister.ShowCharacterSelection), 0.5f);
-            
+            UiRegister.ShowCharacterSelection();
         }
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
@@ -565,6 +572,10 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     public void SellItemResponse(S_SellItemResponse data)
+    {
+
+    }
+    public void ShopInventoryList(S_ShopInventoryList data)
     {
 
     }
@@ -1099,6 +1110,7 @@ public class TownManager : MonoBehaviour
             MatchingWindow.SetActive(false);
     }
 
+   
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
