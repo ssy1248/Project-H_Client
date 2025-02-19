@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Google.Protobuf.Protocol;
+using TMPro;
 
 public class UIAnimation : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIAnimation : MonoBehaviour
 
     [SerializeField] private MyPlayer mPlayer;
     [SerializeField] private InventoryContainer inventory;
+    [SerializeField] private EquipmentContainer equipment;
     [SerializeField] GameObject marketplace;
     [SerializeField] private GameObject party;
 
@@ -21,7 +23,7 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] Dictionary<int, GameObject> slots = new Dictionary<int, GameObject>();
     void Start()
     {
-        
+
     }
 
     public void Init()
@@ -80,6 +82,9 @@ public class UIAnimation : MonoBehaviour
             // �κ��丮 Ű 
             case var _ when Input.GetKeyDown(KeyCode.I):
                 inventory.Toggle();
+                break;
+            case var _ when Input.GetKeyDown(KeyCode.P):
+                equipment.Toggle();
                 break;
             case var _ when Input.GetKeyDown(KeyCode.M):
                 if (marketplace.activeSelf)
