@@ -1,7 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
-using System.Diagnostics;
+using UnityEngine.Events;
 
 class PacketHandler
 {
@@ -51,9 +51,12 @@ class PacketHandler
     {
         if (packet is not S_BuyItemResponse enterPacket) return;
     }
+    public static UnityAction<S_EquipItemResponse> S_EquipItemEvent;
     public static void S_EquipItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_EquipItemResponse enterPacket) return;
+        // TODO : 아이템 장착 핸들러 구현
+        S_EquipItemEvent?.Invoke(enterPacket);
     }
     public static void S_DisrobeItemHandler(PacketSession session, IMessage packet)
     {
@@ -151,11 +154,11 @@ class PacketHandler
         if (packet is not S_BuyInMarket enterPacket) return;
         TownManager.Instance.BuyInMarketResponse(enterPacket);
     }
+    public static UnityAction<S_InventoryResponse> S_InventoryEvent;
     public static void S_InventoryHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_InventoryResponse enterPacket) return;
-        // TODO : 인벤토리 갱신 핸들러
-        TownManager.Instance.UpdateInventory(enterPacket);
+        S_InventoryEvent?.Invoke(enterPacket);
     }
     public static void S_MatchResponse(PacketSession session, IMessage packet)
     {

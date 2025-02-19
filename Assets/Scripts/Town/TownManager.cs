@@ -5,12 +5,9 @@ using System.Linq;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
 // using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TownManager : MonoBehaviour
 {
@@ -1166,11 +1163,6 @@ public class TownManager : MonoBehaviour
         uiChat.gameObject.SetActive(true);
         uiAnimation.Init();
         uiAnimation.Show();
-    }
-
-    public void UpdateInventory(S_InventoryResponse data){
-        // 인벤토리 갱신
-        uiAnimation.UpdateInventory(data);
     }
 
     public Player GetPlayerAvatarById(int playerId)

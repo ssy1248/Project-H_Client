@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Google.Protobuf.Protocol;
-using TMPro;
 
 public class UIAnimation : MonoBehaviour
 {
@@ -97,12 +96,6 @@ public class UIAnimation : MonoBehaviour
                 }
                 break;
         }
-    }
-
-    public void UpdateInventory(S_InventoryResponse data)
-    {
-        // 인벤토리 갱신
-        inventory.UpdateInventory(data);
     }
 
     public void MatchRequest()
