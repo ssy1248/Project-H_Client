@@ -15,7 +15,6 @@ public class MarketSellSlot : MonoBehaviour
     [SerializeField] TextMeshProUGUI itemText;
 
     [SerializeField] ItemInfo itemData;
-    private Action onConfirmAction;
     public void InitSlot(Marketplace temp)
     {
         marketplaceTemp = temp;

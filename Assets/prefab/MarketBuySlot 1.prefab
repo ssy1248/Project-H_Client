@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 2476848592165140245}
   - component: {fileID: 8895710881658720344}
   - component: {fileID: 800673816649141169}
-  - component: {fileID: 8218097527325542561}
+  - component: {fileID: 7745783279205666195}
   m_Layer: 5
   m_Name: MarketBuySlot 1
   m_TagString: Untagged
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8218097527325542561}
+      - m_Target: {fileID: 7745783279205666195}
         m_TargetAssemblyTypeName: MarkeBuySlot, Assembly-CSharp
         m_MethodName: Check
         m_Mode: 1
@@ -347,7 +347,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8218097527325542561
+--- !u!114 &7745783279205666195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -356,7 +356,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6756639040007174508}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de6b4d0cb1233e84dbcee8fcd80c6a90, type: 3}
+  m_Script: {fileID: 11500000, guid: 354d4d877ae9bf64bb6818c94f468853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 2634058749513338957}

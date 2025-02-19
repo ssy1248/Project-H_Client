@@ -117,6 +117,7 @@ public class UIAnimation : MonoBehaviour
 
         // 2) TownManager에서 “내 플레이어가 속한 파티” 가져오기
         PartyInfo myPartyInfo = TownManager.Instance.GetPartyInfoByPlayerId(myPlayer.PlayerId);
+        Debug.Log($"에러전 파티 인포 : {myPartyInfo}");
         if (myPartyInfo == null)
         {
             Debug.Log("파티를 생성하고 매칭 신청을 해주세요");
@@ -124,6 +125,13 @@ public class UIAnimation : MonoBehaviour
         }
 
         Debug.Log($"찾은 파티 인포 : {myPartyInfo}");
+
+        //if (myPartyInfo.PartyLeaderId != myPlayer.PlayerId)
+        //{
+        //    Debug.Log("매칭 요청은 파티장만 신청 가능합니다.");
+        //    // 또는 경고 메시지를 띄운 후에도 요청을 보낼 수 있습니다.
+        //    // return;
+        //}
 
         // 3) MatchRequest 패킷 생성해서 파티 정보 넣기
         C_MatchRequest matchRequestPacket = new C_MatchRequest
@@ -136,8 +144,25 @@ public class UIAnimation : MonoBehaviour
         Debug.Log("매칭 요청 패킷 전송 완료!");
     }
 
+    public void MatchStopRequest()
+    {
+        // 1) 내 플레이어가 누군지 확인
+        Player myPlayer = TownManager.Instance.MyPlayer;
+        if (myPlayer == null)
+        {
+            Debug.LogWarning("내 플레이어가 존재하지 않아 매칭 요청을 보낼 수 없습니다.");
+            return;
+        }
+
+        // 2) TownManager에서 “내 플레이어가 속한 파티” 가져오기
+        PartyInfo myPartyInfo = TownManager.Instance.GetPartyInfoByPlayerId(myPlayer.PlayerId);
+        C_MatchStopRequest matchStopRequestPacket = new C_MatchStopRequest { Party = myPartyInfo };
+        GameManager.Network.Send(matchStopRequestPacket);
+    }
+
     public void Show()
     {
+        gameObject.SetActive(true);
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -145,6 +170,7 @@ public class UIAnimation : MonoBehaviour
 
     public void Hide()
     {
+        gameObject.SetActive(false);
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
