@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Google.Protobuf.Protocol;
 
 public class ItemSlotBuy : MonoBehaviour
 {
@@ -10,24 +11,25 @@ public class ItemSlotBuy : MonoBehaviour
     public Image itemIconImage;
     public Button buyButton;
 
-    private Item currentItem;
+    private ItemInfo currentItem;
 
-    public void SetItem(Item item)
+    public void SetItem(ItemInfo item)
     {
+        currentItem = item; 
+        
         currentItem = item;
-        itemTitleText.text = item.itemTitle;
-        itemDescriptionText.text = item.itemDescription;
-        itemIconImage.sprite = item.itemIcon;
-        itemPriceText.text = item.itemPrice.ToString();
+        itemTitleText.text = item.Name;
+        itemDescriptionText.text = item.ItemType.ToString();
+        itemPriceText.text = item.Price.ToString();
 
         buyButton.onClick.RemoveAllListeners();
         buyButton.onClick.AddListener(BuyItem);
-
+        
     }
 
     private void BuyItem()
     {
-        Debug.Log($"Bought {currentItem.itemTitle} for {currentItem.itemPrice} Gold!");
+        TownManager.Instance.BuyItemRequest(currentItem.Name, currentItem.Price);
         // 실제 구매 로직 (예: 플레이어 소지금 차감 등) 추가 가능
     }
 }
