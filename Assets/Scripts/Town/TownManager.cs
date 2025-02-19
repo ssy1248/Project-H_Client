@@ -22,8 +22,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private EventSystem eSystem;
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
+    [SerializeField] Marketplace market;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+    [SerializeField] ShopUI shopUi;
 
     #region 파티 UI
     [Header("파티 UI 모음")]
@@ -288,6 +290,15 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(buyItemPacket);
     }
+    public void SellItemRequest(int inventoryId, int price)
+    {
+        var sellPacket = new C_SellItemRequest
+        {
+            InventoryId = inventoryId,
+            Price = price,
+        };
+        GameManager.Network.Send(sellPacket);
+    }
     public void EquipItemRequest(int itemId)
     {
         var equipItemPacket = new C_EquipItemRequest
@@ -368,6 +379,18 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(marketListPacket);
     }
+    public void MarketSelectBuyNameRequest(int page, int count ,string name)
+    {
+        var marketListPacket = new C_MarketSelectBuyName
+        {
+            Page = page,
+            Count = count,
+            Name = name,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
+
+   
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -412,7 +435,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
-        Debug.Log(data);
+        Debug.Log(data.StoreList);
         Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
@@ -426,6 +449,7 @@ public class TownManager : MonoBehaviour
                 Spawn(player);
             }
         }
+        shopUi.GetBuyData(data.StoreList.ToList());
     }
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
@@ -533,6 +557,10 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+    }
+    public void SellItemResponse(S_SellItemResponse data)
+    {
+
     }
     // 아이템 장착 응답 처리
     public void EquipItemResponse(S_EquipItemResponse data)
@@ -1033,12 +1061,11 @@ public class TownManager : MonoBehaviour
     // 마켓 관련 패킷 추가 
     public void MarketListResponse(S_MarketList data)
     {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+        market.SetBuyData(data);
     }
     public void SellInMarketResponse(S_SellInMarket data)
     {
+        
         StartCoroutine("errorText");
         Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
@@ -1052,9 +1079,11 @@ public class TownManager : MonoBehaviour
     }
     public void MarketMyListResponse(S_MarketMyList data)
     {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
+        market.SetSellData(data);
+    }
+    public void MarketSelectBuyName(S_MarketSelectBuyName data)
+    {
+        market.SetSelectData(data);
     }
 
     // 자기 자신 스폰용도 
