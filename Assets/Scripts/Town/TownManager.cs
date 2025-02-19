@@ -1095,7 +1095,7 @@ public class TownManager : MonoBehaviour
         if (data.IsStart)
             MatchingWindow.SetActive(true);
         else
-            Debug.Log("asdfasdf");
+            MatchingWindow.SetActive(false);
     }
 
     // 자기 자신 스폰용도 
