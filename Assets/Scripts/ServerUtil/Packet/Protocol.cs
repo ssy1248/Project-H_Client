@@ -73,7 +73,7 @@ namespace Google.Protobuf.Protocol {
             "bkluZGV4GAMgASgFIlcKFENfUGFydHlJbnZpdGVSZXF1ZXN0Eh0KFXJlcXVl",
             "c3RlclVzZXJOaWNrbmFtZRgBIAEoCRIgChhwYXJ0aWNpcGF0ZXJVc2VyTmlj",
             "a25hbWUYAiABKAkiNQoSQ19QYXJ0eUpvaW5SZXF1ZXN0Eg8KB3BhcnR5SWQY",
-            "ASABKAUSDgoGdXNlcklkGAIgASgFIhQKEkNfUGFydHlMaXN0UmVxdWVzdCIp",
+            "ASABKAkSDgoGdXNlcklkGAIgASgFIhQKEkNfUGFydHlMaXN0UmVxdWVzdCIp",
             "ChRDX1NlYXJjaFBhcnR5UmVxdWVzdBIRCglwYXJ0eU5hbWUYASABKAkiRQoS",
             "Q19QYXJ0eUtpY2tSZXF1ZXN0EhcKD3JlcXVlc3RlclVzZXJJZBgBIAEoBRIW",
             "Cg5raWNrVXNlclVzZXJJZBgCIAEoBSIkChJDX1BhcnR5RXhpdFJlcXVlc3QS",
@@ -7047,16 +7047,16 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "partyId" field.</summary>
     public const int PartyIdFieldNumber = 1;
-    private int partyId_;
+    private string partyId_ = "";
     /// <summary>
     /// 파티 id
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PartyId {
+    public string PartyId {
       get { return partyId_; }
       set {
-        partyId_ = value;
+        partyId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -7099,7 +7099,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PartyId != 0) hash ^= PartyId.GetHashCode();
+      if (PartyId.Length != 0) hash ^= PartyId.GetHashCode();
       if (UserId != 0) hash ^= UserId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -7119,9 +7119,9 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PartyId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PartyId);
+      if (PartyId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(PartyId);
       }
       if (UserId != 0) {
         output.WriteRawTag(16);
@@ -7137,9 +7137,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PartyId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PartyId);
+      if (PartyId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(PartyId);
       }
       if (UserId != 0) {
         output.WriteRawTag(16);
@@ -7155,8 +7155,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PartyId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PartyId);
+      if (PartyId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PartyId);
       }
       if (UserId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(UserId);
@@ -7173,7 +7173,7 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PartyId != 0) {
+      if (other.PartyId.Length != 0) {
         PartyId = other.PartyId;
       }
       if (other.UserId != 0) {
@@ -7198,8 +7198,8 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            PartyId = input.ReadInt32();
+          case 10: {
+            PartyId = input.ReadString();
             break;
           }
           case 16: {
@@ -7225,8 +7225,8 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            PartyId = input.ReadInt32();
+          case 10: {
+            PartyId = input.ReadString();
             break;
           }
           case 16: {

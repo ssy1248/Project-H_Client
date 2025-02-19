@@ -42,6 +42,11 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject SearchResultUI;
     #endregion
 
+    #region 매칭 UI
+    [Header("매칭 UI ")]
+    [SerializeField] private GameObject MatchingWindow;
+    #endregion
+
     [Header("테스트")]
     // 테스트 용도로 생성
     [SerializeField] GameObject errorText;
@@ -1084,6 +1089,13 @@ public class TownManager : MonoBehaviour
     public void MarketSelectBuyName(S_MarketSelectBuyName data)
     {
         market.SetSelectData(data);
+    }
+    public void MatchingNotification(S_MatchingNotification data)
+    {
+        if (data.IsStart)
+            MatchingWindow.SetActive(true);
+        else
+            Debug.Log("asdfasdf");
     }
 
     // 자기 자신 스폰용도 
