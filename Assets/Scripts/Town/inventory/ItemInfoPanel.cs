@@ -28,7 +28,7 @@ public class ItemInfoPanel : MonoBehaviour
     public void Init(ItemInfo info)
     {
         text_itemName.text = info.Name;
-        string newString = $"{info.Rarity}\n${info.ItemType}"; // TODO: 희귀도랑 아이템 타입 매핑 필요
+        string newString = $"{info.Rarity}\n{info.ItemType}"; // TODO: 희귀도랑 아이템 타입 매핑 필요
         // TODO : 아이템 이미지 매핑
         text_itemType.text = newString;
     }

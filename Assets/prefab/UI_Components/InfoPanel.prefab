@@ -49,7 +49,7 @@ RectTransform:
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &7008833215435245979
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -144,9 +144,10 @@ MonoBehaviour:
   rectTransform: {fileID: 266640207555402900}
   text_itemName: {fileID: 6855216506681195900}
   text_itemType: {fileID: 7858365626365471258}
-  img_ItemImage: {fileID: 0}
+  img_ItemImage: {fileID: 3923302581177184409}
   text_description: {fileID: 4395805076159259367}
   text_manual: {fileID: 219273504652873043}
+  parentTransform: {fileID: 0}
 --- !u!225 &4444366347263552960
 CanvasGroup:
   m_ObjectHideFlags: 0
