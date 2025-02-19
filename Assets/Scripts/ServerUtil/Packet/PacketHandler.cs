@@ -165,6 +165,11 @@ class PacketHandler
     {
         if (packet is not S_MatchStopResponse enterPacket) return;
     }
+    public static void S_MatchingNotification(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchingNotification enterPacket) return;
+        TownManager.Instance.MatchingNotification(enterPacket);
+    }
     public static void S_MarketSelectBuyNameHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MarketSelectBuyName enterPacket) return;

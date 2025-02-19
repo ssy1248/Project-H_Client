@@ -141,6 +141,7 @@ public class UIAnimation : MonoBehaviour
 
     public void Show()
     {
+        gameObject.SetActive(true);
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -148,6 +149,7 @@ public class UIAnimation : MonoBehaviour
 
     public void Hide()
     {
+        gameObject.SetActive(false);
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
