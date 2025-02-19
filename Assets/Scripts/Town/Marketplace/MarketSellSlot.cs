@@ -32,6 +32,6 @@ public class MarketSellSlot : MonoBehaviour
     }
     public void SellInMarket()
     {
-        TownManager.Instance.SellInMarketRequest(0,0);
+        TownManager.Instance.SellInMarketRequest(itemData.Id, itemData.ItemType, Convert.ToInt32(marketplaceTemp.goldData.text));
     }
 }
