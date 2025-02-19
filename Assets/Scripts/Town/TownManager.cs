@@ -358,12 +358,13 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(marketListPacket);
     }
-    public void SellInMarketRequest(int inventoryId, int itemId)
+    public void SellInMarketRequest(int inventoryId, int itemId ,int gold)
     {
         var SellInMarketPacket = new C_SellInMarket
         {
             InventoryId = inventoryId,
             ItemId = itemId,
+            Gold = gold
         };
         GameManager.Network.Send(SellInMarketPacket);
     }
@@ -1095,7 +1096,7 @@ public class TownManager : MonoBehaviour
         if (data.IsStart)
             MatchingWindow.SetActive(true);
         else
-            Debug.Log("asdfasdf");
+            MatchingWindow.SetActive(false);
     }
 
     // 자기 자신 스폰용도 
