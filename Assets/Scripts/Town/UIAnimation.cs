@@ -139,6 +139,22 @@ public class UIAnimation : MonoBehaviour
         Debug.Log("매칭 요청 패킷 전송 완료!");
     }
 
+    public void MatchStopRequest()
+    {
+        // 1) 내 플레이어가 누군지 확인
+        Player myPlayer = TownManager.Instance.MyPlayer;
+        if (myPlayer == null)
+        {
+            Debug.LogWarning("내 플레이어가 존재하지 않아 매칭 요청을 보낼 수 없습니다.");
+            return;
+        }
+
+        // 2) TownManager에서 “내 플레이어가 속한 파티” 가져오기
+        PartyInfo myPartyInfo = TownManager.Instance.GetPartyInfoByPlayerId(myPlayer.PlayerId);
+        C_MatchStopRequest matchStopRequestPacket = new C_MatchStopRequest { Party = myPartyInfo };
+        GameManager.Network.Send(matchStopRequestPacket);
+    }
+
     public void Show()
     {
         gameObject.SetActive(true);
