@@ -422,8 +422,8 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            UiRegister.loginObject.SetActive(false);
-            UiRegister.chuseObject.SetActive(true);
+            Invoke(nameof(UiRegister.ShowCharacterSelection), 0.5f);
+            
         }
     }
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
@@ -455,7 +455,7 @@ public class TownManager : MonoBehaviour
                 Spawn(player);
             }
         }
-        shopUi.GetBuyData(data.StoreList.ToList());
+        //shopUi.GetBuyData(data.StoreList.ToList());
     }
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
