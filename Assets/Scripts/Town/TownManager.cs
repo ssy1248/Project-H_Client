@@ -454,7 +454,7 @@ public class TownManager : MonoBehaviour
                 Spawn(player);
             }
         }
-        shopUi.GetBuyData(data.StoreList.ToList());
+        //shopUi.GetBuyData(data.StoreList.ToList());
     }
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)

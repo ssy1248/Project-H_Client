@@ -74,10 +74,8 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("click");
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            Debug.Log("right-click");
             // 부모 클래스에 맡겨버리기
             onRightClickAction?.Invoke(this);
         }
