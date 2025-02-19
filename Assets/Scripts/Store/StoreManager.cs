@@ -39,14 +39,17 @@ public class ShopUI : MonoBehaviour
         prevSellPageButton.onClick.AddListener(ShowPreviousSellPage);
 
     }
-
-    public void GetBuyData()
+    // 상점 데이터 받아오기 
+    public void GetBuyData(List<ItemInfo> data)
     {
-
+        buyItemList = data;
+        LoadItemsForSellPage();
     }
+    // 인벤토리 데이터 받아오기
     public void GetSellData()
     {
 
+        LoadItemsForBuyPage();
     }
     // 구매 페이지 로드
     private void LoadItemsForBuyPage()
@@ -99,4 +102,13 @@ public class ShopUI : MonoBehaviour
     // 판매 페이지 이동
     private void ShowNextSellPage() { if ((currentSellPage + 1) * itemsPerPage < sellItemList.Count) { currentSellPage++; LoadItemsForSellPage(); } }
     private void ShowPreviousSellPage() { if (currentSellPage > 0) { currentSellPage--; LoadItemsForSellPage(); } }
+
+    public void OpenShop()
+    {
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }else
+            gameObject.SetActive(true);
+    }
 }
