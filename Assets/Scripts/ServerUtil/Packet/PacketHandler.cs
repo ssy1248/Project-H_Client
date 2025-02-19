@@ -165,6 +165,20 @@ class PacketHandler
     {
         if (packet is not S_MatchStopResponse enterPacket) return;
     }
+    public static void S_MarketSelectBuyNameHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MarketSelectBuyName enterPacket) return;
+        TownManager.Instance.MarketSelectBuyName(enterPacket);
+    }
+    public static void S_SellItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SellItemResponse enterPacket) return;
+        TownManager.Instance.SellItemResponse(enterPacket);
+    }
+    public static void S_ShopDataHandler(PacketSession session, IMessage packet)
+    {
+
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Google.Protobuf.Protocol;
+using System.Xml.Linq;
 
 public class ShopUI : MonoBehaviour
 {
@@ -17,8 +19,8 @@ public class ShopUI : MonoBehaviour
 
 
     [Header("Item List")]
-    public List<Item> buyItemList = new List<Item>();  // 구매 가능한 아이템 리스트
-    public List<Item> sellItemList = new List<Item>();  // 판매 가능한 아이템 리스트
+    public List<ItemInfo> buyItemList = new List<ItemInfo>();  // 구매 가능한 아이템 리스트
+    public List<ItemInfo> sellItemList = new List<ItemInfo>();  // 판매 가능한 아이템 리스트
 
     private int currentBuyPage = 0;
     private int currentSellPage = 0;
@@ -26,32 +28,26 @@ public class ShopUI : MonoBehaviour
 
     void Start()
     {
-
-        // 예제 아이템 추가 (실제 게임에서는 DB나 다른 방식으로 가져올 수도 있음)
-        buyItemList.Add(new Item("Sword", "A sharp blade.", null, 100));
-        buyItemList.Add(new Item("Shield", "A sturdy shield.", null, 150));
-        buyItemList.Add(new Item("Potion", "Restores health.", null, 50));
-        buyItemList.Add(new Item("Sword", "A sharp blade.", null, 100));
-        buyItemList.Add(new Item("Shield", "A sturdy shield.", null, 150));
-        buyItemList.Add(new Item("Potion", "Restores health.", null, 50));
-        buyItemList.Add(new Item("Sword", "A sharp blade.", null, 100));
-        buyItemList.Add(new Item("Shield", "A sturdy shield.", null, 150));
-        buyItemList.Add(new Item("Potion", "Restores health.", null, 50));
-
-        sellItemList.Add(new Item("Old Sword", "A worn-out sword.", null, 30));
-        sellItemList.Add(new Item("Used Potion", "Half-used potion.", null, 10));
-
+        /*
+        buyItemList.Add(new ItemInfo("Sword", "A sharp blade.", null, 100));
+        sellItemList.Add(new ItemInfo(1, 100, "Old Sword", "A worn-out sword.", null, 30));
+        */
         // 버튼 리스너 설정
         nextBuyPageButton.onClick.AddListener(ShowNextBuyPage);
         prevBuyPageButton.onClick.AddListener(ShowPreviousBuyPage);
         nextSellPageButton.onClick.AddListener(ShowNextSellPage);
         prevSellPageButton.onClick.AddListener(ShowPreviousSellPage);
 
-        // 첫 페이지 로드
-        LoadItemsForBuyPage();
-        LoadItemsForSellPage();
     }
 
+    public void GetBuyData()
+    {
+
+    }
+    public void GetSellData()
+    {
+
+    }
     // 구매 페이지 로드
     private void LoadItemsForBuyPage()
     {
@@ -67,7 +63,7 @@ public class ShopUI : MonoBehaviour
         {
             GameObject slot = Instantiate(buySlotPrefab, buySlotParent);
             slot.SetActive(true);  // 생성 후 활성화
-            Item item = buyItemList[i];
+            ItemInfo item = buyItemList[i];
 
             ItemSlotBuy itemSlot = slot.GetComponent<ItemSlotBuy>();
             itemSlot.SetItem(item);
@@ -89,7 +85,7 @@ public class ShopUI : MonoBehaviour
         for (int i = startIdx; i < endIdx; i++)
         {
             GameObject slot = Instantiate(sellSlotPrefab, sellSlotParent);
-            Item item = sellItemList[i];
+            ItemInfo item = sellItemList[i];
 
             ItemSlotSell itemSlot = slot.GetComponent<ItemSlotSell>();
             itemSlot.SetItem(item);
@@ -103,4 +99,13 @@ public class ShopUI : MonoBehaviour
     // 판매 페이지 이동
     private void ShowNextSellPage() { if ((currentSellPage + 1) * itemsPerPage < sellItemList.Count) { currentSellPage++; LoadItemsForSellPage(); } }
     private void ShowPreviousSellPage() { if (currentSellPage > 0) { currentSellPage--; LoadItemsForSellPage(); } }
+
+    public void OpenShop()
+    {
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }else
+            gameObject.SetActive(true);
+    }
 }

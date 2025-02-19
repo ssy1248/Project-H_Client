@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Google.Protobuf.Protocol;
 
 public class ItemSlotSell : MonoBehaviour
 {
@@ -12,13 +13,15 @@ public class ItemSlotSell : MonoBehaviour
 
     private Item currentItem;
 
-    public void SetItem(Item item)
+    public void SetItem(ItemInfo item)
     {
+        /*
         currentItem = item;
         itemTitleText.text = item.itemTitle;
         itemDescriptionText.text = item.itemDescription;
         itemIconImage.sprite = item.itemIcon;
         itemPriceText.text = item.itemPrice.ToString();
+        */
 
         sellButton.onClick.RemoveAllListeners();
         sellButton.onClick.AddListener(SellItem);
