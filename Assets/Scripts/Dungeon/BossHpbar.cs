@@ -1,75 +1,138 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using TMPro;
 
 public class BossHealthBar : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public Slider healthBar;        // º¸½º HP ¹Ù
-    public Image healthBarFill;     // HP ¹Ù Fill ÀÌ¹ÌÁö (»ö»ó º¯°æÀ» À§ÇÑ)
-    public Image healthBarBackground; // HP ¹Ù ¹è°æ ÀÌ¹ÌÁö (»ö»ó º¯°æÀ» À§ÇÑ)
-    public float maxHealth = 100f;  // º¸½º ÃÖ´ë Ã¼·Â
-    private float currentHealth;    // º¸½º ÇöÀç Ã¼·Â
+    public Slider healthSlider; // ì²´ë ¥ì„ í‘œì‹œí•  ìŠ¬ë¼ì´ë”
+    public Image fillImage; // í˜„ì¬ ì²´ë ¥ë°” ìƒ‰ìƒ
+    public Image backgroundImage; // ë°°ê²½ìƒ‰ ë³€ê²½
+    public Color[] stageColors = { Color.red, new Color(1f, 0.5f, 0f), Color.green, new Color(0.6f, 0f, 0.8f), Color.blue }; // ë¹¨ê°• â†’ ì£¼í™© â†’ ì´ˆë¡ â†’ ë³´ë¼ â†’ íŒŒë‘
+    public Color lastStageColor = Color.black; // ë§ˆì§€ë§‰ 10% ë°°ê²½ìƒ‰
 
-    private Color[] healthColors;   // °¢ Ã¼·Â ´Ü°è¿¡ ÇØ´çÇÏ´Â »ö»óµé (¹è°æ°ú Fill »ö»ó)
-    private int colorIndex = 0;     // ÇöÀç »ö»ó ´Ü°è
+    private int maxHealth = 3000;
+    private int currentHealth;
+    private int stageHealth; // 10% ë‹¨ìœ„ ì²´ë ¥
+    private int currentStageIndex = 0;
+    private bool isAnimating = false; // ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰ ì—¬ë¶€ ì²´í¬
+
+    public TextMeshProUGUI healthText; // ë³´ìŠ¤ ì²´ë ¥ í…ìŠ¤íŠ¸
 
     void Start()
     {
-        currentHealth = maxHealth;  // ½ÃÀÛ ½Ã º¸½ºÀÇ Ã¼·ÂÀº ÃÖ´ë Ã¼·Â
-        healthBar.maxValue = maxHealth;  // ½½¶óÀÌ´õÀÇ ÃÖ´ë °ª ¼³Á¤
-        healthBar.value = currentHealth;  // ½½¶óÀÌ´õÀÇ ÇöÀç °ª ¼³Á¤
+        currentHealth = maxHealth;
+        stageHealth = maxHealth / stageColors.Length; // 10% ë‹¨ìœ„ ê³„ì‚°
+        healthSlider.maxValue = stageHealth;
+        healthSlider.value = stageHealth;
 
-        // °¢ »ö»ó ´Ü°è¿¡ ´ëÇÑ Á¤ÀÇ (¹è°æ »ö»ó°ú Fill »ö»ó)
-        healthColors = new Color[]
-        {
-            Color.red,     // 1´Ü°è: »¡°£»ö
-            Color.yellow,  // 2´Ü°è: ³ë¶õ»ö
-            Color.green,   // 3´Ü°è: ÃÊ·Ï»ö
-            Color.blue     // 4´Ü°è: ÆÄ¶õ»ö
-        };
+        fillImage.color = stageColors[currentStageIndex]; // ì²« Fill Image ìƒ‰ìƒ
+        backgroundImage.color = stageColors[(currentStageIndex + 1) % stageColors.Length]; // ì²« ë°°ê²½ìƒ‰
 
-        // Ã³À½¿¡ ¹è°æ°ú Fill »ö»óÀ» »¡°£»öÀ¸·Î ¼³Á¤
-        UpdateHealthBarColor();
+        // 5ì´ˆë§ˆë‹¤ ì²´ë ¥ 100 ê°ì†Œ
+        InvokeRepeating("AutoDamage", 0.5f, 0.5f);
+
+        UpdateHealthText(); // í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
     }
 
-    void Update()
+    public void TakeDamage(int damage)
     {
-        // Ã¼·ÂÀÌ 0¿¡¼­ ÃÖ´ë Ã¼·Â±îÁö °¨¼ÒÇÑ´Ù°í °¡Á¤
-        // Å×½ºÆ®¸¦ À§ÇØ Ã¼·ÂÀ» Á¶±İ¾¿ °¨¼Ò½ÃÅ°´Â ÄÚµå Ãß°¡
-        if (currentHealth > 0)
+        if (isAnimating) return; // ì• ë‹ˆë©”ì´ì…˜ ì¤‘ì´ë©´ ì¤‘ë³µ ì‹¤í–‰ ë°©ì§€
+
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-            currentHealth -= Time.deltaTime * 10f;  // 10ÃÊ¸¶´Ù Ã¼·ÂÀÌ °¨¼Ò
-            healthBar.value = currentHealth;        // HP ¹Ù °ª °»½Å
-            UpdateHealthBarColor();                 // HP ¹Ù »ö»ó ¾÷µ¥ÀÌÆ®
+            // ğŸ’¡ ì²´ë ¥ì„ ë°”ë¡œ 0ìœ¼ë¡œ ì„¤ì •í•˜ì§€ ì•Šê³ , ë§ˆì§€ë§‰ ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰ í›„ ì²˜ë¦¬
+            StartCoroutine(AnimateLastHealthReduction());
+            return;
         }
+
+        int stageRemainder = currentHealth % stageHealth;
+        int newStageIndex = (maxHealth - currentHealth) / stageHealth;
+
+        // ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
+        StartCoroutine(AnimateHealthReduction(stageRemainder, newStageIndex));
     }
 
-    // Ã¼·Â¿¡ µû¶ó HP ¹Ù »ö»ó ¹× ¹è°æ »ö»ó º¯°æ
-    void UpdateHealthBarColor()
+    private IEnumerator AnimateHealthReduction(int targetValue, int newStageIndex)
     {
-        // Ã¼·Â ºñÀ² °è»ê (0~1 ¹üÀ§)
-        float healthPercentage = currentHealth / maxHealth;
+        isAnimating = true; // ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘
 
-        // Ã¼·Â¿¡ µû¶ó »ö»ó ´Ü°è¸¦ °áÁ¤
-        if (healthPercentage > 0.75f)
+        float duration = 0.5f; // ì• ë‹ˆë©”ì´ì…˜ ì§€ì† ì‹œê°„
+        float elapsedTime = 0f;
+        float startValue = healthSlider.value;
+
+        while (elapsedTime < duration)
         {
-            colorIndex = 0;  // 75% ÀÌ»ó: »¡°£»ö
+            elapsedTime += Time.deltaTime;
+            healthSlider.value = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
+            yield return null;
         }
-        else if (healthPercentage > 0.5f)
+
+        healthSlider.value = targetValue; // ìµœì¢… ê°’ ë³´ì •
+
+        if (newStageIndex != currentStageIndex)
         {
-            colorIndex = 1;  // 50% ÀÌ»ó: ³ë¶õ»ö
+            currentStageIndex = newStageIndex % stageColors.Length;
+            UpdateHealthBarColors();
         }
-        else if (healthPercentage > 0.25f)
+
+        isAnimating = false; // ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ
+
+        UpdateHealthText(); // ì²´ë ¥ í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
+    }
+
+    private void UpdateHealthBarColors()
+    {
+        fillImage.color = backgroundImage.color; // ë°°ê²½ìƒ‰ì´ì—ˆë˜ ê²ƒì„ Fill Imageë¡œ
+        healthSlider.value = healthSlider.maxValue; // ìƒˆë¡œìš´ ì²´ë ¥ë°”ëŠ” ê½‰ ì°¬ ìƒíƒœì—ì„œ ì‹œì‘
+
+        if (currentStageIndex == stageColors.Length - 1)
         {
-            colorIndex = 2;  // 25% ÀÌ»ó: ÃÊ·Ï»ö
+            backgroundImage.color = lastStageColor; // ë§ˆì§€ë§‰ 10%ì—ì„œëŠ” ê²€ì€ìƒ‰ ê³ ì •
         }
         else
         {
-            colorIndex = 3;  // 25% ÀÌÇÏ: ÆÄ¶õ»ö
+            int nextIndex = (currentStageIndex + 1) % stageColors.Length;
+            backgroundImage.color = stageColors[nextIndex];
+        }
+    }
+
+    private IEnumerator AnimateLastHealthReduction()
+    {
+        isAnimating = true; // ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘
+
+        float duration = 0.5f;
+        float elapsedTime = 0f;
+        float startValue = healthSlider.value;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            healthSlider.value = Mathf.Lerp(startValue, 0f, elapsedTime / duration);
+            yield return null;
         }
 
-        // Fill »ö»ó°ú ¹è°æ »ö»ó º¯°æ
-        healthBarFill.color = healthColors[colorIndex];
-        healthBarBackground.color = healthColors[colorIndex];
+        healthSlider.value = 0f; // ë§ˆì§€ë§‰ ì²´ë ¥ 0ìœ¼ë¡œ ì„¤ì •
+        currentHealth = 0; // ğŸ’¡ ì´ì œ ì‹¤ì œ ì²´ë ¥ì„ 0ìœ¼ë¡œ ì„¤ì •
+        Debug.Log("ë³´ìŠ¤ ì²˜ì¹˜ë¨!"); // ğŸ’¡ ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚œ í›„ ë©”ì‹œì§€ ì¶œë ¥
+
+        isAnimating = false; // ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ
+
+        UpdateHealthText(); // ì²´ë ¥ í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
+    }
+
+    private void AutoDamage()
+    {
+        TakeDamage(100);
+    }
+
+    // ë³´ìŠ¤ ì²´ë ¥ í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
+    private void UpdateHealthText()
+    {
+        if (healthText != null)
+        {
+            healthText.text = $"{currentHealth} / {maxHealth}";
+        }
     }
 }
