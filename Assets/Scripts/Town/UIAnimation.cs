@@ -131,8 +131,15 @@ public class UIAnimation : MonoBehaviour
         Debug.Log("매칭 요청 패킷 전송 완료!");
     }
 
+    public void MatchStopRequest()
+    {
+        C_MatchStopRequest MatchStopRequestPacket = new C_MatchStopRequest { Stop = true };
+        GameManager.Network.Send(MatchStopRequestPacket);
+    }
+
     public void Show()
     {
+        gameObject.SetActive(true);
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;

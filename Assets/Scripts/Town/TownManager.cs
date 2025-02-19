@@ -22,7 +22,6 @@ public class TownManager : MonoBehaviour
     [SerializeField] private EventSystem eSystem;
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
-    [SerializeField] Marketplace market;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
 
@@ -378,7 +377,7 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(marketListPacket);
     }
-    public void MarketSelectBuyNameRequest(int page, int count ,string name)
+    public void MarketSelectBuyNameRequest(int page, int count, string name)
     {
         var marketListPacket = new C_MarketSelectBuyName
         {
@@ -389,7 +388,7 @@ public class TownManager : MonoBehaviour
         GameManager.Network.Send(marketListPacket);
     }
 
-   
+
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -472,10 +471,11 @@ public class TownManager : MonoBehaviour
     {
         // 받은 배열 만큼 반복문을 돌려야함
         // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
-        foreach (var syncTransformInfo  in data.TransformInfos) {
+        foreach (var syncTransformInfo in data.TransformInfos)
+        {
             // 플레이어 ID
             int playerId = syncTransformInfo.PlayerId;
-            
+
             // 트랜스폼 정보 (위치 회전)
             TransformInfo transformInfo = syncTransformInfo.Transform;
             Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
@@ -487,16 +487,18 @@ public class TownManager : MonoBehaviour
 
             // 플레이어가 존재하는지 검증.
             Player player = GetPlayerAvatarById(playerId);
-            if(player == null) {
+            if (player == null)
+            {
                 continue;
             }
 
             // 플레이어가 본인인지 검증.
-            if(MyPlayer.PlayerId == playerId) {
+            if (MyPlayer.PlayerId == playerId)
+            {
                 continue;
             }
 
-            
+
             // 플레이어에게 이동 정보를 넘긴다.
             player.Move(targetPos, targetRot, speed);
         }
@@ -703,6 +705,8 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        //딕셔너리 추가
+
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
         foreach (var playerStatus in data.Party.Players)
         {
@@ -756,7 +760,7 @@ public class TownManager : MonoBehaviour
 
         int count = data.Info.Count;
         Debug.Log($"파티 인포 : {count}");
-        for(int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
             partyListObj.GetComponent<PartyListItem>().partyData = data.Info[i];
@@ -840,7 +844,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 추방 받은 데이터 : {data}");
 
-        if(data.Success)
+        if (data.Success)
         {
             PartyUI.SetActive(false);
             foreach (Transform child in PartyListSpawnPoint.transform)
@@ -874,7 +878,8 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 업데이트 받은 데이터 : {data}");
 
-        if (MyPlayer == null || !data.Party.Players.Any(ps => {
+        if (MyPlayer == null || !data.Party.Players.Any(ps =>
+        {
             Player p = GetPlayerByNickname(ps.PlayerName);
             return p != null && p.PlayerId == MyPlayer.PlayerId;
         }))
@@ -938,11 +943,12 @@ public class TownManager : MonoBehaviour
     // 마켓 관련 패킷 추가 
     public void MarketListResponse(S_MarketList data)
     {
-        market.SetBuyData(data);
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
     }
     public void SellInMarketResponse(S_SellInMarket data)
     {
-        
         StartCoroutine("errorText");
         Debug.Log(data);
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
@@ -956,11 +962,9 @@ public class TownManager : MonoBehaviour
     }
     public void MarketMyListResponse(S_MarketMyList data)
     {
-        market.SetSellData(data);
-    }
-    public void MarketSelectBuyName(S_MarketSelectBuyName data)
-    {
-        market.SetSelectData(data);
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Itemdata.ToString());
     }
 
     // 자기 자신 스폰용도 
@@ -1032,7 +1036,8 @@ public class TownManager : MonoBehaviour
         uiAnimation.Show();
     }
 
-    public void UpdateInventory(S_InventoryResponse data){
+    public void UpdateInventory(S_InventoryResponse data)
+    {
         // 인벤토리 갱신
         uiAnimation.UpdateInventory(data);
     }
