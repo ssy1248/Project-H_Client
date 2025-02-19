@@ -151,7 +151,7 @@ public class UIAnimation : MonoBehaviour
 
         // 2) TownManager에서 “내 플레이어가 속한 파티” 가져오기
         PartyInfo myPartyInfo = TownManager.Instance.GetPartyInfoByPlayerId(myPlayer.PlayerId);
-        C_MatchStopRequest matchStopRequestPacket = new C_MatchStopRequest { Stop = true, PartyId = myPartyInfo.PartyId };
+        C_MatchStopRequest matchStopRequestPacket = new C_MatchStopRequest { Party = myPartyInfo };
         GameManager.Network.Send(matchStopRequestPacket);
     }
 
