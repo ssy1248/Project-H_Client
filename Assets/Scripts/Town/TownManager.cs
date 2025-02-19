@@ -25,6 +25,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] Marketplace market;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+    [SerializeField] ShopUI shopUi;
 
     #region 파티 UI
     [Header("파티 UI 모음")]
@@ -434,7 +435,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
-        Debug.Log(data);
+        Debug.Log(data.StoreList);
         Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
@@ -448,6 +449,7 @@ public class TownManager : MonoBehaviour
                 Spawn(player);
             }
         }
+        shopUi.GetBuyData(data.StoreList.ToList());
     }
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
