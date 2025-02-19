@@ -37,8 +37,17 @@ public class ShopUI : MonoBehaviour
         prevBuyPageButton.onClick.AddListener(ShowPreviousBuyPage);
         nextSellPageButton.onClick.AddListener(ShowNextSellPage);
         prevSellPageButton.onClick.AddListener(ShowPreviousSellPage);
-
+        
     }
+    private void OnEnable()
+    {
+        GetSellDataRequest();
+    }
+    public void GetSellDataRequest()
+    {
+        TownManager.Instance.ShopInventoryRequest((uint)currentSellPage, (uint)itemsPerPage);
+    }
+
     // 상점 데이터 받아오기 
     public void GetBuyData(List<ItemInfo> data)
     {
@@ -46,9 +55,9 @@ public class ShopUI : MonoBehaviour
         LoadItemsForSellPage();
     }
     // 인벤토리 데이터 받아오기
-    public void GetSellData()
+    public void GetSellData(List<ItemInfo> data)
     {
-
+        sellItemList = data;
         LoadItemsForBuyPage();
     }
     // 구매 페이지 로드
@@ -100,8 +109,8 @@ public class ShopUI : MonoBehaviour
     private void ShowPreviousBuyPage() { if (currentBuyPage > 0) { currentBuyPage--; LoadItemsForBuyPage(); } }
 
     // 판매 페이지 이동
-    private void ShowNextSellPage() { if ((currentSellPage + 1) * itemsPerPage < sellItemList.Count) { currentSellPage++; LoadItemsForSellPage(); } }
-    private void ShowPreviousSellPage() { if (currentSellPage > 0) { currentSellPage--; LoadItemsForSellPage(); } }
+    private void ShowNextSellPage() { if ((currentSellPage + 1) * itemsPerPage < sellItemList.Count) { currentSellPage++; GetSellDataRequest(); } }
+    private void ShowPreviousSellPage() { if (currentSellPage > 0) { currentSellPage--; GetSellDataRequest(); } }
 
     public void OpenShop()
     {
