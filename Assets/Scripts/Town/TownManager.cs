@@ -54,7 +54,7 @@ public class TownManager : MonoBehaviour
     private Dictionary<int, string> playerDb = new();
 
     // 파티 인포를 저장할 딕셔너리
-    private Dictionary<int, PartyInfo> partyInfoDict = new Dictionary<int, PartyInfo>();
+    private Dictionary<string, PartyInfo> partyInfoDict = new Dictionary<string, PartyInfo>();
 
     public Player MyPlayer { get; private set; }
 
@@ -615,6 +615,11 @@ public class TownManager : MonoBehaviour
         {
             partyInfoDict[data.Party.PartyId] = data.Party;
         }
+        else
+        {
+            partyInfoDict.Add(data.Party.PartyId, data.Party);
+        }
+
 
         // 기존에 생성된 파티원 UI가 있다면 먼저 제거
         foreach (Transform child in PartyStatusSpawnPoint.transform)
@@ -677,7 +682,14 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        //딕셔너리 추가
+        if (partyInfoDict.ContainsKey(data.Party.PartyId))
+        {
+            partyInfoDict[data.Party.PartyId] = data.Party;
+        }
+        else
+        {
+            partyInfoDict.Add(data.Party.PartyId, data.Party);
+        }
 
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
         foreach (var playerStatus in data.Party.Players)
@@ -818,6 +830,59 @@ public class TownManager : MonoBehaviour
 
         if(data.Success)
         {
+            // [1] 추방된 유저가 누구인지 찾는다 (닉네임 등)
+            Player kickedPlayer = GetPlayerAvatarById(data.UserId);
+            if (kickedPlayer == null)
+            {
+                Debug.LogWarning("추방된 유저를 로컬에서 찾을 수 없습니다.");
+            }
+
+            // [2] 딕셔너리에서 해당 유저가 속해있는 PartyInfo를 찾아서 수정/삭제
+            // ---- 기존: List<int> removePartyList = new List<int>();
+            List<string> removePartyList = new List<string>();
+
+            foreach (var kvp in partyInfoDict)
+            {
+                // kvp.Key는 string 타입
+                var partyId = kvp.Key;
+                var pInfo = kvp.Value;
+
+                int removedCount = 0;
+                for (int i = pInfo.Players.Count - 1; i >= 0; i--)
+                {
+                    if (kickedPlayer != null && pInfo.Players[i].PlayerName == kickedPlayer.nickname)
+                    {
+                        pInfo.Players.RemoveAt(i);
+                        removedCount++;
+                    }
+                }
+
+                if (removedCount > 0)
+                {
+                    if (pInfo.Players.Count == 0)
+                    {
+                        // ---- 기존: removePartyList.Add(partyId); 에서 partyId가 int가 아니므로 에러
+                        removePartyList.Add(partyId); // partyId는 string
+                    }
+                    else
+                    {
+                        partyInfoDict[partyId] = pInfo;
+                    }
+                    break;
+                }
+            }
+
+            // 실제 파티 딕셔너리에서 완전히 제거
+            // ---- 기존: foreach (int removeId in removePartyList)
+            foreach (string removeId in removePartyList)
+            {
+                if (partyInfoDict.ContainsKey(removeId))
+                {
+                    partyInfoDict.Remove(removeId);
+                }
+            }
+
+            // [3] UI 갱신 처리
             PartyUI.SetActive(false);
             foreach (Transform child in PartyListSpawnPoint.transform)
             {
@@ -837,10 +902,64 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 탈퇴 받은 데이터 : {data}");
 
-        PartyUI.SetActive(false);
-        foreach (Transform child in PartyListSpawnPoint.transform)
+        if (data.Success)
         {
-            Destroy(child.gameObject);
+            Player exitPlayer = GetPlayerAvatarById(data.UserId);
+            if (exitPlayer == null)
+            {
+                Debug.LogWarning("탈퇴한 유저를 로컬에서 찾을 수 없습니다.");
+            }
+
+            // ---- 기존: List<int> removePartyList = new List<int>();
+            List<string> removePartyList = new List<string>();
+
+            foreach (var kvp in partyInfoDict)
+            {
+                var partyId = kvp.Key;
+                var pInfo = kvp.Value;
+
+                int removedCount = 0;
+                for (int i = pInfo.Players.Count - 1; i >= 0; i--)
+                {
+                    if (exitPlayer != null && pInfo.Players[i].PlayerName == exitPlayer.nickname)
+                    {
+                        pInfo.Players.RemoveAt(i);
+                        removedCount++;
+                    }
+                }
+
+                if (removedCount > 0)
+                {
+                    if (pInfo.Players.Count == 0)
+                    {
+                        removePartyList.Add(partyId); // string
+                    }
+                    else
+                    {
+                        partyInfoDict[partyId] = pInfo;
+                    }
+                    break;
+                }
+            }
+
+            // ---- 기존: foreach (int removeId in removePartyList)
+            foreach (string removeId in removePartyList)
+            {
+                if (partyInfoDict.ContainsKey(removeId))
+                {
+                    partyInfoDict.Remove(removeId);
+                }
+            }
+
+            PartyUI.SetActive(false);
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        else
+        {
+            Debug.Log("파티 탈퇴 실패 혹은 이미 파티에 속해있지 않은 유저입니다.");
         }
     }
 
