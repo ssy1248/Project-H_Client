@@ -24,6 +24,7 @@ public class Marketplace : MonoBehaviour
     [SerializeField] TextMeshProUGUI pageText;
     [SerializeField] GameObject[] pageObject;
     [SerializeField] TMP_InputField selectData;
+    public TMP_InputField goldData;
     [SerializeField] string selectName = "";
 
     private Action onConfirmAction;

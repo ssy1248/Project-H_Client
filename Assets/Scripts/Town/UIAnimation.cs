@@ -141,6 +141,7 @@ public class UIAnimation : MonoBehaviour
 
     public void MatchStopRequest()
     {
+        /*
         // 1) 내 플레이어가 누군지 확인
         Player myPlayer = TownManager.Instance.MyPlayer;
         if (myPlayer == null)
@@ -153,6 +154,7 @@ public class UIAnimation : MonoBehaviour
         PartyInfo myPartyInfo = TownManager.Instance.GetPartyInfoByPlayerId(myPlayer.PlayerId);
         C_MatchStopRequest matchStopRequestPacket = new C_MatchStopRequest { Party = myPartyInfo };
         GameManager.Network.Send(matchStopRequestPacket);
+        */
     }
 
     public void Show()
