@@ -422,7 +422,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            Invoke(nameof(UiRegister.ShowCharacterSelection()), 0.5f);
+            Invoke(nameof(UiRegister.ShowCharacterSelection), 0.5f);
             
         }
     }
