@@ -39,13 +39,13 @@ public class ShopUI : MonoBehaviour
         prevSellPageButton.onClick.AddListener(ShowPreviousSellPage);
 
     }
-    // 인벤토리 데이터 받아오기 
-    public void GetBuyData()
+    // 상점 데이터 받아오기 
+    public void GetBuyData(List<ItemInfo> data)
     {
-
+        buyItemList = data;
         LoadItemsForSellPage();
     }
-    // 상점 데이터 받아오기 
+    // 인벤토리 데이터 받아오기
     public void GetSellData()
     {
 
