@@ -78,6 +78,9 @@ class PacketManager
         _handler.Add((ushort)MsgId.SMatchresponse, PacketHandler.S_MatchResponse);
         _onRecv.Add((ushort)MsgId.SMatchstopresponse, MakePacket<S_MatchStopResponse>);
         _handler.Add((ushort)MsgId.SMatchstopresponse, PacketHandler.S_MatchStopResponse);
+        _onRecv.Add((ushort)MsgId.SSellitemresponse, MakePacket<S_SellItemResponse>);
+        _handler.Add((ushort)MsgId.SSellitemresponse, PacketHandler.S_SellItemHandler);
+        
         Debug.Log("핸들러 등록 완료");
     }
 

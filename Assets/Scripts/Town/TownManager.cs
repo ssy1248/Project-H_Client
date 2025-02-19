@@ -289,6 +289,15 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(buyItemPacket);
     }
+    public void SellItemRequest(int inventoryId, int price)
+    {
+        var sellPacket = new C_SellItemRequest
+        {
+            InventoryId = inventoryId,
+            Price = price,
+        };
+        GameManager.Network.Send(sellPacket);
+    }
     public void EquipItemRequest(int itemId)
     {
         var equipItemPacket = new C_EquipItemRequest
@@ -379,6 +388,8 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(marketListPacket);
     }
+
+   
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -544,6 +555,10 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+    }
+    public void SellItemResponse(S_SellItemResponse data)
+    {
+
     }
     // 아이템 장착 응답 처리
     public void EquipItemResponse(S_EquipItemResponse data)

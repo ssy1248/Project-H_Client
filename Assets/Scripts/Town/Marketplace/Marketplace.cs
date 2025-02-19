@@ -140,7 +140,7 @@ public class Marketplace : MonoBehaviour
         }
         buttons[0].SetActive(inventoryPage > 0);
         buttons[1].SetActive(inventoryPage > 1);
-        
+
     }
     // 데이터 넣어주기 마켓
     public void SetBuyData(S_MarketList data)
@@ -165,7 +165,7 @@ public class Marketplace : MonoBehaviour
         {
             if (i < data.Itemdata.Count)
             {
-                //buyslots[i].GetComponent<MarkeBuySlot>().SetData(data.Itemdata[i]);
+                buyslots[i].GetComponent<MarkeBuySlot>().SetData(data.Itemdata[i]);
             }
             else
             {

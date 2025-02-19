@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -709,8 +709,9 @@ GameObject:
   - component: {fileID: 292056468}
   - component: {fileID: 292056467}
   - component: {fileID: 292056466}
+  - component: {fileID: 292056469}
   m_Layer: 5
-  m_Name: Bg
+  m_Name: Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -791,6 +792,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 292056464}
   m_CullTransparentMesh: 1
+--- !u!114 &292056469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 292056464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9155d81301f895d43b277819cdb4e7f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buySlotParent: {fileID: 1370378470}
+  sellSlotParent: {fileID: 1910963228}
+  buySlotPrefab: {fileID: 5243000200465636518, guid: 4fdcef7ec675efa4badd6169ee53479c,
+    type: 3}
+  sellSlotPrefab: {fileID: 4688925772803948952, guid: 61642ec363e41b24a85a2206c94f5b69,
+    type: 3}
+  nextBuyPageButton: {fileID: 296871578}
+  prevBuyPageButton: {fileID: 1209982412}
+  nextSellPageButton: {fileID: 2133114526}
+  prevSellPageButton: {fileID: 1244070407}
 --- !u!1 &296871573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,8 +1353,6 @@ GameObject:
   - component: {fileID: 726964354}
   - component: {fileID: 726964353}
   - component: {fileID: 726964352}
-  - component: {fileID: 726964356}
-  - component: {fileID: 726964357}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1422,42 +1443,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &726964356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 726964351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02d4e9ae7f9fd6241876954ac4c33799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &726964357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 726964351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9155d81301f895d43b277819cdb4e7f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buySlotParent: {fileID: 1370378470}
-  sellSlotParent: {fileID: 1910963228}
-  buySlotPrefab: {fileID: 5243000200465636518, guid: 4fdcef7ec675efa4badd6169ee53479c,
-    type: 3}
-  sellSlotPrefab: {fileID: 4688925772803948952, guid: 61642ec363e41b24a85a2206c94f5b69,
-    type: 3}
-  nextBuyPageButton: {fileID: 296871578}
-  prevBuyPageButton: {fileID: 1209982412}
-  nextSellPageButton: {fileID: 2133114526}
-  prevSellPageButton: {fileID: 1244070407}
-  buyItemList: []
-  sellItemList: []
 --- !u!1 &777543041
 GameObject:
   m_ObjectHideFlags: 0
