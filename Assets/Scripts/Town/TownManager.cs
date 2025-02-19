@@ -433,6 +433,13 @@ public class TownManager : MonoBehaviour
             UiRegister.ShowCharacterSelection();
         }
     }
+
+    private IEnumerator DelayedShowCharacterSelection(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UiRegister.ShowCharacterSelection();
+    }
+
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)
     {
@@ -672,6 +679,16 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+            if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+                popup.RemoveBtnObj.SetActive(false);
+            else
+                popup.RemoveBtnObj.SetActive(true);
+        }
+
         // PartyInfo의 Players 리스트 순회
         foreach (var playerStatus in data.Party.Players)
         {
@@ -734,6 +751,16 @@ public class TownManager : MonoBehaviour
         else
         {
             partyInfoDict.Add(data.Party.PartyId, data.Party);
+        }
+
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+        if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+            popup.RemoveBtnObj.SetActive(false);
+        else
+            popup.RemoveBtnObj.SetActive(true);
         }
 
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
@@ -987,7 +1014,6 @@ public class TownManager : MonoBehaviour
                 }
             }
 
-            // ---- 기존: foreach (int removeId in removePartyList)
             foreach (string removeId in removePartyList)
             {
                 if (partyInfoDict.ContainsKey(removeId))
@@ -1033,6 +1059,16 @@ public class TownManager : MonoBehaviour
         foreach (Transform child in PartyStatusSpawnPoint.transform)
         {
             Destroy(child.gameObject);
+        }
+
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+            if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+                popup.RemoveBtnObj.SetActive(false);
+            else
+                popup.RemoveBtnObj.SetActive(true);
         }
 
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성

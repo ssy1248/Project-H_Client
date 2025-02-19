@@ -12,6 +12,7 @@ public class UIPartyPopUp : MonoBehaviour
     [SerializeField] private TMP_InputField partyKickInputField;
     [SerializeField] public string selectPartyId;
     [SerializeField] public int dungeonIndex;
+    [SerializeField] public GameObject RemoveBtnObj;
 
     public void PartySearchBtnClick()
     {
