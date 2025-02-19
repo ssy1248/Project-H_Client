@@ -677,6 +677,8 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        //딕셔너리 추가
+
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
         foreach (var playerStatus in data.Party.Players)
         {
