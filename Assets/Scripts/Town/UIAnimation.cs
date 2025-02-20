@@ -20,6 +20,9 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] int slotDistance = 100;
     [SerializeField] GameObject slotObject;
     [SerializeField] Dictionary<int, GameObject> slots = new Dictionary<int, GameObject>();
+
+    private bool isShowing = false;
+
     void Start()
     {
 
@@ -58,24 +61,13 @@ public class UIAnimation : MonoBehaviour
         mPlayer.ExecuteAnimation(idx);
     }
 
-    void InitiallzeSlots()
-    {
-        for (int i = 0; i < slotInPage; i++)
-        {
-            GameObject slotTemp = Instantiate(slotObject, inventory.transform);
-            slotTemp.SetActive(false);
-            RectTransform slotTr = slotTemp.GetComponent<RectTransform>();
-            slotTr.localPosition = new Vector3(slotTr.localPosition.x, slotTr.localPosition.y - i * slotDistance, slotTr.localPosition.z);
-            slots.Add(i, slotTemp);
-        }
-    }
-
     private void Update()
     {
         if (mPlayer == null)
         {
             return;
         }
+        if(!isShowing) return;
         switch (true)
         {
             // �κ��丮 Ű 
@@ -155,17 +147,17 @@ public class UIAnimation : MonoBehaviour
 
     public void Show()
     {
-        gameObject.SetActive(true);
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+        isShowing = true;
     }
 
     public void Hide()
     {
-        gameObject.SetActive(false);
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+        isShowing = false;
     }
 }
