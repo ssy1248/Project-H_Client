@@ -28,6 +28,9 @@ public class InventoryContainer : MonoBehaviour
                 slot.onPointerEnterAction += ShowItemInfoPanel;
                 slot.onPointerExitAction += HideItemInfoPanel;
                 slot.onRightClickAction += OnRightClickHandler;
+                slot.onBeginDragAction += OnBeginDragHandler;
+                slot.onDragAction += OnDragHandler;
+                slot.onEndDragAction += OnEndDragHandler;
             }
         }
 
@@ -74,10 +77,12 @@ public class InventoryContainer : MonoBehaviour
         return item;
     }
 
-    public InventorySlot FindItemSlot(int itemId){
-        foreach(var slot in itemSlots){
-            if(slot.isEmpty) continue;
-            if(slot.data.Id == itemId) return slot;
+    public InventorySlot FindItemSlot(int itemId)
+    {
+        foreach (var slot in itemSlots)
+        {
+            if (slot.isEmpty) continue;
+            if (slot.data.Id == itemId) return slot;
         }
         return null;
     }
@@ -159,11 +164,30 @@ public class InventoryContainer : MonoBehaviour
         }
     }
 
+    private void OnBeginDragHandler(InventorySlot slot)
+    {
+        itemInfoPanel.gameObject.SetActive(false);
+    }
+
+    private void OnDragHandler(InventorySlot slot)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(slot.gameObject.transform as RectTransform, Input.mousePosition, null, out Vector2 localPoint);
+        slot.itemImage.rectTransform.localPosition = localPoint;
+    }
+
+    private void OnEndDragHandler(InventorySlot slot)
+    {
+        slot.itemImage.rectTransform.localPosition = Vector3.zero;
+        itemInfoPanel.gameObject.SetActive(true);
+    }
+
     public void EquipItem(S_EquipItemResponse data)
     {
-        if(data.Success){
+        if (data.Success)
+        {
             var slot = FindItemSlot(data.ItemId);
-            if(slot == null){
+            if (slot == null)
+            {
                 Debug.LogError("slot not found");
                 return;
             }

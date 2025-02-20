@@ -4,10 +4,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Image itemImage;
-    public UnityAction<InventorySlot> onPointerEnterAction, onRightClickAction;
+    public UnityAction<InventorySlot> onPointerEnterAction, onRightClickAction, onBeginDragAction, onDragAction, onEndDragAction;
     public UnityAction onPointerExitAction;
 
     public bool isEmpty
@@ -74,15 +74,44 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        // 우클릭
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 부모 클래스에 맡겨버리기
             onRightClickAction?.Invoke(this);
+            return;
         }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
 
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            onBeginDragAction?.Invoke(this);
+            return;
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            onDragAction?.Invoke(this);
+            return;
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            onEndDragAction?.Invoke(this);
+            return;
+        }
     }
 }
