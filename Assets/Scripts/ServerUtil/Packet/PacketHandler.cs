@@ -164,10 +164,12 @@ class PacketHandler
     public static void S_MatchResponse(PacketSession session, IMessage packet)
     {
         if (packet is not S_MatchResponse enterPacket) return;
+        TownManager.Instance.MatchResponse(enterPacket);
     }
     public static void S_MatchStopResponse(PacketSession session, IMessage packet)
     {
         if (packet is not S_MatchStopResponse enterPacket) return;
+        TownManager.Instance.MatchStop(enterPacket);
     }
     public static void S_MatchingNotification(PacketSession session, IMessage packet)
     {
