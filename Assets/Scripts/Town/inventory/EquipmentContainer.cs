@@ -22,6 +22,7 @@ public class EquipmentContainer : MonoBehaviour
         InitializeSlot(righthandSlot);
         InitializeSlot(lefthandSlot);
         InitializeSlot(footSlot);
+        PacketHandler.S_DisrobeItemEvent += S_DisrobeItemResponseHandler;
     }
 
     // Update is called once per frame
@@ -34,7 +35,30 @@ public class EquipmentContainer : MonoBehaviour
     {
         slot.onPointerEnterAction += ShowItemInfoPanel;
         slot.onPointerExitAction += HideItemInfoPanel;
-        slot.onRightClickAction += Unequip;
+        slot.onRightClickAction += OnRightClickHandler;
+    }
+
+    private InventorySlot FindItemSlot(int itemId)
+    {
+        if (!headSlot.isEmpty)
+            if (headSlot.data.Id == itemId)
+                return headSlot;
+        if (!shirtSlot.isEmpty)
+            if (shirtSlot.data.Id == itemId)
+                return shirtSlot;
+        if (!pantsSlot.isEmpty)
+            if (pantsSlot.data.Id == itemId)
+                return pantsSlot;
+        if (!footSlot.isEmpty)
+            if (footSlot.data.Id == itemId)
+                return footSlot;
+        if (!righthandSlot.isEmpty)
+            if (righthandSlot.data.Id == itemId)
+                return righthandSlot;
+        if (!lefthandSlot.isEmpty)
+            if (lefthandSlot.data.Id == itemId)
+                return lefthandSlot;
+        return null;
     }
 
     public void Equip(ItemInfo item)
@@ -86,11 +110,35 @@ public class EquipmentContainer : MonoBehaviour
         }
     }
 
+    private void OnRightClickHandler(InventorySlot slot)
+    {
+        if (slot.isEmpty) return;
+        C_DisrobeItemRequest disrobeRequest = new C_DisrobeItemRequest
+        {
+            ItemId = slot.data.Id,
+        };
+        GameManager.Network.Send(disrobeRequest);
+    }
+
+    private void S_DisrobeItemResponseHandler(S_DisrobeItemResponse data)
+    {
+        if (data.Success)
+        {
+            var slot = FindItemSlot(data.ItemId);
+            if (slot == null)
+            {
+                Debug.LogError("slot not found");
+                return;
+            }
+            Unequip(slot);
+        }
+    }
+
     public void Unequip(InventorySlot slot)
     {
         var item = slot.data;
-        slot.Clear();
         inventory.AddItem(item);
+        slot.Clear();
     }
 
     private void ShowItemInfoPanel(InventorySlot slot)
