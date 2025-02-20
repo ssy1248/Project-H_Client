@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,6 +72,14 @@ public class InventoryContainer : MonoBehaviour
         var item = slot.data;
         slot.Clear();
         return item;
+    }
+
+    public InventorySlot FindItemSlot(int itemId){
+        foreach(var slot in itemSlots){
+            if(slot.isEmpty) continue;
+            if(slot.data.Id == itemId) return slot;
+        }
+        return null;
     }
 
     public void DestroyItem(int index, ItemInfo item)
@@ -152,10 +161,15 @@ public class InventoryContainer : MonoBehaviour
 
     public void EquipItem(S_EquipItemResponse data)
     {
-        Debug.Log(data);
-        // // TODO : S_EquipItemResponse 핸들러에서 실행하도록 수정
-        // equipmentContainer.Equip(item);
-        // RemoveItem(slot); // TODO : ItemInfo.index 추가
+        if(data.Success){
+            var slot = FindItemSlot(data.ItemId);
+            if(slot == null){
+                Debug.LogError("slot not found");
+                return;
+            }
+            equipmentContainer.Equip(slot.data);
+            RemoveItem(slot);
+        }
     }
 
     public void Toggle()

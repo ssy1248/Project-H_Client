@@ -55,12 +55,13 @@ class PacketHandler
     public static void S_EquipItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_EquipItemResponse enterPacket) return;
-        // TODO : 아이템 장착 핸들러 구현
         S_EquipItemEvent?.Invoke(enterPacket);
     }
+    public static UnityAction<S_DisrobeItemResponse> S_DisrobeItemEvent;
     public static void S_DisrobeItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_DisrobeItemResponse enterPacket) return;
+        S_DisrobeItemEvent?.Invoke(enterPacket);
     }
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
