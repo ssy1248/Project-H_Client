@@ -72,6 +72,10 @@ class PacketManager
         _handler.Add((ushort)MsgId.SBuyinmarket, PacketHandler.S_BuyInMarketHandler);
         _onRecv.Add((ushort)MsgId.SInventoryresponse, MakePacket<S_InventoryResponse>);
         _handler.Add((ushort)MsgId.SInventoryresponse, PacketHandler.S_InventoryHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterSpawn, MakePacket<S_MonsterSpawn>);
+        _handler.Add((ushort)MsgId.SMonsterSpawn, PacketHandler.S_MonsterSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterMove, MakePacket<S_MonsterMove>);
+        _handler.Add((ushort)MsgId.SMonsterMove, PacketHandler.S_MonsterMoveHandler);
         Debug.Log("핸들러 등록 완료");
     }
 

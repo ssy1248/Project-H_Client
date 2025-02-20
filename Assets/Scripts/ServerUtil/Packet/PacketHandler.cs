@@ -2,6 +2,8 @@
 using Google.Protobuf.Protocol;
 using ServerCore;
 using System.Diagnostics;
+using static UnityEngine.Rendering.DebugUI.Table;
+using UnityEngine;
 
 class PacketHandler
 {
@@ -21,11 +23,13 @@ class PacketHandler
     {
         if (packet is not S_Enter enterPacket) return;
         TownManager.Instance.Enter(enterPacket);
+        UnityEngine.Debug.Log($"[엔터] ID {enterPacket} 생성 되었습니다..");
     }
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Spawn enterPacket) return;
         TownManager.Instance.AllSpawn(enterPacket);
+        UnityEngine.Debug.Log($"[스폰] ID {enterPacket} 생성 되었습니다..");
     }
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
@@ -150,6 +154,25 @@ class PacketHandler
     {
         if (packet is not S_InventoryResponse enterPacket) return;
     }
+    // 몬스터 관련.
+    public static void S_MonsterSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MonsterSpawn spawnPacket) return;
+
+        // 몬스터 스폰 관련 함수.
+        MonsterManager.Instance.CreateMonsters(spawnPacket);
+
+    }
+
+    public static void S_MonsterMoveHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MonsterMove monsterMovePacket) return;
+
+        // 몬스터 이동 관련 함수.
+        MonsterManager.Instance.UpdateMonsters(monsterMovePacket);
+
+    }
+
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
