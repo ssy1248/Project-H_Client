@@ -11,10 +11,11 @@ public class ItemSlotSell : MonoBehaviour
     public Image itemIconImage;
     public Button sellButton;
 
-    private Item currentItem;
+    private ItemInfo currentItem;
 
     public void SetItem(ItemInfo item)
     {
+        currentItem = item;
         /*
         currentItem = item;
         itemTitleText.text = item.itemTitle;
@@ -30,7 +31,7 @@ public class ItemSlotSell : MonoBehaviour
 
     private void SellItem()
     {
-        Debug.Log($"Sold {currentItem.itemTitle} for {currentItem.itemPrice} Gold!");
-        // 실제 판매 로직 (예: 플레이어 소지금 증가 등) 추가 가능
+        TownManager.Instance.SellItemRequest(currentItem.Id, currentItem.Price);
+
     }
 }

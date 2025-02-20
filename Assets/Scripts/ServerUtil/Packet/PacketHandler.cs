@@ -184,9 +184,10 @@ class PacketHandler
         if (packet is not S_SellItemResponse enterPacket) return;
         TownManager.Instance.SellItemResponse(enterPacket);
     }
-    public static void S_ShopDataHandler(PacketSession session, IMessage packet)
+    public static void S_ShopInventoryListHandler(PacketSession session, IMessage packet)
     {
-
+        if (packet is not S_ShopInventoryList enterPacket) return;
+        TownManager.Instance.ShopInventoryList(enterPacket);
     }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)

@@ -82,7 +82,9 @@ class PacketManager
         _handler.Add((ushort)MsgId.SMatchingnotification, PacketHandler.S_MatchingNotification);
         _onRecv.Add((ushort)MsgId.SSellitemresponse, MakePacket<S_SellItemResponse>);
         _handler.Add((ushort)MsgId.SSellitemresponse, PacketHandler.S_SellItemHandler);
-        
+        _onRecv.Add((ushort)MsgId.SShopinventorylist, MakePacket<S_ShopInventoryList>);
+        _handler.Add((ushort)MsgId.SShopinventorylist, PacketHandler.S_ShopInventoryListHandler);
+
         Debug.Log("핸들러 등록 완료");
     }
 

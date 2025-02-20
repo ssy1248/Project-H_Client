@@ -223,10 +223,10 @@ public class UIRegister : MonoBehaviour
         txtMessage.color = Color.green;
 
         Invoke(nameof(Login), 0.5f);
-        Invoke(nameof(ShowCharacterSelection), 0.5f);
+        
     }
 
-    private void ShowCharacterSelection()
+    public void ShowCharacterSelection()
     {
         loginPanel.SetActive(false);
         characterPanel.SetActive(true);

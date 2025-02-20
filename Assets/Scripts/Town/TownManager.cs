@@ -393,7 +393,15 @@ public class TownManager : MonoBehaviour
         GameManager.Network.Send(marketListPacket);
     }
 
-   
+   public void ShopInventoryRequest(uint page, uint count)
+    {
+        var marketListPacket = new C_ShopInventoryRequest
+        {
+            Page = page ,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -419,10 +427,16 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            UiRegister.loginObject.SetActive(false);
-            UiRegister.chuseObject.SetActive(true);
+            UiRegister.ShowCharacterSelection();
         }
     }
+
+    private IEnumerator DelayedShowCharacterSelection(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UiRegister.ShowCharacterSelection();
+    }
+
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)
     {
@@ -565,6 +579,10 @@ public class TownManager : MonoBehaviour
     {
 
     }
+    public void ShopInventoryList(S_ShopInventoryList data)
+    {
+
+    }
     // 아이템 장착 응답 처리
     public void EquipItemResponse(S_EquipItemResponse data)
     {
@@ -658,6 +676,16 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+            if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+                popup.RemoveBtnObj.SetActive(false);
+            else
+                popup.RemoveBtnObj.SetActive(true);
+        }
+
         // PartyInfo의 Players 리스트 순회
         foreach (var playerStatus in data.Party.Players)
         {
@@ -720,6 +748,16 @@ public class TownManager : MonoBehaviour
         else
         {
             partyInfoDict.Add(data.Party.PartyId, data.Party);
+        }
+
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+        if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+            popup.RemoveBtnObj.SetActive(false);
+        else
+            popup.RemoveBtnObj.SetActive(true);
         }
 
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
@@ -973,7 +1011,6 @@ public class TownManager : MonoBehaviour
                 }
             }
 
-            // ---- 기존: foreach (int removeId in removePartyList)
             foreach (string removeId in removePartyList)
             {
                 if (partyInfoDict.ContainsKey(removeId))
@@ -1019,6 +1056,16 @@ public class TownManager : MonoBehaviour
         foreach (Transform child in PartyStatusSpawnPoint.transform)
         {
             Destroy(child.gameObject);
+        }
+
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+            if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+                popup.RemoveBtnObj.SetActive(false);
+            else
+                popup.RemoveBtnObj.SetActive(true);
         }
 
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
@@ -1096,6 +1143,7 @@ public class TownManager : MonoBehaviour
             MatchingWindow.SetActive(false);
     }
 
+   
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
