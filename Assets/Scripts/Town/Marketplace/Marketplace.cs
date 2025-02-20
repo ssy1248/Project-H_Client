@@ -49,38 +49,35 @@ public class Marketplace : MonoBehaviour
     {
         marketPage++;
         MarketPageChangeRequest();
-        pageText.SetText(marketPage + " / " + maxMarketPage);
+       
     }
     public void NextInventoryPage()
     {
         inventoryPage++;
         InventoryPageChangeRequest();
-        pageText.SetText(inventoryPage + " / " + maxInventoryPage);
+
     }
     public void BeforeMarketPage()
     {
         marketPage--;
         MarketPageChangeRequest();
-        pageText.SetText(marketPage + " / " + maxMarketPage);
 
     }
     public void BeforeInventoryPage()
     {
         inventoryPage--;
         InventoryPageChangeRequest();
-        pageText.SetText(inventoryPage + " / " +maxInventoryPage);
+
     }
     public void BeforSelectePage()
     {
         selectPage--;
         SelectBuyInMarket();
-        pageText.SetText(selectPage.ToString());
     }
     public void NextSelectPage()
     {
         selectPage++;
         SelectBuyInMarket();
-        pageText.SetText(selectPage.ToString());
     }
     //페이지 요청 함수 
     public void MarketPageChangeRequest()
@@ -150,6 +147,7 @@ public class Marketplace : MonoBehaviour
         buttons[0].SetActive(inventoryPage > 0);
         buttons[1].SetActive(inventoryPage > 1);
         maxInventoryPage = data.MaxPage;
+        pageText.SetText(inventoryPage + " / " + maxInventoryPage);
     }
     // 데이터 넣어주기 마켓
     public void SetBuyData(S_MarketList data)
@@ -168,6 +166,8 @@ public class Marketplace : MonoBehaviour
         buttons[0].SetActive(marketPage > 0);
         buttons[1].SetActive(marketPage > 1);
         maxMarketPage = data.MaxPage;
+        pageText.SetText(marketPage + " / " + maxMarketPage);
+
     }
     public void SetSelectData(S_MarketSelectBuyName data)
     {
@@ -184,6 +184,8 @@ public class Marketplace : MonoBehaviour
         }
         buttons[0].SetActive(marketPage > 0);
         buttons[1].SetActive(marketPage > 1);
+        pageText.SetText(selectPage.ToString());
+
     }
     // 클릭시 발동 
     public void CheckSelect()
