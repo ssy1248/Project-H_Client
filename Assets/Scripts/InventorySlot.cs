@@ -61,7 +61,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         // 슬롯 데이터 초기화
         _data = data;
-        // _data.position = index; TODO: ItemInfo에 position값 추가
+        _data.Position = index;
         // 슬롯에 아이콘 갱신
         itemImage.sprite = null;
         itemImage.color = new UnityEngine.Color(1, 1, 1, 1);
