@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class EquipmentContainer : MonoBehaviour
@@ -71,7 +72,7 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     Unequip(headSlot);
                 }
-                headSlot.Init(item);
+                headSlot.SetItem(item);
                 break;
             case 3:
                 // 상의
@@ -79,7 +80,7 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     Unequip(shirtSlot);
                 }
-                shirtSlot.Init(item);
+                shirtSlot.SetItem(item);
                 break;
             case 4:
                 // 하의
@@ -87,7 +88,7 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     Unequip(pantsSlot);
                 }
-                pantsSlot.Init(item);
+                pantsSlot.SetItem(item);
                 break;
             case 5:
                 // 신발
@@ -95,7 +96,7 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     Unequip(footSlot);
                 }
-                footSlot.Init(item);
+                footSlot.SetItem(item);
                 break;
             case 6:
                 // 무기
@@ -103,14 +104,14 @@ public class EquipmentContainer : MonoBehaviour
                 {
                     Unequip(righthandSlot);
                 }
-                righthandSlot.Init(item);
+                righthandSlot.SetItem(item);
                 break;
             default:
                 break;
         }
     }
 
-    private void OnRightClickHandler(InventorySlot slot)
+    private void OnRightClickHandler(PointerEventData eventData, InventorySlot slot)
     {
         if (slot.isEmpty) return;
         C_DisrobeItemRequest disrobeRequest = new C_DisrobeItemRequest
@@ -138,16 +139,16 @@ public class EquipmentContainer : MonoBehaviour
     {
         var item = slot.data;
         inventory.AddItem(item);
-        slot.Clear();
+        slot.ClearItem();
     }
 
-    private void ShowItemInfoPanel(InventorySlot slot)
+    private void ShowItemInfoPanel(PointerEventData eventData, InventorySlot slot)
     {
         itemInfoPanel.Init(slot.data);
         itemInfoPanel.Show();
     }
 
-    private void HideItemInfoPanel()
+    private void HideItemInfoPanel(PointerEventData eventData)
     {
         itemInfoPanel.Hide();
     }

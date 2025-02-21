@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Protocol;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InventoryContainer : MonoBehaviour
@@ -14,12 +15,14 @@ public class InventoryContainer : MonoBehaviour
 
     private List<InventorySlot> itemSlots = new List<InventorySlot>();
     private bool isShowing = false;
+    private Transform originalParent;
 
     // Start is called before the first frame update
     void Start()
     {
         // 버튼에 이벤트 핸들러 부착
         btn_close.onClick.AddListener(Hide);
+        var i = 0;
         foreach (Transform child in itemSlotParent)
         {
             if (child.gameObject.TryGetComponent(out InventorySlot slot))
@@ -31,9 +34,9 @@ public class InventoryContainer : MonoBehaviour
                 slot.onBeginDragAction += OnBeginDragHandler;
                 slot.onDragAction += OnDragHandler;
                 slot.onEndDragAction += OnEndDragHandler;
+                slot.Init(i++);
             }
         }
-
         // 패킷 핸들러 이벤트 구독
         PacketHandler.S_InventoryEvent += UpdateInventory;
         PacketHandler.S_EquipItemEvent += EquipItem;
@@ -52,7 +55,7 @@ public class InventoryContainer : MonoBehaviour
         {
             if (slot.isEmpty)
             {
-                slot.Init(item);
+                slot.SetItem(item);
                 return;
             }
         }
@@ -66,14 +69,14 @@ public class InventoryContainer : MonoBehaviour
         {
             AddItem(item);
         }
-        itemSlots[index].Init(item);
+        itemSlots[index].SetItem(item);
     }
 
     public ItemInfo RemoveItem(InventorySlot slot)
     {
         // 아이템 제거: 아이템을 해당 슬롯에서 제거
         var item = slot.data;
-        slot.Clear();
+        slot.ClearItem();
         return item;
     }
 
@@ -115,22 +118,22 @@ public class InventoryContainer : MonoBehaviour
         foreach (var slot in itemSlots)
         {
             // 슬롯 데이터 초기화
-            slot.Clear();
+            slot.ClearItem();
         }
     }
 
-    private void ShowItemInfoPanel(InventorySlot slot)
+    private void ShowItemInfoPanel(PointerEventData eventData, InventorySlot slot)
     {
         itemInfoPanel.Init(slot.data);
         itemInfoPanel.Show();
     }
 
-    private void HideItemInfoPanel()
+    private void HideItemInfoPanel(PointerEventData eventData)
     {
         itemInfoPanel.Hide();
     }
 
-    private void OnRightClickHandler(InventorySlot slot)
+    private void OnRightClickHandler(PointerEventData eventData, InventorySlot slot)
     {
         if (slot.isEmpty) return;
         // ItemType
@@ -164,21 +167,64 @@ public class InventoryContainer : MonoBehaviour
         }
     }
 
-    private void OnBeginDragHandler(InventorySlot slot)
+    private void OnPointerUpHandler(InventorySlot slot)
     {
-        itemInfoPanel.gameObject.SetActive(false);
+
     }
 
-    private void OnDragHandler(InventorySlot slot)
+    private void OnBeginDragHandler(PointerEventData eventData, InventorySlot slot)
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(slot.gameObject.transform as RectTransform, Input.mousePosition, null, out Vector2 localPoint);
+        itemInfoPanel.gameObject.SetActive(false);
+        originalParent = slot.itemImage.transform.parent;
+        slot.itemImage.transform.SetParent(canvasGroup.transform, true);
+    }
+
+    private void OnDragHandler(PointerEventData eventData, InventorySlot slot)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasGroup.transform as RectTransform, Input.mousePosition, null, out Vector2 localPoint);
         slot.itemImage.rectTransform.localPosition = localPoint;
     }
 
-    private void OnEndDragHandler(InventorySlot slot)
+    private void OnEndDragHandler(PointerEventData eventData, InventorySlot slot)
     {
+        slot.itemImage.transform.SetParent(originalParent, true);
         slot.itemImage.rectTransform.localPosition = Vector3.zero;
         itemInfoPanel.gameObject.SetActive(true);
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (var hit in results)
+        {
+            if (hit.gameObject.TryGetComponent<InventorySlot>(out var other))
+            {
+                // swap
+                if (slot != other)
+                {
+                    // 서버에 아이템 이동 메세지 전송
+                    C_MoveItemRequset moveRequest = new C_MoveItemRequset
+                    {
+                        ItemId = slot.data.Id,
+                        Position = slot.index,
+                    };
+                    GameManager.Network.Send(equipRequest);
+
+                    C_MoveItemRequset moveRequest = new C_MoveItemRequset
+                    {
+                        ItemId = other.data.Id,
+                        Position = other.index,
+                    };
+                    GameManager.Network.Send(equipRequest);
+                    break;
+
+                    var temp = slot.data;
+                    slot.SetItem(other.data);
+                    other.SetItem(temp);
+                    // 패킷 보내기
+                }
+            }
+        }
+        return;
     }
 
     public void EquipItem(S_EquipItemResponse data)

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Google.Protobuf.Protocol;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -7,8 +9,13 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Image itemImage;
-    public UnityAction<InventorySlot> onPointerEnterAction, onRightClickAction, onBeginDragAction, onDragAction, onEndDragAction;
-    public UnityAction onPointerExitAction;
+    public UnityAction<PointerEventData, InventorySlot> onPointerEnterAction, onRightClickAction, onPointerUpAction, onBeginDragAction, onDragAction, onEndDragAction;
+    public UnityAction<PointerEventData> onPointerExitAction;
+    private int _index;
+    public int index
+    {
+        get { return _index; }
+    }
 
     public bool isEmpty
     {
@@ -19,6 +26,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
     private ItemInfo _data;
+
     public ItemInfo data
     {
         get { return _data; }
@@ -36,21 +44,27 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     }
 
-    public void Init(ItemInfo data)
+    public void Init(int index)
     {
-        // 슬롯 데이터 초기화
-        _data = data;
-        // 슬롯에 아이콘 갱신
-        itemImage.sprite = null;
-        itemImage.color = new UnityEngine.Color(1, 1, 1, 1);
+        _index = index;
     }
 
-    public void Clear()
+    public void ClearItem()
     {
         // 슬롯 데이터 삭제
         _data = null;
         itemImage.sprite = null;
         itemImage.color = new UnityEngine.Color(1, 1, 1, 0);
+    }
+
+    public void SetItem(ItemInfo data)
+    {
+        // 슬롯 데이터 초기화
+        _data = data;
+        // _data.position = index; TODO: ItemInfo에 position값 추가
+        // 슬롯에 아이콘 갱신
+        itemImage.sprite = null;
+        itemImage.color = new UnityEngine.Color(1, 1, 1, 1);
     }
 
     private void Equip(ItemInfo item)
@@ -64,12 +78,12 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_data != null)
-            onPointerEnterAction?.Invoke(this);
+            onPointerEnterAction?.Invoke(eventData, this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        onPointerExitAction?.Invoke();
+        onPointerExitAction?.Invoke(eventData);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -78,21 +92,25 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 부모 클래스에 맡겨버리기
-            onRightClickAction?.Invoke(this);
+            onRightClickAction?.Invoke(eventData, this);
             return;
         }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-
+        if (eventData.button == PointerEventData.InputButton.Left && eventData.dragging)
+        {
+            onPointerUpAction?.Invoke(eventData, this);
+            return;
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            onBeginDragAction?.Invoke(this);
+            onBeginDragAction?.Invoke(eventData, this);
             return;
         }
     }
@@ -101,7 +119,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            onDragAction?.Invoke(this);
+            onDragAction?.Invoke(eventData, this);
             return;
         }
     }
@@ -110,8 +128,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            onEndDragAction?.Invoke(this);
-            return;
+            onEndDragAction?.Invoke(eventData, this);
         }
     }
 }
