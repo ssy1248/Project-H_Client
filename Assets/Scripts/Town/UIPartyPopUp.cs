@@ -13,6 +13,7 @@ public class UIPartyPopUp : MonoBehaviour
     [SerializeField] public string selectPartyId;
     [SerializeField] public int dungeonIndex;
     [SerializeField] public GameObject RemoveBtnObj;
+    [SerializeField] public string MemberClickNickname;
 
     public void PartySearchBtnClick()
     {
@@ -61,6 +62,19 @@ public class UIPartyPopUp : MonoBehaviour
         C_PartyKickRequest partyKickPacket = new C_PartyKickRequest { RequesterUserId = TownManager.Instance.MyPlayer.PlayerId, KickUserUserId = kickUserId };
         GameManager.Network.Send(partyKickPacket);
     }
+    public void PartyKickBtnRequest()
+    {
+        int kickUserId = TownManager.Instance.GetPlayerByNickname(MemberClickNickname).PlayerId;
+        C_PartyKickRequest partyKickPacket = new C_PartyKickRequest { RequesterUserId = TownManager.Instance.MyPlayer.PlayerId, KickUserUserId = kickUserId };
+        GameManager.Network.Send(partyKickPacket);
+
+        // 컨텍스트 메뉴 닫기
+        PartyStatusMemberClick memberClick = FindObjectOfType<PartyStatusMemberClick>();
+        if (memberClick != null)
+        {
+            memberClick.CloseContextMenu();
+        }
+    }
 
     private void PartyExitRequest()
     {
@@ -93,5 +107,19 @@ public class UIPartyPopUp : MonoBehaviour
         C_PartyInviteRequest partyInviteRequestPacket = new C_PartyInviteRequest { RequesterUserNickname = TownManager.Instance.MyPlayer.nickname, ParticipaterUserNickname = partyInviteInputField.text };
         GameManager.Network.Send(partyInviteRequestPacket);
         //partyInviteInputField.text = "";
+    }
+
+    public void PartyLeaderChangeRequest()
+    {
+        int ChangeUser = TownManager.Instance.GetPlayerByNickname(MemberClickNickname).PlayerId;
+        C_PartyLeaderChangeRequest partyLeaderChangeRequest = new C_PartyLeaderChangeRequest { RequesterId = TownManager.Instance.MyPlayer.PlayerId, ChangeUserId = ChangeUser };
+        GameManager.Network.Send(partyLeaderChangeRequest);
+
+        // 컨텍스트 메뉴 닫기
+        PartyStatusMemberClick memberClick = FindObjectOfType<PartyStatusMemberClick>();
+        if (memberClick != null)
+        {
+            memberClick.CloseContextMenu();
+        }
     }
 }

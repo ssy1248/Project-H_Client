@@ -96,7 +96,7 @@ namespace Google.Protobuf.Protocol {
             "dHkYASABKAsyIy5Hb29nbGUuUHJvdG9idWYuUHJvdG9jb2wuUGFydHlJbmZv",
             "IikKFlNfTWF0Y2hpbmdOb3RpZmljYXRpb24SDwoHaXNTdGFydBgBIAEoCCKF",
             "AQoPU19NYXRjaFJlc3BvbnNlEhwKFGR1bmdlb25TZXNzaW9uTnVtYmVyGAEg",
-            "ASgJEjIKBXBhcnR5GAIgASgLMiMuR29vZ2xlLlByb3RvYnVmLlByb3RvY29s",
+            "ASgFEjIKBXBhcnR5GAIgAygLMiMuR29vZ2xlLlByb3RvYnVmLlByb3RvY29s",
             "LlBhcnR5SW5mbxIPCgdzdWNjZXNzGAMgASgIEg8KB21lc3NhZ2UYBCABKAki",
             "SAoSQ19NYXRjaFN0b3BSZXF1ZXN0EjIKBXBhcnR5GAEgASgLMiMuR29vZ2xl",
             "LlByb3RvYnVmLlByb3RvY29sLlBhcnR5SW5mbyI0ChNTX01hdGNoU3RvcFJl",
@@ -10131,7 +10131,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public S_MatchResponse(S_MatchResponse other) : this() {
       dungeonSessionNumber_ = other.dungeonSessionNumber_;
-      party_ = other.party_ != null ? other.party_.Clone() : null;
+      party_ = other.party_.Clone();
       success_ = other.success_;
       message_ = other.message_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -10145,32 +10145,28 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "dungeonSessionNumber" field.</summary>
     public const int DungeonSessionNumberFieldNumber = 1;
-    private string dungeonSessionNumber_ = "";
-    /// <summary>
-    /// 던전 세션넘버 uuid인데 int32로 받고있음, 그리고 파티인포를 하나로 합칠거니 repeated 가 필요없을거 같음
-    /// </summary>
+    private int dungeonSessionNumber_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string DungeonSessionNumber {
+    public int DungeonSessionNumber {
       get { return dungeonSessionNumber_; }
       set {
-        dungeonSessionNumber_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        dungeonSessionNumber_ = value;
       }
     }
 
     /// <summary>Field number for the "party" field.</summary>
     public const int PartyFieldNumber = 2;
-    private global::Google.Protobuf.Protocol.PartyInfo party_;
+    private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.PartyInfo> _repeated_party_codec
+        = pb::FieldCodec.ForMessage(18, global::Google.Protobuf.Protocol.PartyInfo.Parser);
+    private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.PartyInfo> party_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.PartyInfo>();
     /// <summary>
     /// 합쳐진 파티 인포
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.PartyInfo Party {
+    public pbc::RepeatedField<global::Google.Protobuf.Protocol.PartyInfo> Party {
       get { return party_; }
-      set {
-        party_ = value;
-      }
     }
 
     /// <summary>Field number for the "success" field.</summary>
@@ -10219,7 +10215,7 @@ namespace Google.Protobuf.Protocol {
         return true;
       }
       if (DungeonSessionNumber != other.DungeonSessionNumber) return false;
-      if (!object.Equals(Party, other.Party)) return false;
+      if(!party_.Equals(other.party_)) return false;
       if (Success != other.Success) return false;
       if (Message != other.Message) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -10229,8 +10225,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (DungeonSessionNumber.Length != 0) hash ^= DungeonSessionNumber.GetHashCode();
-      if (party_ != null) hash ^= Party.GetHashCode();
+      if (DungeonSessionNumber != 0) hash ^= DungeonSessionNumber.GetHashCode();
+      hash ^= party_.GetHashCode();
       if (Success != false) hash ^= Success.GetHashCode();
       if (Message.Length != 0) hash ^= Message.GetHashCode();
       if (_unknownFields != null) {
@@ -10251,14 +10247,11 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (DungeonSessionNumber.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(DungeonSessionNumber);
+      if (DungeonSessionNumber != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(DungeonSessionNumber);
       }
-      if (party_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Party);
-      }
+      party_.WriteTo(output, _repeated_party_codec);
       if (Success != false) {
         output.WriteRawTag(24);
         output.WriteBool(Success);
@@ -10277,14 +10270,11 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (DungeonSessionNumber.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(DungeonSessionNumber);
+      if (DungeonSessionNumber != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(DungeonSessionNumber);
       }
-      if (party_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Party);
-      }
+      party_.WriteTo(ref output, _repeated_party_codec);
       if (Success != false) {
         output.WriteRawTag(24);
         output.WriteBool(Success);
@@ -10303,12 +10293,10 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (DungeonSessionNumber.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(DungeonSessionNumber);
+      if (DungeonSessionNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DungeonSessionNumber);
       }
-      if (party_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Party);
-      }
+      size += party_.CalculateSize(_repeated_party_codec);
       if (Success != false) {
         size += 1 + 1;
       }
@@ -10327,15 +10315,10 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.DungeonSessionNumber.Length != 0) {
+      if (other.DungeonSessionNumber != 0) {
         DungeonSessionNumber = other.DungeonSessionNumber;
       }
-      if (other.party_ != null) {
-        if (party_ == null) {
-          Party = new global::Google.Protobuf.Protocol.PartyInfo();
-        }
-        Party.MergeFrom(other.Party);
-      }
+      party_.Add(other.party_);
       if (other.Success != false) {
         Success = other.Success;
       }
@@ -10361,15 +10344,12 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            DungeonSessionNumber = input.ReadString();
+          case 8: {
+            DungeonSessionNumber = input.ReadInt32();
             break;
           }
           case 18: {
-            if (party_ == null) {
-              Party = new global::Google.Protobuf.Protocol.PartyInfo();
-            }
-            input.ReadMessage(Party);
+            party_.AddEntriesFrom(input, _repeated_party_codec);
             break;
           }
           case 24: {
@@ -10399,15 +10379,12 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            DungeonSessionNumber = input.ReadString();
+          case 8: {
+            DungeonSessionNumber = input.ReadInt32();
             break;
           }
           case 18: {
-            if (party_ == null) {
-              Party = new global::Google.Protobuf.Protocol.PartyInfo();
-            }
-            input.ReadMessage(Party);
+            party_.AddEntriesFrom(ref input, _repeated_party_codec);
             break;
           }
           case 24: {

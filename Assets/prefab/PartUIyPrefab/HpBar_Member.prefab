@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5250847975788739294}
   - component: {fileID: 7273088455302450285}
+  - component: {fileID: 3730664563047945971}
   m_Layer: 5
   m_Name: HpBar_Member
-  m_TagString: Untagged
+  m_TagString: PartyMember
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -91,6 +92,19 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3730664563047945971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667359066037539336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8ea47b95ed46e41a7e2cf611884c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contextMenu: {fileID: 0}
 --- !u!1 &2644515810529448648
 GameObject:
   m_ObjectHideFlags: 0
