@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Cinemachine;
 using Google.Protobuf.Protocol;
@@ -42,6 +43,8 @@ public class TownManager : MonoBehaviour
     #region 매칭 UI
     [Header("매칭 UI ")]
     [SerializeField] private GameObject MatchingWindow;
+    [SerializeField] private GameObject MatchResultWindow;
+    [SerializeField] private GameObject MatchStopWindow;
     #endregion
 
     [Header("테스트")]
@@ -1144,6 +1147,21 @@ public class TownManager : MonoBehaviour
             MatchingWindow.SetActive(false);
     }
 
+    public void MatchStop(S_MatchStopResponse data)
+    {
+        if (data.Stop)
+            MatchStopWindow.SetActive(true);
+    }
+
+    public void MatchResponse(S_MatchResponse data)
+    {
+        if (data.Success)
+        {
+            MatchingWindow.SetActive(false);
+            MatchResultWindow.SetActive(true);
+        }
+
+    }
    
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
