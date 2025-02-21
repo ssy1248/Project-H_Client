@@ -202,19 +202,19 @@ public class InventoryContainer : MonoBehaviour
                 if (slot != other)
                 {
                     // 서버에 아이템 이동 메세지 전송
-                    C_MoveItemRequset moveRequest = new C_MoveItemRequset
+                    C_MoveItemRequest moveRequest = new C_MoveItemRequest
                     {
                         ItemId = slot.data.Id,
                         Position = slot.index,
                     };
-                    GameManager.Network.Send(equipRequest);
+                    GameManager.Network.Send(moveRequest);
 
-                    C_MoveItemRequset moveRequest = new C_MoveItemRequset
+                    moveRequest = new C_MoveItemRequest
                     {
                         ItemId = other.data.Id,
                         Position = other.index,
                     };
-                    GameManager.Network.Send(equipRequest);
+                    GameManager.Network.Send(moveRequest);
                     break;
 
                     var temp = slot.data;
