@@ -38,6 +38,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject LeaderMemberPrefab;
     [SerializeField] private GameObject NormalMemberPrefab;
     [SerializeField] private GameObject SearchResultUI;
+    [SerializeField] public GameObject ContextMenuUI;
     #endregion
 
     #region 매칭 UI
@@ -638,7 +639,7 @@ public class TownManager : MonoBehaviour
             {
                 // PartyStatusSpawnPoint의 자식으로 LeaderStatusPrefab 인스턴스 생성
                 GameObject leaderStatusObj = Instantiate(LeaderStatusPrefab, PartyStatusSpawnPoint.transform);
-
+                leaderStatusObj.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
                 // 인스턴스된 오브젝트의 자식에서 TextMeshProUGUI 컴포넌트 찾기
                 TextMeshProUGUI leaderText = leaderStatusObj.GetComponentInChildren<TextMeshProUGUI>();
                 if (leaderText != null)
@@ -713,6 +714,8 @@ public class TownManager : MonoBehaviour
                 prefabToInstantiate = MemberStatusPrefab;
             }
 
+            prefabToInstantiate.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
+
             // 프리팹 인스턴스 생성 및 PartyStatusSpawnPoint의 자식으로 추가
             GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
 
@@ -786,6 +789,8 @@ public class TownManager : MonoBehaviour
             {
                 prefabToInstantiate = MemberStatusPrefab;
             }
+
+            prefabToInstantiate.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
 
             // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
             GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
@@ -1094,6 +1099,8 @@ public class TownManager : MonoBehaviour
             {
                 prefabToInstantiate = MemberStatusPrefab;
             }
+
+            prefabToInstantiate.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
 
             // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
             GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
