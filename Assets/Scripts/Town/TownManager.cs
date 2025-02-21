@@ -8,6 +8,7 @@ using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 // using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TownManager : MonoBehaviour
@@ -46,6 +47,11 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject MatchingWindow;
     [SerializeField] private GameObject MatchResultWindow;
     [SerializeField] private GameObject MatchStopWindow;
+    #endregion
+
+    #region
+    [Header("로딩 UI")]
+    [SerializeField] private GameObject LoadingWindow;
     #endregion
 
     [Header("테스트")]
@@ -1162,12 +1168,19 @@ public class TownManager : MonoBehaviour
 
     public void MatchResponse(S_MatchResponse data)
     {
+        Debug.Log("매칭 완료 패킷 들어옴 " + data);
+
+        // 파티는 들어왔는데 던전세션넘버가 안넘어옴
+
         if (data.Success)
         {
             MatchingWindow.SetActive(false);
             MatchResultWindow.SetActive(true);
-        }
 
+            Loading load = FindAnyObjectByType<Loading>();
+            int dungeon = data.Party.DungeonIndex;
+            load.LoadingPanelDeActiveAndChangeScene(dungeon);
+        }
     }
    
     // 자기 자신 스폰용도 
