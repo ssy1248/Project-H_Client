@@ -368,8 +368,8 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("S_MATCHINGNOTIFICATION")] SMatchingnotification = 57,
     [pbr::OriginalName("C_SHOPINVENTORYREQUEST")] CShopinventoryrequest = 58,
     [pbr::OriginalName("S_SHOPINVENTORYLIST")] SShopinventorylist = 59,
-    [pbr::OriginalName("C_MOVEITEMREQUEST")] CMoveitemrequest = 60,
-    [pbr::OriginalName("S_MOVEITEMRESPONSE")] SMoveitemresponse = 61,
+    [pbr::OriginalName("C_MOVEITEMREQUEST")] CMoveItemRequest = 60,
+    [pbr::OriginalName("S_MOVEITEMRESPONSE")] SMoveItemResponse = 61,
     [pbr::OriginalName("C_PARTYLEADERCHANGEREQUEST")] CPartyleaderchangerequest = 62,
   }
 

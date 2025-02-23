@@ -14,7 +14,6 @@ public class InventoryContainer : MonoBehaviour
     public EquipmentContainer equipmentContainer;
 
     private List<InventorySlot> itemSlots = new List<InventorySlot>();
-    private List<ItemInfo> items = new List<ItemInfo>();
     private bool isShowing = false;
     private Transform originalParent;
 
@@ -52,7 +51,6 @@ public class InventoryContainer : MonoBehaviour
             if (slot.isEmpty)
             {
                 slot.SetItem(item);
-                items.Add(item);
                 return;
             }
         }
@@ -64,10 +62,11 @@ public class InventoryContainer : MonoBehaviour
     {
         if (!itemSlots[index].isEmpty)
         {
+            // 아이템 슬롯이 비어있지 않으면
             AddItem(item);
+            return;
         }
         itemSlots[index].SetItem(item);
-        items.Add(item);
     }
 
     public ItemInfo RemoveItem(InventorySlot slot)
@@ -92,6 +91,7 @@ public class InventoryContainer : MonoBehaviour
         var _inventory = data.Inventory;
         for (var i = 0; i < _inventory.Count; i++)
         {
+            Debug.Log(_inventory[i]);
             if (_inventory[i].Equiped)
             {
                 equipmentContainer.Equip(_inventory[i]);
