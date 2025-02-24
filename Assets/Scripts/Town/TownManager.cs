@@ -462,6 +462,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
+        Debug.Log(data);
         Debug.Log(data.StoreList);
         Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
@@ -576,6 +577,7 @@ public class TownManager : MonoBehaviour
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
         Debug.Log(data);
+
         uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global);
     }
     //  주말 목표 입니다람쥐
