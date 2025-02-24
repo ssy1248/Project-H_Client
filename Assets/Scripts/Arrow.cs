@@ -12,9 +12,12 @@ public class Arrow : MonoBehaviour
         {
             Destroy(gameObject, 3);
         }
-        else if (collision.gameObject.tag == "Wall")
+    void OnTriggerEnter(Collider other)
         {
-            Destroy(gameObject);
+          if (other.gameObject.tag == "Wall")
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
