@@ -66,10 +66,10 @@ public class PlayerController : MonoBehaviour
             moveVec = dodgeVec;
         }
 
-        //if (!isFireReady)
-        //{
-        //    moveVec = Vector3.zero;
-        //}
+        if (!isFireReady)
+        {
+            moveVec = Vector3.zero;
+        }
 
         transform.position += moveVec * speed * Time.deltaTime;
         Debug.Log($"moveVec"+ moveVec);
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
             // 랜덤으로 공격 애니메이션 선택
             int attackIndex = Random.Range(0, 2); // 0, 1 중 하나 선택
             anim.SetInteger("attackIndex", attackIndex); // 애니메이터 변수 설정
-            anim.SetTrigger("doSwing"); // 공격 트리거 실행
+            anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot"); // 공격 트리거 실행
 
             transform.rotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
             fireDelay = 0;

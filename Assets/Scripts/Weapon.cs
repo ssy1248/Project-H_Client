@@ -11,6 +11,10 @@ public class Weapon : MonoBehaviour
     public float attackRate;
     public BoxCollider meleeArea;
     public TrailRenderer trailEffect;
+    public Transform ArrowPos;
+    public GameObject Arrow;
+    public Transform ArrowFormPos;
+
 
     public void Use()
     {
@@ -18,6 +22,11 @@ public class Weapon : MonoBehaviour
         {
             StopCoroutine("Swing");
             StartCoroutine("Swing");
+        }
+        else if (type == Type.Range)
+        {
+            StopCoroutine("Shot");
+            StartCoroutine("Shot");
         }
     }
 
@@ -34,5 +43,17 @@ public class Weapon : MonoBehaviour
         //3번 로직
         yield return new WaitForSeconds(0.3f); //1프레임 대기
         trailEffect.enabled = false;
+    }
+
+    IEnumerator Shot()
+    {
+        yield return null;
+        //화살 발사
+        GameObject intantArrow = Instantiate(Arrow, ArrowPos.position, ArrowPos.rotation);
+        Rigidbody arrowRigid = intantArrow.GetComponent<Rigidbody>();
+        arrowRigid.velocity = ArrowPos.forward * 40;
+        yield return null;
+
+        //화살 배출
     }
 }
