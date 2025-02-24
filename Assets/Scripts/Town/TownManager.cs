@@ -1170,16 +1170,13 @@ public class TownManager : MonoBehaviour
     {
         Debug.Log("매칭 완료 패킷 들어옴 " + data);
 
-        // 파티는 들어왔는데 던전세션넘버가 안넘어옴
-
         if (data.Success)
         {
             MatchingWindow.SetActive(false);
             MatchResultWindow.SetActive(true);
 
-            Loading load = FindAnyObjectByType<Loading>();
-            int dungeon = data.Party.DungeonIndex;
-            load.LoadingPanelDeActiveAndChangeScene(dungeon);
+            int dungeon = data.DungeonSession.PartyInfo.DungeonIndex;
+            LoadingWindow.GetComponentInChildren<Loading>().Index = dungeon;
         }
     }
    

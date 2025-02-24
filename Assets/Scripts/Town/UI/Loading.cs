@@ -9,9 +9,9 @@ public class Loading : MonoBehaviour
 {
     public Image LoadingBarImage;
     public TextMeshProUGUI LoadingCompleteText;
-    public int Index;
+    [SerializeField] public int Index;
 
-    [SerializeField] private float loadingSpeed = 0.5f; // 로딩바가 가득 차는 속도 (1이 될 때까지 걸리는 시간의 역수)
+    [SerializeField] private float loadingSpeed = 0.2f; // 로딩바가 가득 차는 속도 (1이 될 때까지 걸리는 시간의 역수)
     [SerializeField] private float alphaSpeed = 2f;     // 텍스트 알파 애니메이션 속도
 
     private bool isLoadingComplete = false;
@@ -45,9 +45,9 @@ public class Loading : MonoBehaviour
             Color textColor = LoadingCompleteText.color;
             textColor.a = alpha;
             LoadingCompleteText.color = textColor;
-
-            LoadingPanelDeActiveAndChangeScene(Index);
         }
+
+        LoadingPanelDeActiveAndChangeScene(Index);
     }
 
     public void LoadingPanelDeActiveAndChangeScene(int index)
