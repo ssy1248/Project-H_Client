@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Google.Protobuf.Protocol;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,15 +6,26 @@ using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public enum SlotType
+    {
+        NONE = 0,
+        EQUIPMENT = 1,
+        INVENTORY = 2,
+        WAREHOUSE = 3,
+    }
     public Image itemImage;
     public UnityAction<PointerEventData, InventorySlot> onPointerEnterAction, onRightClickAction, onPointerUpAction, onBeginDragAction, onDragAction, onEndDragAction;
     public UnityAction<PointerEventData> onPointerExitAction;
-    private int _index;
+    protected SlotType _type;
+    public SlotType type
+    {
+        get { return _type; }
+    }
+    protected int _index;
     public int index
     {
         get { return _index; }
     }
-
     public bool isEmpty
     {
         get
@@ -26,27 +35,15 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
     private ItemInfo _data;
-
     public ItemInfo data
     {
         get { return _data; }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void Init(int index)
+    public void Init(int index, SlotType type)
     {
         _index = index;
+        _type = type;
     }
 
     public void ClearItem()
