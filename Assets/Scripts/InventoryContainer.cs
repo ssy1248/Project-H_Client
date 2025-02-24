@@ -34,15 +34,15 @@ public class InventoryContainer : MonoBehaviour
                 slot.onBeginDragAction += OnBeginDragHandler;
                 slot.onDragAction += OnDragHandler;
                 slot.onEndDragAction += OnEndDragHandler;
-                slot.Init(i++);
+                slot.Init(i++, InventorySlot.SlotType.INVENTORY);
             }
         }
         // 패킷 핸들러 이벤트 구독
-        PacketHandler.S_InventoryEvent += UpdateInventory;
-        PacketHandler.S_EquipItemEvent += EquipItem;
-        PacketHandler.S_MoveItemEvent += MoveItemHandler;
+        PacketHandler.S_InventoryEvent += S_UpdateInventoryHandler;
+        PacketHandler.S_MoveItemEvent += S_MoveItemHandler;
     }
 
+    #region public
     public void AddItem(ItemInfo item)
     {
         // 빈 슬롯 찾기
@@ -54,8 +54,6 @@ public class InventoryContainer : MonoBehaviour
                 return;
             }
         }
-        // 빈 슬롯이 없는 경우
-
     }
 
     public void AddItem(ItemInfo item, int index)
@@ -69,6 +67,28 @@ public class InventoryContainer : MonoBehaviour
         itemSlots[index].SetItem(item);
     }
 
+    public void AddItem(ItemInfo item, InventorySlot slot)
+    {
+        if (!slot.isEmpty)
+        {
+            AddItem(item);
+            return;
+        }
+        if (!itemSlots.Contains(slot))
+        {
+            AddItem(item);
+            return;
+        }
+        slot.SetItem(item);
+    }
+
+    public ItemInfo RemoveItem(int index)
+    {
+        var item = itemSlots[index].data;
+        itemSlots[index].ClearItem();
+        return item;
+    }
+
     public ItemInfo RemoveItem(InventorySlot slot)
     {
         // 아이템 제거: 아이템을 해당 슬롯에서 제거
@@ -77,32 +97,7 @@ public class InventoryContainer : MonoBehaviour
         return item;
     }
 
-    public void DestroyItem(int index, ItemInfo item)
-    {
-        // 아이템 파괴: 복구 불가능, 아이템이 영구히 제거됨
-    }
-
-    private void UpdateInventory(S_InventoryResponse data)
-    {
-        // 인벤토리 갱신
-        ClearSlots();
-
-        // 슬롯에 아이템 정보 추가
-        var _inventory = data.Inventory;
-        for (var i = 0; i < _inventory.Count; i++)
-        {
-            Debug.Log(_inventory[i]);
-            if (_inventory[i].Equiped)
-            {
-                equipmentContainer.Equip(_inventory[i]);
-                continue;
-            }
-            AddItem(_inventory[i], _inventory[i].Position);
-        }
-    }
-
-
-    private InventorySlot FindItemSlot(int itemId)
+    public InventorySlot FindItemSlot(int itemId)
     {
         foreach (var slot in itemSlots)
         {
@@ -112,6 +107,17 @@ public class InventoryContainer : MonoBehaviour
         return null;
     }
 
+    public ItemInfo FindItem(int itemId)
+    {
+        foreach (var slot in itemSlots)
+        {
+            if (slot.isEmpty) continue;
+            if (slot.data.Id == itemId) return slot.data;
+        }
+        return null;
+    }
+    #endregion
+    #region private
     private void ClearSlots()
     {
         foreach (var slot in itemSlots)
@@ -132,17 +138,15 @@ public class InventoryContainer : MonoBehaviour
         itemInfoPanel.Hide();
     }
 
+    /// <summary>
+    /// 인벤토리 슬롯 클릭 핸들러. 아이템 타입에 따라 사용하거나 장착한다.
+    /// </summary>
+    /// <param name="eventData">포인터 이벤트 데이터</param>
+    /// <param name="slot">이벤트가 호출된 슬롯</param>
     private void OnRightClickHandler(PointerEventData eventData, InventorySlot slot)
     {
+        // 슬롯이 비어있다면 아무것도 하지 않는다
         if (slot.isEmpty) return;
-        // ItemType
-        // 0: 소모성 아이템
-        // 1: 비소모성 아이템
-        // 2: 머리
-        // 3: 상의
-        // 4: 하의
-        // 5: 신발
-        // 6: 무기
         var item = slot.data;
         switch (item.ItemType)
         {
@@ -155,20 +159,10 @@ public class InventoryContainer : MonoBehaviour
             case 4:
             case 5:
             case 6:
-                // 서버에 아이템 장착 메세지 전송
-                C_EquipItemRequest equipRequest = new C_EquipItemRequest
-                {
-                    ItemId = item.Id,
-                };
-                Debug.Log(equipRequest);
-                GameManager.Network.Send(equipRequest);
+                // 아이템 장착
+                equipmentContainer.Equip(item);
                 break;
         }
-    }
-
-    private void OnPointerUpHandler(InventorySlot slot)
-    {
-
     }
 
     private void OnBeginDragHandler(PointerEventData eventData, InventorySlot slot)
@@ -184,6 +178,11 @@ public class InventoryContainer : MonoBehaviour
         slot.itemImage.rectTransform.localPosition = localPoint;
     }
 
+    /// <summary>
+    /// 인벤토리 슬롯 드래그 핸들러. 드랍한 곳의 타입에 따라 아이템을 이동하거나 장비한다.
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <param name="slot"></param>
     private void OnEndDragHandler(PointerEventData eventData, InventorySlot slot)
     {
         slot.itemImage.transform.SetParent(originalParent, true);
@@ -197,44 +196,60 @@ public class InventoryContainer : MonoBehaviour
         {
             if (hit.gameObject.TryGetComponent<InventorySlot>(out var other))
             {
-                // swap
-                if (other != null && slot != other)
+                if (other.type == InventorySlot.SlotType.INVENTORY)
                 {
-                    // 서버에 아이템 이동 메세지 전송
-                    C_MoveItemRequest moveRequest = new C_MoveItemRequest
+                    // 인벤토리 안에서 놓으면
+                    // swap
+                    if (slot != other)
                     {
-                        ItemId = slot.data.Id,
-                        Position = other.index,
-                    };
+                        // 서버에 아이템 이동 메세지 전송
+                        C_MoveItemRequest(slot, other.index);
+                        break;
+                    }
+                }
+                else if (other.type == InventorySlot.SlotType.EQUIPMENT)
+                {
+                    // 장비 창에 놓으면
+                    var equipmentSlot = other as EquipmentSlot;
 
-                    GameManager.Network.Send(moveRequest);
-                    break;
+                    // 올바른 자리에 놓았는지 확인
+                    if (equipmentSlot.itemType == slot.data.ItemType)
+                    {
+                        equipmentContainer.Equip(slot.data);
+                    }
                 }
             }
         }
         return;
     }
 
-    private void EquipItem(S_EquipItemResponse data)
+    private void S_UpdateInventoryHandler(S_InventoryResponse data)
     {
-        if (data.Success)
+        // 인벤토리 갱신
+        ClearSlots();
+
+        // 슬롯에 아이템 정보 추가
+        var _inventory = data.Inventory;
+        for (var i = 0; i < _inventory.Count; i++)
         {
-            var slot = FindItemSlot(data.ItemId);
-            if (slot == null)
+            Debug.Log(_inventory[i]);
+            if (_inventory[i].Equiped)
             {
-                Debug.LogError("slot not found");
-                return;
+                equipmentContainer.SetItem(_inventory[i]);
             }
-            equipmentContainer.Equip(slot.data);
-            RemoveItem(slot);
+            else
+            {
+                AddItem(_inventory[i], _inventory[i].Position);
+            }
         }
     }
 
-    private void MoveItemHandler(S_MoveItemResponse data)
+    private void S_MoveItemHandler(S_MoveItemResponse data)
     {
         // 옮기려는 아이템
         var slot = FindItemSlot(data.ItemId);
-        if(slot == null){
+        if (slot == null)
+        {
             Debug.LogError("SLot not found");
             return;
         }
@@ -256,6 +271,17 @@ public class InventoryContainer : MonoBehaviour
             slot.ClearItem();
         }
     }
+
+    private void C_MoveItemRequest(InventorySlot slot, int to)
+    {
+        C_MoveItemRequest moveRequest = new C_MoveItemRequest
+        {
+            ItemId = slot.data.Id,
+            Position = to,
+        };
+        GameManager.Network.Send(moveRequest);
+    }
+    #endregion
 
     public void Toggle()
     {
