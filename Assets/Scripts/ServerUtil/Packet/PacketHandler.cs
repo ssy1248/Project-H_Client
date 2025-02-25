@@ -63,6 +63,12 @@ class PacketHandler
         if (packet is not S_DisrobeItemResponse enterPacket) return;
         S_DisrobeItemEvent?.Invoke(enterPacket);
     }
+    public static UnityAction<S_MoveItemResponse> S_MoveItemEvent;
+    public static void S_MoveItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MoveItemResponse enterPacket) return;
+        S_MoveItemEvent?.Invoke(enterPacket);
+    }
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_ActiveItemResponse enterPacket) return;

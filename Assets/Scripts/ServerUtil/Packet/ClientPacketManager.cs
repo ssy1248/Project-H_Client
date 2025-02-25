@@ -95,7 +95,9 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SSetauctiondata, MakePacket<S_SetAuctionData>);
         _handler.Add((ushort)MsgId.SSetauctiondata, PacketHandler.S_SetAuctionDataHandler);
         _onRecv.Add((ushort)MsgId.SWaitauction, MakePacket<S_WaitAuction>);
-        _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler);
+        _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler); _onRecv.Add((ushort)MsgId.SMoveitemresponse, MakePacket<S_MoveItemResponse>);
+        _handler.Add((ushort)MsgId.SMoveitemresponse, PacketHandler.S_MoveItemHandler);
+
         Debug.Log("핸들러 등록 완료");
     }
 

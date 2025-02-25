@@ -11,15 +11,15 @@ public class ItemSlotBuy : MonoBehaviour
     public Image itemIconImage;
     public Button buyButton;
 
-    private ItemInfo currentItem;
+    private StoreItemInfo currentItem;
 
-    public void SetItem(ItemInfo item)
+    public void SetItem(StoreItemInfo item)
     {
         currentItem = item; 
         
         currentItem = item;
-        itemTitleText.text = item.Name;
-        itemDescriptionText.text = item.ItemType.ToString();
+        itemTitleText.text = ItemManager.instance.GetBuyId(item.ItemId).Name;
+        itemDescriptionText.text = ItemManager.instance.GetBuyId(item.ItemId).ItemType.ToString();
         itemPriceText.text = item.Price.ToString();
 
         buyButton.onClick.RemoveAllListeners();
@@ -29,7 +29,7 @@ public class ItemSlotBuy : MonoBehaviour
 
     private void BuyItem()
     {
-        TownManager.Instance.BuyItemRequest(currentItem.Name, currentItem.Price);
+        TownManager.Instance.BuyItemRequest(ItemManager.instance.GetBuyId(currentItem.ItemId).Name, currentItem.Price);
         // 실제 구매 로직 (예: 플레이어 소지금 차감 등) 추가 가능
     }
 }

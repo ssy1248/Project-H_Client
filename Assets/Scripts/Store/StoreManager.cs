@@ -19,7 +19,7 @@ public class ShopUI : MonoBehaviour
 
 
     [Header("Item List")]
-    public List<ItemInfo> buyItemList = new List<ItemInfo>();  // 구매 가능한 아이템 리스트
+    public List<StoreItemInfo> buyItemList = new List<StoreItemInfo>();  // 구매 가능한 아이템 리스트
     public List<ItemInfo> sellItemList = new List<ItemInfo>();  // 판매 가능한 아이템 리스트
 
     private int currentBuyPage = 0;
@@ -49,7 +49,7 @@ public class ShopUI : MonoBehaviour
     }
 
     // 상점 데이터 받아오기 
-    public void GetBuyData(List<ItemInfo> data)
+    public void GetBuyData(List<StoreItemInfo> data)
     {
         buyItemList = data;
         LoadItemsForSellPage();
@@ -75,7 +75,7 @@ public class ShopUI : MonoBehaviour
         {
             GameObject slot = Instantiate(buySlotPrefab, buySlotParent);
             slot.SetActive(true);  // 생성 후 활성화
-            ItemInfo item = buyItemList[i];
+            StoreItemInfo item = buyItemList[i];
 
             ItemSlotBuy itemSlot = slot.GetComponent<ItemSlotBuy>();
             itemSlot.SetItem(item);
