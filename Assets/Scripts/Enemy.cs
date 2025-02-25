@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
 
-        if(enemyType != Type.B)
+        //if(enemyType != Type.B)
         Invoke("ChaseStart", 2);
     }
     void ChaseStart()
@@ -115,12 +115,14 @@ public class Enemy : MonoBehaviour
         {
             Weapon weapon = other.GetComponent<Weapon>();
             curHealth -= weapon.damage;
+            DamageManager.Instance.SpawnDamageText(weapon.damage, transform.position, isPlayerHit: false);
             StartCoroutine(OnDamage());
         }
         else if(other.tag == "Arrow")
         {
             Arrow arrow = other.GetComponent<Arrow>();
             curHealth -= arrow.damage;
+            DamageManager.Instance.SpawnDamageText(arrow.damage, transform.position, isPlayerHit: false);
             StartCoroutine(OnDamage());
 
             Debug.Log("Range : " + curHealth);

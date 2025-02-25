@@ -28,6 +28,7 @@ public class DamageText : MonoBehaviour
     private IEnumerator AnimateDamageText()
     {
         Vector3 startPos = transform.position;
+        startPos.y += 15f; // 원하는 만큼 y축을 올림
         Vector3 endPos = startPos + new Vector3(0, 1f, 0); // 위로 살짝 이동
 
         float elapsedTime = 0f;
