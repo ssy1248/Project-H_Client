@@ -1,6 +1,8 @@
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
@@ -13,6 +15,7 @@ public class DungeonManager : MonoBehaviour
     private Dictionary<string, PartyInfo> partyInfoDict = new Dictionary<string, PartyInfo>();
     // 자기 자신 
     public Player MyPlayer { get; private set; }
+    public RewardAuction rewardAuction;
 
     // 플레이어들 몬스터들 데이터 
     private Dictionary<int , Player> players = new Dictionary<int, Player>();
@@ -43,7 +46,45 @@ public class DungeonManager : MonoBehaviour
         }
         InitializePlayerDatabase();
     }
-    // 자기 자신 스폰용도 
+    // 클라이언트 에서 보내기
+
+    public void EnterAuctionBid(int gold ,string id)
+    {
+        var Packet = new C_EnterAuctionBid
+        {
+            Gold = gold,
+            Id = id,
+        };
+        GameManager.Network.Send(Packet);
+    }
+
+    // 서버에서 받기 
+    public void FinalizeBuyAuctionResponse(S_FinalizeBuyAuction data)
+    {
+        rewardAuction.GetReward(data.Name,data.ItemId,true);
+    }
+    public void FinalizeAllAuctionResponse(S_FinalizeAllAuction data)
+    {
+        rewardAuction.GetReward(data.Name, data.Gold, false);
+    }
+    public void EnterAuctionBidResponse(S_EnterAuctionBid data)
+    {
+        rewardAuction.ChangeGold(data);
+    }
+    public void EndAuctionResponse(S_EndAuction data)
+    {
+        rewardAuction.EndAuction();
+    }
+    public void SetAuctionDataResponse(S_SetAuctionData data)
+    {
+        rewardAuction.StartAuction(data);
+    }
+    public void WaitAuctionResponse(S_WaitAuction data)
+    {
+        rewardAuction.WaitAuction(data);
+    }
+
+    // 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
         if (isPlayer)

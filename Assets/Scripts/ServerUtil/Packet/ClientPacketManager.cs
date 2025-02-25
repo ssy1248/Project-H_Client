@@ -84,7 +84,18 @@ class PacketManager
         _handler.Add((ushort)MsgId.SSellitemresponse, PacketHandler.S_SellItemHandler);
         _onRecv.Add((ushort)MsgId.SShopinventorylist, MakePacket<S_ShopInventoryList>);
         _handler.Add((ushort)MsgId.SShopinventorylist, PacketHandler.S_ShopInventoryListHandler);
-
+        _onRecv.Add((ushort)MsgId.SEndauction, MakePacket<S_EndAuction>);
+        _handler.Add((ushort)MsgId.SEndauction, PacketHandler.S_EndAuctionHandler);
+        _onRecv.Add((ushort)MsgId.SEnterauctionbid, MakePacket<S_EnterAuctionBid>);
+        _handler.Add((ushort)MsgId.SEnterauctionbid, PacketHandler.S_EnterAuctionBidHandler);
+        _onRecv.Add((ushort)MsgId.SFinalizeallauction, MakePacket<S_FinalizeAllAuction>);
+        _handler.Add((ushort)MsgId.SFinalizeallauction, PacketHandler.S_FinalizeAllAuctionHandler);
+        _onRecv.Add((ushort)MsgId.SFinalizebuyauction, MakePacket<S_FinalizeBuyAuction>);
+        _handler.Add((ushort)MsgId.SFinalizebuyauction, PacketHandler.S_FinalizeBuyAuctionHandler);
+        _onRecv.Add((ushort)MsgId.SSetauctiondata, MakePacket<S_SetAuctionData>);
+        _handler.Add((ushort)MsgId.SSetauctiondata, PacketHandler.S_SetAuctionDataHandler);
+        _onRecv.Add((ushort)MsgId.SWaitauction, MakePacket<S_WaitAuction>);
+        _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler);
         Debug.Log("핸들러 등록 완료");
     }
 
