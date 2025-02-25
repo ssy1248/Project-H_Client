@@ -8,6 +8,7 @@ using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 // using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TownManager : MonoBehaviour
@@ -46,6 +47,11 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject MatchingWindow;
     [SerializeField] private GameObject MatchResultWindow;
     [SerializeField] private GameObject MatchStopWindow;
+    #endregion
+
+    #region
+    [Header("로딩 UI")]
+    [SerializeField] private GameObject LoadingWindow;
     #endregion
 
     [Header("테스트")]
@@ -456,6 +462,7 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
+        Debug.Log(data);
         Debug.Log(data.StoreList);
         Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
@@ -570,6 +577,7 @@ public class TownManager : MonoBehaviour
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
         Debug.Log(data);
+
         uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global);
     }
     //  주말 목표 입니다람쥐
@@ -1162,12 +1170,17 @@ public class TownManager : MonoBehaviour
 
     public void MatchResponse(S_MatchResponse data)
     {
+        Debug.Log("매칭 완료 패킷 들어옴 " + data);
+
         if (data.Success)
         {
             MatchingWindow.SetActive(false);
-            MatchResultWindow.SetActive(true);
-        }
+            //MatchResultWindow.SetActive(true);
+            LoadingWindow.SetActive(true);
 
+            int dungeon = data.DungeonSession.PartyInfo.DungeonIndex;
+            LoadingWindow.GetComponentInChildren<Loading>().Index = dungeon;
+        }
     }
    
     // 자기 자신 스폰용도 

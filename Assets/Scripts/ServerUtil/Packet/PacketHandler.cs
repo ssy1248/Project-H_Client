@@ -197,6 +197,47 @@ class PacketHandler
         if (packet is not S_ShopInventoryList enterPacket) return;
         TownManager.Instance.ShopInventoryList(enterPacket);
     }
+    public static void S_EndAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_EndAuction enterPacket) return;
+        DungeonManager.Instance.EndAuctionResponse(enterPacket);
+    }
+    public static void S_EnterAuctionBidHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_EnterAuctionBid enterPacket) return;
+        DungeonManager.Instance.EnterAuctionBidResponse(enterPacket);
+    }
+    public static void S_FinalizeAllAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_FinalizeAllAuction enterPacket) return;
+        DungeonManager.Instance.FinalizeAllAuctionResponse(enterPacket);
+    }
+    public static void S_FinalizeBuyAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_FinalizeBuyAuction enterPacket) return;
+        DungeonManager.Instance.FinalizeBuyAuctionResponse(enterPacket);
+    }
+    public static void S_SetAuctionDataHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SetAuctionData enterPacket) return;
+        DungeonManager.Instance.SetAuctionDataResponse(enterPacket);
+    }
+    public static void S_WaitAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_WaitAuction enterPacket) return;
+        DungeonManager.Instance.WaitAuctionResponse(enterPacket);
+    }
+    public static void S_DungeonSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DungeonSpawn enterPacket) return;
+        DungeonManager.Instance.DungeonSpawn(enterPacket);
+    }
+    public static void S_DungeonDeSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DungeonDeSpawn enterPacket) return;
+        DungeonManager.Instance.DungeonDeSpawn(enterPacket);
+    }
+
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
