@@ -14,12 +14,12 @@ public class PlayerActionManager : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) // 좌클릭 감지
             {
                 // 예시: 레이캐스트를 통해 타겟을 얻거나, 타겟 ID를 직접 결정할 수 있습니다.
-                int targetId = 0;//GetTargetIdFromMouseClick();
+                int targetId = 1;//GetTargetIdFromMouseClick();
 
                 // NormalAttack 메시지 생성
                 NormalAttack normalAttack = new NormalAttack
                 {
-                    AttackerName = DungeonManager.Instance.MyPlayer.name,
+                    AttackerName = DungeonManager.Instance.MyPlayer.nickname,
                     TargetId = targetId,
                     // 필요한 경우 추가 정보(예: 위치, 방향 등)도 설정
                 };
