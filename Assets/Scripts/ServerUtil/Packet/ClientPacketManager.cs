@@ -84,9 +84,23 @@ class PacketManager
         _handler.Add((ushort)MsgId.SSellitemresponse, PacketHandler.S_SellItemHandler);
         _onRecv.Add((ushort)MsgId.SShopinventorylist, MakePacket<S_ShopInventoryList>);
         _handler.Add((ushort)MsgId.SShopinventorylist, PacketHandler.S_ShopInventoryListHandler);
-        _onRecv.Add((ushort)MsgId.SMoveitemresponse, MakePacket<S_MoveItemResponse>);
+        _onRecv.Add((ushort)MsgId.SEndauction, MakePacket<S_EndAuction>);
+        _handler.Add((ushort)MsgId.SEndauction, PacketHandler.S_EndAuctionHandler);
+        _onRecv.Add((ushort)MsgId.SEnterauctionbid, MakePacket<S_EnterAuctionBid>);
+        _handler.Add((ushort)MsgId.SEnterauctionbid, PacketHandler.S_EnterAuctionBidHandler);
+        _onRecv.Add((ushort)MsgId.SFinalizeallauction, MakePacket<S_FinalizeAllAuction>);
+        _handler.Add((ushort)MsgId.SFinalizeallauction, PacketHandler.S_FinalizeAllAuctionHandler);
+        _onRecv.Add((ushort)MsgId.SFinalizebuyauction, MakePacket<S_FinalizeBuyAuction>);
+        _handler.Add((ushort)MsgId.SFinalizebuyauction, PacketHandler.S_FinalizeBuyAuctionHandler);
+        _onRecv.Add((ushort)MsgId.SSetauctiondata, MakePacket<S_SetAuctionData>);
+        _handler.Add((ushort)MsgId.SSetauctiondata, PacketHandler.S_SetAuctionDataHandler);
+        _onRecv.Add((ushort)MsgId.SWaitauction, MakePacket<S_WaitAuction>);
+        _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler); _onRecv.Add((ushort)MsgId.SMoveitemresponse, MakePacket<S_MoveItemResponse>);
         _handler.Add((ushort)MsgId.SMoveitemresponse, PacketHandler.S_MoveItemHandler);
-
+        _handler.Add((ushort)MsgId.SDungeonspawn, PacketHandler.S_DungeonSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SDungeonspawn, MakePacket<S_DungeonSpawn>);
+        _handler.Add((ushort)MsgId.SDungeondespawn, PacketHandler.S_DungeonDeSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SDungeondespawn, MakePacket<S_DungeonDeSpawn>);
         Debug.Log("핸들러 등록 완료");
     }
 
