@@ -227,6 +227,17 @@ class PacketHandler
         if (packet is not S_WaitAuction enterPacket) return;
         DungeonManager.Instance.WaitAuctionResponse(enterPacket);
     }
+    public static void S_DungeonSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DungeonSpawn enterPacket) return;
+        DungeonManager.Instance.DungeonSpawn(enterPacket);
+    }
+    public static void S_DungeonDeSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DungeonDeSpawn enterPacket) return;
+        DungeonManager.Instance.DungeonDeSpawn(enterPacket);
+    }
+
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {

@@ -97,7 +97,10 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SWaitauction, MakePacket<S_WaitAuction>);
         _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler); _onRecv.Add((ushort)MsgId.SMoveitemresponse, MakePacket<S_MoveItemResponse>);
         _handler.Add((ushort)MsgId.SMoveitemresponse, PacketHandler.S_MoveItemHandler);
-
+        _handler.Add((ushort)MsgId.SDungeonspawn, PacketHandler.S_DungeonSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SDungeonspawn, MakePacket<S_DungeonSpawn>);
+        _handler.Add((ushort)MsgId.SDungeondespawn, PacketHandler.S_DungeonDeSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SDungeondespawn, MakePacket<S_DungeonDeSpawn>);
         Debug.Log("핸들러 등록 완료");
     }
 
