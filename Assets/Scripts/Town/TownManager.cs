@@ -1175,7 +1175,8 @@ public class TownManager : MonoBehaviour
         if (data.Success)
         {
             MatchingWindow.SetActive(false);
-            MatchResultWindow.SetActive(true);
+            //MatchResultWindow.SetActive(true);
+            LoadingWindow.SetActive(true);
 
             int dungeon = data.DungeonSession.PartyInfo.DungeonIndex;
             LoadingWindow.GetComponentInChildren<Loading>().Index = dungeon;

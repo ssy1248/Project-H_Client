@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
         Attack();
     }
 
+    // wasd 로 이동이 아닌 로아처럼 마우스 이동
     void GETInput()
     {
         hAxis = Input.GetAxisRaw("Horizontal");
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour
         transform.LookAt(transform.position + moveVec);
     }
 
+    // 회피 리퀘스트
     void Dodge()
     {
         Debug.Log($"DDown: {DDown}, isDodge: {isDodge}, moveVec: {moveVec}");
@@ -103,6 +105,7 @@ public class PlayerController : MonoBehaviour
         isDodge = false;
     }
 
+    // 여기서 프로토콜 어택리퀘스트 핸들러를 사용해서 보내야 할듯
     void Attack()
     {
         if (equipWeapon == null)
