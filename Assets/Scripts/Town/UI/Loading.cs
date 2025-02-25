@@ -50,13 +50,14 @@ public class Loading : MonoBehaviour
         LoadingPanelDeActiveAndChangeScene(Index);
     }
 
-    public void LoadingPanelDeActiveAndChangeScene(int index)
+    public void LoadingPanelDeActiveAndChangeScene (int index)
     {
         // 화면 클릭 시 해당 게임 오브젝트 비활성화
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             gameObject.SetActive(false);
-            SceneManager.LoadSceneAsync("Dungeon " + index);
+            SceneManager.LoadScene("Dungeon " + index);
+            DungeonManager.Instance.DungeonEnter();
         }
     }
 }

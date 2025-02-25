@@ -38,6 +38,7 @@ public class DungeonManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -54,6 +55,22 @@ public class DungeonManager : MonoBehaviour
         {
             Gold = gold,
             Id = id,
+        };
+        GameManager.Network.Send(Packet);
+    }
+    public void DungeonEnter()
+    {
+        var Packet = new C_DungeonEnter
+        {
+
+        };
+        GameManager.Network.Send(Packet);
+    }
+    public void DungeonExit()
+    {
+        var Packet = new C_DungeonExit
+        {
+
         };
         GameManager.Network.Send(Packet);
     }
@@ -83,45 +100,63 @@ public class DungeonManager : MonoBehaviour
     {
         rewardAuction.WaitAuction(data);
     }
+    public void DungeonSpawn(S_DungeonSpawn data)
+    {
+        Debug.Log(data);
+        for (int i =0; i < data.DungeonInfo.PartyInfo.Players.Count; i++)
+        {
+            var player = data.DungeonInfo.PartyInfo.Players[i];
+            if (player.PlayerId == data.UserId)
+            {
+                Spawn(player, data.PlayerTransforms[i],true);
+                continue;
+            }
+            Spawn(player, data.PlayerTransforms[i]);
+        }
+        
+    }
+    public void DungeonDeSpawn(S_DungeonDeSpawn data)
+    {
 
+    }
     // 스폰용도 
-    public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
+    public void Spawn(PlayerStatus playerData, TransformInfo playerTransform , bool isPlayer = false)
     {
         if (isPlayer)
         {
             Debug.Log("플레이어 입니다.");
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
-            MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
+            MyPlayer = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
 
             return;
         }
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
-        Player player = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
+        Player player = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));
         player.SetIsMine(false);
 
         // 플레이어를 리스트에 추가
-        players.Add(playerInfo.PlayerId, player);
+        players.Add(playerData.PlayerId, player);
     }
-    public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
+    public Player CreatePlayer(PlayerStatus playerData, Vector3 spawnPos)
     {
-        Debug.Log(playerInfo.Class);
-        string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player" + playerInfo.Class));
+        Debug.Log(playerData.PlayerClass);
+        string playerResPath = playerDb.GetValueOrDefault(playerData.PlayerClass, ("Player/Player" + playerData.PlayerClass));
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 
         var player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
         player.Move(spawnPos, Quaternion.identity, 0);
-        player.SetPlayerId(playerInfo.PlayerId);
-        player.SetNickname(playerInfo.Nickname);
+        player.SetPlayerId(playerData.PlayerId);
+        player.SetNickname(playerData.PlayerName);
 
-        if (playerList.TryGetValue(playerInfo.PlayerId, out var existingPlayer))
+        if (playerList.TryGetValue(playerData.PlayerId, out var existingPlayer))
         {
-            playerList[playerInfo.PlayerId] = player;
+            playerList[playerData.PlayerId] = player;
             Destroy(existingPlayer.gameObject);
         }
         else
         {
-            playerList.Add(playerInfo.PlayerId, player);
+            playerList.Add(playerData.PlayerId, player);
         }
 
         return player;
