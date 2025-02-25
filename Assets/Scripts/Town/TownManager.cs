@@ -470,7 +470,7 @@ public class TownManager : MonoBehaviour
                 Spawn(player);
             }
         }
-        shopUi.GetBuyData(data.StoreList.ToList());
+        //shopUi.GetBuyData(data.StoreList.ToList());
         ItemManager.instance.SetData(data.ItemData.ToList());
     }
     // 나가면 삭제해주기 
@@ -1201,6 +1201,7 @@ public class TownManager : MonoBehaviour
 
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {
+        Debug.Log(playerInfo);
         Debug.Log(playerInfo.Class);
         string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player" + playerInfo.Class));
         Player playerPrefab = Resources.Load<Player>(playerResPath);

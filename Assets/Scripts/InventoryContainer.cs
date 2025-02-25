@@ -232,7 +232,6 @@ public class InventoryContainer : MonoBehaviour
         var _inventory = data.Inventory;
         for (var i = 0; i < _inventory.Count; i++)
         {
-            Debug.Log(_inventory[i]);
             if (_inventory[i].Equiped)
             {
                 equipmentContainer.SetItem(_inventory[i]);
