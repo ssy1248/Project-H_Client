@@ -58,6 +58,7 @@ public class DungeonManager : MonoBehaviour
         };
         GameManager.Network.Send(Packet);
     }
+
     public void DungeonEnter()
     {
         var Packet = new C_DungeonEnter
