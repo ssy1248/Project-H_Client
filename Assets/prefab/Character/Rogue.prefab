@@ -1771,6 +1771,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &3143413371312093643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8619590517259147476}
+  m_Layer: 10
+  m_Name: Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8619590517259147476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3143413371312093643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4875123534900892728}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3186256358687414872
 GameObject:
   m_ObjectHideFlags: 0
@@ -3403,6 +3434,7 @@ Transform:
   - {fileID: 1637977516210281403}
   - {fileID: 8434989876132757675}
   - {fileID: 858307780041463094}
+  - {fileID: 8619590517259147476}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8136238777171015875
@@ -3415,7 +3447,7 @@ Animator:
   m_GameObject: {fileID: 8588462082483426788}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3b40e2fb34bbb1e4da00ed8f7c35d651, type: 3}
-  m_Controller: {fileID: 9100000, guid: baa3431a09c917346b3e55890a113ee9, type: 2}
+  m_Controller: {fileID: 9100000, guid: c1f4f6357bd56ea4abf17b5dfe3bc812, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3474,19 +3506,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8588462082483426788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
+  m_Script: {fileID: 11500000, guid: 56c2e2f6cc4742f4ea45ce1936b04e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   teleportEffects: []
   dodgeEffectsArcher: []
-  dodgeEffectsRogue:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  dodgeEffectsRogue: []
   moveSpeed: 10
   maxHealth: 100
   currentHealth: 100
-  speed: 10
+  speed: 50
 --- !u!54 &196227380015684679
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3529,7 +3558,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -4822,12 +4851,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3731483967181282061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a56b123ca9a0a942bb347029e703597, type: 3}
+  m_Script: {fileID: 11500000, guid: d554390fb4a290346a6d5d6ed356953f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
   damage: 20
-  attackRate: 0.5
+  attackRate: 0.3
   meleeArea: {fileID: 8867036366493970157}
   trailEffect: {fileID: 6701403360059370495}
   ArrowPos: {fileID: 0}
