@@ -1,106 +1,112 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine.AI;
-using Google.Protobuf.Protocol;
-using UnityEngine.XR;
 
 public class MageController : PlayerController
 {
-    public GameObject meteorEffectPrefab; // ¸ŞÅ×¿À ÀÌÆåÆ® ÇÁ¸®ÆÕ
-    public float meteorDelay = 1f; // ¸ŞÅ×¿À ½ÃÀü ½Ã°£
-    public float meteorSpeed = 15f; // ¸ŞÅ×¿ÀÀÇ ¶³¾îÁö´Â ¼Óµµ
+    public GameObject meteorPrefab; // ë–¨ì–´ì§€ëŠ” ë©”í…Œì˜¤ í”„ë¦¬íŒ¹
+    public GameObject explosionPrefab; // ë°”ë‹¥ì— ë‹¿ì•˜ì„ ë•Œ í„°ì§€ëŠ” ì´í™íŠ¸ í”„ë¦¬íŒ¹
+    public GameObject targetingIndicator; // ë°”ë‹¥ì— ìœ„ì¹˜ë¥¼ í‘œì‹œí•˜ëŠ” ì› ì˜¤ë¸Œì íŠ¸
 
-    private bool isMeteorCasting = false; // ¸ŞÅ×¿À ½ÃÀü »óÅÂ
+    public float meteorFallTime = 1.5f; // ë©”í…Œì˜¤ê°€ ë–¨ì–´ì§€ëŠ” ì‹œê°„
+    public float meteorHeight = 10f; // ë©”í…Œì˜¤ê°€ ì‹œì‘ë˜ëŠ” ë†’ì´
 
-    Animator anim;
-    MeshRenderer[] meshs;
-    Rigidbody rigid;
-    private Camera camera;
-    private NavMeshAgent nav;
-
-    public void Awake()
-    {
-        rigid = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>(); // ÀÚ½ÄÀÌ ¾Æ´Ñ ºÎ¸ğ ¿ÀºêÁ§Æ®¿¡¼­ °¡Á®¿À±â
-        meshs = GetComponentsInChildren<MeshRenderer>();
-        camera = Camera.main;
-        nav = GetComponent<NavMeshAgent>();
-        nav.updateRotation = false;
-    }
+    private bool isSelectingTarget = false; // ë©”í…Œì˜¤ ìœ„ì¹˜ë¥¼ ì§€ì • ì¤‘ì¸ì§€ í™•ì¸
+    private Vector3 targetPosition; // ì„ íƒëœ ë©”í…Œì˜¤ íƒ€ê²Ÿ ìœ„ì¹˜
 
     void Update()
     {
-        base.Update(); // ºÎ¸ğ Å¬·¡½ºÀÇ Update È£Ãâ (±âº»ÀûÀÎ ÇÃ·¹ÀÌ¾î ¿òÁ÷ÀÓ Ã³¸®)
+        base.Update();
 
-        if (Input.GetKeyDown(KeyCode.Q) && !isMeteorCasting)
+        // Q í‚¤ë¥¼ ëˆ„ë¥´ë©´ ë©”í…Œì˜¤ ìœ„ì¹˜ ì§€ì • ì‹œì‘
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            CastMeteor();
+            if (!isSelectingTarget)
+            {
+                StartTargeting();
+            }
+            else
+            {
+                ConfirmTarget();
+            }
+        }
+
+        // ë§ˆìš°ìŠ¤ë¥¼ ë”°ë¼ë‹¤ë‹ˆëŠ” ìœ„ì¹˜ í‘œì‹œ ì—…ë°ì´íŠ¸
+        if (isSelectingTarget)
+        {
+            UpdateTargetingIndicator();
         }
     }
 
-    // ¸ŞÅ×¿À ½ÃÀü ÇÔ¼ö
-    void CastMeteor()
+    // 1. ìœ„ì¹˜ ì§€ì • ì‹œì‘
+    void StartTargeting()
     {
-        isMeteorCasting = true;
-        anim.SetTrigger("doMeteorCast"); // ¸ŞÅ×¿À ½ÃÀü ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å
-
-        // ¸ŞÅ×¿À ÀÌÆåÆ® »ı¼º
-        StartCoroutine(MeteorFallRoutine());
+        isSelectingTarget = true;
+        targetingIndicator.SetActive(true);
     }
 
-    // ¸ŞÅ×¿À°¡ ÇÏ´Ã¿¡¼­ ¶³¾îÁö´Â ÄÚ·çÆ¾
-    IEnumerator MeteorFallRoutine()
+    // 2. ë§ˆìš°ìŠ¤ ìœ„ì¹˜ë¥¼ ê³„ì† ì—…ë°ì´íŠ¸í•˜ì—¬ ë°”ë‹¥ì„ ë”°ë¼ë‹¤ë‹ˆê²Œ í•¨
+    void UpdateTargetingIndicator()
     {
-        // ¸ŞÅ×¿À¸¦ ÀÏÁ¤ ³ôÀÌ¿¡¼­ ¶³¾îÁö°Ô ÇÏ±â À§ÇØ ÃÊ±â À§Ä¡¸¦ ¼³Á¤
-        Vector3 spawnPosition = new Vector3(transform.position.x + Random.Range(-5f, 5f), 10f, transform.position.z + Random.Range(-5f, 5f));
-        GameObject meteor = Instantiate(meteorEffectPrefab, spawnPosition, Quaternion.identity);
-
-        // ¸ŞÅ×¿À ÀÌÆåÆ® ½ÇÇà
-        ParticleSystem ps = meteor.GetComponent<ParticleSystem>();
-        if (ps != null) ps.Play();
-
-        // ¸ŞÅ×¿À°¡ ¸ñÇ¥ À§Ä¡·Î ¶³¾îÁöµµ·Ï °è»ê
-        Vector3 targetPosition = transform.position;
-        float fallTime = 0;
-
-        while (fallTime < meteorDelay)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, LayerMask.GetMask("Floor")))
         {
-            meteor.transform.position = Vector3.Lerp(spawnPosition, targetPosition, fallTime / meteorDelay);
-            fallTime += Time.deltaTime;
+            targetingIndicator.transform.position = hit.point;
+        }
+    }
+
+    // 3. ìµœì¢… ìœ„ì¹˜ í™•ì • í›„ ë©”í…Œì˜¤ ë°œë™
+    void ConfirmTarget()
+    {
+        isSelectingTarget = false;
+        targetingIndicator.SetActive(false);
+        targetPosition = targetingIndicator.transform.position;
+        StartCoroutine(MeteorSkill(targetPosition));
+    }
+
+    // 4. ë©”í…Œì˜¤ ë°œë™
+    IEnumerator MeteorSkill(Vector3 position)
+    {
+        // ë©”í…Œì˜¤ ì‹œì‘ ìœ„ì¹˜ (ìœ„ìª½ì—ì„œ ë–¨ì–´ì§€ê¸° ìœ„í•´ Yê°’ì„ ë”í•¨)
+        Vector3 spawnPos = position + Vector3.up * meteorHeight;
+        GameObject meteor = Instantiate(meteorPrefab, spawnPos, Quaternion.identity);
+
+        // ëŒ€ê°ì„  ë°©í–¥ìœ¼ë¡œ ë–¨ì–´ì§€ê²Œ í•  ë²¡í„°
+        Vector3 direction = (position - spawnPos).normalized;
+
+        // ì´ë™ ì†ë„ ì„¤ì •
+        float speed = meteorHeight / meteorFallTime;
+
+        float elapsedTime = 0f;
+        Vector3 startPos = meteor.transform.position;
+
+        // ëŒ€ê°ì„  ë°©í–¥ìœ¼ë¡œ ì´ë™
+        while (elapsedTime < meteorFallTime)
+        {
+            // ëŒ€ê°ì„  ë°©í–¥ìœ¼ë¡œ ì´ë™
+            meteor.transform.position = Vector3.Lerp(startPos, position, elapsedTime / meteorFallTime) + direction * Mathf.Sin(elapsedTime * Mathf.PI * 2f / meteorFallTime) * 0.5f;
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        meteor.transform.position = targetPosition; // ¸ŞÅ×¿À ÃÖÁ¾ ¸ñÇ¥ À§Ä¡¿¡ ¹èÄ¡
+        meteor.transform.position = position;
 
-        // ¸ŞÅ×¿À°¡ ¶³¾îÁö¸ç µ¥¹ÌÁö¸¦ ÁÖ´Â Ã³¸®
-        Collider[] hitEnemies = Physics.OverlapSphere(targetPosition, 3f, LayerMask.GetMask("Enemy"));
+        // ë°”ë‹¥ì— ë‹¿ì•˜ì„ ë•Œ í­ë°œ ì´í™íŠ¸
+        Instantiate(explosionPrefab, position, Quaternion.identity);
+        Destroy(meteor);
+
+        Collider[] hitEnemies = Physics.OverlapSphere(position, 3f, LayerMask.GetMask("Enemy"));
         foreach (Collider enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy"))
             {
-                // Enemy ½ºÅ©¸³Æ®¿¡¼­ µ¥¹ÌÁö Ã³¸® ¹æ½Ä¿¡ ¸Â°Ô È£Ãâ
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
                 if (enemyScript != null && !enemyScript.isDead)
                 {
-                    int damage = 100; // ¿¹½Ã·Î 100 µ¥¹ÌÁö, ÇÊ¿ä½Ã ´Ù¸¥ °ªÀ¸·Î ¼³Á¤ °¡´É
+                    int damage = 100; // ì˜ˆì‹œ ë°ë¯¸ì§€ ê°’
                     enemyScript.curHealth -= damage;
-                    DamageManager.Instance.SpawnDamageText(damage, enemy.transform.position, isPlayerHit: true);
-
-                    // µ¥¹ÌÁö ¹ŞÀº ÈÄ »óÅÂ Ã³¸®
-                    if (enemyScript.curHealth <= 0)
-                    {
-                        enemyScript.isDead = true;
-                        enemyScript.anim.SetTrigger("doDie");
-                        Destroy(enemy.gameObject, 4f); // ÀûÀÌ Á×Àº ÈÄ 4ÃÊ µÚ¿¡ Á¦°Å
-                    }
+                    //DamageManager.Instance.SpawnDamageText(damage, enemy.transform.position, isPlayerHit: false);
                 }
             }
         }
-
-        // ¸ŞÅ×¿À ÀÌÆåÆ® ºñÈ°¼ºÈ­
-        Destroy(meteor);
-        isMeteorCasting = false;
     }
 }

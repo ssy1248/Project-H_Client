@@ -5,19 +5,19 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     public int damage;
-
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
         {
             Destroy(gameObject, 3);
         }
+
+    }
     void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Wall")
         {
-          if (other.gameObject.tag == "Wall")
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 }

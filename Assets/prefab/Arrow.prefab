@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8906762298896781385}
   - component: {fileID: 9086996829509608328}
   - component: {fileID: 1176665506795722384}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arrow
-  m_TagString: Untagged
+  m_TagString: Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,7 +167,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

@@ -17,9 +17,10 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 10f;
 
     private Camera camera;
-    private NavMeshAgent nav;
+    protected NavMeshAgent nav;
 
-    public int health;
+    public int maxHealth = 100;
+    public int currentHealth;
 
     public float speed;
     float hAxis;
@@ -27,9 +28,9 @@ public class PlayerController : MonoBehaviour
     bool DDown;
     bool FDown;
 
-    bool isMove;
-    bool isDodge;
-    bool isFireReady = true;
+    protected bool isMove = false;
+    protected bool isDodge;
+    protected bool isFireReady = true;
     bool isBorder1;
     bool isBorder2;
     bool isDamage;
@@ -37,9 +38,9 @@ public class PlayerController : MonoBehaviour
     Vector3 moveVec;
     Vector3 dodgeVec;
 
-    Animator anim;
+    protected Animator anim;
     MeshRenderer[] meshs;
-    Rigidbody rigid;
+    protected Rigidbody rigid;
 
     Weapon equipWeapon;
     float fireDelay;
@@ -53,6 +54,8 @@ public class PlayerController : MonoBehaviour
         camera = Camera.main;
         nav = GetComponent<NavMeshAgent>();
         nav.updateRotation = false;
+
+        currentHealth = maxHealth;
     }
 
     public void setDestination(Vector3 dest)
@@ -77,6 +80,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 체력 감소 함수
+
+    // 캐릭터 죽음 처리
+    void Die()
+    {
+        Debug.Log("캐릭터가 죽었습니다!");
+        anim.SetTrigger("doDie");
+
+        // 모든 이동, 공격 등의 기능을 비활성화
+        nav.isStopped = true;  // NavMeshAgent 멈추기
+        rigid.isKinematic = true;  // Rigidbody 비활성화
+        anim.SetBool("isRun", false);  // 달리기 애니메이션 멈추기
+        isMove = false;
+        isFireReady = false;
+        // 추가적으로 UI나 게임 오버 화면을 띄우는 로직을 여기에 추가 가능
+    }
+
     public void Update()
     {
         GETInput();
@@ -98,22 +118,35 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (currentHealth <= 0)
+        {
+            // 죽으면 더 이상 업데이트되지 않도록
+            return;
+        }
+
+
         Mousemove();
     }
 
     void Mousemove()
     {
-     if(isMove)
+        if (isMove)
         {
             var dir = new Vector3(moveVec.x, transform.position.y, moveVec.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
             transform.forward = dir;
             transform.position += dir.normalized * Time.deltaTime * moveSpeed;
+
+            anim.SetBool("isRun", true); // 이동 중일 때만 'run' 애니메이션 실행
+        }
+        else
+        {
+            anim.SetBool("isRun", false); // 이동하지 않으면 'idle' 애니메이션
         }
 
-     if(Vector3.Distance(transform.position, moveVec) <= 0.1f)
+        if (Vector3.Distance(transform.position, moveVec) <= 0.1f)
         {
             isMove = false;
-            anim.SetBool("isRun", false);
+            anim.SetBool("isRun", false); // 목표 지점에 도달하면 'idle' 상태로 돌아가게 설정
         }
     }
 
@@ -322,19 +355,25 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-     if (other.tag == "EnemyAttack")
+        if (other.CompareTag("EnemyArrow")) // "EnemyArrow" 태그인지 확인
         {
-            if(!isDamage)
+            if (!isDamage)
             {
-            Arrow enemyArrow = other.GetComponent<Arrow>();
-            health -= enemyArrow.damage;
-            StartCoroutine(OnDamage());
+                Arrow enemyArrow = other.GetComponent<Arrow>();
+                currentHealth -= enemyArrow.damage;
+                DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), isPlayerHit: true, 300f);
+                Debug.Log("현재 체력: " + currentHealth);  // 현재 체력 로그 출력
+                StartCoroutine(OnDamage());
             }
 
+            if (currentHealth <= 0)
+            {
+                Die();  // 체력이 0 이하일 경우 죽음 처리
+            }
         }
     }
 
-    IEnumerator OnDamage()
+    public IEnumerator OnDamage()
     {
         isDamage = true;
         foreach(MeshRenderer mesh in meshs)
@@ -352,11 +391,5 @@ public class PlayerController : MonoBehaviour
         yield return null;
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            nav.isStopped = true;  // 충돌 시 이동 멈추기
-        }
-    }
+
 }

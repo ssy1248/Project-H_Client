@@ -109,24 +109,48 @@ public class Enemy : MonoBehaviour
         Targetting();
         FreezeVelocity();
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Melee")
+        if (other.tag == "Melee")
         {
             Weapon weapon = other.GetComponent<Weapon>();
-            curHealth -= weapon.damage;
-            DamageManager.Instance.SpawnDamageText(weapon.damage, transform.position, isPlayerHit: false);
-            StartCoroutine(OnDamage());
+
+            // 카운터 공격 여부 확인
+            if (weapon != null && weapon.isCounterAttack)
+            {
+                curHealth -= weapon.damage;  // 카운터 공격으로 받은 데미지 처리
+                DamageManager.Instance.SpawnDamageText(weapon.damage, transform.Find("Head"), isPlayerHit: false, 400f);
+                StartCoroutine(OnDamage());
+
+                Debug.Log("Counter Attack: " + curHealth);
+            }
+            else if (weapon != null)
+            {
+                curHealth -= weapon.damage;  // 일반 공격으로 받은 데미지 처리
+                DamageManager.Instance.SpawnDamageText(weapon.damage, transform.Find("Head"), isPlayerHit: false, 400f);
+                StartCoroutine(OnDamage());
+
+                Debug.Log("Melee: " + curHealth);
+            }
         }
-        else if(other.tag == "Arrow")
+
+        else if (other.tag == "Arrow")
         {
             Arrow arrow = other.GetComponent<Arrow>();
             curHealth -= arrow.damage;
-            DamageManager.Instance.SpawnDamageText(arrow.damage, transform.position, isPlayerHit: false);
+            DamageManager.Instance.SpawnDamageText(arrow.damage, transform.Find("Head"), isPlayerHit: false, 400f);
             StartCoroutine(OnDamage());
 
             Debug.Log("Range : " + curHealth);
         }
+    }
+
+    public void ReceiveDamage(int damage) //스킬 판정
+    {
+        curHealth -= damage; // 받은 데미지만큼 체력 감소
+        DamageManager.Instance.SpawnDamageText(damage, transform.Find("Head"), isPlayerHit: false, 400f); // 데미지 텍스트
+        StartCoroutine(OnDamage()); // 데미지 처리 애니메이션
     }
     IEnumerator OnDamage()
     {

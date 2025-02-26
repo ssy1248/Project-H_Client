@@ -7,10 +7,12 @@ public class BossController : Enemy
 {
     Vector3 lookVec;
     Vector3 tauntVec;
+    Vector3 Attack1Vec;
+    Vector3 Attack2Vec;
+
+    private Projector projector;
     bool isLook;
     bool isPatternActive;
-
-
 
     void Awake()
     {
@@ -74,16 +76,18 @@ public class BossController : Enemy
                 {
                     // 패턴 활성화
                     isPatternActive = true;
-                    int randomAction = Random.Range(0, 3);  // 최대 3가지 패턴으로 랜덤 변경
+                    int randomAction = Random.Range(0, 5);  // 최대 3가지 패턴으로 랜덤 변경
                     switch (randomAction)
                     {
                         case 0:
+                        case 1:
                             yield return StartCoroutine(Attack1());
                             break;
-                        case 1:
+                        case 2:
+                        case 3:
                             yield return StartCoroutine(Attack2());
                             break;
-                        case 2:
+                        case 4:
                             yield return StartCoroutine(Taunt());
                             break;
                     }
@@ -99,45 +103,42 @@ public class BossController : Enemy
 
     IEnumerator Attack1()
     {
-        tauntVec = target.position + lookVec;
+        Attack1Vec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
-        boxCollider.enabled = true;
         anim.SetTrigger("Attack1");
-        yield return new WaitForSeconds(2f);
+
+        yield return new WaitForSeconds(0f);
         meleeArea.enabled = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
         meleeArea.enabled = false;
 
         yield return new WaitForSeconds(1f);
         isLook = true;
-        nav.isStopped = false;
-        boxCollider.enabled = true;
+        nav.isStopped = true;
     }
-
     IEnumerator Attack2()
     {
-        tauntVec = target.position + lookVec;
+        Attack2Vec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
-        boxCollider.enabled = true;
         anim.SetTrigger("Attack2");
-        yield return new WaitForSeconds(2f);
+
+        yield return new WaitForSeconds(0f);
         meleeArea.enabled = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
         meleeArea.enabled = false;
 
         yield return new WaitForSeconds(1f);
         isLook = true;
-        nav.isStopped = false;
-        boxCollider.enabled = true;
+        nav.isStopped = true;
     }
     // 보스가 타겟에게 도달하는 이동 패턴
-IEnumerator Walk()
+    IEnumerator Walk()
 {
     nav.isStopped = false;
     anim.SetBool("isWalk", true);  // 걷는 애니메이션 시작
@@ -171,17 +172,16 @@ IEnumerator Walk()
 
         isLook = false;
         nav.isStopped = false;
-        boxCollider.enabled = true;
         anim.SetTrigger("doTaunt");
-        yield return new WaitForSeconds(3f);
+
+        yield return new WaitForSeconds(1f);
         meleeArea.enabled = true;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
         meleeArea.enabled = false;
 
         yield return new WaitForSeconds(1f);
         isLook = true;
-        nav.isStopped = false;
-        boxCollider.enabled = true;
+        nav.isStopped = true;
     }
 }
