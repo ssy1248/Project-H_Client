@@ -36,7 +36,7 @@ public class PlayerActionManager : MonoBehaviour
             // 스킬 공격
             if (Input.GetKeyDown(KeyCode.Q))
             {
-
+                SkillAttackRequest();
             }
             // 회피
             if (Input.GetKeyDown(KeyCode.Space))
@@ -54,6 +54,28 @@ public class PlayerActionManager : MonoBehaviour
         }
     }
 
+    void SkillAttackRequest()
+    {
+        int targetId = 1;
+
+        // SkillAttack 메세지 생성
+        SkillAttack skillAttack = new SkillAttack
+        {
+            AttackerName = DungeonManager.Instance.MyPlayer.nickname,
+            SkillId = 1,
+            TargetId = targetId,
+            CurrentMp = 100,
+        };
+
+        // 현재는 mp를 보내는 것이 없어서 체크해야할듯
+        C_PlayerAction actionPacket = new C_PlayerAction
+        {
+            SkillAttack = skillAttack
+        };
+
+        GameManager.Network.Send(actionPacket);
+    }
+
     void NormalAttackRequest()
     {
         // 예시: 레이캐스트를 통해 타겟을 얻거나, 타겟 ID를 직접 결정할 수 있습니다.
@@ -67,15 +89,11 @@ public class PlayerActionManager : MonoBehaviour
             // 필요한 경우 추가 정보(예: 위치, 방향 등)도 설정
         };
 
-        Debug.Log(normalAttack);
-
         // C_PlayerAction 메시지의 oneof 필드인 normalAttack에 값 할당
         C_PlayerAction actionPacket = new C_PlayerAction
         {
             NormalAttack = normalAttack
         };
-
-        Debug.Log(actionPacket);
 
         // 서버로 메시지 전송
         GameManager.Network.Send(actionPacket);
