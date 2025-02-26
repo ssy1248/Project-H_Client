@@ -238,6 +238,12 @@ class PacketHandler
         DungeonManager.Instance.DungeonDeSpawn(enterPacket);
     }
 
+    public static void S_PlayerActionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_PlayerAction enterPacket) return;
+        PlayerActionManager.Instance.PlayerActionHandler(enterPacket);
+    }
+
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
