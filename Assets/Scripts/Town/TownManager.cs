@@ -81,6 +81,7 @@ public class TownManager : MonoBehaviour
     {
         if (_instance == null)
         {
+            DontDestroyOnLoad(gameObject);
             _instance = this;
         }
         else
@@ -88,7 +89,7 @@ public class TownManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        
         InitializePlayerDatabase();
     }
 
