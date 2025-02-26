@@ -101,6 +101,8 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SDungeonspawn, MakePacket<S_DungeonSpawn>);
         _handler.Add((ushort)MsgId.SDungeondespawn, PacketHandler.S_DungeonDeSpawnHandler);
         _onRecv.Add((ushort)MsgId.SDungeondespawn, MakePacket<S_DungeonDeSpawn>);
+        _handler.Add((ushort)MsgId.SPlayeraction, PacketHandler.S_PlayerActionHandler);
+        _onRecv.Add((ushort)MsgId.SPlayeraction, MakePacket<S_PlayerAction>);
         Debug.Log("핸들러 등록 완료");
     }
 
