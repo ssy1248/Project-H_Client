@@ -156,7 +156,9 @@ public class Player : MonoBehaviour
     private void CheckMove()
     {
         float dist = Vector3.Distance(lastPos, transform.position);
-        animator.SetFloat(Constants.TownPlayerMove, dist * 100);
+        Debug.Log(dist);
+        animator.SetBool("isRun", !((dist*100) < 0.1f));
+
         lastPos = transform.position;
     }
 }
