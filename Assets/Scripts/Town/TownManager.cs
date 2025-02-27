@@ -329,11 +329,11 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(disrobeItemPacket);
     }
-    public void ActiveItemRequest(int itemId)
+    public void ActiveItemRequest(int inventoryId)
     {
         var activeItemPacket = new C_ActiveItemRequest
         {
-            ItemId = itemId
+            Id = inventoryId,
         };
 
         GameManager.Network.Send(activeItemPacket);

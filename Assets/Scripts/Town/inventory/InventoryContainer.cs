@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -40,6 +40,7 @@ public class InventoryContainer : MonoBehaviour
         // 패킷 핸들러 이벤트 구독
         PacketHandler.S_InventoryEvent += S_UpdateInventoryHandler;
         PacketHandler.S_MoveItemEvent += S_MoveItemHandler;
+        PacketHandler.S_ActiveItemEvent += S_ActiveItemResponseHandler;
     }
 
     #region public
@@ -151,6 +152,8 @@ public class InventoryContainer : MonoBehaviour
         switch (item.ItemType)
         {
             case 0:
+                // 아이템 사용
+                C_ActiveItemRequest(slot.data.Id);
                 break;
             case 1:
                 break;
@@ -271,6 +274,32 @@ public class InventoryContainer : MonoBehaviour
         }
     }
 
+    private void S_ActiveItemResponseHandler(S_ActiveItemResponse data)
+    {
+        Debug.Log("S_ActiveItemResponseHandler");
+        Debug.Log(data.UserId);
+        Debug.Log(data.Id);
+        // 아이템을 가지고 있는지 확인
+        var slot = FindItemSlot(data.Id);
+        if (!slot)
+        {
+            return;
+        }
+        var item = slot.data;
+        
+        // 아이템 효과 적용
+        ItemManager.instance.ActiveItemHandler(item.ItemId, data);
+        // 아이템 제거
+        if (item.Quantity > 1)
+        {
+            item.Quantity -= 1;
+        }
+        else
+        {
+            slot.ClearItem();
+        }
+    }
+
     private void C_MoveItemRequest(InventorySlot slot, int to)
     {
         C_MoveItemRequest moveRequest = new C_MoveItemRequest
@@ -279,6 +308,16 @@ public class InventoryContainer : MonoBehaviour
             Position = to,
         };
         GameManager.Network.Send(moveRequest);
+    }
+
+    private void C_ActiveItemRequest(int inventoryId)
+    {
+        C_ActiveItemRequest itemRequest = new C_ActiveItemRequest
+        {
+            Id = inventoryId,
+            Timestamp = DateTime.UtcNow.Ticks,
+        };
+        GameManager.Network.Send(itemRequest);
     }
     #endregion
 

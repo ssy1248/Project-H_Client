@@ -1,6 +1,7 @@
 using Google.Protobuf.Protocol;
-using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
@@ -22,6 +23,7 @@ public class ItemManager : MonoBehaviour
             return;
         }
         LoadAssets();
+        InitializeItemHandler();
     }
     public void SetData(List<ItemData> data)
     {
@@ -60,5 +62,36 @@ public class ItemManager : MonoBehaviour
             itemImages.Add(fileName, sprite);
             Debug.Log(fileName);
         }
+    }
+
+    public void ActiveItemHandler(int itemId, S_ActiveItemResponse data)
+    {
+        Debug.Log("ActiveItemHandler");
+        var success = data.Success;
+
+        if (success)
+        {
+            // 적절한 아이템 사용
+            var handler = ItemHandlers[itemId];
+            handler(data);
+        }
+    }
+
+    private delegate void itemHandler(S_ActiveItemResponse data);
+    private Dictionary<int, itemHandler> ItemHandlers;
+    private void InitializeItemHandler()
+    {
+        ItemHandlers = new Dictionary<int, itemHandler>{
+            {3, HealthPotion(100)},
+        };
+    }
+
+    private itemHandler HealthPotion(int amount)
+    {
+        return (S_ActiveItemResponse data) =>
+        {
+            Debug.Log($"{data.UserId} : use item({data.Id})");
+            Debug.Log($"hp potion({amount})");
+        };
     }
 }
