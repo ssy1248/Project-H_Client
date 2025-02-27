@@ -81,7 +81,6 @@ public class TownManager : MonoBehaviour
     {
         if (_instance == null)
         {
-            DontDestroyOnLoad(gameObject);
             _instance = this;
         }
         else

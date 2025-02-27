@@ -35,7 +35,17 @@ class PacketHandler
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Move enterPacket) return;
-        TownManager.Instance.AllMove(enterPacket);
+        if (TownManager.Instance !=null)
+        {
+            TownManager.Instance.AllMove(enterPacket);
+            return;
+        }
+        if (DungeonManager.Instance != null)
+        {
+            DungeonManager.Instance.AllMove(enterPacket);
+            return;
+        }
+
     }
     public static void S_AnimationHandler(PacketSession session, IMessage packet)
     {
