@@ -109,8 +109,8 @@ public class BattleManager : MonoBehaviour
 
     public void ConfigureDungeon(DungeonInfo dungeonInfo)
     {
-        //ConfigureMap(dungeonInfo.DungeonCode);
-        //ConfigureMonsters(dungeonInfo.Monsters);
+        //ConfigureMap(dungeonInfo.DungeonId);
+        //ConfigureMonsters(dungeonInfo.MonsterId);
     }
 
     private void ResetMonsters()
