@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 // using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class TownManager : MonoBehaviour
 {
@@ -22,8 +21,10 @@ public class TownManager : MonoBehaviour
     [SerializeField] private EventSystem eSystem;
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
+    [SerializeField] Marketplace market;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
+    [SerializeField] ShopUI shopUi;
 
     #region 파티 UI
     [Header("파티 UI 모음")]
@@ -37,6 +38,20 @@ public class TownManager : MonoBehaviour
     [SerializeField] private GameObject PartyMemberSpawnPoint;
     [SerializeField] private GameObject LeaderMemberPrefab;
     [SerializeField] private GameObject NormalMemberPrefab;
+    [SerializeField] private GameObject SearchResultUI;
+    [SerializeField] public GameObject ContextMenuUI;
+    #endregion
+
+    #region 매칭 UI
+    [Header("매칭 UI ")]
+    [SerializeField] private GameObject MatchingWindow;
+    [SerializeField] private GameObject MatchResultWindow;
+    [SerializeField] private GameObject MatchStopWindow;
+    #endregion
+
+    #region
+    [Header("로딩 UI")]
+    [SerializeField] private GameObject LoadingWindow;
     #endregion
 
     [Header("테스트")]
@@ -53,12 +68,14 @@ public class TownManager : MonoBehaviour
     private Dictionary<int, string> playerDb = new();
 
     // 파티 인포를 저장할 딕셔너리
-    private Dictionary<int, PartyInfo> partyInfoDict = new Dictionary<int, PartyInfo>();
+    private Dictionary<string, PartyInfo> partyInfoDict = new Dictionary<string, PartyInfo>();
 
     public Player MyPlayer { get; private set; }
 
     // 유저들 동기화에 사용할 딕셔너리
     private List<Player> players = new List<Player>();
+
+    // partyInfoDict -> 파티 아이디로 파티 인포를 저장
 
     private void Awake()
     {
@@ -71,7 +88,7 @@ public class TownManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        
         InitializePlayerDatabase();
     }
 
@@ -112,6 +129,33 @@ public class TownManager : MonoBehaviour
             if (player.nickname.Equals(nickname, StringComparison.OrdinalIgnoreCase))
                 return player;
         }
+        return null;
+    }
+
+    public PartyInfo GetPartyInfoByPlayerId(int playerId)
+    {
+        // partyInfoDict:  Key = partyId,  Value = PartyInfo
+        foreach (PartyInfo partyInfo in partyInfoDict.Values)
+        {
+            // PartyInfo.Players는 PlayerStatus 리스트(닉네임, 레벨, HP 등)
+            // 각 PlayerStatus와 실제 TownManager의 Player 객체를 대조해봐야 할 수도 있음
+            foreach (var pStatus in partyInfo.Players)
+            {
+                // TownManager에는 GetPlayerByNickname()이 존재하므로 닉네임으로 Player 객체를 찾는다
+                Player player = GetPlayerByNickname(pStatus.PlayerName);
+                if (player == null)
+                    continue;
+
+                // 찾은 Player의 PlayerId가 우리가 찾고자 하는 playerId와 같다면,
+                // 이 PartyInfo가 해당 플레이어가 속한 파티!
+                if (player.PlayerId == playerId)
+                {
+                    return partyInfo;
+                }
+            }
+        }
+
+        // 못 찾으면 null 반환
         return null;
     }
 
@@ -258,6 +302,15 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(buyItemPacket);
     }
+    public void SellItemRequest(int inventoryId, int price)
+    {
+        var sellPacket = new C_SellItemRequest
+        {
+            InventoryId = inventoryId,
+            Price = price,
+        };
+        GameManager.Network.Send(sellPacket);
+    }
     public void EquipItemRequest(int itemId)
     {
         var equipItemPacket = new C_EquipItemRequest
@@ -276,23 +329,14 @@ public class TownManager : MonoBehaviour
 
         GameManager.Network.Send(disrobeItemPacket);
     }
-    public void ActiveItemRequest(int itemId)
+    public void ActiveItemRequest(int inventoryId)
     {
         var activeItemPacket = new C_ActiveItemRequest
         {
-            ItemId = itemId
+            Id = inventoryId,
         };
 
         GameManager.Network.Send(activeItemPacket);
-    }
-    public void PartyRequest(int userId)
-    {
-        var partyPacket = new C_PartyRequest
-        {
-            UserId = userId
-        };
-
-        GameManager.Network.Send(partyPacket);
     }
     public void EnterDungeon(int duneonCode, PlayerInfo player)
     {
@@ -310,6 +354,63 @@ public class TownManager : MonoBehaviour
         };
 
         GameManager.Network.Send(enterDungeonPacket);
+    }
+
+    public void MarketListRequest(int page, int count)
+    {
+        var marketListPacket = new C_MarketList
+        {
+            Page = page,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
+    public void SellInMarketRequest(int inventoryId, int itemId ,int gold)
+    {
+        var SellInMarketPacket = new C_SellInMarket
+        {
+            InventoryId = inventoryId,
+            ItemId = itemId,
+            Gold = gold
+        };
+        GameManager.Network.Send(SellInMarketPacket);
+    }
+    public void BuyInMarketRequest(int marketId)
+    {
+        var BuyInMarketPacket = new C_BuyInMarket
+        {
+            MarketId = marketId,
+        };
+        GameManager.Network.Send(BuyInMarketPacket);
+    }
+    public void MarketMyListRequest(int page, int count)
+    {
+        var marketListPacket = new C_MarketMyList
+        {
+            Page = page,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
+    public void MarketSelectBuyNameRequest(int page, int count ,string name)
+    {
+        var marketListPacket = new C_MarketSelectBuyName
+        {
+            Page = page,
+            Count = count,
+            Name = name,
+        };
+        GameManager.Network.Send(marketListPacket);
+    }
+
+   public void ShopInventoryRequest(uint page, uint count)
+    {
+        var marketListPacket = new C_ShopInventoryRequest
+        {
+            Page = page ,
+            Count = count,
+        };
+        GameManager.Network.Send(marketListPacket);
     }
     /* 여기까지 */
 
@@ -336,10 +437,16 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
-            UiRegister.loginObject.SetActive(false);
-            UiRegister.chuseObject.SetActive(true);
+            UiRegister.ShowCharacterSelection();
         }
     }
+
+    private IEnumerator DelayedShowCharacterSelection(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UiRegister.ShowCharacterSelection();
+    }
+
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)
     {
@@ -356,6 +463,7 @@ public class TownManager : MonoBehaviour
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
         Debug.Log(data);
+        Debug.Log(data.StoreList);
         Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
@@ -369,6 +477,8 @@ public class TownManager : MonoBehaviour
                 Spawn(player);
             }
         }
+        //shopUi.GetBuyData(data.StoreList.ToList());
+        ItemManager.instance.SetData(data.ItemData.ToList());
     }
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
@@ -466,6 +576,9 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
+        Debug.Log(data);
+
+        uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global);
     }
     //  주말 목표 입니다람쥐
 
@@ -474,6 +587,14 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+    }
+    public void SellItemResponse(S_SellItemResponse data)
+    {
+
+    }
+    public void ShopInventoryList(S_ShopInventoryList data)
+    {
+
     }
     // 아이템 장착 응답 처리
     public void EquipItemResponse(S_EquipItemResponse data)
@@ -526,7 +647,7 @@ public class TownManager : MonoBehaviour
             {
                 // PartyStatusSpawnPoint의 자식으로 LeaderStatusPrefab 인스턴스 생성
                 GameObject leaderStatusObj = Instantiate(LeaderStatusPrefab, PartyStatusSpawnPoint.transform);
-
+                leaderStatusObj.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
                 // 인스턴스된 오브젝트의 자식에서 TextMeshProUGUI 컴포넌트 찾기
                 TextMeshProUGUI leaderText = leaderStatusObj.GetComponentInChildren<TextMeshProUGUI>();
                 if (leaderText != null)
@@ -556,11 +677,26 @@ public class TownManager : MonoBehaviour
         {
             partyInfoDict[data.Party.PartyId] = data.Party;
         }
+        else
+        {
+            partyInfoDict.Add(data.Party.PartyId, data.Party);
+        }
+
 
         // 기존에 생성된 파티원 UI가 있다면 먼저 제거
         foreach (Transform child in PartyStatusSpawnPoint.transform)
         {
             Destroy(child.gameObject);
+        }
+
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+            if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+                popup.RemoveBtnObj.SetActive(false);
+            else
+                popup.RemoveBtnObj.SetActive(true);
         }
 
         // PartyInfo의 Players 리스트 순회
@@ -585,6 +721,8 @@ public class TownManager : MonoBehaviour
             {
                 prefabToInstantiate = MemberStatusPrefab;
             }
+
+            prefabToInstantiate.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
 
             // 프리팹 인스턴스 생성 및 PartyStatusSpawnPoint의 자식으로 추가
             GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
@@ -618,6 +756,25 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        if (partyInfoDict.ContainsKey(data.Party.PartyId))
+        {
+            partyInfoDict[data.Party.PartyId] = data.Party;
+        }
+        else
+        {
+            partyInfoDict.Add(data.Party.PartyId, data.Party);
+        }
+
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+        if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+            popup.RemoveBtnObj.SetActive(false);
+        else
+            popup.RemoveBtnObj.SetActive(true);
+        }
+
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
         foreach (var playerStatus in data.Party.Players)
         {
@@ -641,6 +798,8 @@ public class TownManager : MonoBehaviour
                 prefabToInstantiate = MemberStatusPrefab;
             }
 
+            prefabToInstantiate.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
+
             // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
             GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
 
@@ -663,22 +822,23 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 리스트 조회 받은 데이터 : {data}");
 
+        // 기존에 생성된 파티원 UI가 있다면 먼저 제거
+        foreach (Transform child in PartyListSpawnPoint.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
         int count = data.Info.Count;
+        Debug.Log($"파티 인포 : {count}");
         for(int i = 0; i < count; i++)
         {
-            // 기존에 생성된 파티원 UI가 있다면 먼저 제거
-            foreach (Transform child in PartyListSpawnPoint.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
             GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
             partyListObj.GetComponent<PartyListItem>().partyData = data.Info[i];
             TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>(true);
             if (texts.Length >= 4)
             {
                 // 첫 번째 텍스트: DungeonName -> 나중에 추가할 던전 선택 생기면 그것으로 대체
-                texts[0].text = data.Info[i].PartyId.ToString();
+                texts[0].text = "Dungeon " + data.Info[i].DungeonIndex.ToString();
 
                 // 두 번째 텍스트: 파티 이름
                 texts[1].text = data.Info[i].PartyName;
@@ -690,7 +850,7 @@ public class TownManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("PartyListPrefab 내에 TextMeshProUGUI 컴포넌트가 3개 이상 존재하지 않습니다.");
+                Debug.LogWarning("PartyListPrefab 내에 TextMeshProUGUI 컴포넌트가 4개 이상 존재하지 않습니다.");
             }
         }
     }
@@ -700,6 +860,51 @@ public class TownManager : MonoBehaviour
         StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 서치 받은 데이터 : {data}");
+
+        // 검색 성공
+        if (data.Success)
+        {
+            UIPartyPopUp input = FindAnyObjectByType<UIPartyPopUp>();
+            string searchTerm = input.partySearchInputField.text;
+            Debug.Log($"클라 값 : {searchTerm}");
+
+            // PartyListSpawnPoint 아래에 있는 기존 파티 리스트 UI 제거
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // data.Info에서 검색어에 맞는 파티들을 LINQ로 찾기 (대소문자 무시)
+            var matchingParties = data.Info
+                .Where(p => p.PartyName.ToLower().Contains(searchTerm.ToLower()))
+                .ToList();
+
+            if (matchingParties.Count > 0)
+            {
+                foreach (var partyInfo in matchingParties)
+                {
+                    GameObject partyListObj = Instantiate(PartyListPrefab, PartyListSpawnPoint.transform);
+                    partyListObj.GetComponent<PartyListItem>().partyData = partyInfo;
+                    TextMeshProUGUI[] texts = partyListObj.GetComponentsInChildren<TextMeshProUGUI>(true);
+                    if (texts.Length >= 4)
+                    {
+                        texts[0].text = partyInfo.PartyId.ToString();
+                        texts[1].text = partyInfo.PartyName;
+                        texts[2].text = $"{partyInfo.Players.Count} / {partyInfo.Maximum}";
+                        texts[3].text = partyInfo.PartyId.ToString();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("PartyListPrefab 내에 예상된 TextMeshProUGUI 컴포넌트가 부족합니다.");
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("검색 결과가 없습니다.");
+                SearchResultUI.SetActive(true);
+            }
+        }
     }
 
     // 파티 추방
@@ -711,6 +916,59 @@ public class TownManager : MonoBehaviour
 
         if(data.Success)
         {
+            // [1] 추방된 유저가 누구인지 찾는다 (닉네임 등)
+            Player kickedPlayer = GetPlayerAvatarById(data.UserId);
+            if (kickedPlayer == null)
+            {
+                Debug.LogWarning("추방된 유저를 로컬에서 찾을 수 없습니다.");
+            }
+
+            // [2] 딕셔너리에서 해당 유저가 속해있는 PartyInfo를 찾아서 수정/삭제
+            // ---- 기존: List<int> removePartyList = new List<int>();
+            List<string> removePartyList = new List<string>();
+
+            foreach (var kvp in partyInfoDict)
+            {
+                // kvp.Key는 string 타입
+                var partyId = kvp.Key;
+                var pInfo = kvp.Value;
+
+                int removedCount = 0;
+                for (int i = pInfo.Players.Count - 1; i >= 0; i--)
+                {
+                    if (kickedPlayer != null && pInfo.Players[i].PlayerName == kickedPlayer.nickname)
+                    {
+                        pInfo.Players.RemoveAt(i);
+                        removedCount++;
+                    }
+                }
+
+                if (removedCount > 0)
+                {
+                    if (pInfo.Players.Count == 0)
+                    {
+                        // ---- 기존: removePartyList.Add(partyId); 에서 partyId가 int가 아니므로 에러
+                        removePartyList.Add(partyId); // partyId는 string
+                    }
+                    else
+                    {
+                        partyInfoDict[partyId] = pInfo;
+                    }
+                    break;
+                }
+            }
+
+            // 실제 파티 딕셔너리에서 완전히 제거
+            // ---- 기존: foreach (int removeId in removePartyList)
+            foreach (string removeId in removePartyList)
+            {
+                if (partyInfoDict.ContainsKey(removeId))
+                {
+                    partyInfoDict.Remove(removeId);
+                }
+            }
+
+            // [3] UI 갱신 처리
             PartyUI.SetActive(false);
             foreach (Transform child in PartyListSpawnPoint.transform)
             {
@@ -730,10 +988,63 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 탈퇴 받은 데이터 : {data}");
 
-        PartyUI.SetActive(false);
-        foreach (Transform child in PartyListSpawnPoint.transform)
+        if (data.Success)
         {
-            Destroy(child.gameObject);
+            Player exitPlayer = GetPlayerAvatarById(data.UserId);
+            if (exitPlayer == null)
+            {
+                Debug.LogWarning("탈퇴한 유저를 로컬에서 찾을 수 없습니다.");
+            }
+
+            // ---- 기존: List<int> removePartyList = new List<int>();
+            List<string> removePartyList = new List<string>();
+
+            foreach (var kvp in partyInfoDict)
+            {
+                var partyId = kvp.Key;
+                var pInfo = kvp.Value;
+
+                int removedCount = 0;
+                for (int i = pInfo.Players.Count - 1; i >= 0; i--)
+                {
+                    if (exitPlayer != null && pInfo.Players[i].PlayerName == exitPlayer.nickname)
+                    {
+                        pInfo.Players.RemoveAt(i);
+                        removedCount++;
+                    }
+                }
+
+                if (removedCount > 0)
+                {
+                    if (pInfo.Players.Count == 0)
+                    {
+                        removePartyList.Add(partyId); // string
+                    }
+                    else
+                    {
+                        partyInfoDict[partyId] = pInfo;
+                    }
+                    break;
+                }
+            }
+
+            foreach (string removeId in removePartyList)
+            {
+                if (partyInfoDict.ContainsKey(removeId))
+                {
+                    partyInfoDict.Remove(removeId);
+                }
+            }
+
+            PartyUI.SetActive(false);
+            foreach (Transform child in PartyListSpawnPoint.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        else
+        {
+            Debug.Log("파티 탈퇴 실패 혹은 이미 파티에 속해있지 않은 유저입니다.");
         }
     }
 
@@ -764,6 +1075,16 @@ public class TownManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        // 파티리더가 아니라면 UIPartyPopUp의 RemoveBtnObj를 비활성화
+        UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+        if (popup != null)
+        {
+            if (MyPlayer.PlayerId != data.Party.PartyLeaderId)
+                popup.RemoveBtnObj.SetActive(false);
+            else
+                popup.RemoveBtnObj.SetActive(true);
+        }
+
         // 새롭게 업데이트된 PartyInfo의 Players 리스트를 순회하여 UI 생성
         foreach (var playerStatus in data.Party.Players)
         {
@@ -787,6 +1108,8 @@ public class TownManager : MonoBehaviour
                 prefabToInstantiate = MemberStatusPrefab;
             }
 
+            prefabToInstantiate.GetComponent<PartyStatusMemberClick>().contextMenu = ContextMenuUI;
+
             // 프리팹 인스턴스 생성 후 PartyStatusSpawnPoint의 자식으로 추가
             GameObject statusObj = Instantiate(prefabToInstantiate, PartyStatusSpawnPoint.transform);
 
@@ -804,7 +1127,62 @@ public class TownManager : MonoBehaviour
     }
     // 던전 쪽 추후 추가 예정
     /* 여기까지 */
+    // 마켓 관련 패킷 추가 
+    public void MarketListResponse(S_MarketList data)
+    {
+        market.SetBuyData(data);
+    }
+    public void SellInMarketResponse(S_SellInMarket data)
+    {
+        
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+    }
+    public void BuyInMarketResponse(S_BuyInMarket data)
+    {
+        StartCoroutine("errorText");
+        Debug.Log(data);
+        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
 
+    }
+    public void MarketMyListResponse(S_MarketMyList data)
+    {
+        market.SetSellData(data);
+    }
+    public void MarketSelectBuyName(S_MarketSelectBuyName data)
+    {
+        market.SetSelectData(data);
+    }
+    public void MatchingNotification(S_MatchingNotification data)
+    {
+        if (data.IsStart)
+            MatchingWindow.SetActive(true);
+        else
+            MatchingWindow.SetActive(false);
+    }
+
+    public void MatchStop(S_MatchStopResponse data)
+    {
+        if (data.Stop)
+            MatchStopWindow.SetActive(true);
+    }
+
+    public void MatchResponse(S_MatchResponse data)
+    {
+        Debug.Log("매칭 완료 패킷 들어옴 " + data);
+
+        if (data.Success)
+        {
+            MatchingWindow.SetActive(false);
+            //MatchResultWindow.SetActive(true);
+            LoadingWindow.SetActive(true);
+
+            int dungeon = data.DungeonSession.PartyInfo.DungeonIndex;
+            LoadingWindow.GetComponentInChildren<Loading>().Index = dungeon;
+        }
+    }
+   
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
@@ -836,6 +1214,7 @@ public class TownManager : MonoBehaviour
 
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {
+        Debug.Log(playerInfo);
         Debug.Log(playerInfo.Class);
         string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player" + playerInfo.Class));
         Player playerPrefab = Resources.Load<Player>(playerResPath);
@@ -870,7 +1249,8 @@ public class TownManager : MonoBehaviour
     {
         UiRegister.gameObject.SetActive(false);
         uiChat.gameObject.SetActive(true);
-        uiAnimation.gameObject.SetActive(true);
+        uiAnimation.Init();
+        uiAnimation.Show();
     }
 
     public Player GetPlayerAvatarById(int playerId)

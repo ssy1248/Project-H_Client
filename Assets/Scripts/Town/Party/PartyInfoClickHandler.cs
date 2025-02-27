@@ -15,6 +15,8 @@ public class PartyInfoClickHandler : MonoBehaviour, IPointerClickHandler
             // 모든 자식(TextMeshProUGUI 컴포넌트 포함, 비활성화된 것도 포함)
             TextMeshProUGUI[] texts = gameObject.GetComponentsInChildren<TextMeshProUGUI>(true);
             TextMeshProUGUI partyIdText = null;
+
+            // "PartyId"라는 이름의 TextMeshProUGUI를 찾는다
             foreach (var txt in texts)
             {
                 if (txt.gameObject.name.Equals("PartyId"))
@@ -26,23 +28,19 @@ public class PartyInfoClickHandler : MonoBehaviour, IPointerClickHandler
 
             if (partyIdText != null)
             {
-                int parsedId;
-                if (int.TryParse(partyIdText.text, out parsedId))
+                // 문자열 형태로 PartyId를 가져온다
+                string partyIdString = partyIdText.text;
+
+                // UIPartyPopUp 찾아서 selectPartyId(문자열) 할당
+                UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
+                if (popup != null)
                 {
-                    UIPartyPopUp popup = FindObjectOfType<UIPartyPopUp>();
-                    if (popup != null)
-                    {
-                        popup.selectPartyId = parsedId;
-                        Debug.Log("Selected party id set to: " + parsedId);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("UIPartyPopUp 인스턴스를 찾을 수 없습니다.");
-                    }
+                    popup.selectPartyId = partyIdString;
+                    Debug.Log("Selected party id set to: " + partyIdString);
                 }
                 else
                 {
-                    Debug.LogWarning("PartyId 텍스트를 int로 변환할 수 없습니다: " + partyIdText.text);
+                    Debug.LogWarning("UIPartyPopUp 인스턴스를 찾을 수 없습니다.");
                 }
             }
             else

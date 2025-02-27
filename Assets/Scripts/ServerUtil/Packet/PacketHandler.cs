@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using UnityEngine.Events;
 using System.Diagnostics;
 using static UnityEngine.Rendering.DebugUI.Table;
 using UnityEngine;
@@ -39,7 +40,17 @@ class PacketHandler
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Move enterPacket) return;
-        TownManager.Instance.AllMove(enterPacket);
+        if (TownManager.Instance !=null)
+        {
+            TownManager.Instance.AllMove(enterPacket);
+            return;
+        }
+        if (DungeonManager.Instance != null)
+        {
+            DungeonManager.Instance.AllMove(enterPacket);
+            return;
+        }
+
     }
     public static void S_AnimationHandler(PacketSession session, IMessage packet)
     {
@@ -49,22 +60,35 @@ class PacketHandler
     public static void S_ChatHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Chat enterPacket) return;
+        TownManager.Instance.ChatResponse(enterPacket);
     }
     public static void S_BuyItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BuyItemResponse enterPacket) return;
     }
+    public static UnityAction<S_EquipItemResponse> S_EquipItemEvent;
     public static void S_EquipItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_EquipItemResponse enterPacket) return;
+        S_EquipItemEvent?.Invoke(enterPacket);
     }
+    public static UnityAction<S_DisrobeItemResponse> S_DisrobeItemEvent;
     public static void S_DisrobeItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_DisrobeItemResponse enterPacket) return;
+        S_DisrobeItemEvent?.Invoke(enterPacket);
     }
+    public static UnityAction<S_MoveItemResponse> S_MoveItemEvent;
+    public static void S_MoveItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MoveItemResponse enterPacket) return;
+        S_MoveItemEvent?.Invoke(enterPacket);
+    }
+    public static UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_ActiveItemResponse enterPacket) return;
+        S_ActiveItemEvent?.Invoke(enterPacket);
     }
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {
@@ -137,22 +161,106 @@ class PacketHandler
     public static void S_MarketMyListHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MarketMyList enterPacket) return;
+        TownManager.Instance.MarketMyListResponse(enterPacket);
     }
     public static void S_MarketListHandler(PacketSession session, IMessage packet)
     {
-        if (packet is not S_MarketMyList enterPacket) return;
+        if (packet is not S_MarketList enterPacket) return;
+        TownManager.Instance.MarketListResponse(enterPacket);
     }
     public static void S_SellInMarketHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_SellInMarket enterPacket) return;
+        TownManager.Instance.SellInMarketResponse(enterPacket);
     }
     public static void S_BuyInMarketHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BuyInMarket enterPacket) return;
+        TownManager.Instance.BuyInMarketResponse(enterPacket);
     }
+    public static UnityAction<S_InventoryResponse> S_InventoryEvent;
     public static void S_InventoryHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_InventoryResponse enterPacket) return;
+        S_InventoryEvent?.Invoke(enterPacket);
+    }
+    public static void S_MatchResponse(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchResponse enterPacket) return;
+        TownManager.Instance.MatchResponse(enterPacket);
+    }
+    public static void S_MatchStopResponse(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchStopResponse enterPacket) return;
+        TownManager.Instance.MatchStop(enterPacket);
+    }
+    public static void S_MatchingNotification(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MatchingNotification enterPacket) return;
+        TownManager.Instance.MatchingNotification(enterPacket);
+    }
+    public static void S_MarketSelectBuyNameHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MarketSelectBuyName enterPacket) return;
+        TownManager.Instance.MarketSelectBuyName(enterPacket);
+    }
+    public static void S_SellItemHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SellItemResponse enterPacket) return;
+        TownManager.Instance.SellItemResponse(enterPacket);
+    }
+    public static void S_ShopInventoryListHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_ShopInventoryList enterPacket) return;
+        TownManager.Instance.ShopInventoryList(enterPacket);
+    }
+    public static void S_EndAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_EndAuction enterPacket) return;
+        DungeonManager.Instance.EndAuctionResponse(enterPacket);
+    }
+    public static void S_EnterAuctionBidHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_EnterAuctionBid enterPacket) return;
+        DungeonManager.Instance.EnterAuctionBidResponse(enterPacket);
+    }
+    public static void S_FinalizeAllAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_FinalizeAllAuction enterPacket) return;
+        DungeonManager.Instance.FinalizeAllAuctionResponse(enterPacket);
+    }
+    public static void S_FinalizeBuyAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_FinalizeBuyAuction enterPacket) return;
+        DungeonManager.Instance.FinalizeBuyAuctionResponse(enterPacket);
+    }
+    public static void S_SetAuctionDataHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SetAuctionData enterPacket) return;
+        DungeonManager.Instance.SetAuctionDataResponse(enterPacket);
+    }
+    public static void S_WaitAuctionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_WaitAuction enterPacket) return;
+        DungeonManager.Instance.WaitAuctionResponse(enterPacket);
+    }
+    public static void S_DungeonSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DungeonSpawn enterPacket) return;
+        DungeonManager.Instance.DungeonSpawn(enterPacket);
+    }
+    public static void S_DungeonDeSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_DungeonDeSpawn enterPacket) return;
+        DungeonManager.Instance.DungeonDeSpawn(enterPacket);
+    }
+
+    public static void S_PlayerActionHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_PlayerAction enterPacket) return;
+        PlayerActionManager.Instance.PlayerActionHandler(enterPacket);
+    }
+
     }
     // 몬스터 관련.
     public static void S_MonsterSpawnHandler(PacketSession session, IMessage packet)

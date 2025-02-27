@@ -8,7 +8,7 @@ public class Slot : MonoBehaviour
     [SerializeField] bool isEquip = false;
     ItemInfo itemData;
 
-    void InitSlot(ItemInfo data)
+    public void InitSlot(ItemInfo data)
     {
         itemData = data;
         ToggleEquipEffect();
