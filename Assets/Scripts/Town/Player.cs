@@ -1,6 +1,7 @@
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
 using UnityEngine.SocialPlatforms;
 using System;
 
@@ -8,6 +9,8 @@ public class Player : MonoBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] private UINameChat uiNameChat;
+
+
 
     [Header("Movement Settings")]
     public float SmoothMoveSpeed = 10f; // 위치 보간 속도
@@ -33,11 +36,15 @@ public class Player : MonoBehaviour
 
     private Vector3 lastPos;
 
-    private float agentSpeed; 
+    private float agentSpeed;
 
 
+    private void Awake()
+    {
 
-    
+
+    }
+
     private void Start()
     {
         Avatar = GetComponent<Avatar>();
@@ -143,6 +150,8 @@ public class Player : MonoBehaviour
         goalPos = move;
         goalRot = rot;
         agentSpeed = speed;
+
+
         Debug.Log(goalPos);
     }
 

@@ -26,6 +26,9 @@ public class MyPlayer : MonoBehaviour
     {
         eSystem = TownManager.Instance.E_System;
         agent = GetComponent<NavMeshAgent>();
+        agent.avoidancePriority = 0;
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+
         animator = GetComponent<Animator>();
 
         InitializeCamera();

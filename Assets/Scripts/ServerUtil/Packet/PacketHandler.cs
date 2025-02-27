@@ -173,6 +173,29 @@ class PacketHandler
 
     }
 
+    public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MonsterHit monsterHitPacket) return;
+
+
+
+    }
+
+    public static void S_MonsterAttckHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MonsterAttck monsterAttckPacket) return;
+
+
+        MonsterManager.Instance.MonsterAttckAnimation(monsterAttckPacket);
+    }
+
+    public static void S_MonsterDieHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_MonsterDie monsterDiePacket) return;
+
+        MonsterManager.Instance.DeleteMonster(monsterDiePacket);
+    }
+
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {

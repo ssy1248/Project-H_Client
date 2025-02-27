@@ -90,6 +90,49 @@ public class MonsterManager : MonoBehaviour
 
     }
 
+    // 몬스터 애니메이션 업데이트
+    public void MonsterAttckAnimation(S_MonsterAttck monsterAttckPacket)
+    {
+        foreach (var mMonsterId in monsterAttckPacket.MonsterId)
+        {
+
+            if (monsterDict.ContainsKey(mMonsterId)){
+                Monster findMonster = monsterDict.GetValueOrDefault(mMonsterId);
+                if (findMonster != null)
+                {
+                    findMonster.switchAnimation(monsterAttckPacket.MonsterAinID);
+                }
+            }
+                        
+        }
+    }
+
+    // 몬스터 삭제
+    public void DeleteMonster(S_MonsterDie monsterDiePacket)
+    {
+        foreach (var mMonsterId in monsterDiePacket.MonsterId)
+        {
+
+            if (monsterDict.ContainsKey(mMonsterId))
+            {
+                Monster findMonster = monsterDict[mMonsterId];
+
+                // 오브젝트가 존재하면 삭제
+                if (findMonster != null)
+                {
+                    findMonster.switchAnimation(monsterDiePacket.MonsterAinID);
+
+                    GameObject.Destroy(findMonster.gameObject);
+
+
+                    // Dictionary에서도 제거
+                    monsterDict.Remove(mMonsterId);
+                }
+
+            }
+
+        }
+    }
 
 
     // 몬스터 업데이트 
@@ -107,16 +150,15 @@ public class MonsterManager : MonoBehaviour
     public void UpdateMonster(SyncMonsterTransformInfo transformInfo)
     {
         string id = transformInfo.MonsterId;
-
+        //Debug.Log($"[몬스터 업데이트] {transformInfo} ");
         // 이미 없다면 업데이트 X
         if (!monsterDict.ContainsKey(id))
         {
             Debug.Log($"[몬스터 업데이트] ID {id} 몬스터가 없습니다.");
-            return;
-        } else
-        {
             CreateMonster(transformInfo);
-        }
+            return;
+        } 
+
 
         // 존재하면 몬스터 업데이트 진행.
         Monster findMonster = monsterDict.GetValueOrDefault(id);

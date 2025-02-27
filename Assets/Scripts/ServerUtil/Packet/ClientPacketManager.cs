@@ -72,10 +72,16 @@ class PacketManager
         _handler.Add((ushort)MsgId.SBuyinmarket, PacketHandler.S_BuyInMarketHandler);
         _onRecv.Add((ushort)MsgId.SInventoryresponse, MakePacket<S_InventoryResponse>);
         _handler.Add((ushort)MsgId.SInventoryresponse, PacketHandler.S_InventoryHandler);
-        _onRecv.Add((ushort)MsgId.SMonsterSpawn, MakePacket<S_MonsterSpawn>);
-        _handler.Add((ushort)MsgId.SMonsterSpawn, PacketHandler.S_MonsterSpawnHandler);
-        _onRecv.Add((ushort)MsgId.SMonsterMove, MakePacket<S_MonsterMove>);
-        _handler.Add((ushort)MsgId.SMonsterMove, PacketHandler.S_MonsterMoveHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterspawn, MakePacket<S_MonsterSpawn>);
+        _handler.Add((ushort)MsgId.SMonsterspawn, PacketHandler.S_MonsterSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SMonstermove, MakePacket<S_MonsterMove>);
+        _handler.Add((ushort)MsgId.SMonstermove, PacketHandler.S_MonsterMoveHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterhit, MakePacket<S_MonsterHit>);
+        _handler.Add((ushort)MsgId.SMonsterhit, PacketHandler.S_MonsterHitHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterattck, MakePacket<S_MonsterAttck>);
+        _handler.Add((ushort)MsgId.SMonsterattck, PacketHandler.S_MonsterAttckHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterdie, MakePacket<S_MonsterDie>);
+        _handler.Add((ushort)MsgId.SMonsterdie, PacketHandler.S_MonsterDieHandler);
         Debug.Log("핸들러 등록 완료");
     }
 
