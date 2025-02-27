@@ -1,47 +1,39 @@
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrenadePool : MonoBehaviour
+public class Grenade : MonoBehaviour
 {
-    public GameObject grenadePrefab; // ¼ö·ùÅº ÇÁ¸®ÆÕ
-    public int poolSize = 10; // Ç® Å©±â
-    private List<GameObject> grenadePool; // Ç®À» ÀúÀåÇÒ ¸®½ºÆ®
+    public GameObject meshObject;
+    public GameObject effecObject;
+    public Rigidbody rigid;
+    private bool hasExploded = false;  // ì¤‘ë³µ í­ë°œ ë°©ì§€
 
-    private void Awake()
+    private void OnEnable()
     {
-        // Ç® ÃÊ±âÈ­
-        grenadePool = new List<GameObject>();
+        hasExploded = false;  // ë‹¤ì‹œ ë˜ì§ˆ ë•Œ ì´ˆê¸°í™”
+        meshObject.SetActive(true);
+        effecObject.SetActive(false);
+    }
 
-        // Ç®¿¡ ¼ö·ùÅºÀ» ¹Ì¸® »ı¼ºÇÏ¿© ÀúÀå
-        for (int i = 0; i < poolSize; i++)
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!hasExploded)  // ì´ë¯¸ í­ë°œí•œ ìƒíƒœê°€ ì•„ë‹ˆë©´ ì‹¤í–‰
         {
-            GameObject grenade = Instantiate(grenadePrefab);
-            grenade.SetActive(false); // Ã³À½¿¡´Â ºñÈ°¼ºÈ­
-            grenadePool.Add(grenade);
+            hasExploded = true;
+            StartCoroutine(Explosion());
         }
     }
 
-    // ºñÈ°¼ºÈ­µÈ ¼ö·ùÅºÀ» ¹İÈ¯ÇÏ°í »ç¿ëÇÏ´Â ÇÔ¼ö
-    public GameObject GetGrenade()
+    IEnumerator Explosion()
     {
-        foreach (var grenade in grenadePool)
-        {
-            if (!grenade.activeInHierarchy)
-            {
-                grenade.SetActive(true); // È°¼ºÈ­
-                return grenade;
-            }
-        }
+        yield return new WaitForSeconds(3f);  // ì¶©ëŒ í›„ 3ì´ˆ í›„ í­ë°œ
+        rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
+        meshObject.SetActive(false);
+        effecObject.SetActive(true);
 
-        // ¸¸¾à ºñÈ°¼ºÈ­µÈ ¼ö·ùÅºÀÌ ¾ø´Ù¸é »õ·Î »ı¼º
-        GameObject newGrenade = Instantiate(grenadePrefab);
-        grenadePool.Add(newGrenade);
-        return newGrenade;
-    }
-
-    // »ç¿ëÀÌ ³¡³­ ¼ö·ùÅºÀ» Ç®¿¡ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
-    public void ReturnGrenade(GameObject grenade)
-    {
-        grenade.SetActive(false); // ºñÈ°¼ºÈ­
+        yield return new WaitForSeconds(1f);
+        gameObject.SetActive(false);
     }
 }

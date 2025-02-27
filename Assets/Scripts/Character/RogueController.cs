@@ -1,93 +1,81 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RogueController : MonoBehaviour
+public class RogueController : PlayerController
 {
-    private PlayerController playerController;
-    public GameObject grenadePoolObject;  // ¼ö·ùÅº Ç® ¿ÀºêÁ§Æ® ÂüÁ¶
-    private float throwForce = 15f;  // ¼ö·ùÅºÀÇ ´øÁö´Â Èû
-    private float backflipForce = 5f;  // ¹éÇÃ¸³ÀÇ Èû
+    public GameObject grenadePoolObject;  // ìˆ˜ë¥˜íƒ„ í’€ (ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸)
+    private List<GameObject> grenadePool = new List<GameObject>();
+    private bool GDOWN;
 
-    private int damage = 50;  // µ¥¹ÌÁö °ª (¿¹½Ã)
-
-    Animator anim;
-    Rigidbody rigid;
-    private bool isFlipping = false;
-
-    private Queue<GameObject> grenadePool = new Queue<GameObject>();  // ¼ö·ùÅº Ç®
-
-    private void Awake()
+    private void Start()
     {
-        anim = GetComponent<Animator>();
-        rigid = GetComponent<Rigidbody>();
-        playerController = GetComponent<PlayerController>();
-        InitializeGrenadePool();  // Ç® ¿ÀºêÁ§Æ®·ÎºÎÅÍ ¼ö·ùÅºµéÀ» ÃÊ±âÈ­
+        // ìˆ˜ë¥˜íƒ„ í’€ì—ì„œ ë¯¸ë¦¬ ìƒì„±ëœ ìˆ˜ë¥˜íƒ„ì„ ê°€ì ¸ì˜¤ê¸°
+        foreach (Transform child in grenadePoolObject.transform)
+        {
+            grenadePool.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !isFlipping)
+        GetInput();
+        Grenade();
+    }
+
+    void GetInput()
+    {
+        GDOWN = Input.GetButtonDown("Skill1");  // Q í‚¤ ì…ë ¥ ê°ì§€
+    }
+
+    void Grenade()
+    {
+        if (grenadePool.Count == 0)  // ë‚¨ì€ ìˆ˜ë¥˜íƒ„ì´ ì—†ìœ¼ë©´ ë°˜í™˜
         {
-            StartCoroutine(ExecuteBackflipAndThrow());
+            Debug.Log("ìˆ˜ë¥˜íƒ„ì´ ë¶€ì¡±í•˜ì—¬ ë˜ì§ˆ ìˆ˜ ì—†ìŒ!");
+            return;
+        }
+
+        if (GDOWN && !isDodge && !isMove)
+        {
+            Debug.Log("ìˆ˜ë¥˜íƒ„ ë˜ì§€ê¸° ì‹¤í–‰!");
+            ThrowGrenade();
         }
     }
 
-    private IEnumerator ExecuteBackflipAndThrow()
+    void ThrowGrenade()
     {
-        isFlipping = true;
-        anim.SetTrigger("doBackflip");
-        playerController.isMove = false;
+        // í’€ì—ì„œ ë¹„í™œì„±í™”ëœ ìˆ˜ë¥˜íƒ„ ì°¾ê¸°
+        GameObject grenade = null;
+        foreach (var g in grenadePool)
+        {
+            if (!g.activeInHierarchy)  // ë¹„í™œì„±í™”ëœ ì˜¤ë¸Œì íŠ¸ ì°¾ê¸°
+            {
+                grenade = g;
+                break;
+            }
+        }
 
-        // ¹éÇÃ¸³ ÈÄ µÚ·Î ³¯¾Æ°¡´Â Èû Ãß°¡
-        rigid.AddForce(Vector3.up * backflipForce + -transform.forward * 5f, ForceMode.Impulse);
+        if (grenade == null)
+        {
+            Debug.Log("ì‚¬ìš© ê°€ëŠ¥í•œ ìˆ˜ë¥˜íƒ„ ì—†ìŒ!");
+            return;
+        }
 
-        yield return new WaitForSeconds(0.2f); // ¹éÇÃ¸³ ½ÃÀÛ ÈÄ ¾à°£ÀÇ µô·¹ÀÌ ÈÄ ÅõÃ´
-        ThrowGrenade();
+        Debug.Log($"ìˆ˜ë¥˜íƒ„ ë˜ì§: {grenade.name}");
 
-        yield return new WaitForSeconds(0.8f); // ¹éÇÃ¸³ ¾Ö´Ï¸ŞÀÌ¼Ç ½Ã°£ ´ë±â
-        isFlipping = false;
-    }
-
-    private void ThrowGrenade()
-    {
-        // ¼ö·ùÅºÀ» Ç®¿¡¼­ °¡Á®¿È
-        GameObject grenade = GetGrenadeFromPool();
-        grenade.transform.position = transform.position + transform.forward * 2f + Vector3.up * 0.5f;
-        grenade.transform.rotation = transform.rotation;
+        // ìˆ˜ë¥˜íƒ„ì„ í”Œë ˆì´ì–´ ìœ„ì¹˜ì—ì„œ ìƒì„±
+        grenade.transform.position = transform.position + Vector3.up * 1f;
+        grenade.transform.rotation = Quaternion.identity;
+        grenade.SetActive(true); // í™œì„±í™”
 
         Rigidbody grenadeRb = grenade.GetComponent<Rigidbody>();
+        grenadeRb.velocity = Vector3.zero;
+        grenadeRb.angularVelocity = Vector3.zero;
 
-        // ¼ö·ùÅºÀÌ Æ÷¹°¼±À¸·Î ³¯¾Æ°¡°Ô ÇÏ±â À§ÇØ »ó¹æÇâ°ú ¾Õ¹æÇâ¿¡ ÈûÀ» ÁÜ
-        Vector3 throwDirection = (transform.forward + Vector3.up * 0.5f).normalized;  // ´øÁú ¹æÇâ (¾Õ + À§)
-        grenadeRb.velocity = throwDirection * throwForce;
-
-        // ¼ö·ùÅºÀÌ ´øÁ®Áø ÈÄ 1.5ÃÊ ÈÄ¿¡ ÀÚµ¿À¸·Î Æø¹ß
-    }
-
-    private void InitializeGrenadePool()
-    {
-        // ¼ö·ùÅº Ç® ¿ÀºêÁ§Æ® ¾ÈÀÇ ¼ö·ùÅºµéÀ» Ã£¾Æ¼­ ºñÈ°¼ºÈ­ÇÑ µÚ Å¥¿¡ Ãß°¡
-        foreach (Transform child in grenadePoolObject.transform)
-        {
-            GameObject grenade = child.gameObject;
-            grenade.SetActive(false);  // Ç® ¿ÀºêÁ§Æ®¿¡ ÀÖ´Â ¼ö·ùÅºÀ» ºñÈ°¼ºÈ­
-            grenadePool.Enqueue(grenade);  // ºñÈ°¼ºÈ­µÈ ¼ö·ùÅºÀ» Ç®¿¡ Ãß°¡
-        }
-    }
-
-    private GameObject GetGrenadeFromPool()
-    {
-        // Ç®¿¡¼­ ºñÈ°¼ºÈ­µÈ ¼ö·ùÅºÀ» °¡Á®¿È
-        if (grenadePool.Count > 0)
-        {
-            GameObject grenade = grenadePool.Dequeue();  // Å¥¿¡¼­ ÇÏ³ª¸¦ ²¨³¿
-            grenade.SetActive(true);  // È°¼ºÈ­
-            return grenade;
-        }
-
-        // Ç®¿¡ ¼ö·ùÅºÀÌ ¾øÀ¸¸é °æ°í ¸Ş½ÃÁö Ãâ·Â
-        Debug.LogWarning("Grenade pool is empty!");
-        return null;  // ¼ö·ùÅºÀÌ ¾øÀ¸¸é null ¹İÈ¯ (ÀÌ °æ¿ì Ãß°¡ ·ÎÁ÷À» ³ÖÀ» ¼ö ÀÖÀ½)
+        // ë˜ì§ˆ ë°©í–¥ ì„¤ì • (ì• + ìœ„)
+        Vector3 throwDirection = (transform.forward * 1.0f + Vector3.up * 0.5f).normalized;
+        grenadeRb.velocity = throwDirection * 15f;
     }
 }

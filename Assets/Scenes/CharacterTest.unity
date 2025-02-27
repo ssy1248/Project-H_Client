@@ -1288,6 +1288,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 589722271}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &268116693 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2719195294845082790, guid: d1768a265f2871a44a1a041e76be4be7,
+    type: 3}
+  m_PrefabInstance: {fileID: 5199706889468644955}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &300086387
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1829,8 +1835,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8588462082483426788, guid: aa30b66758eb3af478d9422f37241bcf,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 432847464}
   m_SourcePrefab: {fileID: 100100000, guid: aa30b66758eb3af478d9422f37241bcf, type: 3}
+--- !u!1 &432847456 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8588462082483426788, guid: aa30b66758eb3af478d9422f37241bcf,
+    type: 3}
+  m_PrefabInstance: {fileID: 416642741}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &432847464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432847456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b6464d31900dd4588ff635fba0623f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportEffects: []
+  dodgeEffectsArcher: []
+  dodgeEffectsRogue: []
+  moveSpeed: 10
+  maxHealth: 100
+  currentHealth: 0
+  AttackRate: 0.5
+  isMove: 0
+  grenadePoolObject: {fileID: 1626698915}
 --- !u!1 &461734497 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4013579338162578565, guid: be094d723ea47d143986ef581f82cf58,
@@ -5730,6 +5767,38 @@ Transform:
   - {fileID: 1741710341}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1626698915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1626698916}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1626698916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626698915}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 268116693}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1635573494 stripped
 BoxCollider:
   m_CorrespondingSourceObject: {fileID: 8638025419221830365, guid: f31da5d7e3e780447903401fbf00ded6,
@@ -6335,6 +6404,125 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 903498891}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1796484808 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8071033197443254324, guid: d1768a265f2871a44a1a041e76be4be7,
+    type: 3}
+  m_PrefabInstance: {fileID: 5199706889468644955}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &1796484812
+TrailRenderer:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796484808}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Time: 3
+  m_PreviewTimeScale: 1
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 0, g: 0.6981132, b: 0.1672028, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 0.30980393}
+      key2: {r: 1, g: 1, b: 1, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 44718
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 48573
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MinVertexDistance: 0.1
+  m_MaskInteraction: 0
+  m_Autodestruct: 0
+  m_Emitting: 1
+  m_ApplyActiveColorSpace: 1
 --- !u!4 &1828950687 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8324274735479345935, guid: a5c5952bcdb610d42ac5250757327dcc,
@@ -8040,7 +8228,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1626698916}
     m_Modifications:
     - target: {fileID: 2719195294845082790, guid: d1768a265f2871a44a1a041e76be4be7,
         type: 3}
@@ -8065,17 +8253,17 @@ PrefabInstance:
     - target: {fileID: 2719195294845082790, guid: d1768a265f2871a44a1a041e76be4be7,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2719195294845082790, guid: d1768a265f2871a44a1a041e76be4be7,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2719195294845082790, guid: d1768a265f2871a44a1a041e76be4be7,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2719195294845082790, guid: d1768a265f2871a44a1a041e76be4be7,
         type: 3}
@@ -8097,10 +8285,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rogue_Bomb
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3384267215730099740, guid: d1768a265f2871a44a1a041e76be4be7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 9062857872129659281, guid: d1768a265f2871a44a1a041e76be4be7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8071033197443254324, guid: d1768a265f2871a44a1a041e76be4be7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1796484812}
   m_SourcePrefab: {fileID: 100100000, guid: d1768a265f2871a44a1a041e76be4be7, type: 3}
 --- !u!1001 &5633104036829367375
 PrefabInstance:
@@ -8289,6 +8487,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   AttackRate: 0.5
+  isMove: 0
   meteorPrefab: {fileID: 1186240544273883083, guid: 11218b99cf09bc9458011b4af5c27256,
     type: 3}
   explosionPrefab: {fileID: 448162269932703216, guid: e664c9a93a017304f8796b4764711596,
@@ -8319,4 +8518,4 @@ SceneRoots:
   - {fileID: 87092024}
   - {fileID: 416642741}
   - {fileID: 1568545494}
-  - {fileID: 5199706889468644955}
+  - {fileID: 1626698916}
