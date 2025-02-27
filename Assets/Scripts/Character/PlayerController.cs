@@ -21,14 +21,14 @@ public class PlayerController : MonoBehaviour
 
     public int maxHealth = 100;
     public int currentHealth;
+    public float AttackRate = 0.5f;
 
-    public float speed;
     float hAxis;
     float vAxis;
     bool DDown;
     bool FDown;
 
-    protected bool isMove = false;
+    public bool isMove = false;
     protected bool isDodge;
     protected bool isFireReady = true;
     bool isBorder1;
@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
         if (DDown && !isDodge)
         {
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward; // 이동 중이면 이동 방향 사용
-            speed *= 2;
+            moveSpeed *= 2;
             anim.SetTrigger("doDodge");
             isDodge = true;
 
@@ -310,7 +310,7 @@ public class PlayerController : MonoBehaviour
 
     void DodgeOut()
     {
-        speed = 10f;
+        moveSpeed = 10f;
         isDodge = false;
     }
 
@@ -321,7 +321,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         fireDelay += Time.deltaTime;
-        isFireReady = equipWeapon.attackRate < fireDelay;
+        isFireReady = AttackRate * equipWeapon.attackRate < fireDelay;
 
         if (FDown && isFireReady && !isDodge)
         {
