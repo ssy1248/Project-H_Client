@@ -79,9 +79,11 @@ class PacketHandler
         if (packet is not S_MoveItemResponse enterPacket) return;
         S_MoveItemEvent?.Invoke(enterPacket);
     }
+    public static UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_ActiveItemResponse enterPacket) return;
+        S_ActiveItemEvent?.Invoke(enterPacket);
     }
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {

@@ -14,6 +14,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         WAREHOUSE = 3,
     }
     public Image itemImage;
+    public TMPro.TextMeshProUGUI quantityText;
     public UnityAction<PointerEventData, InventorySlot> onPointerEnterAction, onRightClickAction, onPointerUpAction, onBeginDragAction, onDragAction, onEndDragAction;
     public UnityAction<PointerEventData> onPointerExitAction;
     protected SlotType _type;
@@ -59,17 +60,14 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         // 슬롯 데이터 초기화
         _data = data;
         _data.Position = index;
+        if(!_data.Stackable){
+            quantityText.text = "";
+        }else{
+            quantityText.text = _data.Quantity.ToString();
+        }
         // 슬롯에 아이콘 갱신
         itemImage.sprite = ItemManager.instance.GetItemImg(_data.Imgsrc);
         itemImage.color = new UnityEngine.Color(1, 1, 1, 1);
-    }
-
-    private void Equip(ItemInfo item)
-    {
-        // unequip
-
-        // equip
-        item.Equiped = true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
