@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,17 +42,94 @@ public class PlayerActionManager : MonoBehaviour
             // 회피
             if (Input.GetKeyDown(KeyCode.Space))
             {
-
+                DodgeRequest();
             }
         }
     }
 
     public void PlayerActionHandler(S_PlayerAction action)
     {
-        if(action.Success)
+        // 전체적인 성공 여부와 메시지를 먼저 처리
+        if (!action.Success)
         {
-
+            Debug.Log("플레이어 액션 실패: " + action.Message);
+            return;
         }
+
+        // oneof 케이스에 따라 분기 처리
+        switch (action.ActionCase)
+        {
+            case S_PlayerAction.ActionOneofCase.NormalAttackResult:
+                ProcessNormalAttackResult(action.NormalAttackResult);
+                break;
+            case S_PlayerAction.ActionOneofCase.SkillAttackResult:
+                ProcessSkillAttackResult(action.SkillAttackResult);
+                break;
+            case S_PlayerAction.ActionOneofCase.DodgeResult:
+                ProcessDodgeResult(action.DodgeResult);
+                break;
+            case S_PlayerAction.ActionOneofCase.HitResult:
+                ProcessHitResult(action.HitResult);
+                break;
+            default:
+                Debug.LogWarning("알 수 없는 플레이어 액션이 도착했습니다.");
+                break;
+        }
+    }
+
+    // 회피 액션이 들어오면 처리할 핸들러
+    private void ProcessDodgeResult(DodgeResult result)
+    {
+        Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, 남은 쿨타임={result.Cooldown}");
+        // 여기서 UI 업데이트나 게임 로직에 반영
+    }
+
+    // 피격 액션이 들어오면 처리할 핸들러
+    private void ProcessHitResult(HitResult result)
+    {
+        Debug.Log($"피격 결과: 받은 피해량={result.DamageReceived}, 남은 HP={result.CurrentHp}");
+        // 여기서 UI 업데이트나 게임 로직에 반영
+    }
+
+    // 스킬 액션이 들어오면 처리할 핸들러
+    private void ProcessSkillAttackResult(SkillAttackResult result)
+    {
+        Debug.Log($"스킬 공격 결과: 스킬ID={result.SkillId}, 대상ID={result.TargetId}, 피해량={result.DamageDealt}");
+        // 여기서 UI 업데이트나 게임 로직에 반영
+    }
+
+    // 일반 공격 액션이 들어오면 처리할 핸들러
+    private void ProcessNormalAttackResult(NormalAttackResult result)
+    {
+        Debug.Log($"일반 공격 결과: 대상ID={result.TargetId}, 피해량={result.DamageDealt}");
+        // 여기서 UI 업데이트나 게임 로직에 반영
+        PlayerTest localPlayer = GameObject.FindAnyObjectByType<PlayerTest>();
+        if (localPlayer != null)
+        {
+            localPlayer.Attack();
+        }
+        else
+        {
+            Debug.LogWarning("로컬 플레이어 스크립트를 찾을 수 없습니다.");
+        }
+    }
+
+    void DodgeRequest()
+    {
+        // 바라보는 방향도 보내줘야할듯?
+        // 회피 거리를 보내는 것이 아닌 바라보는 방향으로 사용해야할듯
+        DodgeAction dodgeAction = new DodgeAction
+        {
+            AttackerName = DungeonManager.Instance.MyPlayer.nickname,
+            DodgeDistance = 5,
+        };
+
+        C_PlayerAction actionPacket = new C_PlayerAction
+        {
+            DodgeAction = dodgeAction,
+        };
+
+        GameManager.Network.Send(actionPacket);
     }
 
     void SkillAttackRequest()
