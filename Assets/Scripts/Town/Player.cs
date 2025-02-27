@@ -14,8 +14,6 @@ public class Player : MonoBehaviour
     public float SmoothRotateSpeed = 10f; // 회전 보간 속도
     public float TeleportDistanceThreshold = 10f; // 순간 이동 거리 임계값 (0.5)
 
-
-
     public Avatar Avatar { get; private set; }
     public MyPlayer MPlayer { get; private set; }
 
@@ -35,9 +33,6 @@ public class Player : MonoBehaviour
 
     private float agentSpeed; 
 
-
-
-    
     private void Start()
     {
         Avatar = GetComponent<Avatar>();
@@ -97,11 +92,8 @@ public class Player : MonoBehaviour
         RotateSmoothly();
     }
 
-    
-
     private void MoveSmoothly()
     {
-
         // 목표 위치까지 부드럽게 이동
         transform.position = Vector3.MoveTowards(transform.position, goalPos, agentSpeed * Time.deltaTime);
         Debug.Log(transform.position);
@@ -115,7 +107,6 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, goalRot, t);
         }
     }
-
 
     public void SendMessage(string msg)
     {
@@ -146,8 +137,6 @@ public class Player : MonoBehaviour
         Debug.Log(goalPos);
     }
 
-  
-
     public void PlayAnimation(int animCode)
     {
         animator?.SetTrigger("Anim"+animCode);
@@ -159,4 +148,5 @@ public class Player : MonoBehaviour
         animator.SetFloat(Constants.TownPlayerMove, dist * 100);
         lastPos = transform.position;
     }
+
 }

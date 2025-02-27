@@ -115,21 +115,19 @@ public class PlayerTest : MonoBehaviour
 
             if (Input.GetMouseButton(1))
             {
+                CheckMove();
                 RaycastHit hit;
                 if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
                 {
                     setDestination(hit.point);
+                    Mousemove();
                 }
             }
-
-            //Attack();
-            Mousemove();
         }
         else
         {
             // 원격 플레이어는 부드러운 보간 처리
             SmoothMoveAndRotate();
-            CheckMove();
         }
     }
 
@@ -157,6 +155,7 @@ public class PlayerTest : MonoBehaviour
 
     void Mousemove()
     {
+        Debug.Log("마우스 무브 들어옴");
         if (isMove)
         {
             Vector3 dir = new Vector3(moveVec.x, transform.position.y, moveVec.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -164,6 +163,7 @@ public class PlayerTest : MonoBehaviour
                 transform.forward = dir.normalized;
             transform.position += dir.normalized * Time.deltaTime * moveSpeed;
             anim.SetBool("isRun", true);
+            Debug.Log($"isRun : {anim.GetBool("isRun")}");
         }
         else
         {
@@ -311,17 +311,12 @@ public class PlayerTest : MonoBehaviour
         }
     }
 
-    public void Move(Vector3 move, Quaternion rot, float speed)
-    {
-        goalPos = move;
-        goalRot = rot;
-        agentSpeed = speed;
-    }
-
+    // 이부분이 실질적인 플레이어 이동
     private void CheckMove()
     {
+        Debug.Log("체크무브 들어옴");
         float dist = Vector3.Distance(lastPos, transform.position);
-        anim.SetFloat("MoveSpeed", dist * 100);
+        anim.SetBool("isRun", true);
         lastPos = transform.position;
     }
     #endregion
