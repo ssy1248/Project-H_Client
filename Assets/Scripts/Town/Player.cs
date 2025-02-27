@@ -135,6 +135,7 @@ public class Player : MonoBehaviour
         goalRot = rot;
         agentSpeed = speed;
         Debug.Log(goalPos);
+        animator.SetBool("isRun", true);
     }
 
     public void PlayAnimation(int animCode)

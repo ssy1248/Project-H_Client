@@ -17,7 +17,7 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         //canRotate = Input.GetMouseButton(1);
-        UpdateCameraRotation();
+        //UpdateCameraRotation();
     }
 
     private void UpdateCameraRotation()
