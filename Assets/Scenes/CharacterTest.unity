@@ -1765,6 +1765,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rogue
       objectReference: {fileID: 0}
+    - target: {fileID: 8588462082483426788, guid: aa30b66758eb3af478d9422f37241bcf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5110,6 +5115,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 352249174259344374, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 352249174259344374, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 352249174259344374, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 352249174259344374, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2736082249205084631, guid: 3317f3600836fa84f9b9bd90951e0dc9,
         type: 3}
       propertyPath: dodgeEffectsArcher.Array.data[0]
@@ -5135,6 +5160,26 @@ PrefabInstance:
       propertyPath: arrowPoolObject
       value: 
       objectReference: {fileID: 1867197700}
+    - target: {fileID: 5055586408604120980, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055586408604120980, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055586408604120980, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055586408604120980, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7018606411016115333, guid: 3317f3600836fa84f9b9bd90951e0dc9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5189,6 +5234,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Archer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8126715550554907011, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8930077352649381635, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8930077352649381635, guid: 3317f3600836fa84f9b9bd90951e0dc9,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
