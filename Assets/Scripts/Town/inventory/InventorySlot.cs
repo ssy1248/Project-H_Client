@@ -70,14 +70,6 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         itemImage.color = new UnityEngine.Color(1, 1, 1, 1);
     }
 
-    private void Equip(ItemInfo item)
-    {
-        // unequip
-
-        // equip
-        item.Equiped = true;
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_data != null)

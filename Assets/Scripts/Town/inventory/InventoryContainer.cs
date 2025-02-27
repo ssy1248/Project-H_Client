@@ -286,13 +286,14 @@ public class InventoryContainer : MonoBehaviour
             return;
         }
         var item = slot.data;
-        
+
         // 아이템 효과 적용
         ItemManager.instance.ActiveItemHandler(item.ItemId, data);
         // 아이템 제거
         if (item.Quantity > 1)
         {
             item.Quantity -= 1;
+            slot.SetItem(item);
         }
         else
         {
