@@ -88,7 +88,7 @@ public class TownManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        
         InitializePlayerDatabase();
     }
 

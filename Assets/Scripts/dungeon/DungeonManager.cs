@@ -1,15 +1,21 @@
+using Cinemachine;
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class DungeonManager : MonoBehaviour
 {
     private static DungeonManager _instance;
     public static DungeonManager Instance => _instance;
-
+    [SerializeField] private CinemachineFreeLook freeLook;
+    [SerializeField] private EventSystem eSystem;
+    public EventSystem E_System => eSystem;
+    public CinemachineFreeLook FreeLook => freeLook;
 
     // 파티 데이터 
     private Dictionary<string, PartyInfo> partyInfoDict = new Dictionary<string, PartyInfo>();
@@ -35,10 +41,10 @@ public class DungeonManager : MonoBehaviour
 
     private void Awake()
     {
+        DungeonEnter();
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -69,13 +75,28 @@ public class DungeonManager : MonoBehaviour
     }
     public void DungeonExit()
     {
-        var Packet = new C_DungeonExit
+       SceneManager.LoadScene("Town");
+       var Packet = new C_DungeonExit
         {
 
         };
         GameManager.Network.Send(Packet);
     }
+    public void Move(Vector3 pos, float rotation)
+    {
+        var movePacket = new C_Move
+        {
+            Transform = new TransformInfo
+            {
+                PosX = pos.x,
+                PosY = pos.y,
+                PosZ = pos.z,
+                Rot = rotation
+            }
+        };
 
+        GameManager.Network.Send(movePacket);
+    }
     // 서버에서 받기 
     public void FinalizeBuyAuctionResponse(S_FinalizeBuyAuction data)
     {
@@ -116,6 +137,42 @@ public class DungeonManager : MonoBehaviour
         }
         
     }
+    public void AllMove(S_Move data)
+    {
+        // 받은 배열 만큼 반복문을 돌려야함
+        // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
+        foreach (var syncTransformInfo in data.TransformInfos)
+        {
+            // 플레이어 ID
+            int playerId = syncTransformInfo.PlayerId;
+
+            // 트랜스폼 정보 (위치 회전)
+            TransformInfo transformInfo = syncTransformInfo.Transform;
+            Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
+            Quaternion targetRot = Quaternion.Euler(0, transformInfo.Rot, 0);
+
+            // 스피드
+            float speed = syncTransformInfo.Speed;
+
+
+            // 플레이어가 존재하는지 검증.
+            Player player = GetPlayerAvatarById(playerId);
+            if (player == null)
+            {
+                continue;
+            }
+
+            // 플레이어가 본인인지 검증.
+            if (MyPlayer.PlayerId == playerId)
+            {
+                continue;
+            }
+
+
+            // 플레이어에게 이동 정보를 넘긴다.
+            player.Move(targetPos, targetRot, speed);
+        }
+    }
     public void DungeonDeSpawn(S_DungeonDeSpawn data)
     {
 
@@ -129,7 +186,9 @@ public class DungeonManager : MonoBehaviour
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
-
+            FreeLook.LookAt = MyPlayer.gameObject.transform;
+            FreeLook.Follow = MyPlayer.gameObject.transform;
+            FreeLook.gameObject.SetActive(true);
             return;
         }
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
@@ -166,5 +225,10 @@ public class DungeonManager : MonoBehaviour
     {
         //var monster = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
         return new Monster();
+    }
+
+    public Player GetPlayerAvatarById(int playerId)
+    {
+        return playerList.TryGetValue(playerId, out var player) ? player : null;
     }
 }
