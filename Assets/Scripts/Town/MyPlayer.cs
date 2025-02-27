@@ -6,6 +6,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using Cinemachine;
 
 public class MyPlayer : MonoBehaviour
 {
@@ -24,7 +25,14 @@ public class MyPlayer : MonoBehaviour
 
     void Awake()
     {
-        eSystem = TownManager.Instance.E_System;
+        if (TownManager.Instance != null)
+        {
+            eSystem = TownManager.Instance.E_System;
+        }
+        if (DungeonManager.Instance != null)
+        {
+            eSystem = DungeonManager.Instance.E_System;
+        }
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
@@ -44,7 +52,16 @@ public class MyPlayer : MonoBehaviour
 
     private void InitializeCamera()
     {
-        var freeLook = TownManager.Instance.FreeLook;
+        CinemachineFreeLook freeLook =null;
+
+        if (TownManager.Instance != null)
+        {
+             freeLook = TownManager.Instance.FreeLook;
+        }
+        if (DungeonManager.Instance != null)
+        {
+             freeLook = DungeonManager.Instance.FreeLook;
+        }
         freeLook.Follow = transform;
         freeLook.LookAt = transform;
         freeLook.gameObject.SetActive(true);

@@ -56,8 +56,8 @@ public class Loading : MonoBehaviour
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             gameObject.SetActive(false);
-            SceneManager.LoadScene("Dungeon " + index);
-            DungeonManager.Instance.DungeonEnter();
+            SceneManager.LoadSceneAsync("Dungeon " + index);
+
         }
     }
 }
