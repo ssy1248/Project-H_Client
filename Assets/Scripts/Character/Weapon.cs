@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
     public enum Type { Melee, Range };
     public Type type;
     public int damage;
-    public float attackRate;
+    public float attackRate = 1;
     public BoxCollider meleeArea;
     public TrailRenderer trailEffect;
     public Transform ArrowPos;
