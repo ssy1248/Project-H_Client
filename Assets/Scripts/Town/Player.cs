@@ -222,7 +222,7 @@ public class Player : MonoBehaviour
             Invoke("DodgeOut", 0.4f);
         }
     }
-
+     
     void DodgeOut()
     {
         speed = 10f;
