@@ -270,7 +270,34 @@ public class Monster : MonoBehaviour
         } else if(id == "Die")
         {
             animator.SetTrigger(Constants.MonsterDie);
+            StartCoroutine(WaitForAnimationEnd("Die"));
         }
 
+    }
+
+    private IEnumerator WaitForAnimationEnd(string stateName)
+    {
+        yield return new WaitForEndOfFrame(); // 한 프레임 대기 (애니메이션이 시작되도록)
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        //// 애니메이션이 끝날 때까지 대기
+        //while (!(stateInfo.IsName(stateName) && (stateInfo.normalizedTime % 1) >= 0.90f))
+        //{
+        //    //Debug.Log($" 현재 애니메이션: {stateInfo.fullPathHash}, 목표: {stateName}, 진행도: {stateInfo.normalizedTime}");
+        //    yield return null;
+        //    stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 상태 정보 업데이트
+        //}
+
+        yield return new WaitForSeconds(2f); // 애니메이션이 완전히 종료된 후 잠시 대기
+
+        // 애니메이션 종료 후 실행할 동작
+        OnMonsterDeath();
+    }
+
+    private void OnMonsterDeath()
+    {
+        //if (this == null) return; // 이미 삭제된 경우 실행 안 함
+        Destroy(gameObject);
     }
 }

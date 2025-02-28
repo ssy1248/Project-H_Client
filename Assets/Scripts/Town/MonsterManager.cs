@@ -122,8 +122,7 @@ public class MonsterManager : MonoBehaviour
                 {
                     findMonster.switchAnimation(monsterDiePacket.MonsterAinID);
 
-                    GameObject.Destroy(findMonster.gameObject);
-
+                    // GameObject.Destroy(findMonster.gameObject);
 
                     // Dictionary에서도 제거
                     monsterDict.Remove(mMonsterId);
