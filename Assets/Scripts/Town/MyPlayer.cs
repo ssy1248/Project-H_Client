@@ -79,7 +79,7 @@ public class MyPlayer : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetMouseButtonDown(0) && !eSystem.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(1) && !eSystem.IsPointerOverGameObject())
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit))
             {
