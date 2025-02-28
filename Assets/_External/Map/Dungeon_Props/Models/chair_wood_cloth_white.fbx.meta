@@ -1,29 +1,71 @@
 fileFormatVersion: 2
 guid: a0961037a80d5485a9e79224cc9c4f52
 ModelImporter:
-  serializedVersion: 22
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: cloth
-    100004: cloth.001
-    400000: //RootNode
-    400002: cloth
-    400004: cloth.001
-    2100000: entourage_set_01_atlas
-    2100002: entourage_set_01_atlas_transp
-    2100004: entourage_set_01_atlas.001
-    2100006: entourage_set_01_atlas_transp.001
-    2300000: //RootNode
-    2300002: cloth
-    2300004: cloth.001
-    3300000: //RootNode
-    3300002: cloth
-    3300004: cloth.001
-    4300000: chair_wood_cloth_white
-    4300002: cloth
-    4300004: chair_stone_cloth_white
-    4300006: cloth.001
-    9500000: //RootNode
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: cloth
+  - first:
+      1: 100004
+    second: cloth.001
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: cloth
+  - first:
+      4: 400004
+    second: cloth.001
+  - first:
+      21: 2100000
+    second: entourage_set_01_atlas
+  - first:
+      21: 2100002
+    second: entourage_set_01_atlas_transp
+  - first:
+      21: 2100004
+    second: entourage_set_01_atlas.001
+  - first:
+      21: 2100006
+    second: entourage_set_01_atlas_transp.001
+  - first:
+      23: 2300000
+    second: //RootNode
+  - first:
+      23: 2300002
+    second: cloth
+  - first:
+      23: 2300004
+    second: cloth.001
+  - first:
+      33: 3300000
+    second: //RootNode
+  - first:
+      33: 3300002
+    second: cloth
+  - first:
+      33: 3300004
+    second: cloth.001
+  - first:
+      43: 4300000
+    second: chair_wood_cloth_white
+  - first:
+      43: 4300002
+    second: cloth
+  - first:
+      43: 4300004
+    second: chair_stone_cloth_white
+  - first:
+      43: 4300006
+    second: cloth.001
+  - first:
+      95: 9500000
+    second: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -36,7 +78,7 @@ ModelImporter:
       name: entourage_set_01_atlas_transp
     second: {fileID: 2100000, guid: dfc3aa726907eb84896ed25bc653f0c2, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -45,6 +87,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -53,6 +96,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -67,32 +111,49 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -102,14 +163,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
