@@ -458,33 +458,11 @@ public class Player : MonoBehaviour
     }
 
     // 게임 오브젝트 제거 (Despawn)
+    /*
     public void Despawn()
     {
         uiNameChat.PushText(msg);
         uiChat.PushMessage(msg, IsMine, type);
     }
-
-    public void Move(Vector3 move, Quaternion rot, float speed )
-    {
-        goalPos = move;
-        goalRot = rot;
-        agentSpeed = speed;
-        Debug.Log(goalPos);
-    }
-
-  
-
-    public void PlayAnimation(int animCode)
-    {
-        animator?.SetTrigger("Anim"+animCode);
-    }
-
-    private void CheckMove()
-    {
-        float dist = Vector3.Distance(lastPos, transform.position);
-        Debug.Log(dist);
-        animator.SetBool("isRun", !((dist*100) < 0.1f));
-
-        lastPos = transform.position;
-    }
+    */
 }
