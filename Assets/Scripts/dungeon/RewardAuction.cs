@@ -64,11 +64,13 @@ public class RewardAuction : MonoBehaviour
     }
     public void AuctionBid()
     {
+        Debug.Log("경매 버튼 누름");
         int gold = int.Parse(goldInput.text);
         if (gold > nowGold)
         {
             DungeonManager.Instance.EnterAuctionBid(gold, id);
         }
+
     }
     // 구매 신청 
 
