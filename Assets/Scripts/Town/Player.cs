@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
 using Google.Protobuf.Protocol;
 
 public class Player : MonoBehaviour
@@ -10,6 +11,8 @@ public class Player : MonoBehaviour
     #region Identification & UI
     [Header("Player Settings")]
     [SerializeField] private UINameChat uiNameChat;
+
+
     private UIChat uiChat;
 
     public string nickname;
