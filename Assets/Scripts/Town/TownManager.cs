@@ -495,7 +495,7 @@ public class TownManager : MonoBehaviour
         {
             players.Remove(playerToRemove);
             playerList.Remove(data.PlayerId);
-            playerToRemove.Despawn();
+            //playerToRemove.Despawn();
 
         }
     }

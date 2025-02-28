@@ -2438,10 +2438,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 2075369095008506869}
+  nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
   TeleportDistanceThreshold: 0.5
-  nickname: 
+  goalPos: {x: 0, y: 0, z: 0}
+  goalRot: {x: 0, y: 0, z: 0, w: 0}
+  moveSpeed: 1
+  speed: 1
+  teleportEffects: []
+  dodgeEffectsArcher: []
+  dodgeEffectsRogue: []
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &7581309179231962001
 GameObject:
   m_ObjectHideFlags: 0
