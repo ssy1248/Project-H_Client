@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using UnityEngine.SocialPlatforms;
 using System;
 
-public class Player : MonoBehaviour
+public class Playe1 : MonoBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] private UINameChat uiNameChat;
