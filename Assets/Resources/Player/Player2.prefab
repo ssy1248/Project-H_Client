@@ -3407,9 +3407,7 @@ GameObject:
   - component: {fileID: 4875123534900892728}
   - component: {fileID: 8136238777171015875}
   - component: {fileID: 1516113556671880306}
-  - component: {fileID: 1126331272961007837}
   - component: {fileID: 9047784073065238460}
-  - component: {fileID: 1745618493839542012}
   - component: {fileID: 196227380015684679}
   - component: {fileID: 7210424792132183613}
   m_Layer: 10
@@ -3428,7 +3426,7 @@ Transform:
   m_GameObject: {fileID: 8588462082483426788}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -29.68, y: 1.13, z: -41.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3481,32 +3479,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1126331272961007837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588462082483426788}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae2689aff12f31a4cbd4429b6056ffda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportEffects: []
-  dodgeEffectsArcher: []
-  dodgeEffectsRogue: []
-  moveSpeed: 10
-  speed: 10
-  maxHealth: 100
-  currentHealth: 0
-  SmoothMoveSpeed: 10
-  SmoothRotateSpeed: 10
-  TeleportDistanceThreshold: 0.5
-  goalPos: {x: 0, y: 0, z: 0}
-  goalRot: {x: 0, y: 0, z: 0, w: 0}
-  nickname: 
-  uiNameChat: {fileID: 1507038350636548826}
 --- !u!114 &9047784073065238460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3520,29 +3492,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 1507038350636548826}
+  nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
   TeleportDistanceThreshold: 0.5
-  nickname: idntk
---- !u!114 &1745618493839542012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588462082483426788}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56c2e2f6cc4742f4ea45ce1936b04e1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  goalPos: {x: 0, y: 0, z: 0}
+  goalRot: {x: 0, y: 0, z: 0, w: 0}
+  moveSpeed: 1
+  speed: 1
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
-  moveSpeed: 10
   maxHealth: 100
-  currentHealth: 100
-  speed: 50
+  currentHealth: 0
 --- !u!54 &196227380015684679
 Rigidbody:
   m_ObjectHideFlags: 0

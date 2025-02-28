@@ -107,19 +107,19 @@ public class PlayerTest : MonoBehaviour
         if (IsMine)
         {
             // 로컬 플레이어 입력 처리
-            GETInput();
-            if (IsMage())
-                Teleport();
-            else
-                Dodge();
+            //GETInput();
+            //if (IsMage())
+            //    Teleport();
+            //else
+            //    Dodge();
 
             if (Input.GetMouseButton(1))
             {
-                CheckMove();
                 RaycastHit hit;
                 if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
                 {
                     setDestination(hit.point);
+                    //CheckMove();
                     Mousemove();
                 }
             }
@@ -158,9 +158,13 @@ public class PlayerTest : MonoBehaviour
         Debug.Log("마우스 무브 들어옴");
         if (isMove)
         {
-            Vector3 dir = new Vector3(moveVec.x, transform.position.y, moveVec.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            Vector3 currentPos = new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 destination = new Vector3(moveVec.x, 0, moveVec.z);
+            Vector3 dir = destination - currentPos;
             if (dir != Vector3.zero)
                 transform.forward = dir.normalized;
+
+            // 목표 위치로 이동
             transform.position += dir.normalized * Time.deltaTime * moveSpeed;
             anim.SetBool("isRun", true);
             Debug.Log($"isRun : {anim.GetBool("isRun")}");
@@ -170,7 +174,7 @@ public class PlayerTest : MonoBehaviour
             anim.SetBool("isRun", false);
         }
 
-        if (Vector3.Distance(transform.position, moveVec) <= 0.1f)
+        if (Vector3.Distance(transform.position, moveVec) <= 0.5f)
         {
             isMove = false;
             anim.SetBool("isRun", false);

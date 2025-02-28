@@ -81,6 +81,18 @@ public class PlayerActionManager : MonoBehaviour
     private void ProcessDodgeResult(DodgeResult result)
     {
         Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, 남은 쿨타임={result.Cooldown}");
+        Player localPlayer = GameObject.FindAnyObjectByType<Player>();
+        if(localPlayer != null)
+        {
+            if(localPlayer.IsMage())
+            {
+                localPlayer.Teleport();
+            }
+            else
+            {
+                localPlayer.Dodge();
+            }
+        }
         // 여기서 UI 업데이트나 게임 로직에 반영
     }
 
@@ -103,7 +115,7 @@ public class PlayerActionManager : MonoBehaviour
     {
         Debug.Log($"일반 공격 결과: 대상ID={result.TargetId}, 피해량={result.DamageDealt}");
         // 여기서 UI 업데이트나 게임 로직에 반영
-        PlayerTest localPlayer = GameObject.FindAnyObjectByType<PlayerTest>();
+        Player localPlayer = GameObject.FindAnyObjectByType<Player>();
         if (localPlayer != null)
         {
             localPlayer.Attack();
