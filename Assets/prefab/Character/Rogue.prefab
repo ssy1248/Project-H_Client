@@ -3408,7 +3408,6 @@ GameObject:
   - component: {fileID: 8136238777171015875}
   - component: {fileID: 1516113556671880306}
   - component: {fileID: 9047784073065238460}
-  - component: {fileID: 1745618493839542012}
   - component: {fileID: 196227380015684679}
   - component: {fileID: 7210424792132183613}
   m_Layer: 10
@@ -3487,35 +3486,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8588462082483426788}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffb2e211de0d4420c8dc13c7fc181b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 1507038350636548826}
+  nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
   TeleportDistanceThreshold: 0.5
-  nickname: idntk
---- !u!114 &1745618493839542012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588462082483426788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56c2e2f6cc4742f4ea45ce1936b04e1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  goalPos: {x: 0, y: 0, z: 0}
+  goalRot: {x: 0, y: 0, z: 0, w: 0}
+  moveSpeed: 10
+  speed: 10
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
-  moveSpeed: 10
   maxHealth: 100
-  currentHealth: 100
-  speed: 50
+  currentHealth: 0
 --- !u!54 &196227380015684679
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4851,12 +4840,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3731483967181282061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d554390fb4a290346a6d5d6ed356953f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a56b123ca9a0a942bb347029e703597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  damage: 20
-  attackRate: 0.3
+  damage: 10
+  attackRate: 1
   meleeArea: {fileID: 8867036366493970157}
   trailEffect: {fileID: 6701403360059370495}
   ArrowPos: {fileID: 0}
