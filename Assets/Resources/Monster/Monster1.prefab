@@ -267,6 +267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8848641078867681708}
   - component: {fileID: 5273557984882636083}
+  - component: {fileID: 2611178589116308917}
   m_Layer: 0
   m_Name: Monster1
   m_TagString: Untagged
@@ -304,6 +305,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiMonsterInfo: {fileID: 5466402315271668107}
+--- !u!195 &2611178589116308917
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2839099123733093915}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 4
+  m_Acceleration: 7
+  avoidancePriority: 50
+  m_AngularSpeed: 300
+  m_StoppingDistance: 1
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &3080882227753067895
 GameObject:
   m_ObjectHideFlags: 0

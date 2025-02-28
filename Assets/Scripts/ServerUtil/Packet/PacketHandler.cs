@@ -2,6 +2,9 @@
 using Google.Protobuf.Protocol;
 using ServerCore;
 using UnityEngine.Events;
+using System.Diagnostics;
+using static UnityEngine.Rendering.DebugUI.Table;
+using UnityEngine;
 
 class PacketHandler
 {
@@ -255,6 +258,49 @@ class PacketHandler
         if (packet is not S_PlayerAction enterPacket) return;
         PlayerActionManager.Instance.PlayerActionHandler(enterPacket);
     }
+
+    
+// 몬스터 관련.
+public static void S_MonsterSpawnHandler(PacketSession session, IMessage packet)
+{
+    if (packet is not S_MonsterSpawn spawnPacket) return;
+
+    // 몬스터 스폰 관련 함수.
+    MonsterManager.Instance.CreateMonsters(spawnPacket);
+
+}
+
+public static void S_MonsterMoveHandler(PacketSession session, IMessage packet)
+{
+    if (packet is not S_MonsterMove monsterMovePacket) return;
+
+    // 몬스터 이동 관련 함수.
+    MonsterManager.Instance.UpdateMonsters(monsterMovePacket);
+
+}
+
+public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
+{
+    if (packet is not S_MonsterHit monsterHitPacket) return;
+
+
+
+}
+
+public static void S_MonsterAttckHandler(PacketSession session, IMessage packet)
+{
+    if (packet is not S_MonsterAttck monsterAttckPacket) return;
+
+
+    MonsterManager.Instance.MonsterAttckAnimation(monsterAttckPacket);
+}
+
+public static void S_MonsterDieHandler(PacketSession session, IMessage packet)
+{
+    if (packet is not S_MonsterDie monsterDiePacket) return;
+
+    MonsterManager.Instance.DeleteMonster(monsterDiePacket);
+}
 
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
