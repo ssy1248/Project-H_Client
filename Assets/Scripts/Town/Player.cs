@@ -456,4 +456,13 @@ public class Player : MonoBehaviour
 
         GameManager.Network.Send(chatPacket);
     }
+
+    // 게임 오브젝트 제거 (Despawn)
+    /*
+    public void Despawn()
+    {
+        uiNameChat.PushText(msg);
+        uiChat.PushMessage(msg, IsMine, type);
+    }
+    */
 }
