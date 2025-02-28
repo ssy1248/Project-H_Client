@@ -27,17 +27,20 @@ public class RewardAuction : MonoBehaviour
     string nowName = "";
     ItemData nowitem ;
     int maxRewardItems = 0;
+    int rarity = 0;
 
     public void StartAuction(S_SetAuctionData data)
     {
+        rarity = data.Rarity;
+        nowName = "";
         Debug.Log(data);
         id = data.Id;
         nowitem = ItemManager.instance.GetBuyId(data.Itemid);
         nowGold = nowitem.Price;
         nowTime = data.Time;
         maxRewardItems = data.MaxRewardItems;
-        maxRewardText.SetText("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç° : "+ maxRewardItems);
-        buyText.SetText("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : \n" + nowName + "\nï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : \n" + nowGold);
+        maxRewardText.SetText("³²Àº ¾ÆÀÌÅÛ ¼ö ÀÔ´Ï´Ù! : "+ maxRewardItems);
+        buyText.SetText("ÇöÀç ±¸¸ÅÀÚ : \n" + nowName + "\nÇöÀç ±Ý¾× : \n" + nowGold);
         auctionObject.SetActive(true);
         StartCoroutine("TimeCheck");
     }
@@ -57,7 +60,7 @@ public class RewardAuction : MonoBehaviour
         nowTime = data.Time;
         nowGold = data.Gold;
         nowName = data.Name;
-        buyText.SetText("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : \n"+ nowName+ "\nï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : \n" + nowGold);
+        buyText.SetText("ÇöÀç ±¸¸ÅÀÚ : \n"+ nowName+ "\nÇöÀç ±Ý¾× : \n" + nowGold);
     }
     public void AuctionBid()
     {
@@ -67,17 +70,17 @@ public class RewardAuction : MonoBehaviour
             DungeonManager.Instance.EnterAuctionBid(gold, id);
         }
     }
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ëµµ 
+    // ±¸¸Å ½ÅÃ» 
 
     public void GetReward(string name, int data , bool isItem)
     {
         if (isItem)
         {
-            GetRewardText.SetText(name + " ï¿½ï¿½ \n" +ItemManager.instance.GetBuyId(data).Name +" X 1 \nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½ ");
+            GetRewardText.SetText(name + " ´ÔÀÇ \n" +ItemManager.instance.GetBuyId(data).Name +" X 1 ¾ÆÀÌÅÛ È¹µæ ");
         }
         else
         {
-            GetRewardText.SetText(name + " ï¿½ï¿½ \n" + data + "G  \nï¿½ï¿½ï¿? È¹ï¿½ï¿½ ");
+            GetRewardText.SetText(name + " ´ÔÀÇ \n" + data + "G  \n º¸»ó È¹µæ ");
         }
         getRewardObject.SetActive(true);
         
@@ -92,7 +95,7 @@ public class RewardAuction : MonoBehaviour
         else
         {
             itemStateObject.SetActive(true);
-            stateText.SetText("ï¿½Ì¸ï¿½ : \n" + nowitem.Name + "\nï¿½ï¿½ï¿½îµµ : \n" + "\nï¿½ï¿½ï¿½ï¿½ : \n" + nowitem.ItemType);
+            stateText.SetText("¾ÆÀÌÅÛ ÀÌ¸§ : \n" + nowitem.Name + "\n ¾ÆÀÌÅÛ ·¹¾î¸®Æ¼ : \n" + rarity + "\n ¾ÆÀÌÅÛ µ¥ÀÌÅÍ : \n" + nowitem.ItemType);
         }
     }
     public void SetReward()
