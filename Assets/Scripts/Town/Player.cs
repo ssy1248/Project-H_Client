@@ -197,7 +197,6 @@ public class Player : MonoBehaviour
     void CheckArrival()
     {
         float distance = Vector3.Distance(transform.position, moveVec);
-        Debug.Log("목표까지의 거리: " + distance);
         if (distance <= 0.5f)
         {
             isMove = false;
@@ -209,6 +208,7 @@ public class Player : MonoBehaviour
     {
         if (!isDodge)
         {
+            // dodgeVec이 isMove가 true면 (moveVec - transform.position).normalized / false일때는? transform.forward를 보내주면 바라보는 방향을 알수있지 않을까?
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward;
             speed *= 2;
             animator.SetTrigger("doDodge");
@@ -221,6 +221,12 @@ public class Player : MonoBehaviour
 
             Invoke("DodgeOut", 0.4f);
         }
+    }
+
+    void DodgeOut()
+    {
+        speed = 10f;
+        isDodge = false;
     }
 
     public void Teleport()
@@ -276,12 +282,6 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         effect.SetActive(false);
-    }
-
-    void DodgeOut()
-    {
-        speed = 10f;
-        isDodge = false;
     }
 
     public void Attack()

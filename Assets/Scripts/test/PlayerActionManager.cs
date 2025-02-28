@@ -56,6 +56,7 @@ public class PlayerActionManager : MonoBehaviour
             return;
         }
 
+
         // oneof 케이스에 따라 분기 처리
         switch (action.ActionCase)
         {
@@ -81,16 +82,20 @@ public class PlayerActionManager : MonoBehaviour
     private void ProcessDodgeResult(DodgeResult result)
     {
         Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, 남은 쿨타임={result.Cooldown}");
-        Player localPlayer = GameObject.FindAnyObjectByType<Player>();
-        if(localPlayer != null)
+        Player[] players = GameObject.FindObjectsOfType<Player>();
+        foreach (Player player in players)
         {
-            if(localPlayer.IsMage())
+            if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
-                localPlayer.Teleport();
-            }
-            else
-            {
-                localPlayer.Dodge();
+                if(player.IsMage())
+                {
+                    player.Teleport();
+                }
+                else
+                {
+                    player.Dodge();
+                }
+                break;
             }
         }
         // 여기서 UI 업데이트나 게임 로직에 반영
@@ -115,14 +120,14 @@ public class PlayerActionManager : MonoBehaviour
     {
         Debug.Log($"일반 공격 결과: 대상ID={result.TargetId}, 피해량={result.DamageDealt}");
         // 여기서 UI 업데이트나 게임 로직에 반영
-        Player localPlayer = GameObject.FindAnyObjectByType<Player>();
-        if (localPlayer != null)
+        Player[] players = GameObject.FindObjectsOfType<Player>();
+        foreach (Player player in players)
         {
-            localPlayer.Attack();
-        }
-        else
-        {
-            Debug.LogWarning("로컬 플레이어 스크립트를 찾을 수 없습니다.");
+            if(player.MPlayer != null && player.nickname == result.UseUserName)
+            {
+                player.Attack();
+                break;
+            }
         }
     }
 

@@ -10,7 +10,6 @@ using Cinemachine;
 
 public class MyPlayer : MonoBehaviour
 {
-
     // 플레이어 정보.
     private Player player;
 
