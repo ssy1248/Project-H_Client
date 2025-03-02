@@ -81,20 +81,39 @@ public class PlayerActionManager : MonoBehaviour
     // 회피 액션이 들어오면 처리할 핸들러
     private void ProcessDodgeResult(DodgeResult result)
     {
-        Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, 남은 쿨타임={result.Cooldown}");
+        Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, " +
+             $"이동 거리={result.DodgeDistance}, " +
+             $"최종 위치=({result.FinalPosition.X}, {result.FinalPosition.Y}, {result.FinalPosition.Z})");
         Player[] players = GameObject.FindObjectsOfType<Player>();
         foreach (Player player in players)
         {
             if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
-                if(player.IsMage())
+                // 서버에서 전달받은 최종 좌표
+                Vector3 serverFinalPos = new Vector3(
+                    result.FinalPosition.X,
+                    result.FinalPosition.Y,
+                    result.FinalPosition.Z
+                );
+
+                // 클라이언트에서 계산한 예측 좌표 (예: 플레이어가 회피 시 계산한 좌표)
+                Vector3 predictedPos = player.GetPredictedDodgePosition(); // 사용자가 직접 구현한 메서드
+
+                // 두 좌표 사이의 오차 허용 범위 (예: 0.5 유닛)
+                float tolerance = 0.5f;
+                if (Vector3.Distance(predictedPos, serverFinalPos) < tolerance)
                 {
-                    player.Teleport();
+                    // 예측이 서버 결과와 거의 일치하면 바로 적용
+                    player.SetPosition(serverFinalPos);
                 }
                 else
                 {
-                    player.Dodge();
+                    // 차이가 큰 경우 보간(interpolation)을 통해 부드럽게 보정 (고무줄 효과)
+                    player.InterpolateToPosition(serverFinalPos);
                 }
+
+                // 회피 애니메이션 등 추가 처리
+                player.TriggerDodgeAnimation();
                 break;
             }
         }
@@ -133,17 +152,34 @@ public class PlayerActionManager : MonoBehaviour
 
     void DodgeRequest()
     {
-        // 바라보는 방향도 보내줘야할듯?
-        // 회피 거리를 보내는 것이 아닌 바라보는 방향으로 사용해야할듯
+        // 클라이언트의 MyPlayer 인스턴스를 가져옵니다.
+        var myPlayer = DungeonManager.Instance.MyPlayer;
+
+        // 로컬에서 회피 동작(예측)을 바로 실행합니다.
+        myPlayer.Dodge();
+
+        // 플레이어가 바라보는 방향을 구합니다.
+        Vector3 playerForward = myPlayer.transform.forward;
+
+        // 프로토버퍼 메시지 형식에 맞게 Vector3 객체로 변환합니다.
+        Google.Protobuf.Protocol.Vector directionProto = new Google.Protobuf.Protocol.Vector
+        {
+            X = playerForward.x,
+            Y = playerForward.y,
+            Z = playerForward.z
+        };
+
+        // dodgeDistance 필드는 클라이언트에서 보내지 않도록 하거나 기본값(예: 0)으로 처리합니다.
         DodgeAction dodgeAction = new DodgeAction
         {
-            AttackerName = DungeonManager.Instance.MyPlayer.nickname,
-            DodgeDistance = 5,
+            AttackerName = myPlayer.nickname,
+            Direction = directionProto
+            // dodgeDistance는 서버 권위적인 값으로 계산되므로 클라이언트에서는 보내지 않습니다.
         };
 
         C_PlayerAction actionPacket = new C_PlayerAction
         {
-            DodgeAction = dodgeAction,
+            DodgeAction = dodgeAction
         };
 
         GameManager.Network.Send(actionPacket);
