@@ -1,44 +1,116 @@
 fileFormatVersion: 2
 guid: 4bac6cd9f5aa44d0aa961a4dcd4a1664
 ModelImporter:
-  serializedVersion: 22
-  fileIDToRecycleName:
-    100000: chest
-    100002: chest_small
-    100004: //RootNode
-    100006: gold
-    100008: hinges
-    100010: lid
-    100012: lid 1
-    100014: root
-    100016: shadow
-    100018: spiderweb
-    400000: chest
-    400002: //RootNode
-    400004: chest_small
-    400006: gold
-    400008: hinges
-    400010: lid
-    400012: lid 1
-    400014: root
-    400016: shadow
-    400018: spiderweb
-    2100000: chest_small_mat
-    4300000: chest_small
-    4300002: lid
-    4300004: spiderweb
-    4300006: shadow
-    4300008: gold
-    7400000: open
-    7400002: close
-    7400004: closed
-    7400006: small_chest
-    9500000: //RootNode
-    13700000: chest_small
-    13700002: gold
-    13700004: lid
-    13700006: shadow
-    13700008: spiderweb
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: chest
+  - first:
+      1: 100002
+    second: chest_small
+  - first:
+      1: 100004
+    second: //RootNode
+  - first:
+      1: 100006
+    second: gold
+  - first:
+      1: 100008
+    second: hinges
+  - first:
+      1: 100010
+    second: lid
+  - first:
+      1: 100012
+    second: lid 1
+  - first:
+      1: 100014
+    second: root
+  - first:
+      1: 100016
+    second: shadow
+  - first:
+      1: 100018
+    second: spiderweb
+  - first:
+      4: 400000
+    second: chest
+  - first:
+      4: 400002
+    second: //RootNode
+  - first:
+      4: 400004
+    second: chest_small
+  - first:
+      4: 400006
+    second: gold
+  - first:
+      4: 400008
+    second: hinges
+  - first:
+      4: 400010
+    second: lid
+  - first:
+      4: 400012
+    second: lid 1
+  - first:
+      4: 400014
+    second: root
+  - first:
+      4: 400016
+    second: shadow
+  - first:
+      4: 400018
+    second: spiderweb
+  - first:
+      21: 2100000
+    second: chest_small_mat
+  - first:
+      43: 4300000
+    second: chest_small
+  - first:
+      43: 4300002
+    second: lid
+  - first:
+      43: 4300004
+    second: spiderweb
+  - first:
+      43: 4300006
+    second: shadow
+  - first:
+      43: 4300008
+    second: gold
+  - first:
+      74: 7400000
+    second: open
+  - first:
+      74: 7400002
+    second: close
+  - first:
+      74: 7400004
+    second: closed
+  - first:
+      74: 7400006
+    second: small_chest
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: chest_small
+  - first:
+      137: 13700002
+    second: gold
+  - first:
+      137: 13700004
+    second: lid
+  - first:
+      137: 13700006
+    second: shadow
+  - first:
+      137: 13700008
+    second: spiderweb
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -46,7 +118,7 @@ ModelImporter:
       name: chest_small_mat
     second: {fileID: 2100000, guid: e0f6f412d11a541c2a4f961694cda272, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -55,6 +127,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -63,6 +136,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -74,6 +148,7 @@ ModelImporter:
     - serializedVersion: 16
       name: open
       takeName: Take 001
+      internalID: 0
       firstFrame: 1
       lastFrame: 18
       wrapMode: 0
@@ -102,6 +177,7 @@ ModelImporter:
     - serializedVersion: 16
       name: close
       takeName: Take 001
+      internalID: 0
       firstFrame: 25
       lastFrame: 38
       wrapMode: 0
@@ -130,6 +206,7 @@ ModelImporter:
     - serializedVersion: 16
       name: closed
       takeName: Take 001
+      internalID: 0
       firstFrame: 39
       lastFrame: 40
       wrapMode: 0
@@ -158,6 +235,7 @@ ModelImporter:
     - serializedVersion: 16
       name: small_chest
       takeName: Take 001
+      internalID: 0
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -189,32 +267,49 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -224,14 +319,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
