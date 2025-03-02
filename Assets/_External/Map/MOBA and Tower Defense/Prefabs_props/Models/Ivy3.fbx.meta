@@ -1,67 +1,168 @@
 fileFormatVersion: 2
 guid: 8488a12bd565719498ab51d8891e606a
 ModelImporter:
-  serializedVersion: 16
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: polySurface30
-    100004: polySurface31
-    100006: polySurface69
-    100008: polySurface70
-    100010: polySurface71
-    100012: polySurface72
-    100014: polySurface73
-    100016: polySurface74
-    100018: polySurface75
-    100020: polySurface76
-    100022: pPlane14
-    100024: transform1
-    100026: transform2
-    100028: transform3
-    100030: transform4
-    100032: transform5
-    100034: transform6
-    100036: transform7
-    400000: //RootNode
-    400002: polySurface30
-    400004: polySurface31
-    400006: polySurface69
-    400008: polySurface70
-    400010: polySurface71
-    400012: polySurface72
-    400014: polySurface73
-    400016: polySurface74
-    400018: polySurface75
-    400020: polySurface76
-    400022: pPlane14
-    400024: transform1
-    400026: transform2
-    400028: transform3
-    400030: transform4
-    400032: transform5
-    400034: transform6
-    400036: transform7
-    2300000: polySurface76
-    2300002: //RootNode
-    3300000: polySurface76
-    3300002: //RootNode
-    4300000: polySurface76
-    9500000: //RootNode
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: polySurface30
+  - first:
+      1: 100004
+    second: polySurface31
+  - first:
+      1: 100006
+    second: polySurface69
+  - first:
+      1: 100008
+    second: polySurface70
+  - first:
+      1: 100010
+    second: polySurface71
+  - first:
+      1: 100012
+    second: polySurface72
+  - first:
+      1: 100014
+    second: polySurface73
+  - first:
+      1: 100016
+    second: polySurface74
+  - first:
+      1: 100018
+    second: polySurface75
+  - first:
+      1: 100020
+    second: polySurface76
+  - first:
+      1: 100022
+    second: pPlane14
+  - first:
+      1: 100024
+    second: transform1
+  - first:
+      1: 100026
+    second: transform2
+  - first:
+      1: 100028
+    second: transform3
+  - first:
+      1: 100030
+    second: transform4
+  - first:
+      1: 100032
+    second: transform5
+  - first:
+      1: 100034
+    second: transform6
+  - first:
+      1: 100036
+    second: transform7
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: polySurface30
+  - first:
+      4: 400004
+    second: polySurface31
+  - first:
+      4: 400006
+    second: polySurface69
+  - first:
+      4: 400008
+    second: polySurface70
+  - first:
+      4: 400010
+    second: polySurface71
+  - first:
+      4: 400012
+    second: polySurface72
+  - first:
+      4: 400014
+    second: polySurface73
+  - first:
+      4: 400016
+    second: polySurface74
+  - first:
+      4: 400018
+    second: polySurface75
+  - first:
+      4: 400020
+    second: polySurface76
+  - first:
+      4: 400022
+    second: pPlane14
+  - first:
+      4: 400024
+    second: transform1
+  - first:
+      4: 400026
+    second: transform2
+  - first:
+      4: 400028
+    second: transform3
+  - first:
+      4: 400030
+    second: transform4
+  - first:
+      4: 400032
+    second: transform5
+  - first:
+      4: 400034
+    second: transform6
+  - first:
+      4: 400036
+    second: transform7
+  - first:
+      23: 2300000
+    second: polySurface76
+  - first:
+      23: 2300002
+    second: //RootNode
+  - first:
+      33: 3300000
+    second: polySurface76
+  - first:
+      33: 3300002
+    second: //RootNode
+  - first:
+      43: 4300000
+    second: polySurface76
+  - first:
+      95: 9500000
+    second: //RootNode
+  externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 2
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -69,35 +170,72 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
+    keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
+    useFileScale: 0
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 4
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
+    serializedVersion: 3
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

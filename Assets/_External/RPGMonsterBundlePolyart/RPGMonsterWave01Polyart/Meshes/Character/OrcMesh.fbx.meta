@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 1b1c0636a9064e88bf6df6272afee809
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -442,6 +442,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 1
     importCameras: 0
@@ -469,6 +470,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 0
     normalImportMode: 1
@@ -1128,7 +1130,8 @@ ModelImporter:
     - name: Foot_L
       parentName: LowerLeg_L
       position: {x: -0.2128555, y: 7.9936054e-17, z: -7.105427e-17}
-      rotation: {x: -0.000000014701268, y: 0.00000005850916, z: 0.000000029802319, w: 1}
+      rotation: {x: -0.000000014701268, y: 0.00000005850916, z: 0.000000029802319,
+        w: 1}
       scale: {x: 1.0000012, y: 1.000001, z: 1.0000013}
     - name: Toe_L
       parentName: Foot_L
@@ -1173,6 +1176,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
