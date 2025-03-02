@@ -21,6 +21,31 @@ public class ItemInfoPanel : MonoBehaviour
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(parentTransform, Input.mousePosition, null, out Vector2 localPoint);
             rectTransform.localPosition = localPoint;
+
+            // 화면 경계를 확인하고 위치 조정
+            Vector3[] corners = new Vector3[4];
+            rectTransform.GetWorldCorners(corners);
+
+            Vector3 minScreenBounds = new Vector3(0, 0, 0);
+            Vector3 maxScreenBounds = new Vector3(Screen.width, Screen.height, 0);
+
+            // 좌우 경계 확인 및 조정
+            if (corners[2].x > maxScreenBounds.x) // 패널의 오른쪽이 화면을 넘어가면
+            {
+                localPoint.x -= rectTransform.rect.width;
+            }
+
+            // 상하 경계 확인 및 조정
+            if (corners[2].y > maxScreenBounds.y) // 패널의 위쪽이 화면을 넘어가면
+            {
+                localPoint.y -= corners[2].y - maxScreenBounds.y;
+            }
+            if (corners[0].y < minScreenBounds.y) // 패널의 아래쪽이 화면을 넘어가면
+            {
+                localPoint.y += minScreenBounds.y - corners[0].y;
+            }
+
+            rectTransform.localPosition = localPoint;
         }
     }
 
