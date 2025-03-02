@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     [Header("Local Movement Settings")]
     public float moveSpeed = 10f;     // 마우스 클릭 등으로 지정된 이동 속도
     public float speed = 10f;         // 회피 시 배속용 변수
-    public float dodgeDistance = 5f;  // 회피 이동 시 적용할 거리 <- 이부분은 고민해야할듯
+    public float dodgeDistance = 3f;  // 회피 이동 시 적용할 거리 // 임의 값
     private Camera cam;
     protected NavMeshAgent nav;
 

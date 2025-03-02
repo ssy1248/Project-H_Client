@@ -89,6 +89,8 @@ public class PlayerActionManager : MonoBehaviour
         {
             if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
+                player.Dodge();
+
                 // 서버에서 전달받은 최종 좌표
                 Vector3 serverFinalPos = new Vector3(
                     result.FinalPosition.X,
@@ -154,10 +156,7 @@ public class PlayerActionManager : MonoBehaviour
     {
         // 클라이언트의 MyPlayer 인스턴스를 가져옵니다.
         var myPlayer = DungeonManager.Instance.MyPlayer;
-
-        // 로컬에서 회피 동작(예측)을 바로 실행합니다.
-        myPlayer.Dodge();
-
+            
         // 플레이어가 바라보는 방향을 구합니다.
         Vector3 playerForward = myPlayer.transform.forward;
 
