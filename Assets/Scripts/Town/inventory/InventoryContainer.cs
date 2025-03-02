@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryContainer : MonoBehaviour
+public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     public CanvasGroup canvasGroup;
     public Transform itemSlotParent;
@@ -16,6 +16,7 @@ public class InventoryContainer : MonoBehaviour
     private List<InventorySlot> itemSlots = new List<InventorySlot>();
     private bool isShowing = false;
     private Transform originalParent;
+    private Vector2 offset;
 
     // Start is called before the first frame update
     void Start()
@@ -177,7 +178,7 @@ public class InventoryContainer : MonoBehaviour
 
     private void OnDragHandler(PointerEventData eventData, InventorySlot slot)
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasGroup.transform as RectTransform, Input.mousePosition, null, out Vector2 localPoint);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasGroup.transform as RectTransform, eventData.position, null, out Vector2 localPoint);
         slot.itemImage.rectTransform.localPosition = localPoint;
     }
 
@@ -348,5 +349,21 @@ public class InventoryContainer : MonoBehaviour
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
         isShowing = false;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, null, out offset);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        var p = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        if (p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1)
+        {
+            return;
+        }
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, null, out Vector2 localPosition);
+        (transform as RectTransform).anchoredPosition += localPosition - offset;
     }
 }

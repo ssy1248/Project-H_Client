@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipmentContainer : MonoBehaviour
+public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     public InventoryContainer inventory;
     public Button btn_close;
@@ -13,6 +13,7 @@ public class EquipmentContainer : MonoBehaviour
     public EquipmentSlot headSlot, shirtSlot, pantsSlot, righthandSlot, lefthandSlot, footSlot;
     private bool isShowing = false;
     private Transform originalParent;
+    private Vector2 offset;
 
     // Start is called before the first frame update
     void Start()
@@ -290,6 +291,22 @@ public class EquipmentContainer : MonoBehaviour
     private void HideItemInfoPanel(PointerEventData eventData)
     {
         itemInfoPanel.Hide();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, null, out offset);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        var p = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        if (p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1)
+        {
+            return;
+        }
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, null, out Vector2 localPosition);
+        (transform as RectTransform).anchoredPosition += localPosition - offset;
     }
     #endregion
 }
