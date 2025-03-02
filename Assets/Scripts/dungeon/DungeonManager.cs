@@ -139,7 +139,7 @@ public class DungeonManager : MonoBehaviour
     }
     public void AllMove(S_Move data)
     {
-        Debug.Log(data);
+        //Debug.Log(data);
         // 받은 배열 만큼 반복문을 돌려야함
         // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
         foreach (var syncTransformInfo in data.TransformInfos)

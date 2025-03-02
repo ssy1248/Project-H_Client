@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     [Header("Local Movement Settings")]
     public float moveSpeed = 10f;     // 마우스 클릭 등으로 지정된 이동 속도
     public float speed = 10f;         // 회피 시 배속용 변수
+    public float dodgeDistance = 3f;  // 회피 이동 시 적용할 거리 // 임의 값
     private Camera cam;
     protected NavMeshAgent nav;
 
@@ -155,6 +156,70 @@ public class Player : MonoBehaviour
             SmoothMoveAndRotate();
         }
     }
+
+    #region Dodge Prediction Methods
+    // 회피 보간 시간 (서버와의 좌표 차이 보정용)
+    public float dodgeInterpolationTime = 0.3f;
+
+    // 회피 입력 시 계산된 예측 좌표
+    private Vector3 predictedDodgePos;
+
+    /// <summary>
+    /// 클라이언트가 회피 시 계산한 예측 좌표를 반환합니다.
+    /// </summary>
+    public Vector3 GetPredictedDodgePosition()
+    {
+        return predictedDodgePos;
+    }
+
+    /// <summary>
+    /// 서버에서 전달받은 최종 좌표를 즉시 적용합니다.
+    /// </summary>
+    public void SetPosition(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    /// <summary>
+    /// 현재 위치에서 targetPos까지 일정 시간 동안 보간(interpolation)하여 이동합니다.
+    /// (고무줄 효과 연출)
+    /// </summary>
+    public void InterpolateToPosition(Vector3 targetPos)
+    {
+        StopAllCoroutines();
+        StartCoroutine(MoveToPositionCoroutine(targetPos, dodgeInterpolationTime));
+    }
+
+    private IEnumerator MoveToPositionCoroutine(Vector3 targetPos, float duration)
+    {
+        Vector3 startPos = transform.position;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, targetPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPos;
+    }
+
+    /// <summary>
+    /// 회피 애니메이션을 실행합니다.
+    /// Animator에 "doDodge" 트리거가 설정되어 있어야 합니다.
+    /// </summary>
+    public void TriggerDodgeAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("doDodge");
+        }
+        else
+        {
+            Debug.LogWarning("Animator가 할당되지 않았습니다. 회피 애니메이션을 실행할 수 없습니다.");
+        }
+    }
+    #endregion
+
     #region Local Player Methods
     public void setDestination(Vector3 dest)
     {
@@ -200,7 +265,6 @@ public class Player : MonoBehaviour
     void CheckArrival()
     {
         float distance = Vector3.Distance(transform.position, moveVec);
-        Debug.Log("목표까지의 거리: " + distance);
         if (distance <= 0.5f)
         {
             isMove = false;
@@ -212,9 +276,15 @@ public class Player : MonoBehaviour
     {
         if (!isDodge)
         {
+            // 회피 시 이동 방향 계산:
+            // 이동 중이면 목적지와의 방향, 그렇지 않으면 현재 바라보는 방향 사용
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward;
+            // 회피 예측 좌표 계산
+            predictedDodgePos = transform.position + dodgeVec * dodgeDistance;
+            // 배속 적용 (필요에 따라 값 조정)
             speed *= 2;
-            animator.SetTrigger("doDodge");
+            // 새로 추가한 함수로 회피 애니메이션 트리거
+            TriggerDodgeAnimation();
             isDodge = true;
 
             if (gameObject.CompareTag("Archer"))
@@ -224,6 +294,12 @@ public class Player : MonoBehaviour
 
             Invoke("DodgeOut", 0.4f);
         }
+    }
+     
+    void DodgeOut()
+    {
+        speed = 10f;
+        isDodge = false;
     }
 
     public void Teleport()
@@ -279,12 +355,6 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         effect.SetActive(false);
-    }
-
-    void DodgeOut()
-    {
-        speed = 10f;
-        isDodge = false;
     }
 
     public void Attack()
