@@ -11,7 +11,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         NONE = 0,
         EQUIPMENT = 1,
         INVENTORY = 2,
-        WAREHOUSE = 3,
+        STORAGE = 3,
     }
     public Image itemImage;
     public TMPro.TextMeshProUGUI quantityText;
@@ -57,6 +57,9 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void SetItem(ItemInfo data)
     {
+        if(data == null){
+            ClearItem();
+        }
         // 슬롯 데이터 초기화
         _data = data;
         _data.Position = index;
