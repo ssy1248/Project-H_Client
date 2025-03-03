@@ -69,7 +69,6 @@ public class ItemManager : MonoBehaviour
         {
             string fileName = sprite.texture.name;
             itemImages.Add(fileName, sprite);
-            Debug.Log(fileName);
         }
     }
 
