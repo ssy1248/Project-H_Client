@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class UIRegister : MonoBehaviour
 {
-    public static UIRegister Instance { get; private set; }  // ½Ì±ÛÅæ ÆÐÅÏÀ¸·Î UIRegister Á¢±Ù
+    public static UIRegister Instance { get; private set; }  // ï¿½Ì±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UIRegister ï¿½ï¿½ï¿½ï¿½
 
     [SerializeField] private TMP_InputField inputPort;
     [SerializeField] private Button localServerBtn;
-    [SerializeField] private Button btnBack; // ÀÌÀü È­¸éÀ¸·Î µ¹¾Æ°¡´Â ¹öÆ°
+    [SerializeField] private Button btnBack; // ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 
-    [SerializeField] private GameObject serverPanel; // Ã¹ È­¸é ¼­¹ö ÀÔ·Â ÆÐ³Î
+    [SerializeField] private GameObject serverPanel; // Ã¹ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ð³ï¿½
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject registerPanel;
     [SerializeField] private GameObject characterPanel;
@@ -26,7 +26,7 @@ public class UIRegister : MonoBehaviour
     [SerializeField] private TMP_InputField loginEmail;
     [SerializeField] private TMP_InputField loginPassword;
     [SerializeField] private Button btnLogin;
-    [SerializeField] private Button btnGoToRegister; // ·Î±×ÀÎ¿¡¼­ È¸¿ø°¡ÀÔ È­¸éÀ¸·Î °¡´Â ¹öÆ°
+    [SerializeField] private Button btnGoToRegister; // ï¿½Î±ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 
     [SerializeField] private Button btnConfirmCharacter;
     [SerializeField] private Button[] charBtns;
@@ -45,20 +45,20 @@ public class UIRegister : MonoBehaviour
 
     private readonly string[] characterDescriptions =
     {
-        "ÀÌ¸§±¸ÇÔ\n¿ë°¨ÇÑ Àü»çÀÔ´Ï´Ù.",
-        "ÀÌ¸§±¸ÇÔ\n½Åºñ·Î¿î ¸¶¹ý»çÀÔ´Ï´Ù.",
-        "ÀÌ¸§±¸ÇÔ\n³¯·ÆÇÑ ±Ã¼öÀÔ´Ï´Ù.",
-        "ÀÌ¸§±¸ÇÔ\n°­·ÂÇÑ ÅÊÄ¿ÀÔ´Ï´Ù.",
-        "ÀÌ¸§±¸ÇÔ\nÄ¡À¯ÀÇ ¼ºÁ÷ÀÚÀÔ´Ï´Ù."
+        "ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½ë°¨ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.",
+        "ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½Åºï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.",
+        "ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¼ï¿½ï¿½Ô´Ï´ï¿½.",
+        "ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¿ï¿½Ô´Ï´ï¿½.",
+        "ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½\nÄ¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½."
     };
 
     private const string DefaultServerMessage = "Input Server";
-    private const string EmailPasswordError = "ÀÌ¸ÞÀÏ°ú ºñ¹Ð¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä!";
-    private const string NicknameError = "´Ð³×ÀÓÀ» ÀÔ·ÂÇÏ¼¼¿ä! (2~10ÀÚ)";
+    private const string EmailPasswordError = "ï¿½Ì¸ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½!";
+    private const string NicknameError = "ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½! (2~10ï¿½ï¿½)";
 
     void Start()
     {
-        Instance = this;  // UIRegister ÀÎ½ºÅÏ½º¸¦ ½Ì±ÛÅæÀ¸·Î ¼³Á¤
+        Instance = this;  // UIRegister ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         InitializeCharacterButtons();
         btnRegister.onClick.AddListener(HandleRegistration);
@@ -69,7 +69,7 @@ public class UIRegister : MonoBehaviour
         btnConfirmCharacter.onClick.AddListener(ConfirmCharacter);
 
         btnGoToRegister.onClick.AddListener(GoToRegisterScreen);
-        SetServerUI(); // Ã¹ È­¸éÀÎ ¼­¹ö ÀÔ·Â UI Ç¥½Ã
+        SetServerUI(); // Ã¹ È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ UI Ç¥ï¿½ï¿½
     }
 
     private void ToggleScreens()
@@ -83,7 +83,7 @@ public class UIRegister : MonoBehaviour
         {
             loginPanel.SetActive(false);
             serverPanel.SetActive(true);
-            localServerBtn.gameObject.SetActive(true); // ·ÎÄÃ ¼­¹ö ¹öÆ° È°¼ºÈ­
+            localServerBtn.gameObject.SetActive(true); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° È°ï¿½ï¿½È­
         }
         else if (registerPanel.activeSelf)
         {
@@ -101,7 +101,7 @@ public class UIRegister : MonoBehaviour
     {
         loginPanel.SetActive(false);
         registerPanel.SetActive(true);
-        btnBack.gameObject.SetActive(true); // È¸¿ø°¡ÀÔ È­¸é¿¡¼­ µÚ·Î °¡±â ¹öÆ° È°¼ºÈ­
+        btnBack.gameObject.SetActive(true); // È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ï¿½ï¿½ ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° È°ï¿½ï¿½È­
     }
 
     private void InitializeCharacterButtons()
@@ -115,17 +115,17 @@ public class UIRegister : MonoBehaviour
 
     private void SelectCharacter(int idx)
     {
-        // ÀÌÀü ¼±ÅÃµÈ Ä³¸¯ÅÍ Ç¥½Ã ÇØÁ¦
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (selectedCharacterId != -1)
             charBtns[selectedCharacterId - 1].transform.GetChild(0).gameObject.SetActive(false);
 
         selectedCharacterId = idx;
-        charBtns[selectedCharacterId - 1].transform.GetChild(0).gameObject.SetActive(true); // ¼±ÅÃµÈ Ä³¸¯ÅÍ Ç¥½Ã
+        charBtns[selectedCharacterId - 1].transform.GetChild(0).gameObject.SetActive(true); // ï¿½ï¿½ï¿½Ãµï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
 
         txtCharDescription.text = characterDescriptions[selectedCharacterId - 1];
         if (idx >= 0 && idx <= 5)
         {
-            Debug.Log($"Character selected with id: {selectedCharacterId}");  // ¼±ÅÃµÈ Ä³¸¯ÅÍÀÇ id ·Î±× Ãâ·Â
+            //Debug.Log($"Character selected with id: {selectedCharacterId}");  // ï¿½ï¿½ï¿½Ãµï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ id ï¿½Î±ï¿½ ï¿½ï¿½ï¿½
         }
 
     }
@@ -134,7 +134,7 @@ public class UIRegister : MonoBehaviour
     {
         if (selectedCharacterId >= 0 && selectedCharacterId <= 5)
         {
-            TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // ¼±ÅÃµÈ Ä³¸¯ÅÍÀÇ id·Î °ÔÀÓ ½ÃÀÛ ¿äÃ»
+            TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // ï¿½ï¿½ï¿½Ãµï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ idï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
         }
         else
         {
@@ -142,7 +142,7 @@ public class UIRegister : MonoBehaviour
         }
     }
 
-    // Ä³¸¯ÅÍ ¼±ÅÃÀ» classIdx¿¡ ¹Ý¿µ
+    // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ classIdxï¿½ï¿½ ï¿½Ý¿ï¿½
     public void SetSelectedCharacter(int id)
     {
         selectedCharacterId = id;
@@ -204,7 +204,7 @@ public class UIRegister : MonoBehaviour
             return;
         }
 
-        txtMessage.text = "È¸¿ø°¡ÀÔ ¼º°ø! ·Î±×ÀÎÇÏ¼¼¿ä.";
+        txtMessage.text = "È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! ï¿½Î±ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.";
         txtMessage.color = Color.green;
 
         Invoke(nameof(Registers), 0.5f);
@@ -219,7 +219,7 @@ public class UIRegister : MonoBehaviour
             return;
         }
 
-        txtMessage.text = "·Î±×ÀÎ ¼º°ø!";
+        txtMessage.text = "ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!";
         txtMessage.color = Color.green;
 
         Invoke(nameof(Login), 0.5f);
@@ -238,7 +238,7 @@ public class UIRegister : MonoBehaviour
         serverUrl = "127.0.0.1";
         port = "3000";
         localServerBtn.gameObject.SetActive(false);
-        serverPanel.SetActive(false); // ¼­¹ö ÀÔ·Â È­¸é ¼û±è
+        serverPanel.SetActive(false); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         ShowLoginUI();
     }
 

@@ -731,11 +731,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f03402c556dc85c448fdb1b1479978a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equipmentContainer: {fileID: 0}
+  storageContainer: {fileID: 0}
   canvasGroup: {fileID: 2735354004980818274}
   itemSlotParent: {fileID: 138505912734272370}
   btn_close: {fileID: 8329831663563873351}
   itemInfoPanel: {fileID: 0}
-  equipmentContainer: {fileID: 0}
+  inventoryType: 2
 --- !u!225 &2735354004980818274
 CanvasGroup:
   m_ObjectHideFlags: 0
