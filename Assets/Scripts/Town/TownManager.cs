@@ -462,12 +462,12 @@ public class TownManager : MonoBehaviour
     {
         StartCoroutine("erroText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
-        Debug.Log(data);
-        Debug.Log(data.StoreList);
-        Debug.Log("플레이어 수 : " + data.Players.Count);
+        //Debug.Log(data);
+        //Debug.Log(data.StoreList);
+        //Debug.Log("플레이어 수 : " + data.Players.Count);
         foreach (PlayerInfo player in data.Players)
         {
-            Debug.Log("포이치 들어옴");
+            //Debug.Log("포이치 들어옴");
             if (player.PlayerId == data.UserId)
             {
                 Spawn(player, true);
@@ -1190,7 +1190,7 @@ public class TownManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            Debug.Log("플레이어 입니다.");
+            //Debug.Log("플레이어 입니다.");
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
@@ -1216,8 +1216,6 @@ public class TownManager : MonoBehaviour
 
     public Player CreatePlayer(PlayerInfo playerInfo, Vector3 spawnPos)
     {
-        Debug.Log(playerInfo);
-        Debug.Log(playerInfo.Class);
         string playerResPath = playerDb.GetValueOrDefault(playerInfo.Class, ("Player/Player" + playerInfo.Class));
         Player playerPrefab = Resources.Load<Player>(playerResPath);
 

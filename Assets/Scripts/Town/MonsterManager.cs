@@ -33,7 +33,7 @@ public class MonsterManager : MonoBehaviour
 
 
 
-    // ÇÁ¸®ÆÕ ÀÐ¾î¿À±â 
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¾ï¿½ï¿½ï¿½ï¿½ 
     private void InitializeMonsterDatabase()
     {
         for (int i = 1; i < 30; i++)
@@ -44,12 +44,12 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    // ¸ó½ºÅÍ »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void CreateMonsters(S_MonsterSpawn spawnPacket)
     {
         foreach (var monsterInfo in spawnPacket.MonsterInfo)
         {
-            CreateMonster(monsterInfo); // °³º° ¸ó½ºÅÍ »ý¼º
+            CreateMonster(monsterInfo); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
 
@@ -58,10 +58,10 @@ public class MonsterManager : MonoBehaviour
         
         string id = monsterInfo.MonsterId;
 
-        // ÀÌ¹Ì Á¸ÀçÇÏ¸é »ý¼º X
+        // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ X
         if (monsterDict.ContainsKey(id))
         {
-            Debug.Log($"[¸ó½ºÅÍ »ý¼º] ID {id} ¸ó½ºÅÍ°¡ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.");
+            //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½] ID {id} ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
             return;
         }
 
@@ -71,28 +71,28 @@ public class MonsterManager : MonoBehaviour
         Quaternion rot = Quaternion.Euler(0, monsterInfo.Transform.Rot, 0);
         string name = monsterInfo.MonsterStatus.MonsterIdx.ToString();
 
-        // ¸ó½ºÅÍ ÇÁ¸®ÆÕ °æ·Î Ã£±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
         string monsterPath = monsterDb.GetValueOrDefault(Constants.MonsterCodeFactor + monsterCode, "Monster/Monster1");
         Monster monsterPrefab = Resources.Load<Monster>(monsterPath);
 
         if (monsterPrefab == null)
         {
-            Debug.LogError($"¸ó½ºÅÍ °æ·Î°¡ Á¤»óÀÌ ¾Æ´Õ´Ï´Ù. : {monsterPath}");
+            Debug.LogError($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½. : {monsterPath}");
             return;
         }
 
-        // ¸ó½ºÅÍ ÀÎ½ºÅÏ½º »ý¼º
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Monster newMonster = Instantiate(monsterPrefab, spawnPosition, rot);
         newMonster.Initialize(id, name, hp, spawnPosition, rot);
 
-        // ¸ó½ºÅÍ Ãß°¡
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
         monsterDict[id] = newMonster;
 
-        Debug.Log($"[¸ó½ºÅÍ »ý¼º] ID {id} ¸ó½ºÅÍ°¡ »ý¼º µÇ¾ú½À´Ï´Ù..");
+        //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½] ID {id} ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½..");
 
     }
 
-    // ¸ó½ºÅÍ ¾Ö´Ï¸ÞÀÌ¼Ç ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void MonsterAttckAnimation(S_MonsterAttck monsterAttckPacket)
     {
         foreach (var mMonsterId in monsterAttckPacket.MonsterId)
@@ -109,7 +109,7 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    // ¸ó½ºÅÍ »èÁ¦
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void DeleteMonster(S_MonsterDie monsterDiePacket)
     {
         foreach (var mMonsterId in monsterDiePacket.MonsterId)
@@ -119,14 +119,14 @@ public class MonsterManager : MonoBehaviour
             {
                 Monster findMonster = monsterDict[mMonsterId];
 
-                // ¿ÀºêÁ§Æ®°¡ Á¸ÀçÇÏ¸é »èÁ¦
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (findMonster != null)
                 {
                     findMonster.switchAnimation(monsterDiePacket.MonsterAinID);
 
                     // GameObject.Destroy(findMonster.gameObject);
 
-                    // Dictionary¿¡¼­µµ Á¦°Å
+                    // Dictionaryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     monsterDict.Remove(mMonsterId);
                 }
 
@@ -136,14 +136,14 @@ public class MonsterManager : MonoBehaviour
     }
 
 
-    // ¸ó½ºÅÍ ¾÷µ¥ÀÌÆ® 
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® 
     public void UpdateMonsters(S_MonsterMove monsterMovePacket)
     {
         // int id, float hp ,Vector3 position, Quaternion rot, float speed
 
         foreach (var monsterInfo in monsterMovePacket.TransformInfo)
         {
-            UpdateMonster(monsterInfo); // °³º° ¸ó½ºÅÍ ¾÷µ¥ÀÌÆ® 
+            UpdateMonster(monsterInfo); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® 
         }
 
     }
@@ -151,20 +151,20 @@ public class MonsterManager : MonoBehaviour
     public void UpdateMonster(SyncMonsterTransformInfo transformInfo)
     {
         string id = transformInfo.MonsterId;
-        //Debug.Log($"[¸ó½ºÅÍ ¾÷µ¥ÀÌÆ®] {transformInfo} ");
-        // ÀÌ¹Ì ¾ø´Ù¸é ¾÷µ¥ÀÌÆ® X
+        //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®] {transformInfo} ");
+        // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® X
         if (!monsterDict.ContainsKey(id))
         {
-            Debug.Log($"[¸ó½ºÅÍ ¾÷µ¥ÀÌÆ®] ID {id} ¸ó½ºÅÍ°¡ ¾ø½À´Ï´Ù.");
+            //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®] ID {id} ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             CreateMonster(transformInfo);
             return;
         } 
 
 
-        // Á¸ÀçÇÏ¸é ¸ó½ºÅÍ ¾÷µ¥ÀÌÆ® ÁøÇà.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½.
         Monster findMonster = monsterDict.GetValueOrDefault(id);
 
-        // ¾÷µ¥ÀÌÆ®¿¡ »ç¿ëÇÒ º¯¼ö »ý¼º.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
         float hp = transformInfo.MonsterStatus.MonsterHp;
         float speed = transformInfo.Speed;
         Vector3 targetPosition = new Vector3(transformInfo.Transform.PosX, transformInfo.Transform.PosY, transformInfo.Transform.PosZ);
@@ -173,24 +173,24 @@ public class MonsterManager : MonoBehaviour
 
         findMonster.UpdateMonsterPosition(targetPosition, rot, speed, hp);
 
-        Debug.Log($"[¸ó½ºÅÍ ¾÷µ¥ÀÌÆ®] ID {id} ¸ó½ºÅÍ°¡ ¾÷µ¥ÀÌÆ® µÇ¾ú½À´Ï´Ù..");
+        //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®] ID {id} ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½..");
 
     }
 
 
-    // ¸ó½ºÅÍ »èÁ¦. 
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. 
     public void RemoveMonster(string id)
     {
         if (monsterDict.ContainsKey(id))
         {
             Monster foundMonster = monsterDict.GetValueOrDefault(id);
-            monsterDict.Remove(id); // ÇØ´ç Å°¸¦ µñ¼Å³Ê¸®¿¡¼­ Á¦°Å
+            monsterDict.Remove(id); // ï¿½Ø´ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            // ¸ó½ºÅÍ ¿ÀºêÁ§Æ® »èÁ¦
-            Destroy(foundMonster.gameObject); // °ÔÀÓ ¿ÀºêÁ§Æ® »èÁ¦
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+            Destroy(foundMonster.gameObject); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         } else
         {
-            Debug.LogError($"»èÁ¦ÇÒ ¸ó½ºÅÍ {id}°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.LogError($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ {id}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
         }
         
     }

@@ -12,6 +12,7 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] private MyPlayer mPlayer;
     [SerializeField] private InventoryContainer inventory;
     [SerializeField] private EquipmentContainer equipment;
+    [SerializeField] private StorageContainer storage;
     [SerializeField] GameObject marketplace;
     [SerializeField] private GameObject party;
 
@@ -71,6 +72,9 @@ public class UIAnimation : MonoBehaviour
         switch (true)
         {
             // �κ��丮 Ű 
+            case var _ when Input.GetKeyDown(KeyCode.O):
+                storage.Toggle();
+                break;
             case var _ when Input.GetKeyDown(KeyCode.I):
                 inventory.Toggle();
                 break;

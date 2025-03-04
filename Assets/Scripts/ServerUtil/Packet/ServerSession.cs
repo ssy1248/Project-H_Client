@@ -60,7 +60,7 @@ public class ServerSession : PacketSession
 
 	public override void OnRecvPacket(ArraySegment<byte> buffer)
 	{
-        Debug.Log($"패킷 수신 크기: {buffer.Count}");
+        //Debug.Log($"패킷 수신 크기: {buffer.Count}");
         PacketManager.Instance.OnRecvPacket(this, buffer);
 	}
 

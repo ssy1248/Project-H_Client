@@ -130,7 +130,7 @@ class PacketManager
             return;
         }
 
-        Debug.Log($"패킷 크기: {size}");
+        //Debug.Log($"패킷 크기: {size}");
         count += 4;
 
         // 아이디를 1바이트로 읽음
@@ -141,7 +141,7 @@ class PacketManager
             return;
         }
 
-        Debug.Log($"패킷 ID: {id}");
+        //Debug.Log($"패킷 ID: {id}");
         count += 1;
 
         Action<PacketSession, ArraySegment<byte>, ushort> action = null;
@@ -150,7 +150,7 @@ class PacketManager
 
         if (_onRecv.TryGetValue(id, out action))
         {
-            Debug.Log($"패킷 핸들러 실행: {id}");
+            //Debug.Log($"패킷 핸들러 실행: {id}");
             action.Invoke(session, buffer, id);
         }
         else
@@ -165,7 +165,7 @@ class PacketManager
         {
             T pkt = new T();
             pkt.MergeFrom(buffer.Array, buffer.Offset + 5, buffer.Count - 5);
-            Debug.Log($"패킷 역직렬화 성공: {typeof(T).Name}");
+            //Debug.Log($"패킷 역직렬화 성공: {typeof(T).Name}");
 
             if (CustomHandler != null)
             {
