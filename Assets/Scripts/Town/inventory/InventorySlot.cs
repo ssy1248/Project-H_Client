@@ -50,6 +50,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         // 슬롯 데이터 삭제
         _data = null;
+        quantityText.text = "";
         itemImage.sprite = null;
         itemImage.color = new UnityEngine.Color(1, 1, 1, 0);
     }

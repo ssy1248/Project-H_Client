@@ -255,6 +255,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                     equipmentContainer.SetItem(_inventory[i]);
                     break;
                 case (int)InventorySlot.SlotType.STORAGE:
+                    break;
                 default:
                     storageContainer.AddItem(_inventory[i], _inventory[i].Position);
                     break;
