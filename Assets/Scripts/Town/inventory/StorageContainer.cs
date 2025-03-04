@@ -85,6 +85,7 @@ public class StorageContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public ItemInfo RemoveItem(int index)
     {
+        if (index < 0) return null;
         var item = itemSlots[index].data;
         itemSlots[index].ClearItem();
         return item;
@@ -192,7 +193,7 @@ public class StorageContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                         return;
                     case InventorySlot.SlotType.EQUIPMENT:
                         // 장비 창에 놓으면
-                        var equipmentSlot = other as EquipmentSlot;
+                        var equipmentSlot = other;
 
                         // 올바른 자리에 놓았는지 확인
                         if (equipmentSlot.index == slot.data.ItemType)
@@ -234,7 +235,7 @@ public class StorageContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         var slot = FindItemSlot(itemId);
         if (slot == null)
         {
-            Debug.LogError("Slot not found");
+            Debug.LogWarning("Slot not found");
             return;
         }
 
@@ -249,6 +250,7 @@ public class StorageContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                 break;
             // storage -> storage
             case (int)InventorySlot.SlotType.STORAGE:
+                if (position == slot.index) break;
                 temp = RemoveItem(position);
                 AddItem(item, position);
                 slot.SetItem(temp);

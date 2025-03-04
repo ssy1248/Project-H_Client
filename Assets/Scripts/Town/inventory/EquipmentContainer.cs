@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
@@ -12,7 +11,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Button btn_close;
     public CanvasGroup canvasGroup;
     public ItemInfoPanel itemInfoPanel;
-    public EquipmentSlot headSlot, shirtSlot, pantsSlot, righthandSlot, lefthandSlot, footSlot;
+    public InventorySlot headSlot, shirtSlot, pantsSlot, righthandSlot, lefthandSlot, footSlot;
     private bool isShowing = false;
     private Transform originalParent;
     private Vector2 offset;
@@ -37,7 +36,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="item">장착할 아이템</param>
     public void Equip(ItemInfo item)
     {
-        EquipmentSlot slot = null;
+        InventorySlot slot = null;
         switch (item.ItemType)
         {
             case (int)ItemType.Head:
@@ -56,12 +55,13 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                 slot = righthandSlot;
                 break;
         }
+        if (slot == null) return;
         slot.SetItem(item);
     }
 
     public ItemInfo Disrobe(int itemType)
     {
-        EquipmentSlot slot = null;
+        InventorySlot slot = null;
         switch (itemType)
         {
             case (int)ItemType.Head:
@@ -79,15 +79,16 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
             case (int)ItemType.Weapon:
                 slot = righthandSlot;
                 break;
-            default:
-                return null;
         }
+        if (slot == null) return null;
+        if (slot.isEmpty) return null;
         var item = slot.data;
         slot.ClearItem();
         return item;
     }
 
-    public ItemInfo Disrobe(InventorySlot slot){
+    public ItemInfo Disrobe(InventorySlot slot)
+    {
         var item = slot.data;
         slot.ClearItem();
         return item;
@@ -98,7 +99,8 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         var slot = FindTypeSlot(item);
         if (slot == null)
         {
-            Debug.LogError("아이템 타입이 잘못되었습니다");
+            Debug.LogWarning("아이템 타입이 잘못되었습니다");
+            return;
         }
         // 장비 슬롯에 장착
         slot.SetItem(item);
@@ -133,7 +135,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
     #endregion
     #region private
-    private void InitializeSlot(EquipmentSlot slot, int itemType)
+    private void InitializeSlot(InventorySlot slot, int itemType)
     {
         slot.onPointerEnterAction += ShowItemInfoPanel;
         slot.onPointerExitAction += HideItemInfoPanel;
@@ -143,7 +145,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         slot.onEndDragAction += OnDragEndHandler;
         slot.Init(itemType, InventorySlot.SlotType.EQUIPMENT);
     }
-    private EquipmentSlot FindItemSlot(int itemId)
+    private InventorySlot FindItemSlot(int itemId)
     {
         if (!headSlot.isEmpty)
             if (headSlot.data.Id == itemId)
@@ -165,7 +167,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                 return lefthandSlot;
         return null;
     }
-    private EquipmentSlot FindItemSlot(ItemInfo item)
+    private InventorySlot FindItemSlot(ItemInfo item)
     {
         var itemId = item.Id;
         if (!headSlot.isEmpty)
@@ -189,7 +191,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         return null;
     }
 
-    private EquipmentSlot FindTypeSlot(ItemInfo item)
+    private InventorySlot FindTypeSlot(ItemInfo item)
     {
         switch (item.ItemType)
         {
@@ -266,14 +268,16 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         var slot = FindItemSlot(data.ItemId);
         if (slot == null) return;
 
-        // 아이템 이동 위치 확인
-        var disrobed = Disrobe(slot);
+        // equipment -> inventory
         if (data.Storage == (int)InventorySlot.SlotType.INVENTORY)
         {
+            var disrobed = Disrobe(slot);
             inventoryContainer.AddItem(disrobed, data.Position);
         }
+        // equipment -> storage
         else if (data.Storage == (int)InventorySlot.SlotType.STORAGE)
         {
+            var disrobed = Disrobe(slot);
             storageContainer.AddItem(disrobed, data.Position);
         }
     }

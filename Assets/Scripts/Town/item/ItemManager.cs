@@ -39,7 +39,6 @@ public class ItemManager : MonoBehaviour
         foreach (ItemData item in data)
         {
             itemData.Add(item.Id, item);
-            Debug.Log(item);
         }
     }
     public ItemData GetBuyId(int id)

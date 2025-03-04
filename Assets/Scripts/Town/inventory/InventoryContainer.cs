@@ -87,6 +87,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public ItemInfo RemoveItem(int index)
     {
+        if (index < 0) return null;
         var item = itemSlots[index].data;
         itemSlots[index].ClearItem();
         return item;
@@ -254,6 +255,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                     equipmentContainer.SetItem(_inventory[i]);
                     break;
                 case (int)InventorySlot.SlotType.STORAGE:
+                default:
                     storageContainer.AddItem(_inventory[i], _inventory[i].Position);
                     break;
             }
@@ -270,7 +272,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         var slot = FindItemSlot(itemId);
         if (slot == null)
         {
-            Debug.LogError("Slot not found");
+            Debug.LogWarning("Slot not found");
             return;
         }
 
@@ -279,6 +281,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             // inventory -> inventory
             case (int)InventorySlot.SlotType.INVENTORY:
+                if (position == slot.index) break;
                 var temp = RemoveItem(position);
                 AddItem(item, position);
                 slot.SetItem(temp);

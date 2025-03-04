@@ -8,10 +8,9 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     public enum SlotType
     {
-        NONE = 0,
+        INVENTORY = 0,
         EQUIPMENT = 1,
-        INVENTORY = 2,
-        STORAGE = 3,
+        STORAGE = 2,
     }
     public Image itemImage;
     public TMPro.TextMeshProUGUI quantityText;
@@ -59,6 +58,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if(data == null){
             ClearItem();
+            return;
         }
         // 슬롯 데이터 초기화
         _data = data;
