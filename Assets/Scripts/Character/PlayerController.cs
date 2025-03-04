@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     private int dodgeEffectRogueIndex = 0; // 도적 Dodge 이펙트 인덱스
     public float moveSpeed = 10f;
 
+    private int comboIndex = 0; // 콤보 순서 저장 변수
+    private float comboResetTime = 1.0f; // 콤보가 초기화되는 시간
+    private float lastAttackTime = 0f; // 마지막 공격 시간 저장
+
     private Camera camera;
     protected NavMeshAgent nav;
 
@@ -327,8 +331,10 @@ public class PlayerController : MonoBehaviour
         {
             equipWeapon.Use();
 
-            int attackIndex = Random.Range(0, 2);
-            anim.SetInteger("attackIndex", attackIndex);
+            // 마우스 클릭할 때마다 콤보 증가 (순환)
+            comboIndex = (comboIndex + 1) % 3; // 예제에서는 0, 1을 번갈아가며 실행
+
+            anim.SetInteger("attackIndex", comboIndex);
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
 
             // 마우스 클릭한 위치를 기준으로 방향 설정
@@ -348,6 +354,13 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isRun", false);
 
             fireDelay = 0;
+            lastAttackTime = Time.time; // 마지막 공격 시간 저장
+        }
+
+        // 일정 시간이 지나면 콤보 초기화
+        if (Time.time - lastAttackTime > comboResetTime)
+        {
+            comboIndex = 0;
         }
     }
 

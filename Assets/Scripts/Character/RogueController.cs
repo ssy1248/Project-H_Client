@@ -10,6 +10,8 @@ public class RogueController : PlayerController
     public GameObject LandEffectPoolObj; // 풀을 저장할 리스트
     private List<GameObject> LandEffectPool; // 풀을 저장할 리스트
 
+    public int maxComboCount = 3; // 기본 콤보 개수
+
     private void Start()
     {
         anim = GetComponent<Animator>();

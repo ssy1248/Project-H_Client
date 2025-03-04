@@ -48,7 +48,7 @@ public class BossController : Enemy
             fanCollider.isTrigger = true;
         }
 
-        // 부채꼴 범위 초기화
+        // 사각형 범위 초기화
         if (squareShapeRange != null)
         {
             squareShapeRange.SetActive(false);  // 초기에는 비활성화
@@ -158,8 +158,6 @@ public class BossController : Enemy
             squareCollider.size = squareShapeRange.transform.localScale;
         }
 
-        yield return new WaitForSeconds(0f);
-
         yield return new WaitForSeconds(3f);
 
         yield return new WaitForSeconds(1f);
@@ -208,8 +206,6 @@ public class BossController : Enemy
             fanCollider.radius = fanShapeRange.transform.localScale.x / 2f;
         }
 
-        yield return new WaitForSeconds(0f);
-
         yield return new WaitForSeconds(3f);
 
         yield return new WaitForSeconds(1f);
@@ -255,6 +251,15 @@ public class BossController : Enemy
                 warningCircle.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f); // 크기 설정
                 warningCircle.transform.rotation = Quaternion.Euler(-90f, 90f, 0); // 원형 범위가 올바르게 보이도록 회전
 
+                // SphereCollider 설정
+                SphereCollider collider = warningCircle.GetComponent<SphereCollider>();
+                if (collider == null)
+                {
+                    collider = warningCircle.AddComponent<SphereCollider>(); // 없으면 추가
+                }
+                collider.radius = warningCircle.transform.localScale.x / 2f; // 크기에 맞게 설정
+                collider.isTrigger = true; // 충돌 감지용
+
                 warningCircle.SetActive(true);
                 warningCircles.Add(warningCircle);
             }
@@ -265,13 +270,13 @@ public class BossController : Enemy
         // 칼이 순차적으로 떨어짐
         for (int i = 0; i < bladeCount; i++)
         {
-            Vector3 spawnPosition = new Vector3(attackPositions[i].x, 10f, attackPositions[i].z); // Y축을 10f로 설정하여 위에서 떨어지도록 조정
+            Vector3 spawnPosition = new Vector3(attackPositions[i].x, 12f, attackPositions[i].z); // Y축을 10f로 설정하여 위에서 떨어지도록 조정
             GameObject blade = Instantiate(bladePrefab, spawnPosition, Quaternion.identity);
 
             // 칼을 180도 회전시켜서 떨어지도록 적용
             blade.transform.rotation = Quaternion.Euler(180f, 0f, 0f); // X축을 기준으로 180도 회전
 
-            blade.GetComponent<Rigidbody>().velocity = Vector3.down * 6f; // 아래로 떨어지는 속도 적용
+            blade.GetComponent<Rigidbody>().velocity = Vector3.down * 5f; // 아래로 떨어지는 속도 적용
 
         }
 
