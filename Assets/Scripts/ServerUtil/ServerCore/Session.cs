@@ -78,14 +78,14 @@ namespace ServerCore
 
 		public void Start(Socket socket)
 		{
-            Debug.Log("Session Start 호출됨");
+            //Debug.Log("Session Start 호출됨");
             _socket = socket;
 
             _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
             RegisterRecv();
-            Debug.Log("RegisterRecv 호출됨");
+            //Debug.Log("RegisterRecv 호출됨");
         }
 
 		public void Send(List<ArraySegment<byte>> sendBuffList)
@@ -189,10 +189,10 @@ namespace ServerCore
 
             try
             {
-                Debug.Log("ReceiveAsync 호출");
+                //Debug.Log("ReceiveAsync 호출");
                 bool pending = _socket.ReceiveAsync(_recvArgs);
 
-				Debug.Log(pending);
+				//Debug.Log(pending);
                 if (pending == false)
                     OnRecvCompleted(null, _recvArgs);
             }

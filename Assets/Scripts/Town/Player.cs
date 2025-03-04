@@ -243,7 +243,6 @@ public class Player : MonoBehaviour
 
     void Mousemove()
     {
-        Debug.Log("마우스 무브 들어옴");
         Vector3 currentPos = new Vector3(transform.position.x, 0, transform.position.z);
         Vector3 destination = new Vector3(moveVec.x, 0, moveVec.z);
         Vector3 dir = destination - currentPos;
@@ -420,7 +419,6 @@ public class Player : MonoBehaviour
         goalPos = move;
         goalRot = rot;
         agentSpeed = speed;
-        Debug.Log(goalPos);
     }
     #endregion
 
