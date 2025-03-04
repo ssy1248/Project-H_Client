@@ -89,32 +89,12 @@ public class PlayerActionManager : MonoBehaviour
         {
             if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
-                player.Dodge();
-
-                // 서버에서 전달받은 최종 좌표
-                Vector3 serverFinalPos = new Vector3(
+                //player.Dodge();
+                // (예측 좌표 비교 로직을 생략하고) 서버 계산 좌표를 부드럽게 적용합니다.
+                player.InterpolateToPosition(new Vector3(
                     result.FinalPosition.X,
                     result.FinalPosition.Y,
-                    result.FinalPosition.Z
-                );
-
-                // 클라이언트에서 계산한 예측 좌표 (예: 플레이어가 회피 시 계산한 좌표)
-                Vector3 predictedPos = player.GetPredictedDodgePosition(); // 사용자가 직접 구현한 메서드
-
-                // 두 좌표 사이의 오차 허용 범위 (예: 0.5 유닛)
-                float tolerance = 0.5f;
-                if (Vector3.Distance(predictedPos, serverFinalPos) < tolerance)
-                {
-                    // 예측이 서버 결과와 거의 일치하면 바로 적용
-                    player.SetPosition(serverFinalPos);
-                }
-                else
-                {
-                    // 차이가 큰 경우 보간(interpolation)을 통해 부드럽게 보정 (고무줄 효과)
-                    player.InterpolateToPosition(serverFinalPos);
-                }
-
-                // 회피 애니메이션 등 추가 처리
+                    result.FinalPosition.Z));
                 player.TriggerDodgeAnimation();
                 break;
             }
@@ -134,6 +114,15 @@ public class PlayerActionManager : MonoBehaviour
     {
         Debug.Log($"스킬 공격 결과: 스킬ID={result.SkillId}, 대상ID={result.TargetId}, 피해량={result.DamageDealt}");
         // 여기서 UI 업데이트나 게임 로직에 반영
+        Player[] players = GameObject.FindObjectsOfType<Player>();
+        foreach (Player player in players)
+        {
+            if (player.MPlayer != null && player.nickname == result.UseUserName)
+            {
+                player.Skill();
+                break;
+            }
+        }
     }
 
     // 일반 공격 액션이 들어오면 처리할 핸들러
@@ -158,22 +147,29 @@ public class PlayerActionManager : MonoBehaviour
         var myPlayer = DungeonManager.Instance.MyPlayer;
             
         // 플레이어가 바라보는 방향을 구합니다.
-        Vector3 playerForward = myPlayer.transform.forward;
+        Vector3 playerForward = myPlayer.transform.forward.normalized;
 
-        // 프로토버퍼 메시지 형식에 맞게 Vector3 객체로 변환합니다.
-        Google.Protobuf.Protocol.Vector directionProto = new Google.Protobuf.Protocol.Vector
+        // 현재 위치
+        Vector currentPositionProto = new Vector
+        {
+            X = transform.position.x,
+            Y = transform.position.y,
+            Z = transform.position.z
+        };
+
+        // 프로토버퍼 메시지 형식에 맞게 Vector3 객체로 변환합니다. -> 바라보는 방향
+        Vector directionProto = new Vector
         {
             X = playerForward.x,
             Y = playerForward.y,
             Z = playerForward.z
         };
 
-        // dodgeDistance 필드는 클라이언트에서 보내지 않도록 하거나 기본값(예: 0)으로 처리합니다.
         DodgeAction dodgeAction = new DodgeAction
         {
             AttackerName = myPlayer.nickname,
+            CurrentPosition = currentPositionProto,
             Direction = directionProto
-            // dodgeDistance는 서버 권위적인 값으로 계산되므로 클라이언트에서는 보내지 않습니다.
         };
 
         C_PlayerAction actionPacket = new C_PlayerAction

@@ -192,6 +192,11 @@ public class Player : MonoBehaviour
 
     private IEnumerator MoveToPositionCoroutine(Vector3 targetPos, float duration)
     {
+        if (gameObject.CompareTag("Archer"))
+            ActivateDodgeEffect(dodgeEffectsArcher, ref dodgeEffectArcherIndex);
+        else if (gameObject.CompareTag("Rogue"))
+            ActivateDodgeEffect(dodgeEffectsRogue, ref dodgeEffectRogueIndex);
+
         Vector3 startPos = transform.position;
         float elapsed = 0f;
         while (elapsed < duration)
@@ -272,6 +277,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // 실질적인 회피 함수
     public void Dodge()
     {
         if (!isDodge)
@@ -281,6 +287,7 @@ public class Player : MonoBehaviour
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward;
             // 회피 예측 좌표 계산
             predictedDodgePos = transform.position + dodgeVec * dodgeDistance;
+            Debug.Log("클라 예측 좌표 : " + predictedDodgePos);
             // 배속 적용 (필요에 따라 값 조정)
             speed *= 2;
             // 새로 추가한 함수로 회피 애니메이션 트리거
@@ -355,6 +362,18 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         effect.SetActive(false);
+    }
+
+    public void Skill()
+    {
+        if (equipWeapon == null)
+            return;
+
+        if(!isDodge)
+        {
+            equipWeapon.Use();
+
+        }
     }
 
     public void Attack()

@@ -1180,6 +1180,8 @@ public class TownManager : MonoBehaviour
 
             int dungeon = data.DungeonSession.PartyInfo.DungeonIndex;
             LoadingWindow.GetComponentInChildren<Loading>().Index = dungeon;
+            PartyManager partyManager = FindFirstObjectByType<PartyManager>();
+            partyManager.InDungeonPartyInfo = data.Party;
         }
     }
    
