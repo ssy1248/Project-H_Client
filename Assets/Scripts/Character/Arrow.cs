@@ -5,19 +5,17 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     public int damage;
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-        {
-            Destroy(gameObject, 3);
-        }
+    public Weapon weapon;
 
-    }
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Wall")
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);  // 화살 비활성화
+            if (weapon != null)
+            {
+                weapon.ReturnArrow(gameObject);
+            }
         }
     }
 }
