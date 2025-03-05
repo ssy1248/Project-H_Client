@@ -158,7 +158,7 @@ public class Player : MonoBehaviour
     }
 
     #region Dodge Prediction Methods
-    // 회피 보간 시간 (서버와의 좌표 차이 보정용)
+    // 회피 보간 시간 
     public float dodgeInterpolationTime = 0.3f;
 
     // 회피 입력 시 계산된 예측 좌표
@@ -182,7 +182,6 @@ public class Player : MonoBehaviour
 
     /// <summary>
     /// 현재 위치에서 targetPos까지 일정 시간 동안 보간(interpolation)하여 이동합니다.
-    /// (고무줄 효과 연출)
     /// </summary>
     public void InterpolateToPosition(Vector3 targetPos)
     {

@@ -84,17 +84,23 @@ public class PlayerActionManager : MonoBehaviour
         Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, " +
              $"이동 거리={result.DodgeDistance}, " +
              $"최종 위치=({result.FinalPosition.X}, {result.FinalPosition.Y}, {result.FinalPosition.Z})");
+
         Player[] players = GameObject.FindObjectsOfType<Player>();
         foreach (Player player in players)
         {
             if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
                 //player.Dodge();
-                // (예측 좌표 비교 로직을 생략하고) 서버 계산 좌표를 부드럽게 적용합니다.
-                player.InterpolateToPosition(new Vector3(
+                // 서버 계산 좌표를 부드럽게 적용합니다.
+                //player.InterpolateToPosition(new Vector3(
+                //    result.FinalPosition.X,
+                //    result.FinalPosition.Y,
+                //    result.FinalPosition.Z));
+                player.SetPosition(new Vector3(
                     result.FinalPosition.X,
                     result.FinalPosition.Y,
-                    result.FinalPosition.Z));
+                    result.FinalPosition.Z)
+                    );
                 player.TriggerDodgeAnimation();
                 break;
             }
@@ -182,7 +188,7 @@ public class PlayerActionManager : MonoBehaviour
 
     void SkillAttackRequest()
     {
-        int targetId = 1;
+        string targetId = GetTargetIdFromMouseClick();
 
         // SkillAttack 메세지 생성
         SkillAttack skillAttack = new SkillAttack
@@ -204,8 +210,9 @@ public class PlayerActionManager : MonoBehaviour
 
     void NormalAttackRequest()
     {
-        // 예시: 레이캐스트를 통해 타겟을 얻거나, 타겟 ID를 직접 결정할 수 있습니다.
-        int targetId = 1;//GetTargetIdFromMouseClick();
+        // 레이캐스트를 통해 타겟을 얻거나, 타겟 ID를 직접 결정할 수 있습니다.
+        string targetId = GetTargetIdFromMouseClick();
+        Debug.Log("TargetId : " + targetId);
 
         // NormalAttack 메시지 생성
         NormalAttack normalAttack = new NormalAttack
@@ -225,22 +232,26 @@ public class PlayerActionManager : MonoBehaviour
         GameManager.Network.Send(actionPacket);
     }
 
-    // 예시: 마우스 클릭 시 레이캐스트로 타겟 ID를 얻는 함수 (실제 구현은 상황에 맞게 수정)
-    int GetTargetIdFromMouseClick()
+    // 마우스 클릭 시 레이캐스트로 타겟 ID를 얻는 함수 (실제 구현은 상황에 맞게 수정)
+    string GetTargetIdFromMouseClick()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            // hit.collider.gameObject에 해당하는 오브젝트에서 타겟 ID를 가져온다고 가정
-            // 예: TargetIdentifier 스크립트가 붙어있다고 가정
-            TargetIdentifier identifier = hit.collider.GetComponent<TargetIdentifier>();
-            if (identifier != null)
+            Debug.Log("레이캐스트 들어옴");
+            if(hit.collider.gameObject.CompareTag("Monster") == true)
             {
-                return identifier.targetId;
+                string targetID = hit.transform.GetComponent<Monster>().MonsterId;
+                Debug.Log($"클릭한 몬스터 ID : {targetID}");
+                return targetID;
+            } 
+            else
+            {
+                Debug.Log("태그가 틀림?");
             }
         }
         // 타겟이 없으면 0이나 -1 같은 기본값 반환 (필요에 따라 처리)
-        return -1;
+        return "-1";
     }
 }
