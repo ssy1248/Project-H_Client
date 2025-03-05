@@ -2,6 +2,7 @@ using Cinemachine;
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -98,6 +99,17 @@ public class DungeonManager : MonoBehaviour
         GameManager.Network.Send(movePacket);
     }
     // 서버에서 받기 
+    public void Despawn(S_Despawn data)
+    {
+        Player playerToRemove = players[data.PlayerId];
+
+        if (playerToRemove != null)
+        {
+            players.Remove(data.PlayerId);
+            playerList.Remove(data.PlayerId);
+            playerToRemove.DespawnEffect();
+        }
+    }
     public void FinalizeBuyAuctionResponse(S_FinalizeBuyAuction data)
     {
         rewardAuction.GetReward(data.Name,data.ItemId,true);

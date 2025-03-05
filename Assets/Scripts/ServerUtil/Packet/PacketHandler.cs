@@ -33,7 +33,17 @@ class PacketHandler
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Despawn enterPacket) return;
-        TownManager.Instance.Despawn(enterPacket);
+        if (TownManager.Instance != null)
+        {
+            TownManager.Instance.Despawn(enterPacket);
+            return;
+        }
+        if (DungeonManager.Instance != null)
+        {
+            DungeonManager.Instance.Despawn(enterPacket);
+            return;
+        }
+
     }
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
