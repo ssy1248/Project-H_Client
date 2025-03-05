@@ -1491,7 +1491,6 @@ MonoBehaviour:
   landEffectPrefab: {fileID: 2154017420452501535}
   jumpForce: 10
   LandEffectPoolObj: {fileID: 4541366777395646174}
-  maxComboCount: 3
 --- !u!1 &3688192372485551812
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,7 +1596,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.5
+  m_Time: 0.15
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -1607,7 +1606,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.41000175
+        value: 0.22443199
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -6387,7 +6386,6 @@ MonoBehaviour:
   trailEffect: {fileID: 5496807388402932720}
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
-  ArrowFormPos: {fileID: 0}
   arrowPoolObject: {fileID: 0}
   poolSize: 10
   isCounterAttack: 0
