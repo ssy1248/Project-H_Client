@@ -742,7 +742,7 @@ public class TownManager : MonoBehaviour
     //파티 가입
     public void PartyJoinHandler(S_PartyResponse data)
     {
-        StartCoroutine("errorText");
+        //StartCoroutine("errorText");
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 가입 받은 데이터 : {data}");
 

@@ -109,7 +109,7 @@ public class Monster : MonoBehaviour
         moveSpeed = speed;
         MonsterHp = hp;
         //이동
-        MoveTowardsTarget();
+        //MoveTowardsTarget();
         Debug.Log($"받은 몬스터 좌표 {targetRot}");
     }
 
@@ -168,35 +168,34 @@ public class Monster : MonoBehaviour
 
 
 
-        //if(targetPosition != null)
-        //{
-        //    // 현재 위치와 목표 위치 간의 방향 벡터 계산
-        //    Vector3 directionToTarget2 = targetPosition - transform.position;
-        //    directionToTarget2.y = 0;  // 수평 이동만 고려
+        if (targetPosition != null)
+        {
+            // 현재 위치와 목표 위치 간의 방향 벡터 계산
+            Vector3 directionToTarget2 = targetPosition - transform.position;
+            directionToTarget2.y = 0;  // 수평 이동만 고려
 
-        //    // 목표 위치까지 이동할 거리 계산
-        //    float distanceToTarget = directionToTarget2.magnitude;
+            // 목표 위치까지 이동할 거리 계산
+            float distanceToTarget = directionToTarget2.magnitude;
 
-        //    // 만약 목표 위치까지의 거리가 일정 범위 이하라면 이동 멈춤
-        //    if (distanceToTarget < 0.1f)
-        //    {
-        //        transform.position = targetPosition;  // 목표 위치로 정확히 이동
-        //        return;
-        //    }
+            // 만약 목표 위치까지의 거리가 일정 범위 이하라면 이동 멈춤
+            if (distanceToTarget < 0.1f)
+            {
+                transform.position = targetPosition;  // 목표 위치로 정확히 이동
+                return;
+            }
 
-        //    // 이동 속도 설정 (예: 4 units per second)
-        //    float moveSpeed = 4f;
-        //    Vector3 moveDirection = directionToTarget2.normalized;  // 이동 방향 벡터를 정규화
+            // 이동 속도 설정 (예: 4 units per second)
+            float moveSpeed = 4f;
+            Vector3 moveDirection = directionToTarget2.normalized;  // 이동 방향 벡터를 정규화
 
-        //    // 보간 이동: 이전 위치에서 목표 위치로 부드럽게 이동
-        //    Vector3 newPosition = Vector3.Lerp(lastPosition, targetPosition, Time.deltaTime * moveSpeed);
+            // 보간 이동: 이전 위치에서 목표 위치로 부드럽게 이동
+            Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
 
-        //    // 새로운 위치로 이동
-        //    transform.position = newPosition;
+            // 새로운 위치로 이동
+            transform.position = newPosition;
 
-        //    // 이전 위치를 갱신
-        //    lastPosition = transform.position;
-        //}
+            
+        }
 
 
         // 회전 목표가 변경되었을 때만 회전을 시작하도록 처리
