@@ -109,8 +109,8 @@ public class Monster : MonoBehaviour
         moveSpeed = speed;
         MonsterHp = hp;
         //�̵�
-        MoveTowardsTarget();
-        //Debug.Log($"���� ���� ��ǥ {targetRot}");
+        //MoveTowardsTarget();
+        Debug.Log($"���� ���� ��ǥ {targetRot}");
     }
 
     // Ÿ�� ��ġ�� �̵��ϴ� ���� (���Ͱ� Ÿ���� ����)
@@ -168,35 +168,34 @@ public class Monster : MonoBehaviour
 
 
 
-        //if(targetPosition != null)
-        //{
-        //    // ���� ��ġ�� ��ǥ ��ġ ���� ���� ���� ���
-        //    Vector3 directionToTarget2 = targetPosition - transform.position;
-        //    directionToTarget2.y = 0;  // ���� �̵��� ����
+        if (targetPosition != null)
+        {
+            // ���� ��ġ�� ��ǥ ��ġ ���� ���� ���� ���
+            Vector3 directionToTarget2 = targetPosition - transform.position;
+            directionToTarget2.y = 0;  // ���� �̵��� ����
 
-        //    // ��ǥ ��ġ���� �̵��� �Ÿ� ���
-        //    float distanceToTarget = directionToTarget2.magnitude;
+            // ��ǥ ��ġ���� �̵��� �Ÿ� ���
+            float distanceToTarget = directionToTarget2.magnitude;
 
-        //    // ���� ��ǥ ��ġ������ �Ÿ��� ���� ���� ���϶�� �̵� ����
-        //    if (distanceToTarget < 0.1f)
-        //    {
-        //        transform.position = targetPosition;  // ��ǥ ��ġ�� ��Ȯ�� �̵�
-        //        return;
-        //    }
+            // ���� ��ǥ ��ġ������ �Ÿ��� ���� ���� ���϶�� �̵� ����
+            if (distanceToTarget < 0.1f)
+            {
+                transform.position = targetPosition;  // ��ǥ ��ġ�� ��Ȯ�� �̵�
+                return;
+            }
 
-        //    // �̵� �ӵ� ���� (��: 4 units per second)
-        //    float moveSpeed = 4f;
-        //    Vector3 moveDirection = directionToTarget2.normalized;  // �̵� ���� ���͸� ����ȭ
+            // �̵� �ӵ� ���� (��: 4 units per second)
+            float moveSpeed = 4f;
+            Vector3 moveDirection = directionToTarget2.normalized;  // �̵� ���� ���͸� ����ȭ
 
-        //    // ���� �̵�: ���� ��ġ���� ��ǥ ��ġ�� �ε巴�� �̵�
-        //    Vector3 newPosition = Vector3.Lerp(lastPosition, targetPosition, Time.deltaTime * moveSpeed);
+            // ���� �̵�: ���� ��ġ���� ��ǥ ��ġ�� �ε巴�� �̵�
+            Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
 
-        //    // ���ο� ��ġ�� �̵�
-        //    transform.position = newPosition;
+            // ���ο� ��ġ�� �̵�
+            transform.position = newPosition;
 
-        //    // ���� ��ġ�� ����
-        //    lastPosition = transform.position;
-        //}
+            
+        }
 
 
         // ȸ�� ��ǥ�� ����Ǿ��� ���� ȸ���� �����ϵ��� ó��

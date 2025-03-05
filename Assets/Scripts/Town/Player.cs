@@ -30,6 +30,9 @@ public class Player : MonoBehaviour
     public float SmoothRotateSpeed = 10f;     // 원격 보간 회전 속도
     public float TeleportDistanceThreshold = 10f; // 순간 이동 거리 임계값
 
+    public float raycastDistance = 10f;  // 레이캐스트의 거리
+    public LayerMask groundLayer;
+
     // 원격 이동용 변수
     public Vector3 goalPos;
     public Quaternion goalRot;
@@ -419,6 +422,22 @@ public class Player : MonoBehaviour
         goalPos = move;
         goalRot = rot;
         agentSpeed = speed;
+        Debug.Log(goalPos);
+
+        // 캐릭터의 위치에서 아래로 레이캐스트 쏘기
+        RaycastHit hit;
+        goalPos.y += 5.0f;
+        if (Physics.Raycast(goalPos, Vector3.down, out hit, raycastDistance, groundLayer))
+        {
+            goalPos.y = hit.point.y;
+            Debug.Log($" 히트함 :  {hit.point.y}");
+        }
+        else
+        {
+            Debug.Log($"히트안함 :  {goalPos.y}");
+        }
+
+
     }
     #endregion
 
