@@ -495,7 +495,7 @@ public class TownManager : MonoBehaviour
         {
             players.Remove(playerToRemove);
             playerList.Remove(data.PlayerId);
-            //playerToRemove.Despawn();
+            playerToRemove.DespawnEffect();
 
         }
     }
@@ -1192,8 +1192,9 @@ public class TownManager : MonoBehaviour
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
-
+  
             ActivateGameUI();
+            MyPlayer.SpawnEffect();
             return;
         }
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
@@ -1202,6 +1203,7 @@ public class TownManager : MonoBehaviour
 
         // 플레이어를 리스트에 추가
         players.Add(player);
+        player.SpawnEffect();
     }
 
     //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)

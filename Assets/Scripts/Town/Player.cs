@@ -531,11 +531,28 @@ public class Player : MonoBehaviour
     }
 
     // 게임 오브젝트 제거 (Despawn)
-    /*
-    public void Despawn()
+    
+    public void DespawnEffect()
     {
-        uiNameChat.PushText(msg);
-        uiChat.PushMessage(msg, IsMine, type);
+        GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
+        StartCoroutine(DestroyThis(temp));
     }
-    */
+    public void SpawnEffect()
+    {
+        GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
+        StartCoroutine(EndSpawnEffect(temp));
+    }
+    IEnumerator EndSpawnEffect(GameObject obj)
+    {
+        yield return new WaitForSeconds(1f);
+        SpawnManger.Instance.setData(obj);
+    }
+    IEnumerator DestroyThis(GameObject obj)
+    {
+        yield return new WaitForSeconds(1f);
+        SpawnManger.Instance.setData(obj);
+        Destroy(gameObject);
+        StopAllCoroutines();
+    }
+    
 }
