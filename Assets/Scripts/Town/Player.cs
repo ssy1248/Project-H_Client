@@ -561,12 +561,12 @@ public class Player : MonoBehaviour
     }
     IEnumerator EndSpawnEffect(GameObject obj)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.3f);
         SpawnManger.Instance.setData(obj);
     }
     IEnumerator DestroyThis(GameObject obj)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.3f);
         SpawnManger.Instance.setData(obj);
         Destroy(gameObject);
         StopAllCoroutines();
