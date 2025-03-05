@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isRun", false);  // 달리기 애니메이션 멈추기
         isMove = false;
         isFireReady = false;
+
         // 추가적으로 UI나 게임 오버 화면을 띄우는 로직을 여기에 추가 가능
     }
 

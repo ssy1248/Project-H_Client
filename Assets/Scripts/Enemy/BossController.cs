@@ -14,6 +14,9 @@ public class BossController : Enemy
     bool isLook;
     bool isPatternActive;
 
+    private int bossMaxhealth = 3000;
+
+
     // 부채꼴 범위 표시용 GameObject
     public GameObject fanShapeRange;  // 부채꼴 모양 범위 표시용 GameObject
     public GameObject squareShapeRange;  // 사각형 모양 범위 표시용 GameObject
@@ -25,6 +28,8 @@ public class BossController : Enemy
 
     void Awake()
     {
+        maxHealth = bossMaxhealth;
+        curHealth = maxHealth;
         rigid = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         mat = GetComponent<MeshRenderer>().material;

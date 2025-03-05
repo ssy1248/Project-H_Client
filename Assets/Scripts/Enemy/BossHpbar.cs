@@ -11,16 +11,29 @@ public class BossHealthBar : MonoBehaviour
     public Color[] stageColors = { Color.red, new Color(1f, 0.5f, 0f), Color.green, new Color(0.6f, 0f, 0.8f), Color.blue }; // 빨강 → 주황 → 초록 → 보라 → 파랑
     public Color lastStageColor = Color.black; // 마지막 10% 배경색
 
-    private int maxHealth = 3000;
+    private int maxHealth;
     private int currentHealth;
     private int stageHealth; // 10% 단위 체력
     private int currentStageIndex = 0;
     private bool isAnimating = false; // 애니메이션 실행 여부 체크
 
     public TextMeshProUGUI healthText; // 보스 체력 텍스트
+    public BossController bossController;
 
     void Start()
     {
+        // bossController가 null인 경우에는 직접 할당
+        if (bossController == null)
+        {
+            bossController = FindObjectOfType<BossController>();
+            if (bossController == null)
+            {
+                Debug.LogError("BossController를 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
+                return; // 종료
+            }
+        }
+
+        maxHealth = bossController.maxHealth;
         currentHealth = maxHealth;
         stageHealth = maxHealth / stageColors.Length; // 10% 단위 계산
         healthSlider.maxValue = stageHealth;
@@ -28,9 +41,6 @@ public class BossHealthBar : MonoBehaviour
 
         fillImage.color = stageColors[currentStageIndex]; // 첫 Fill Image 색상
         backgroundImage.color = stageColors[(currentStageIndex + 1) % stageColors.Length]; // 첫 배경색
-
-        // 5초마다 체력 100 감소
-        InvokeRepeating("AutoDamage", 0.5f, 0.5f);
 
         UpdateHealthText(); // 텍스트 업데이트
     }
@@ -122,10 +132,6 @@ public class BossHealthBar : MonoBehaviour
         UpdateHealthText(); // 체력 텍스트 업데이트
     }
 
-    private void AutoDamage()
-    {
-        TakeDamage(100);
-    }
 
     // 보스 체력 텍스트 업데이트
     private void UpdateHealthText()
