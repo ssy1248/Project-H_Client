@@ -1,8 +1,17 @@
 using Google.Protobuf.Protocol;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq.Expressions;
 using UnityEngine;
+
+public enum ItemType
+{
+    Consumable = 0,
+    NotConsumable = 1,
+    Head = 2,
+    Shirt = 3,
+    Pants = 4,
+    Foot = 5,
+    Weapon = 6,
+}
 
 public class ItemManager : MonoBehaviour
 {
@@ -30,7 +39,6 @@ public class ItemManager : MonoBehaviour
         foreach (ItemData item in data)
         {
             itemData.Add(item.Id, item);
-            Debug.Log(item);
         }
     }
     public ItemData GetBuyId(int id)
@@ -60,7 +68,6 @@ public class ItemManager : MonoBehaviour
         {
             string fileName = sprite.texture.name;
             itemImages.Add(fileName, sprite);
-            Debug.Log(fileName);
         }
     }
 

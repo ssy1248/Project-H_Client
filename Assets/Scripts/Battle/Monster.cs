@@ -10,23 +10,23 @@ public class Monster : MonoBehaviour
 {
     [SerializeField] private UIMonsterInformation uiMonsterInfo;
 
-    // ¸ó½ºÅÍÀÇ ID, HP, ÁÂÇ¥
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ID, HP, ï¿½ï¿½Ç¥
     public string MonsterId { get; private set; }
     public float MonsterHp { get; private set; }
     private Vector3 monsterPosition;
 
-    // Å¸°Ù ÁÂÇ¥
+    // Å¸ï¿½ï¿½ ï¿½ï¿½Ç¥
     private Vector3 targetPosition;
     private Quaternion targetRot;
-    private float moveSpeed = 4f; // ¸ó½ºÅÍ ÀÌµ¿ ¼Óµµ
+    private float moveSpeed = 4f; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½
     private bool isDestinationReached = true;
 
-    // ³×ºê ¸Þ½¬ Ãß°¡. 
+    // ï¿½×ºï¿½ ï¿½Þ½ï¿½ ï¿½ß°ï¿½. 
     private NavMeshAgent navMeshAgent;
 
     private Animator animator;
 
-    // ¾Ö´Ï¸ÞÀÌ¼Ç ÄÚµå ¸®½ºÆ®
+    // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
     private int[] animCodeList = new[]
     {
         Constants.MonsterAttack1,
@@ -41,23 +41,23 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        // ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         animator = GetComponentInChildren<Animator>();
 
-        // ³×ºê¸Þ½¬ Ãß°¡
+        // ï¿½×ºï¿½Þ½ï¿½ ï¿½ß°ï¿½
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.avoidancePriority = 0;
         navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
-        navMeshAgent.acceleration = 100f; // °¡¼Óµµ Áõ°¡ -> Áï½Ã ¹ÝÀÀ
-        navMeshAgent.stoppingDistance = 0.1f; // ¸ØÃß´Â °Å¸® Á¶Àý
-        navMeshAgent.autoBraking = true; // ÀÚµ¿ ºê·¹ÀÌÅ© È°¼ºÈ­
-        navMeshAgent.angularSpeed = 1000f; // È¸Àü ¼Óµµ Áõ°¡
+        navMeshAgent.acceleration = 100f; // ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        navMeshAgent.stoppingDistance = 0.1f; // ï¿½ï¿½ï¿½ß´ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+        navMeshAgent.autoBraking = true; // ï¿½Úµï¿½ ï¿½ê·¹ï¿½ï¿½Å© È°ï¿½ï¿½È­
+        navMeshAgent.angularSpeed = 1000f; // È¸ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
 
     }
 
-    // ¸ó½ºÅÍÀÇ ID, HP, ÁÂÇ¥, Å¸°Ù ÁÂÇ¥¸¦ ¼³Á¤ÇÏ´Â ¸Þ¼­µå
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ID, HP, ï¿½ï¿½Ç¥, Å¸ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     public void Initialize(string id, string name, float hp, Vector3 spawnPosition, Quaternion rot)
     {
         MonsterId = id;
@@ -66,12 +66,12 @@ public class Monster : MonoBehaviour
         targetPosition = spawnPosition;
         targetRot = rot;
 
-        // UI ¾÷µ¥ÀÌÆ®
+        // UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         uiMonsterInfo.SetName("Monster " + name);
         uiMonsterInfo.SetFullHP(MonsterHp);
     }
 
-    // ¾Ö´Ï¸ÞÀÌ¼Ç ¼³Á¤
+    // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void SetAnim(int idx)
     {
         if (idx < 0 || idx >= animCodeList.Length)
@@ -81,58 +81,58 @@ public class Monster : MonoBehaviour
         animator.SetTrigger(animCode);
     }
 
-    // ¸ó½ºÅÍ°¡ ÇÇÇØ¸¦ ÀÔ¾úÀ» ¶§ È£ÃâµÇ´Â ¸Þ¼­µå
+    // ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½Ø¸ï¿½ ï¿½Ô¾ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     public void Hit(float damage)
     {
         MonsterHp -= damage;
         animator.SetTrigger(Constants.MonsterHit);
 
-        // HP°¡ 0 ÀÌÇÏÀÏ ¶§ ¸ó½ºÅÍ »èÁ¦
+        // HPï¿½ï¿½ 0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (MonsterHp <= 0)
         {
             Die();
         }
     }
 
-    // ¸ó½ºÅÍ Á×À½ Ã³¸®
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     private void Die()
     {
-        SetAnim(4); // Die ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
-        Destroy(gameObject, 2f); // 2ÃÊ µÚ¿¡ °´Ã¼¸¦ »èÁ¦
+        SetAnim(4); // Die ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
+        Destroy(gameObject, 2f); // 2ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 
-    // ¸ó½ºÅÍÀÇ À§Ä¡¸¦ ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void UpdateMonsterPosition(Vector3 move, Quaternion rot, float speed, float hp)
     {
         targetPosition = move;
         targetRot = rot;
         moveSpeed = speed;
         MonsterHp = hp;
-        //ÀÌµ¿
+        //ï¿½Ìµï¿½
         //MoveTowardsTarget();
-        Debug.Log($"¹ÞÀº ¸ó½ºÅÍ ÁÂÇ¥ {targetRot}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ {targetRot}");
     }
 
-    // Å¸°Ù À§Ä¡·Î ÀÌµ¿ÇÏ´Â ·ÎÁ÷ (¸ó½ºÅÍ°¡ Å¸°ÙÀ» ÃßÀû)
+    // Å¸ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Í°ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     private void MoveTowardsTarget()
     {
         if (navMeshAgent != null)
         {
-            //// ¸ó½ºÅÍ À§Ä¡¿Í ¸ñÇ¥ À§Ä¡¸¦ °¡Á®¿É´Ï´Ù.
+            //// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É´Ï´ï¿½.
             //Vector3 currentPosition = transform.position;
             //Vector3 targetPosition = this.targetPosition;
 
-            //// º¸°£ ÀÌµ¿: ÇöÀç À§Ä¡¿¡¼­ ¸ñÇ¥ À§Ä¡·Î ºÎµå·´°Ô ÀÌµ¿
-            //float moveSpeed = 4f;  // ÀÌµ¿ ¼Óµµ Á¶Àý °¡´É
-            //float step = moveSpeed * Time.deltaTime; // ÇÁ·¹ÀÓ¸¶´Ù ÀÌµ¿ÇÏ´Â °Å¸® °è»ê
+            //// ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Îµå·´ï¿½ï¿½ ï¿½Ìµï¿½
+            //float moveSpeed = 4f;  // ï¿½Ìµï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            //float step = moveSpeed * Time.deltaTime; // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½
 
-            //// ¸ñÇ¥ À§Ä¡·Î ÀÌµ¿
+            //// ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
             //transform.position = Vector3.Lerp(currentPosition, targetPosition, step);
-            //Debug.Log($"[¸ó½ºÅÍ ¾÷µ¥ÀÌÆ®] ÇöÀç Æ÷Áö¼Ç {currentPosition} ..");
-            //Debug.Log($"[¸ó½ºÅÍ ¾÷µ¥ÀÌÆ®] ÇöÀç Æ÷Áö¼Ç {targetPosition} ..");
+            //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {currentPosition} ..");
+            //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {targetPosition} ..");
 
-            //Debug.Log($"[¸ó½ºÅÍ ¾÷µ¥ÀÌÆ®] Æ÷Áö¼Ç {targetPosition} ¸ó½ºÅÍ°¡ ¾÷µ¥ÀÌÆ® µÇ¾ú½À´Ï´Ù..");
-            // ³²Àº °Å¸®°¡ ¸ØÃâ °Å¸®º¸´Ù Å©¸é ÀÌµ¿
+            //Debug.Log($"[ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {targetPosition} ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½..");
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½Ìµï¿½
             //if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
             //{
             //    navMeshAgent.SetDestination(targetPosition);
@@ -141,10 +141,10 @@ public class Monster : MonoBehaviour
 
             navMeshAgent.SetDestination(targetPosition);
             isDestinationReached = false;
-            // ¹ÞÀº È¸Àü Àû¿ë.
+            // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
             // .. 
 
-            // NavMeshAgent°¡ È¸ÀüÀ» ÀÚµ¿À¸·Î ÇÏÁö ¾Êµµ·Ï ¼³Á¤
+            // NavMeshAgentï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             navMeshAgent.updateRotation = false;
 
            
@@ -152,16 +152,16 @@ public class Monster : MonoBehaviour
         }
     }
 
-    // ¸ó½ºÅÍ »óÅÂ ¾÷µ¥ÀÌÆ® (¸Å ÇÁ·¹ÀÓ È£Ãâ)
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½)
     private void Update()
     {
         if (!isDestinationReached &&  navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && navMeshAgent.velocity.sqrMagnitude == 0)
         {
            
 
-            // µµ´ÞÇÑ ÈÄ »óÅÂ º¯°æ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             isDestinationReached = true;
-            Debug.Log($"¾ÆÀÌµð: {MonsterId} / ÁÂÇ¥: {transform.position}");
+            //Debug.Log($"ï¿½ï¿½ï¿½Ìµï¿½: {MonsterId} / ï¿½ï¿½Ç¥: {transform.position}");
 
             SendMovePacket(MonsterId, transform.position);
         }
@@ -170,66 +170,66 @@ public class Monster : MonoBehaviour
 
         if (targetPosition != null)
         {
-            // ÇöÀç À§Ä¡¿Í ¸ñÇ¥ À§Ä¡ °£ÀÇ ¹æÇâ º¤ÅÍ °è»ê
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             Vector3 directionToTarget2 = targetPosition - transform.position;
-            directionToTarget2.y = 0;  // ¼öÆò ÀÌµ¿¸¸ °í·Á
+            directionToTarget2.y = 0;  // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            // ¸ñÇ¥ À§Ä¡±îÁö ÀÌµ¿ÇÒ °Å¸® °è»ê
+            // ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½
             float distanceToTarget = directionToTarget2.magnitude;
 
-            // ¸¸¾à ¸ñÇ¥ À§Ä¡±îÁöÀÇ °Å¸®°¡ ÀÏÁ¤ ¹üÀ§ ÀÌÇÏ¶ó¸é ÀÌµ¿ ¸ØÃã
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
             if (distanceToTarget < 0.1f)
             {
-                transform.position = targetPosition;  // ¸ñÇ¥ À§Ä¡·Î Á¤È®È÷ ÀÌµ¿
+                transform.position = targetPosition;  // ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ ï¿½Ìµï¿½
                 return;
             }
 
-            // ÀÌµ¿ ¼Óµµ ¼³Á¤ (¿¹: 4 units per second)
+            // ï¿½Ìµï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½: 4 units per second)
             float moveSpeed = 4f;
-            Vector3 moveDirection = directionToTarget2.normalized;  // ÀÌµ¿ ¹æÇâ º¤ÅÍ¸¦ Á¤±ÔÈ­
+            Vector3 moveDirection = directionToTarget2.normalized;  // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½È­
 
-            // º¸°£ ÀÌµ¿: ÀÌÀü À§Ä¡¿¡¼­ ¸ñÇ¥ À§Ä¡·Î ºÎµå·´°Ô ÀÌµ¿
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Îµå·´ï¿½ï¿½ ï¿½Ìµï¿½
             Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
 
-            // »õ·Î¿î À§Ä¡·Î ÀÌµ¿
+            // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
             transform.position = newPosition;
 
             
         }
 
 
-        // È¸Àü ¸ñÇ¥°¡ º¯°æµÇ¾úÀ» ¶§¸¸ È¸ÀüÀ» ½ÃÀÛÇÏµµ·Ï Ã³¸®
-        if (targetRot != null)  // targetRotÀÌ nullÀÌ ¾Æ´ÑÁö È®ÀÎ
+        // È¸ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        if (targetRot != null)  // targetRotï¿½ï¿½ nullï¿½ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         {
-            // 1. Å¸°Ù À§Ä¡·ÎºÎÅÍ ¹æÇâ º¤ÅÍ¸¦ °è»ê
-            Vector3 directionToTarget = targetPosition - transform.position;  // Å¸°Ù ¹æÇâ º¤ÅÍ
-            directionToTarget.y = 0;  // YÃàÀ¸·Î´Â È¸ÀüÇÏÁö ¾Êµµ·Ï ¼³Á¤ (¼öÆò È¸Àü¸¸ ÇÏµµ·Ï)
+            // 1. Å¸ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½
+            Vector3 directionToTarget = targetPosition - transform.position;  // Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            directionToTarget.y = 0;  // Yï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ïµï¿½ï¿½ï¿½)
 
-            // ¹æÇâ º¤ÅÍ°¡ (0, 0, 0)ÀÏ °æ¿ì È¸ÀüÇÏÁö ¾Êµµ·Ï Ã³¸®
-            if (directionToTarget.sqrMagnitude > Mathf.Epsilon)  // º¤ÅÍ°¡ (0, 0, 0)ÀÌ ¾Æ´Ñ °æ¿ì¿¡¸¸ Ã³¸®
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í°ï¿½ (0, 0, 0)ï¿½ï¿½ ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+            if (directionToTarget.sqrMagnitude > Mathf.Epsilon)  // ï¿½ï¿½ï¿½Í°ï¿½ (0, 0, 0)ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ Ã³ï¿½ï¿½
             {
-                // 2. ¹æÇâ º¤ÅÍ¸¦ ¹ÝÀü½ÃÄÑ¼­ ¸ó½ºÅÍ°¡ µîÀ¸·Î ÂÑµµ·Ï ¼³Á¤
+                // 2. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¼ï¿½ ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 directionToTarget = -directionToTarget;
 
-                // 3. ¹ÝÀüµÈ ¹æÇâÀ¸·Î È¸Àü °ª °è»ê
-                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);  // ¹ÝÀüµÈ ¹æÇâÀ» ÇâÇÑ È¸Àü °ª °è»ê
+                // 3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
 
-                // 4. ºÎµå·´°Ô È¸Àü Àû¿ë
-                if (Quaternion.Angle(transform.rotation, targetRotation) > 0.5f)  // È¸Àü °¢µµ Â÷ÀÌ°¡ 0.5µµ ÀÌ»óÀÏ °æ¿ì¿¡¸¸ È¸Àü
+                // 4. ï¿½Îµå·´ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                if (Quaternion.Angle(transform.rotation, targetRotation) > 0.5f)  // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ 0.5ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ È¸ï¿½ï¿½
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);  // ºÎµå·´°Ô È¸Àü
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);  // ï¿½Îµå·´ï¿½ï¿½ È¸ï¿½ï¿½
                 }
             }
 
-            // NavMeshAgentÀÇ È¸ÀüÀº ¼öµ¿À¸·Î Ã³¸®ÇßÀ¸¹Ç·Î, ÀÚµ¿ È¸ÀüÀº ²ô±â
+            // NavMeshAgentï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½, ï¿½Úµï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             navMeshAgent.updateRotation = false;
         }
          
 
-        // ¿¹½Ã·Î, HP°¡ 0 ÀÌÇÏ°¡ ¾Æ´Ï¸é °è¼Ó Å¸°ÙÀ» ÃßÀûÇÏµµ·Ï ¼³Á¤
+        // ï¿½ï¿½ï¿½Ã·ï¿½, HPï¿½ï¿½ 0 ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (MonsterHp <= 0)
         {
-            Die(); // HP°¡ 0 ÀÌÇÏÀÏ ¶§ ¸ó½ºÅÍ Á×À½
+            Die(); // HPï¿½ï¿½ 0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
     }
@@ -237,7 +237,7 @@ public class Monster : MonoBehaviour
 
     private void SendMovePacket(string id, Vector3 position)
     {
-        // ¸¶¿ì½º Å¬¸¯ ÁÂÇ¥¸¦ ¸ñÇ¥ ÁöÁ¡À¸·Î °è»ê
+        // ï¿½ï¿½ï¿½ì½º Å¬ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         string monsterId = id;
 
       
@@ -276,27 +276,27 @@ public class Monster : MonoBehaviour
 
     private IEnumerator WaitForAnimationEnd(string stateName)
     {
-        yield return new WaitForEndOfFrame(); // ÇÑ ÇÁ·¹ÀÓ ´ë±â (¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ½ÃÀÛµÇµµ·Ï)
+        yield return new WaitForEndOfFrame(); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÛµÇµï¿½ï¿½ï¿½)
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        //// ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³¯ ¶§±îÁö ´ë±â
+        //// ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         //while (!(stateInfo.IsName(stateName) && (stateInfo.normalizedTime % 1) >= 0.90f))
         //{
-        //    //Debug.Log($" ÇöÀç ¾Ö´Ï¸ÞÀÌ¼Ç: {stateInfo.fullPathHash}, ¸ñÇ¥: {stateName}, ÁøÇàµµ: {stateInfo.normalizedTime}");
+        //    //Debug.Log($" ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½: {stateInfo.fullPathHash}, ï¿½ï¿½Ç¥: {stateName}, ï¿½ï¿½ï¿½àµµ: {stateInfo.normalizedTime}");
         //    yield return null;
-        //    stateInfo = animator.GetCurrentAnimatorStateInfo(0); // »óÅÂ Á¤º¸ ¾÷µ¥ÀÌÆ®
+        //    stateInfo = animator.GetCurrentAnimatorStateInfo(0); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         //}
 
-        yield return new WaitForSeconds(2f); // ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¿ÏÀüÈ÷ Á¾·áµÈ ÈÄ Àá½Ã ´ë±â
+        yield return new WaitForSeconds(2f); // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
-        // ¾Ö´Ï¸ÞÀÌ¼Ç Á¾·á ÈÄ ½ÇÇàÇÒ µ¿ÀÛ
+        // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         OnMonsterDeath();
     }
 
     private void OnMonsterDeath()
     {
-        //if (this == null) return; // ÀÌ¹Ì »èÁ¦µÈ °æ¿ì ½ÇÇà ¾È ÇÔ
+        //if (this == null) return; // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
         Destroy(gameObject);
     }
 }
