@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class SpawnManger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] GameObject spawneffectObject;
+    [SerializeField] Transform parent;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] List<GameObject> spawnObjects = new List<GameObject>();
+
+    private void Start()
     {
-        
+        for (int i = 0; i < 5; i++)
+        {
+            spawnObjects.Add(Instantiate(spawneffectObject, parent));
+        }
     }
 }
