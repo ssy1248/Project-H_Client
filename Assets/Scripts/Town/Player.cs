@@ -84,6 +84,8 @@ public class Player : MonoBehaviour
     protected Rigidbody rigid;
     #endregion
 
+    public SkillObjectableScript SkillData;
+
     #region Unity Lifecycle
     void Awake()
     {
@@ -371,10 +373,92 @@ public class Player : MonoBehaviour
         if (equipWeapon == null)
             return;
 
-        if(!isDodge)
-        {
-            equipWeapon.Use();
+        // 이미 회피 중이라면 스킬 사용 불가(또는 다른 처리)
+        if (isDodge)
+            return;
 
+        // 무기 사용 (애니메이션, 쿨타임, MP 체크 등 내부 로직)
+        equipWeapon.Use();
+
+        if (SkillData.SkillType == 1)
+        {
+            // 단일 공격
+            string singleTargetId = PlayerActionManager.Instance.GetTargetIdFromMouseClick();
+            if (singleTargetId == "-1")
+            {
+                Debug.Log("타겟이 없습니다.");
+                return;
+            }
+
+            // 서버 전송
+            SkillAttack skillAttack = new SkillAttack
+            {
+                AttackerName = nickname,
+                SkillId = SkillData.SkillId,
+            };
+            skillAttack.TargetId.Add(singleTargetId);
+
+            C_PlayerAction actionPacket = new C_PlayerAction
+            {
+                SkillAttack = skillAttack
+            };
+
+            GameManager.Network.Send(actionPacket);
+        }
+        else if(SkillData.SkillType == 2)
+        {
+            // 범위 공격
+            // 1) OverlapSphere를 통해 범위 내 Collider 탐색
+            float range = SkillData.SkillRange; // 예: 범위(반경)
+
+            Collider[] colliders = Physics.OverlapSphere(transform.position, range);
+            List<string> targetIds = new List<string>();
+
+            // 2) Collider 중 몬스터만 필터링하여 monsterId를 수집
+            foreach (Collider col in colliders)
+            {
+                // Monster 컴포넌트에서 monsterId를 가져온다고 가정
+                Monster monster = col.GetComponent<Monster>();
+                if (monster != null)
+                {
+                    // 몬스터의 ID를 문자열 형태로 추가
+                    targetIds.Add(monster.MonsterId);
+                }
+            }
+
+            // 3) 서버로 보낼 SkillAttack 메시지 생성
+            if (targetIds.Count > 0)
+            {
+                SkillAttack skillAttack = new SkillAttack
+                {
+                    AttackerName = DungeonManager.Instance.MyPlayer.nickname,
+                    SkillId = SkillData.SkillId
+                };
+                // repeated 필드는 AddRange 사용
+                skillAttack.TargetId.AddRange(targetIds);
+
+                C_PlayerAction actionPacket = new C_PlayerAction
+                {
+                    SkillAttack = skillAttack
+                };
+
+                // 4) 서버로 전송
+                GameManager.Network.Send(actionPacket);
+
+                // 이후, 서버에서 해당 타겟 목록에 대해 데미지 처리
+            }
+            else
+            {
+                Debug.Log("범위 내에 몬스터가 없습니다.");
+            }
+        }
+            else if(SkillData.SkillType == 3)
+        {
+            // 버프 스킬
+        }
+        else if(SkillData.SkillType == 4)
+        {
+            // 디버프 스킬
         }
     }
 

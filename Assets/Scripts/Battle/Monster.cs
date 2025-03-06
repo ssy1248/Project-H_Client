@@ -110,7 +110,7 @@ public class Monster : MonoBehaviour
         MonsterHp = hp;
         //�̵�
         //MoveTowardsTarget();
-        Debug.Log($"���� ���� ��ǥ {targetRot}");
+        //Debug.Log($"���� ���� ��ǥ {targetRot}");
     }
 
     // Ÿ�� ��ġ�� �̵��ϴ� ���� (���Ͱ� Ÿ���� ����)

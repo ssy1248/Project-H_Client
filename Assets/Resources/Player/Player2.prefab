@@ -3496,15 +3496,22 @@ MonoBehaviour:
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
   TeleportDistanceThreshold: 0.5
+  raycastDistance: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   goalPos: {x: 0, y: 0, z: 0}
   goalRot: {x: 0, y: 0, z: 0, w: 0}
   moveSpeed: 1
   speed: 1
+  dodgeDistance: 3
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  SkillData: {fileID: 11400000, guid: 407da90ad5637214296b41c486dd289a, type: 2}
+  dodgeInterpolationTime: 0.3
 --- !u!54 &196227380015684679
 Rigidbody:
   m_ObjectHideFlags: 0
