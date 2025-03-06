@@ -10,12 +10,14 @@ public class MonsterManager : MonoBehaviour
     private static MonsterManager _instance = null;
     public static MonsterManager Instance => _instance;
 
-    private readonly Dictionary<int, string> monsterDb = new Dictionary<int, string>();
-    private readonly Dictionary<string, Monster> monsterDict = new Dictionary<string, Monster>();
+    private Dictionary<int, string> monsterDb = new Dictionary<int, string>();
+    private Dictionary<string, Monster> monsterDict = new Dictionary<string, Monster>();
 
 
     private void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         if (_instance == null)
         {
             _instance = this;
