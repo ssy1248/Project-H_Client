@@ -412,6 +412,11 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(marketListPacket);
     }
+    public void DungeonExit()
+    {
+        var Packet = new C_DungeonExit();
+        GameManager.Network.Send(Packet);
+    }
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
