@@ -1413,6 +1413,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  playerHealthBar: {fileID: 0}
+  partyIndex: 0
   moveSpeed: 10
   maxHealth: 100
   currentHealth: 100
@@ -1483,13 +1485,14 @@ MonoBehaviour:
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
+  playerHealthBar: {fileID: 0}
+  partyIndex: 0
   moveSpeed: 10
-  maxHealth: 100
+  maxHealth: 1000
   currentHealth: 0
   AttackRate: 0.5
   isMove: 0
   landEffectPrefab: {fileID: 2154017420452501535}
-  jumpForce: 10
   LandEffectPoolObj: {fileID: 4541366777395646174}
 --- !u!1 &3688192372485551812
 GameObject:
