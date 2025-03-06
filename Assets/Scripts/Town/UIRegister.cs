@@ -151,7 +151,7 @@ public class UIRegister : MonoBehaviour
 
     private void SetServerUI()
     {
-        serverPanel.SetActive(true);
+        //serverPanel.SetActive(true);
         loginPanel.SetActive(false);
         registerPanel.SetActive(false);
         characterPanel.SetActive(false);
@@ -161,7 +161,7 @@ public class UIRegister : MonoBehaviour
     private void ShowLoginUI()
     {
         loginPanel.SetActive(true);
-        serverPanel.SetActive(false);
+        //serverPanel.SetActive(false);
         registerPanel.SetActive(false);
         characterPanel.SetActive(false);
         txtMessage.text = string.Empty;
@@ -238,7 +238,7 @@ public class UIRegister : MonoBehaviour
         serverUrl = "127.0.0.1";
         port = "3000";
         localServerBtn.gameObject.SetActive(false);
-        serverPanel.SetActive(false); // ¼­¹ö ÀÔ·Â È­¸é ¼û±è
+        //serverPanel.SetActive(false); // ¼­¹ö ÀÔ·Â È­¸é ¼û±è
         ShowLoginUI();
     }
 

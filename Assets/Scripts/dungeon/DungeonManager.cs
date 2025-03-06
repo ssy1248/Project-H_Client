@@ -2,6 +2,7 @@ using Cinemachine;
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -75,13 +76,11 @@ public class DungeonManager : MonoBehaviour
     }
     public void DungeonExit()
     {
-       SceneManager.LoadScene("Town");
-       var Packet = new C_DungeonExit
-        {
+        SceneManager.LoadScene("Town");
 
-        };
-        GameManager.Network.Send(Packet);
+        TownManager.Instance.DungeonExit();
     }
+
     public void Move(Vector3 pos, float rotation)
     {
         var movePacket = new C_Move
@@ -98,6 +97,17 @@ public class DungeonManager : MonoBehaviour
         GameManager.Network.Send(movePacket);
     }
     // 서버에서 받기 
+    public void Despawn(S_Despawn data)
+    {
+        Player playerToRemove = players[data.PlayerId];
+
+        if (playerToRemove != null)
+        {
+            players.Remove(data.PlayerId);
+            playerList.Remove(data.PlayerId);
+            playerToRemove.DespawnEffect();
+        }
+    }
     public void FinalizeBuyAuctionResponse(S_FinalizeBuyAuction data)
     {
         rewardAuction.GetReward(data.Name,data.ItemId,true);
@@ -139,6 +149,7 @@ public class DungeonManager : MonoBehaviour
     }
     public void AllMove(S_Move data)
     {
+        //Debug.Log(data);
         // 받은 배열 만큼 반복문을 돌려야함
         // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
         foreach (var syncTransformInfo in data.TransformInfos)

@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         GETInput();
         //move();
         //Turn();
-        Attack();
+        //Attack();
 
         if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
             Teleport();
@@ -353,7 +353,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void Attack()
+    public void Attack()
     {
         if (equipWeapon == null)
             return;

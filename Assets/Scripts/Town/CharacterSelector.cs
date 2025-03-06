@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class CharacterSelector : MonoBehaviour
 {
-    [SerializeField] private int id;  // Ä³¸¯ÅÍ id
+    [SerializeField] private int id;  // Ä³ï¿½ï¿½ï¿½ï¿½ id
 
     private void OnEnable()
     {
@@ -12,12 +12,12 @@ public class CharacterSelector : MonoBehaviour
 
     void Selector()
     {
-        // id°¡ 1ºÎÅÍ 5 »çÀÌ¿©¾ß¸¸ ¿äÃ»ÇÏµµ·Ï Ã³¸® 
+        // idï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ 5 ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ß¸ï¿½ ï¿½ï¿½Ã»ï¿½Ïµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ 
         if (id >= 1 && id <= 5)
         {
-            Debug.Log($"Character selected with id: {id}");  // ¼±ÅÃµÈ Ä³¸¯ÅÍÀÇ id ·Î±× Ãâ·Â
+            //Debug.Log($"Character selected with id: {id}");  // ï¿½ï¿½ï¿½Ãµï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ id ï¿½Î±ï¿½ ï¿½ï¿½ï¿½
 
-            // UIRegister¸¦ ÅëÇØ ¼±ÅÃµÈ Ä³¸¯ÅÍ ¹İ¿µ
+            // UIRegisterï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½İ¿ï¿½
             UIRegister.Instance.SetSelectedCharacter(id);
         }
         else

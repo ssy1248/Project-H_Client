@@ -103,6 +103,16 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SDungeondespawn, MakePacket<S_DungeonDeSpawn>);
         _handler.Add((ushort)MsgId.SPlayeraction, PacketHandler.S_PlayerActionHandler);
         _onRecv.Add((ushort)MsgId.SPlayeraction, MakePacket<S_PlayerAction>);
+        _onRecv.Add((ushort)MsgId.SMonsterspawn, MakePacket<S_MonsterSpawn>);
+        _handler.Add((ushort)MsgId.SMonsterspawn, PacketHandler.S_MonsterSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SMonstermove, MakePacket<S_MonsterMove>);
+        _handler.Add((ushort)MsgId.SMonstermove, PacketHandler.S_MonsterMoveHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterhit, MakePacket<S_MonsterHit>);
+        _handler.Add((ushort)MsgId.SMonsterhit, PacketHandler.S_MonsterHitHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterattck, MakePacket<S_MonsterAttck>);
+        _handler.Add((ushort)MsgId.SMonsterattck, PacketHandler.S_MonsterAttckHandler);
+        _onRecv.Add((ushort)MsgId.SMonsterdie, MakePacket<S_MonsterDie>);
+        _handler.Add((ushort)MsgId.SMonsterdie, PacketHandler.S_MonsterDieHandler);
         Debug.Log("핸들러 등록 완료");
     }
 
@@ -120,7 +130,7 @@ class PacketManager
             return;
         }
 
-        Debug.Log($"패킷 크기: {size}");
+        //Debug.Log($"패킷 크기: {size}");
         count += 4;
 
         // 아이디를 1바이트로 읽음
@@ -131,7 +141,7 @@ class PacketManager
             return;
         }
 
-        Debug.Log($"패킷 ID: {id}");
+        //Debug.Log($"패킷 ID: {id}");
         count += 1;
 
         Action<PacketSession, ArraySegment<byte>, ushort> action = null;
@@ -140,7 +150,7 @@ class PacketManager
 
         if (_onRecv.TryGetValue(id, out action))
         {
-            Debug.Log($"패킷 핸들러 실행: {id}");
+            //Debug.Log($"패킷 핸들러 실행: {id}");
             action.Invoke(session, buffer, id);
         }
         else
@@ -155,7 +165,7 @@ class PacketManager
         {
             T pkt = new T();
             pkt.MergeFrom(buffer.Array, buffer.Offset + 5, buffer.Count - 5);
-            Debug.Log($"패킷 역직렬화 성공: {typeof(T).Name}");
+            //Debug.Log($"패킷 역직렬화 성공: {typeof(T).Name}");
 
             if (CustomHandler != null)
             {
