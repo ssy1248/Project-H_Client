@@ -32,7 +32,7 @@ public class UIChat : MonoBehaviour
     private Player player;
     private bool isOpen = true;
     private ChatType currentChatType = ChatType.Global;
-    private List<(ChatType type, string msg, bool myChat)> chatMessages = new();
+    private List<(ChatType type, string msg, bool myChat,int id)> chatMessages = new();
 
     private string selectedWhisperUser;
 
@@ -143,7 +143,7 @@ public class UIChat : MonoBehaviour
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
 
         player.SendMessage(inputChat.text);
-        PushMessage(inputChat.text, true, currentChatType);
+        PushMessage(inputChat.text, true, currentChatType, player.PlayerId);
         inputChat.text = string.Empty;
         ActivateInputFieldProperly();
     }
@@ -175,17 +175,17 @@ public class UIChat : MonoBehaviour
         ResetIME();
     }
     
-    public void PushMessage(string msg, bool myChat, ChatType type)
+    public void PushMessage(string msg, bool myChat, ChatType type, int id)
     {
-        chatMessages.Add((type, msg, myChat));
+        chatMessages.Add((type, msg, myChat,id));
 
         if (type == currentChatType || type == ChatType.Global)
         {
-            DisplayMessage(msg, myChat);
+            DisplayMessage(msg, myChat, id);
         }
     }
 
-    private void DisplayMessage(string msg, bool myChat)
+    private void DisplayMessage(string msg, bool myChat,int id)
     {
         // 텍스트 메시지 프리팹을 제대로 할당받았는지 확인
         if (txtChatItemBase == null)
@@ -197,20 +197,14 @@ public class UIChat : MonoBehaviour
         // 메시지 아이템 생성
         var msgItem = Instantiate(txtChatItemBase, chatItemRoot);
 
+        Player playerTemp = TownManager.Instance.GetPlayerAvatarById(id);
         // 채팅 타입에 맞는 색상 지정
         Color messageColor = Color.white;  // 기본은 흰색
-        if (currentChatType == ChatType.Party)
-        {
-            messageColor = new Color(0f, 0f, 1f);  // 파티 채팅일 경우 파란색
-        }
-        else if (currentChatType == ChatType.Whisper)
-        {
-            messageColor = new Color(1f, 0f, 1f);  // 귓속말일 경우 분홍색
-        }
 
-        // 내 채팅은 초록색으로 표시 (기존 로직)
-        msgItem.color = myChat ? Color.green : messageColor;
-        msgItem.text = msg;
+        playerTemp.RecvMessage(msg, id);
+        // 내 채팅은 주황색으로 표시 (기존 로직)
+        msgItem.color = myChat ? Color.yellow : messageColor;
+        msgItem.text = playerTemp.GetNickname()+" : " + msg;
 
         // 활성화
         msgItem.gameObject.SetActive(true);
@@ -226,7 +220,7 @@ public class UIChat : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (var (type, msg, myChat) in chatMessages)
+        foreach (var (type, msg, myChat,id) in chatMessages)
         {
             // 귓속말 모드일 경우 해당 유저와의 메시지만 표시
             if (currentChatType == ChatType.Whisper && !msg.Contains(selectedWhisperUser))
@@ -234,7 +228,7 @@ public class UIChat : MonoBehaviour
 
             if (type == currentChatType || type == ChatType.Global)
             {
-                DisplayMessage(msg, myChat);
+                DisplayMessage(msg, myChat,id);
             }
         }
     }

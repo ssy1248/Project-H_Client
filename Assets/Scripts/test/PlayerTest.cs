@@ -401,12 +401,12 @@ public class PlayerTest : MonoBehaviour
             uiNameChat.SetName(name);
     }
 
-    public void RecvMessage(string msg, UIChat.ChatType type)
+    public void RecvMessage(string msg, UIChat.ChatType type,int id)
     {
         if (uiNameChat != null)
             uiNameChat.PushText(msg);
         if (uiChat != null)
-            uiChat.PushMessage(msg, IsMine, type);
+            uiChat.PushMessage(msg, IsMine, type, id);
     }
 
     public void PlayAnimation(int animCode)

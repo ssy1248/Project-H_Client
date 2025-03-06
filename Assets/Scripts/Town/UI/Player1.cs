@@ -132,10 +132,10 @@ public class Playe1 : MonoBehaviour
         GameManager.Network.Send(chatPacket);
     }
 
-    public void RecvMessage(string msg, UIChat.ChatType type)
+    public void RecvMessage(string msg, UIChat.ChatType type,int id)
     {
         uiNameChat.PushText(msg);
-        uiChat.PushMessage(msg, IsMine, type);
+        uiChat.PushMessage(msg, IsMine, type, id);
     }
 
     public void Move(Vector3 move, Quaternion rot, float speed )
