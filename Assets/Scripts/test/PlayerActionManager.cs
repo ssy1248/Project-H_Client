@@ -37,7 +37,11 @@ public class PlayerActionManager : MonoBehaviour
             // 스킬 공격
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                SkillAttackRequest();
+                var myPlayer = DungeonManager.Instance.MyPlayer;
+                if (myPlayer != null)
+                {
+                    myPlayer.Skill();
+                }
             }
             // 회피
             if (Input.GetKeyDown(KeyCode.Space))
@@ -92,15 +96,15 @@ public class PlayerActionManager : MonoBehaviour
             {
                 //player.Dodge();
                 // 서버 계산 좌표를 부드럽게 적용합니다.
-                //player.InterpolateToPosition(new Vector3(
-                //    result.FinalPosition.X,
-                //    result.FinalPosition.Y,
-                //    result.FinalPosition.Z));
-                player.SetPosition(new Vector3(
+                player.InterpolateToPosition(new Vector3(
                     result.FinalPosition.X,
                     result.FinalPosition.Y,
-                    result.FinalPosition.Z)
-                    );
+                    result.FinalPosition.Z));
+                //player.SetPosition(new Vector3(
+                //    result.FinalPosition.X,
+                //    result.FinalPosition.Y,
+                //    result.FinalPosition.Z)
+                //    );
                 player.TriggerDodgeAnimation();
                 break;
             }
@@ -118,7 +122,7 @@ public class PlayerActionManager : MonoBehaviour
     // 스킬 액션이 들어오면 처리할 핸들러
     private void ProcessSkillAttackResult(SkillAttackResult result)
     {
-        Debug.Log($"스킬 공격 결과: 스킬ID={result.SkillId}, 대상ID={result.TargetId}, 피해량={result.DamageDealt}");
+        Debug.Log($"스킬 공격 결과: 스킬ID={result.SkillId}");
         // 여기서 UI 업데이트나 게임 로직에 반영
         Player[] players = GameObject.FindObjectsOfType<Player>();
         foreach (Player player in players)
@@ -186,28 +190,6 @@ public class PlayerActionManager : MonoBehaviour
         GameManager.Network.Send(actionPacket);
     }
 
-    void SkillAttackRequest()
-    {
-        string targetId = GetTargetIdFromMouseClick();
-
-        // SkillAttack 메세지 생성
-        SkillAttack skillAttack = new SkillAttack
-        {
-            AttackerName = DungeonManager.Instance.MyPlayer.nickname,
-            SkillId = 1,
-            TargetId = targetId,
-            CurrentMp = 100,
-        };
-
-        // 현재는 mp를 보내는 것이 없어서 체크해야할듯
-        C_PlayerAction actionPacket = new C_PlayerAction
-        {
-            SkillAttack = skillAttack
-        };
-
-        GameManager.Network.Send(actionPacket);
-    }
-
     void NormalAttackRequest()
     {
         // 레이캐스트를 통해 타겟을 얻거나, 타겟 ID를 직접 결정할 수 있습니다.
@@ -233,11 +215,11 @@ public class PlayerActionManager : MonoBehaviour
     }
 
     // 마우스 클릭 시 레이캐스트로 타겟 ID를 얻는 함수 (실제 구현은 상황에 맞게 수정)
-    string GetTargetIdFromMouseClick()
+    public string GetTargetIdFromMouseClick()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        float radius = 0.3f;
+        if (Physics.SphereCast(ray, radius, out RaycastHit hit))
         {
             Debug.Log("레이캐스트 들어옴");
             if(hit.collider.gameObject.CompareTag("Monster") == true)
