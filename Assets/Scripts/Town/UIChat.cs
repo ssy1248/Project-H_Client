@@ -12,6 +12,7 @@ public class UIChat : MonoBehaviour
     [SerializeField] private Transform chatItemRoot;
     [SerializeField] private TMP_Text txtChatItemBase;
     [SerializeField] private TMP_InputField inputChat;
+    [SerializeField] GameObject animationTypeObject;
     [SerializeField] private Button btnSend;
     [SerializeField] private Button btnToggle;
     [SerializeField] private Button btnWhisper;
@@ -49,9 +50,9 @@ public class UIChat : MonoBehaviour
 
         btnSend.onClick.AddListener(SendMessage);
         btnToggle.onClick.AddListener(ToggleChatWindow);
-        btnWhisper.onClick.AddListener(OnWhisperButtonClicked);
-        btnParty.onClick.AddListener(() => SetChatType(ChatType.Party));
-        btnGlobalChat.onClick.AddListener(() => SetChatType(ChatType.Global));  // 전체 채팅 버튼 추가
+        //btnWhisper.onClick.AddListener(OnWhisperButtonClicked);
+        //btnParty.onClick.AddListener(() => SetChatType(ChatType.Party));
+       // btnGlobalChat.onClick.AddListener(() => SetChatType(ChatType.Global));  // 전체 채팅 버튼 추가
         btnCloseWhisperInput.onClick.AddListener(CloseWhisperUserInputUI);
 
         inputChat.onSubmit.AddListener((text) =>
@@ -141,26 +142,22 @@ public class UIChat : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
 
-        // 파티 채팅일 경우
-        if (currentChatType == ChatType.Party)
-        {
-            SendMessageToParty(inputChat.text);
-        }
-        // 귓속말일 경우
-        else if (currentChatType == ChatType.Whisper && !string.IsNullOrEmpty(selectedWhisperUser))
-        {
-            SendWhisperToUser(inputChat.text, selectedWhisperUser);
-        }
-        else // 일반 채팅
-        {
-            player.SendMessage(inputChat.text);
-        }
-
+        player.SendMessage(inputChat.text);
         PushMessage(inputChat.text, true, currentChatType);
         inputChat.text = string.Empty;
         ActivateInputFieldProperly();
     }
-
+    public void SetAnimationSetting()
+    {
+        if (!animationTypeObject.activeSelf)
+        {
+            animationTypeObject.SetActive(true);
+        }
+        else
+        {
+            animationTypeObject.SetActive(false);
+        }
+    }
     private void SendMessageToParty(string message)
     {
         // 파티 채팅 처리 로직
