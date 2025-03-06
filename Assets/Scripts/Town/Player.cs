@@ -89,6 +89,7 @@ public class Player : MonoBehaviour
     #region Unity Lifecycle
     void Awake()
     {
+
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         meshs = GetComponentsInChildren<MeshRenderer>();
@@ -598,12 +599,8 @@ public class Player : MonoBehaviour
         IsMine = isMine;
         if (IsMine)
         {
+
             MPlayer = gameObject.AddComponent<MyPlayer>();
-        }
-        else
-        {
-            if (nav != null)
-                Destroy(nav);
         }
     }
 
