@@ -10,11 +10,16 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> dodgeEffectsArcher = new List<GameObject>(); // 궁수 Dodge 이펙트 풀
     public List<GameObject> dodgeEffectsRogue = new List<GameObject>(); // 도적 Dodge 이펙트 풀
 
+    public PlayerHealthBar playerHealthBar;
+
+    public int partyIndex;
 
     private int effectIndex = 0; // 텔레포트 이펙트 인덱스
     private int dodgeEffectArcherIndex = 0; // 궁수 Dodge 이펙트 인덱스
     private int dodgeEffectRogueIndex = 0; // 도적 Dodge 이펙트 인덱스
     public float moveSpeed = 10f;
+
+    private float DodgeCoolTime = 5f;
 
     private int comboIndex = 0; // 콤보 순서 저장 변수
     private float comboResetTime = 1.0f; // 콤보가 초기화되는 시간
@@ -33,7 +38,11 @@ public class PlayerController : MonoBehaviour
     bool FDown;
 
     public bool isMove = false;
+
     protected bool isDodge;
+    private bool isOnCooldown = false;
+    private float currentCooldown = 0f;
+
     protected bool isFireReady = true;
     bool isBorder1;
     bool isBorder2;
@@ -60,6 +69,9 @@ public class PlayerController : MonoBehaviour
         nav.updateRotation = false;
 
         currentHealth = maxHealth;
+
+        //임시 파티 인덱스
+        partyIndex = 0;
     }
 
     public void setDestination(Vector3 dest)
@@ -128,6 +140,23 @@ public class PlayerController : MonoBehaviour
             // 죽으면 더 이상 업데이트되지 않도록
             return;
         }
+
+        // 쿨타임이 끝났다면 currentCooldown을 0으로 리셋
+        if (isOnCooldown)
+        {
+            currentCooldown -= Time.deltaTime;
+            if (currentCooldown <= 0f)
+            {
+                isOnCooldown = false;  // 쿨타임 끝
+            }
+        }
+
+        // D키를 눌렀고, 구르기 중이 아니고 쿨타임이 끝났으면 구르기 실행
+        if (DDown && !isDodge && !isOnCooldown)
+        {
+            Dodge();
+        }
+
 
 
         Mousemove();
@@ -224,7 +253,7 @@ public class PlayerController : MonoBehaviour
 
     void Dodge()
     {
-        if (DDown && !isDodge)
+        if (DDown && !isDodge && !isOnCooldown)
         {
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward; // 이동 중이면 이동 방향 사용
             moveSpeed *= 2;
@@ -239,6 +268,10 @@ public class PlayerController : MonoBehaviour
             {
                 ActivateDodgeEffect(dodgeEffectsRogue, ref dodgeEffectRogueIndex);
             }
+
+            // 쿨타임 설정
+            isOnCooldown = true;
+            currentCooldown = DodgeCoolTime;  // 쿨타임 시간 설정
 
             Invoke("DodgeOut", 0.4f);
         }
@@ -373,7 +406,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!isDamage)
             {
-                Arrow enemyArrow = other.GetComponent<Arrow>();
+                EnemyArrow enemyArrow = other.GetComponent<EnemyArrow>();
+                playerHealthBar.TakeDamage(enemyArrow.damage);
                 currentHealth -= enemyArrow.damage;
                 DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), isPlayerHit: true, 300f);
                 Debug.Log("현재 체력: " + currentHealth);  // 현재 체력 로그 출력

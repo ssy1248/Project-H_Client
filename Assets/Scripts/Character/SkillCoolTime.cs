@@ -11,7 +11,7 @@ public class SkillCoolTime : MonoBehaviour
     public TextMeshProUGUI[] hideSkillTimeTexts;
     public Image[] hideSkillImages;
     private bool[] isHideSkills = { false, false };
-    private float[] SkillTimes = { 3, 3 }; // 각 스킬의 쿨타임 (초 단위)
+    private float[] SkillTimes = { 3, 5 }; // 각 스킬의 쿨타임 (초 단위)
     private float[] getSkillTimes = { 0, 0 }; // 쿨타임을 추적하는 변수
 
     // Start is called before the first frame update

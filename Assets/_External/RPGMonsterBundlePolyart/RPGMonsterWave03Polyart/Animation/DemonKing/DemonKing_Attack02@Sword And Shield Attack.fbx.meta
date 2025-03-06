@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 94c49882f8a94416ac954f1beb009e3c
+guid: ff97ce85fb21cbd4db6fd4c6b615e88b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -19,10 +19,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'demonKing_pinky01Left' has translation
-      animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -36,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: DemonKing_Attack01
-      takeName: Take 001
-      internalID: 1827226128182048838
+      name: Sword And Shield Attack
+      takeName: mixamo.com
+      internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 30
+      lastFrame: 52
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -51,10 +48,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 0
-      loopBlendPositionXZ: 1
+      loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -77,7 +74,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    nodeNameCollisionStrategy: 0
+    nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -467,288 +464,289 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: DemonKing_Attack01(Clone)
+    - name: DemonKing_Mesh(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: DemonKing
-      parentName: DemonKing_Attack01(Clone)
+      parentName: DemonKing_Mesh(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
       scale: {x: 1, y: 1, z: 1}
     - name: demonKing_root
-      parentName: DemonKing_Attack01(Clone)
-      position: {x: 0.0000000055879354, y: 1.0291286, z: -0.16896999}
+      parentName: DemonKing_Mesh(Clone)
+      position: {x: 0.000000007450581, y: 1.0291286, z: -0.16896999}
       rotation: {x: -0.29844967, y: 0.6410365, z: -0.29844967, w: 0.6410365}
       scale: {x: 1, y: 0.9999999, z: 1}
     - name: demonKing_spine01
       parentName: demonKing_root
-      position: {x: -0.33345416, y: 0, z: 3.2182914e-17}
+      position: {x: -0.33345416, y: 0, z: 5.4089476e-17}
       rotation: {x: -0, y: -0, z: -0.24312115, w: 0.9699959}
       scale: {x: 1.0000002, y: 1.0000001, z: 1}
     - name: demonKing_spine02
       parentName: demonKing_spine01
-      position: {x: -0.41430378, y: -7.105427e-17, z: 4.4913307e-17}
+      position: {x: -0.41430378, y: 7.105427e-17, z: 7.500036e-17}
       rotation: {x: -0, y: -0, z: 0.16703458, w: -0.98595107}
       scale: {x: 1.0000001, y: 1.0000004, z: 1.0000001}
     - name: demonKing_spine03
       parentName: demonKing_spine02
-      position: {x: -0.35580447, y: -7.105427e-17, z: 5.022763e-17}
+      position: {x: -0.35580447, y: 2.1316282e-16, z: 8.263953e-17}
       rotation: {x: -0.000000025618311, y: 0.000000021305521, z: -0.16145748, w: -0.9868797}
       scale: {x: 0.99999994, y: 1, z: 1}
-    - name: demonKing_neck
-      parentName: demonKing_spine03
-      position: {x: -0.23456569, y: 3.5527136e-17, z: 4.4109605e-17}
-      rotation: {x: -0.9925626, y: -0.12173566, z: 0.00000002763409, w: -0.000000018616664}
-      scale: {x: 1, y: 1.0000002, z: 0.99999994}
-    - name: demonKing_head
-      parentName: demonKing_neck
-      position: {x: -0.3652351, y: 2.2737367e-15, z: 2.4424906e-17}
-      rotation: {x: 0.47900143, y: 0.52015156, z: -0.47900146, w: 0.52015156}
-      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000001}
-    - name: demonKing_backTop
-      parentName: demonKing_neck
-      position: {x: 0.14584796, y: -0.16551852, z: -1.661356e-17}
-      rotation: {x: 0.47900143, y: 0.52015156, z: -0.47900146, w: 0.52015156}
-      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
     - name: demonKing_backLeft
       parentName: demonKing_spine03
       position: {x: -0.07648895, y: 0.4255098, z: -0.30537292}
       rotation: {x: -0.069490254, y: -0.703684, z: -0.069490224, w: 0.703684}
       scale: {x: 1, y: 1.0000001, z: 1}
-    - name: demonKing_upperArmLeft
-      parentName: demonKing_spine03
-      position: {x: 0.14800021, y: 0.14871754, z: -0.5931313}
-      rotation: {x: -0.05384471, y: -0.70505375, z: -0.08510147, w: 0.70196706}
-      scale: {x: 1.0000002, y: 1, z: 1}
-    - name: demonKing_lowerArmLeft
-      parentName: demonKing_upperArmLeft
-      position: {x: -0.6669303, y: -1.7763568e-17, z: 2.842171e-16}
-      rotation: {x: -0.000000033527613, y: -0, z: 0.06404976, w: 0.99794674}
-      scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    - name: demonKing_handALeft
-      parentName: demonKing_lowerArmLeft
-      position: {x: -0.76763433, y: -1.1723955e-15, z: -4.8316907e-15}
-      rotation: {x: 0.000000007493375, y: -0.016912764, z: 0.00000006648933, w: 0.999857}
-      scale: {x: 1, y: 1.0000001, z: 1}
-    - name: demonKing_pinky01Left
-      parentName: demonKing_handALeft
-      position: {x: -0.28022835, y: 0.15892978, z: 0.005965802}
-      rotation: {x: 0.001219817, y: 0.024337174, z: -0.028551653, w: 0.9992953}
-      scale: {x: 1.0000001, y: 1.0000002, z: 0.99999994}
-    - name: demonKing_pinky02Left
-      parentName: demonKing_pinky01Left
-      position: {x: -0.17707172, y: -1.2967404e-15, z: 3.694822e-15}
-      rotation: {x: 0.011421506, y: -0.027584475, z: -0.0007894207, w: 0.999554}
-      scale: {x: 1, y: 0.99999994, z: 1}
-    - name: demonKing_pinky03Left
-      parentName: demonKing_pinky02Left
-      position: {x: -0.16879864, y: 7.81597e-16, z: 1.7053025e-15}
-      rotation: {x: 0.0015346414, y: -0.069905445, z: 0.021893252, w: 0.9973122}
-      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
-    - name: demonKing_middle01Left
-      parentName: demonKing_handALeft
-      position: {x: -0.3243365, y: 0.009677464, z: 0.06522889}
-      rotation: {x: -0.0058788857, y: 0.022712098, z: -0.0143931275, w: 0.99962115}
-      scale: {x: 1, y: 1.0000002, z: 1}
-    - name: demonKing_middle02Left
-      parentName: demonKing_middle01Left
-      position: {x: -0.19673416, y: -3.0198067e-16, z: -5.684342e-16}
-      rotation: {x: -0.016419105, y: -0.027448153, z: -0.00037653255, w: 0.9994883}
-      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
-    - name: demonKing_middle03Left
-      parentName: demonKing_middle02Left
-      position: {x: -0.17236595, y: 3.9968027e-17, z: 5.1159075e-15}
-      rotation: {x: -0.0020474852, y: -0.089785285, z: -0.02270557, w: 0.99570024}
-      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
-    - name: demonKing_index01Left
-      parentName: demonKing_handALeft
-      position: {x: -0.29524103, y: -0.16016363, z: -0.0010482857}
-      rotation: {x: -0.0226113, y: 0.027955707, z: 0.009184247, w: 0.99931127}
-      scale: {x: 1.0000002, y: 1.0000005, z: 1.0000002}
-    - name: demonKing_index02Left
-      parentName: demonKing_index01Left
-      position: {x: -0.19673416, y: -1.1013412e-15, z: 2.8421708e-15}
-      rotation: {x: -0.06001746, y: -0.02740108, z: -0.0016478369, w: 0.99781984}
-      scale: {x: 1.0000002, y: 1, z: 1}
-    - name: demonKing_index03Left
-      parentName: demonKing_index02Left
-      position: {x: -0.17236595, y: 8.5265126e-16, z: -3.410605e-15}
-      rotation: {x: 0.00035285202, y: 0.0043511386, z: -0.08084083, w: 0.99671745}
-      scale: {x: 1, y: 1.0000004, z: 1}
-    - name: demonKing_thumb01Left
-      parentName: demonKing_handALeft
-      position: {x: -0.14384882, y: -0.2188633, z: -0.1187592}
-      rotation: {x: -0.29150075, y: -0.11094272, z: 0.3523627, w: 0.8823602}
-      scale: {x: 1.0000004, y: 1.0000002, z: 1.0000001}
-    - name: demonKing_thumb02Left
-      parentName: demonKing_thumb01Left
-      position: {x: -0.17244713, y: 9.237055e-16, z: 7.958079e-15}
-      rotation: {x: 0.0097039025, y: 0.004895611, z: -0.033117343, w: 0.99939245}
-      scale: {x: 1.0000004, y: 1.0000002, z: 1}
-    - name: demonKing_thumb03Left
-      parentName: demonKing_thumb02Left
-      position: {x: -0.15436693, y: 1.2079227e-15, z: -3.9790393e-15}
-      rotation: {x: 0.00048624346, y: -0.0014174524, z: -0.10718155, w: 0.9942383}
-      scale: {x: 1.0000002, y: 0.99999994, z: 1.0000002}
     - name: demonKing_backRight
       parentName: demonKing_spine03
       position: {x: -0.07649216, y: 0.42551008, z: 0.30537298}
       rotation: {x: -0.069490254, y: -0.703684, z: -0.069490224, w: 0.703684}
       scale: {x: 1, y: 1.0000001, z: 1}
+    - name: demonKing_neck
+      parentName: demonKing_spine03
+      position: {x: -0.23456569, y: 7.105427e-17, z: 6.7849893e-17}
+      rotation: {x: -0.9925626, y: -0.12173566, z: 0.00000002763409, w: -0.000000018616664}
+      scale: {x: 1, y: 1.0000002, z: 0.99999994}
+    - name: demonKing_backTop
+      parentName: demonKing_neck
+      position: {x: 0.14584796, y: -0.16551852, z: -1.661356e-17}
+      rotation: {x: 0.47900143, y: 0.52015156, z: -0.47900146, w: 0.52015156}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
+    - name: demonKing_head
+      parentName: demonKing_neck
+      position: {x: -0.3652351, y: 2.5579537e-15, z: -1.5543122e-17}
+      rotation: {x: 0.47900143, y: 0.52015156, z: -0.47900146, w: 0.52015156}
+      scale: {x: 1.0000001, y: 1.0000005, z: 1.0000004}
+    - name: demonKing_upperArmLeft
+      parentName: demonKing_spine03
+      position: {x: 0.14800021, y: 0.14871754, z: -0.5931313}
+      rotation: {x: -0.05384468, y: -0.70505375, z: -0.08510153, w: 0.70196706}
+      scale: {x: 1.0000002, y: 0.9999999, z: 0.9999999}
+    - name: demonKing_lowerArmLeft
+      parentName: demonKing_upperArmLeft
+      position: {x: -0.6669303, y: -1.7763568e-17, z: 2.842171e-16}
+      rotation: {x: -0.000000022351742, y: -0.000000029802322, z: 0.064049914, w: 0.99794674}
+      scale: {x: 1, y: 1.0000002, z: 1}
+    - name: demonKing_handALeft
+      parentName: demonKing_lowerArmLeft
+      position: {x: -0.76763433, y: -1.1723955e-15, z: -4.8316907e-15}
+      rotation: {x: 0.000000019275857, y: -0.016913002, z: 0.0000000070733193, w: 0.999857}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: demonKing_index01Left
+      parentName: demonKing_handALeft
+      position: {x: -0.29524103, y: -0.16016363, z: -0.0010482857}
+      rotation: {x: -0.022611309, y: 0.027956005, z: 0.0091837235, w: 0.9993112}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: demonKing_index02Left
+      parentName: demonKing_index01Left
+      position: {x: -0.19673416, y: -1.1013412e-15, z: 2.8421708e-15}
+      rotation: {x: -0.060017698, y: -0.027400581, z: -0.0016479667, w: 0.9978198}
+      scale: {x: 1.0000004, y: 1.0000001, z: 0.99999994}
+    - name: demonKing_index03Left
+      parentName: demonKing_index02Left
+      position: {x: -0.17236595, y: 8.5265126e-16, z: -3.410605e-15}
+      rotation: {x: 0.00035291907, y: 0.004351079, z: -0.080840796, w: 0.99671745}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1.0000001}
+    - name: demonKing_middle01Left
+      parentName: demonKing_handALeft
+      position: {x: -0.3243365, y: 0.009677464, z: 0.06522889}
+      rotation: {x: -0.0058789602, y: 0.022711892, z: -0.014394013, w: 0.9996212}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: demonKing_middle02Left
+      parentName: demonKing_middle01Left
+      position: {x: -0.19673416, y: -3.0198067e-16, z: -5.684342e-16}
+      rotation: {x: -0.016419066, y: -0.027447065, z: -0.00037655735, w: 0.9994884}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000004}
+    - name: demonKing_middle03Left
+      parentName: demonKing_middle02Left
+      position: {x: -0.17236595, y: 3.9968027e-17, z: 5.1159075e-15}
+      rotation: {x: -0.0020474582, y: -0.089785226, z: -0.022705622, w: 0.99570024}
+      scale: {x: 1, y: 1, z: 0.9999998}
+    - name: demonKing_pinky01Left
+      parentName: demonKing_handALeft
+      position: {x: -0.28022835, y: 0.15892978, z: 0.005965802}
+      rotation: {x: 0.0012197574, y: 0.024337923, z: -0.02855153, w: 0.9992953}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: demonKing_pinky02Left
+      parentName: demonKing_pinky01Left
+      position: {x: -0.17707172, y: -1.2967404e-15, z: 3.694822e-15}
+      rotation: {x: 0.011421869, y: -0.027585618, z: -0.00078860833, w: 0.9995539}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1}
+    - name: demonKing_pinky03Left
+      parentName: demonKing_pinky02Left
+      position: {x: -0.16879864, y: 7.81597e-16, z: 1.7053025e-15}
+      rotation: {x: 0.0015345138, y: -0.069905445, z: 0.021893349, w: 0.9973122}
+      scale: {x: 1.0000005, y: 1.0000001, z: 1.0000002}
+    - name: demonKing_thumb01Left
+      parentName: demonKing_handALeft
+      position: {x: -0.14384882, y: -0.2188633, z: -0.1187592}
+      rotation: {x: -0.29150105, y: -0.11094227, z: 0.35236257, w: 0.8823602}
+      scale: {x: 1.0000004, y: 1.0000001, z: 1.0000001}
+    - name: demonKing_thumb02Left
+      parentName: demonKing_thumb01Left
+      position: {x: -0.17244713, y: 9.237055e-16, z: 7.958079e-15}
+      rotation: {x: 0.009703813, y: 0.004896118, z: -0.033117007, w: 0.99939245}
+      scale: {x: 1.0000005, y: 1.0000004, z: 1.0000002}
+    - name: demonKing_thumb03Left
+      parentName: demonKing_thumb02Left
+      position: {x: -0.15436693, y: 1.2079227e-15, z: -3.9790393e-15}
+      rotation: {x: 0.0004862668, y: -0.0014174767, z: -0.107181594, w: 0.9942384}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
     - name: demonKing_upperArmRight
       parentName: demonKing_spine03
       position: {x: 0.1480043, y: 0.14871678, z: 0.59313095}
-      rotation: {x: 0.053843167, y: 0.70505387, z: -0.08510046, w: 0.7019672}
-      scale: {x: 1.0000007, y: 0.99999994, z: 1.0000005}
+      rotation: {x: 0.053843196, y: 0.7050539, z: -0.08510046, w: 0.7019672}
+      scale: {x: 1.0000001, y: 0.99999994, z: 1}
     - name: demonKing_lowerArmRight
       parentName: demonKing_upperArmRight
       position: {x: -0.6669269, y: 4.1744386e-16, z: -1.1368684e-15}
-      rotation: {x: 0.0000000037252899, y: -0.000000119209275, z: 0.064049885, w: 0.99794674}
-      scale: {x: 0.99999994, y: 1.0000006, z: 1.0000001}
+      rotation: {x: 0.00000008195638, y: -0.000000029802319, z: 0.064049885, w: 0.99794674}
+      scale: {x: 1.0000005, y: 1.0000004, z: 1.0000002}
     - name: demonKing_handARight
       parentName: demonKing_lowerArmRight
       position: {x: -0.7676415, y: -1.0658141e-16, z: 1.7053025e-15}
-      rotation: {x: -0.0000018618382, y: -0.016914228, z: -0.000000059541758, w: -0.999857}
-      scale: {x: 1.0000002, y: 1.0000005, z: 1.0000004}
-    - name: demonKing_pinky01Right
-      parentName: demonKing_handARight
-      position: {x: -0.28489974, y: 0.13666256, z: -0.00794632}
-      rotation: {x: 0.0012196314, y: 0.02433861, z: 0.028550249, w: -0.9992953}
-      scale: {x: 1.0000002, y: 1.0000001, z: 1}
-    - name: demonKing_pinky02Right
-      parentName: demonKing_pinky01Right
-      position: {x: -0.17707068, y: -1.7763568e-17, z: 0}
-      rotation: {x: -0.011421022, y: 0.027586946, z: -0.0007894703, w: 0.9995539}
-      scale: {x: 1, y: 1.0000002, z: 1.0000005}
-    - name: demonKing_pinky03Right
-      parentName: demonKing_pinky02Right
-      position: {x: -0.16879879, y: -2.842171e-16, z: 3.410605e-15}
-      rotation: {x: 0.000000015832482, y: 0.00000008940696, z: -0.000000009778886,
-        w: 1}
-      scale: {x: 1.0000004, y: 1.0000004, z: 1}
-    - name: demonKing_middle01Right
-      parentName: demonKing_handARight
-      position: {x: -0.32433754, y: 0.009677325, z: -0.06523}
-      rotation: {x: 0.0058789984, y: -0.022712938, z: -0.0143927885, w: 0.99962115}
-      scale: {x: 1.0000002, y: 1, z: 0.9999998}
-    - name: demonKing_middle02Right
-      parentName: demonKing_middle01Right
-      position: {x: -0.19672444, y: -2.4868996e-16, z: 5.684342e-16}
-      rotation: {x: 0.016418593, y: 0.027446805, z: -0.00037602193, w: 0.9994884}
-      scale: {x: 1.0000001, y: 0.99999994, z: 1}
-    - name: demonKing_middle03Right
-      parentName: demonKing_middle02Right
-      position: {x: -0.17237033, y: 4.440892e-18, z: 5.684342e-16}
-      rotation: {x: -0.0000000251457, y: -0.000000029802312, z: 0.0000000051222724,
-        w: 1}
-      scale: {x: 1.0000002, y: 1, z: 1.0000004}
+      rotation: {x: -0.0000017196338, y: -0.016913816, z: -0.00000002841896, w: -0.999857}
+      scale: {x: 1.0000005, y: 1.0000006, z: 1.0000001}
     - name: demonKing_index01Right
       parentName: demonKing_handARight
       position: {x: -0.29679263, y: -0.14328338, z: -0.00017546346}
-      rotation: {x: 0.02261268, y: -0.027957298, z: 0.009181974, w: 0.99931115}
-      scale: {x: 1.0000002, y: 1, z: 0.9999997}
+      rotation: {x: 0.02261292, y: -0.027957192, z: 0.009181185, w: 0.9993112}
+      scale: {x: 0.9999997, y: 0.99999994, z: 1.0000002}
     - name: demonKing_index02Right
       parentName: demonKing_index01Right
       position: {x: -0.19673821, y: -4.973799e-16, z: -1.1368684e-15}
-      rotation: {x: 0.060016282, y: 0.027401637, z: -0.0016470427, w: 0.9978199}
-      scale: {x: 1.0000004, y: 1.0000006, z: 1.0000006}
+      rotation: {x: 0.060016297, y: 0.027399132, z: -0.0016464329, w: 0.99781996}
+      scale: {x: 1.0000006, y: 1.0000006, z: 1}
     - name: demonKing_index03Right
       parentName: demonKing_index02Right
       position: {x: -0.17236573, y: -1.0658141e-16, z: -5.684342e-16}
-      rotation: {x: 0.00000003725289, y: -0, z: -0.000000035390244, w: 1}
-      scale: {x: 1, y: 0.9999997, z: 0.99999994}
-    - name: demonKing_thumb01Right
+      rotation: {x: -0.000000026077023, y: -0.000000029802312, z: -0.000000067055204,
+        w: 1}
+      scale: {x: 1, y: 0.9999998, z: 1.0000002}
+    - name: demonKing_middle01Right
       parentName: demonKing_handARight
-      position: {x: -0.14384589, y: -0.21886338, z: 0.118760005}
-      rotation: {x: 0.2914896, y: 0.11093688, z: 0.3523636, w: 0.88236433}
-      scale: {x: 1.0000004, y: 1, z: 1.0000002}
-    - name: demonKing_thumb02Right
-      parentName: demonKing_thumb01Right
-      position: {x: -0.1724449, y: -6.3948843e-16, z: -2.8421708e-15}
-      rotation: {x: -0.009689446, y: -0.0048880926, z: -0.033118304, w: 0.9993925}
-      scale: {x: 1.0000001, y: 0.99999994, z: 1.0000001}
-    - name: demonKing_thumb03Right
-      parentName: demonKing_thumb02Right
-      position: {x: -0.15436608, y: -7.105427e-17, z: 2.2737367e-15}
-      rotation: {x: -0, y: -0, z: -0.000000007072231, w: 1}
-      scale: {x: 0.9999998, y: 0.99999994, z: 0.99999994}
+      position: {x: -0.32433754, y: 0.009677325, z: -0.06523}
+      rotation: {x: 0.005878992, y: -0.022712814, z: -0.014393363, w: 0.99962115}
+      scale: {x: 0.9999998, y: 0.99999994, z: 1.0000002}
+    - name: demonKing_middle02Right
+      parentName: demonKing_middle01Right
+      position: {x: -0.19672444, y: -2.4868996e-16, z: 5.684342e-16}
+      rotation: {x: 0.016418774, y: 0.027447963, z: -0.0003765053, w: 0.99948835}
+      scale: {x: 0.9999998, y: 0.9999997, z: 0.9999998}
+    - name: demonKing_middle03Right
+      parentName: demonKing_middle02Right
+      position: {x: -0.17237033, y: 4.440892e-18, z: 5.684342e-16}
+      rotation: {x: -0.00000007916239, y: 0.00000008940694, z: 0.000000052619708,
+        w: 1}
+      scale: {x: 1.0000001, y: 1.0000004, z: 1}
+    - name: demonKing_pinky01Right
+      parentName: demonKing_handARight
+      position: {x: -0.28489974, y: 0.13666256, z: -0.00794632}
+      rotation: {x: 0.001219459, y: 0.024339093, z: 0.028550874, w: -0.99929523}
+      scale: {x: 0.9999997, y: 0.99999994, z: 1.0000002}
+    - name: demonKing_pinky02Right
+      parentName: demonKing_pinky01Right
+      position: {x: -0.17707068, y: -1.7763568e-17, z: 0}
+      rotation: {x: -0.011420586, y: 0.027585603, z: -0.00078937993, w: 0.9995539}
+      scale: {x: 1.0000002, y: 0.99999994, z: 0.99999994}
+    - name: demonKing_pinky03Right
+      parentName: demonKing_pinky02Right
+      position: {x: -0.16879879, y: -2.842171e-16, z: 3.410605e-15}
+      rotation: {x: -0.00000001862645, y: -0.00000008940696, z: -0.000000024680045,
+        w: 1}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
     - name: demonKing_sword
       parentName: demonKing_handARight
       position: {x: -0.23307502, y: 0.0049005053, z: 0.10218683}
-      rotation: {x: -0, y: -0, z: -4.1294547e-17, w: 1}
-      scale: {x: 1, y: 0.99999994, z: 0.9999998}
+      rotation: {x: -0, y: -0, z: 9.1506644e-17, w: 1}
+      scale: {x: 0.9999997, y: 0.9999998, z: 0.99999994}
     - name: DemonKingBlade
       parentName: demonKing_sword
-      position: {x: -0, y: 0, z: 0}
+      position: {x: 6.8925486e-12, y: 7.836149e-12, z: 1.5400018e-11}
       rotation: {x: 0.50385785, y: 0.49611223, z: -0.50385785, w: 0.49611223}
       scale: {x: 1, y: 1, z: 1}
+    - name: demonKing_thumb01Right
+      parentName: demonKing_handARight
+      position: {x: -0.14384589, y: -0.21886338, z: 0.118760005}
+      rotation: {x: 0.29148975, y: 0.11093683, z: 0.35236272, w: 0.88236463}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1.0000002}
+    - name: demonKing_thumb02Right
+      parentName: demonKing_thumb01Right
+      position: {x: -0.1724449, y: -6.3948843e-16, z: -2.8421708e-15}
+      rotation: {x: -0.009689329, y: -0.004887922, z: -0.033116, w: 0.9993926}
+      scale: {x: 1.0000005, y: 0.9999996, z: 0.99999994}
+    - name: demonKing_thumb03Right
+      parentName: demonKing_thumb02Right
+      position: {x: -0.15436608, y: -7.105427e-17, z: 2.2737367e-15}
+      rotation: {x: -0, y: -0, z: -0.0000000071013337, w: 1}
+      scale: {x: 1.0000002, y: 0.99999994, z: 1.0000002}
     - name: demonKing_tail01
       parentName: demonKing_root
       position: {x: 0.36897898, y: 0.022894314, z: -0.06284914}
       rotation: {x: 0.06989303, y: -0.99755454, z: -0, w: 0}
-      scale: {x: 1.0000001, y: 1, z: 1.0000002}
+      scale: {x: 1.0000004, y: 1.0000001, z: 1.0000002}
     - name: demonKing_tail02
       parentName: demonKing_tail01
       position: {x: -0.42159468, y: -2.842171e-16, z: -1.519562e-16}
-      rotation: {x: 0.000000014864721, y: 0.0000000010414873, z: -0.13173972, w: 0.99128443}
-      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+      rotation: {x: -0, y: -0, z: -0.13173969, w: 0.99128443}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
     - name: demonKing_tail03
       parentName: demonKing_tail02
       position: {x: -0.43525568, y: 1.4210854e-16, z: -2.409482e-15}
-      rotation: {x: -0.000000014205919, y: -0.0000000044984976, z: -0.104409054, w: 0.9945345}
-      scale: {x: 1.0000002, y: 1, z: 1.0000001}
+      rotation: {x: -0, y: -0, z: -0.10440908, w: 0.9945345}
+      scale: {x: 1.0000001, y: 0.9999999, z: 1.0000002}
     - name: demonKing_tail04
       parentName: demonKing_tail03
       position: {x: -0.4608972, y: -1.2789769e-15, z: -2.5872454e-15}
-      rotation: {x: -0.000000028411835, y: -0.000000008996995, z: -0.17745493, w: 0.9841289}
-      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+      rotation: {x: -0.000000014205921, y: -0.0000000044984976, z: -0.17745493, w: 0.984129}
+      scale: {x: 1.0000002, y: 0.99999994, z: 1.0000001}
     - name: demonKing_tail05
       parentName: demonKing_tail04
       position: {x: -0.3618292, y: 1.4122036e-15, z: -1.8798598e-15}
-      rotation: {x: 0.000000012856068, y: 0.000000007549861, z: -0.022967098, w: 0.9997363}
-      scale: {x: 1, y: 1, z: 1}
+      rotation: {x: 0.000000068603214, y: -0.000000098208474, z: -0.022967199, w: 0.99973625}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
     - name: demonKing_upperLegLeft
       parentName: demonKing_root
       position: {x: 0.02252252, y: -0.14241959, z: -0.346776}
-      rotation: {x: -0.41451508, y: -0.9017631, z: -0.006208606, w: 0.12231986}
-      scale: {x: 1, y: 1.0000002, z: 1}
+      rotation: {x: -0.4145151, y: -0.901763, z: -0.0062085986, w: 0.12231977}
+      scale: {x: 0.9999998, y: 0.9999998, z: 1}
     - name: demonKing_lowerLegLeft
       parentName: demonKing_upperLegLeft
       position: {x: -0.39771068, y: 2.0428103e-16, z: 4.2632563e-16}
-      rotation: {x: -0.0016483255, y: -0.032022513, z: -0.11509615, w: 0.9928368}
-      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000002}
+      rotation: {x: -0.0016483031, y: -0.03202243, z: -0.11509618, w: 0.9928368}
+      scale: {x: 1.0000001, y: 1.0000006, z: 1.0000004}
     - name: demonKing_feetLeft
       parentName: demonKing_lowerLegLeft
       position: {x: -0.47036642, y: 1.8651746e-16, z: -1.847411e-15}
-      rotation: {x: 0.44408515, y: 0.4861503, z: 0.45339733, w: 0.6007306}
-      scale: {x: 1, y: 1, z: 0.99999994}
+      rotation: {x: 0.44408512, y: 0.48615023, z: 0.45339736, w: 0.6007306}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000002}
     - name: demonKing_toeLeft
       parentName: demonKing_feetLeft
       position: {x: -0.265272, y: -0.00938519, z: -0.00041935142}
-      rotation: {x: -0.0036708107, y: -0.0019017751, z: 0.00076758844, w: 0.9999912}
-      scale: {x: 1.0000001, y: 1.0000005, z: 1.0000001}
+      rotation: {x: -0.0036708112, y: -0.0019017754, z: 0.0007676183, w: 0.9999912}
+      scale: {x: 1.0000001, y: 1.0000002, z: 0.9999999}
     - name: demonKing_upperLegRight
       parentName: demonKing_root
       position: {x: 0.022522869, y: -0.1424199, z: 0.346776}
-      rotation: {x: -0.41451514, y: -0.90176296, z: 0.006207645, w: -0.12232031}
-      scale: {x: 0.9999999, y: 1.0000001, z: 0.9999999}
+      rotation: {x: -0.4145152, y: -0.90176296, z: 0.0062075704, w: -0.12232022}
+      scale: {x: 1, y: 0.99999994, z: 0.99999976}
     - name: demonKing_lowerLegRight
       parentName: demonKing_upperLegRight
       position: {x: -0.39771026, y: -2.0428103e-16, z: 1.4210854e-16}
-      rotation: {x: -0.0016483029, y: -0.032022808, z: 0.115096286, w: -0.9928367}
+      rotation: {x: -0.0016483441, y: -0.03202273, z: 0.11509639, w: -0.9928367}
       scale: {x: 0.99999976, y: 1, z: 1}
     - name: demonKing_feetRight
       parentName: demonKing_lowerLegRight
       position: {x: -0.4703665, y: 1.5987211e-16, z: 1.4210854e-16}
-      rotation: {x: -0.5765966, y: -0.49445337, z: -0.4977623, w: -0.41867042}
-      scale: {x: 1.0000001, y: 1, z: 0.99999994}
+      rotation: {x: -0.5765966, y: -0.49445328, z: -0.49776244, w: -0.41867048}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
     - name: demonKing_toeRight
       parentName: demonKing_feetRight
       position: {x: -0.26413256, y: -0.0007235831, z: -0.026282161}
-      rotation: {x: 0.01536007, y: 0.030157905, z: -0.012337474, w: 0.999351}
-      scale: {x: 1, y: 1, z: 1.0000001}
+      rotation: {x: 0.015360219, y: 0.03015786, z: -0.012337593, w: 0.999351}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -761,13 +759,14 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 87fef72e4e6e417cabd9cb41e14fd125,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
-  importBlendShapeDeformPercent: 0
+  importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 

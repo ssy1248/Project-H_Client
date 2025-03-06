@@ -24,6 +24,7 @@ public class BossController : Enemy
     public GameObject bladePrefab;
     private BoxCollider squareCollider;
     private SphereCollider fanCollider;
+    private SphereCollider circleCollider;
 
 
     void Awake()
@@ -38,31 +39,39 @@ public class BossController : Enemy
 
         nav.isStopped = true;
         StartCoroutine(Think());
-    }
 
-    void Start()
-    {
-        isLook = true;
-        isPatternActive = false;
-
-        // 부채꼴 범위 초기화
+        // 콜라이더 미리 초기화
         if (fanShapeRange != null)
         {
-            fanShapeRange.SetActive(false);  // 초기에는 비활성화
-            fanCollider = fanShapeRange.AddComponent<SphereCollider>();
+            fanCollider = fanShapeRange.GetComponent<SphereCollider>();
+            if (fanCollider == null)
+                fanCollider = fanShapeRange.AddComponent<SphereCollider>();
+
             fanCollider.isTrigger = true;
+            fanShapeRange.SetActive(false);
         }
 
-        // 사각형 범위 초기화
         if (squareShapeRange != null)
         {
-            squareShapeRange.SetActive(false);  // 초기에는 비활성화
-            squareCollider = squareShapeRange.AddComponent<BoxCollider>();
+            squareCollider = squareShapeRange.GetComponent<BoxCollider>();
+            if (squareCollider == null)
+                squareCollider = squareShapeRange.AddComponent<BoxCollider>();
+
             squareCollider.isTrigger = true;
+            squareShapeRange.SetActive(false);
+        }
+
+        if (circleShapeRange != null)
+        {
+            circleCollider = circleShapeRange.GetComponent<SphereCollider>();
+            if (circleCollider == null)
+                circleCollider = circleShapeRange.AddComponent<SphereCollider>();
+
+            circleCollider.isTrigger = true;
+            circleShapeRange.SetActive(false);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isDead)
@@ -86,6 +95,40 @@ public class BossController : Enemy
         }
     }
 
+    private Coroutine _stateCoroutine = null;
+    private Coroutine StartAttack(int randomAction)
+    {
+        if (_stateCoroutine != null)
+        {
+            StopCoroutine(_stateCoroutine);
+            _stateCoroutine = null;
+        }
+
+        switch (randomAction)
+        {
+            case 0:
+                _stateCoroutine = StartCoroutine(Attack1());
+                break;
+            case 1:
+                _stateCoroutine = StartCoroutine(Attack2());
+                break;
+            case 2:
+                _stateCoroutine = StartCoroutine(Taunt());
+                break;
+            case 3:
+                _stateCoroutine = StartCoroutine(Attack3());
+                break;
+            case 4:
+                _stateCoroutine = StartCoroutine(Walk());
+                break;
+            case 5:
+                _stateCoroutine= StartCoroutine(Attack4());
+                break;
+        }
+
+        return _stateCoroutine;
+    }
+
     IEnumerator Think()
     {
         while (!isDead)
@@ -99,7 +142,7 @@ public class BossController : Enemy
                 {
                     if (!isPatternActive)  // 패턴이 활성화되지 않았을 때만 이동 시작
                     {
-                        yield return StartCoroutine(Walk());  // 이동 후 패턴 실행
+                        yield return StartAttack(4);  // 이동 후 패턴 실행
                     }
                 }
                 else  // 일정 거리 이내에 들어오면 멈추고 패턴 실행
@@ -111,21 +154,25 @@ public class BossController : Enemy
                     {
                         case 0:
                         case 1:
-                            yield return StartCoroutine(Attack1());
+                            yield return StartAttack(0);
                             break;
                         case 2:
                         case 3:
-                            yield return StartCoroutine(Attack2());
+                            yield return StartAttack(1);
                             break;
                         case 4:
-                            yield return StartCoroutine(Taunt());
+                            yield return StartAttack(2);
                             break;
                         case 5:
+                            yield return StartAttack(3);
+                            break;
                         case 6:
                         case 7:
                         case 8:
                         case 9:
-                            yield return StartCoroutine(Attack3());
+                        case 10:
+                        case 11:
+                            yield return StartAttack(5);
                             break;
                     }
 
@@ -145,7 +192,7 @@ public class BossController : Enemy
         nav.isStopped = false;
         anim.SetTrigger("Attack1");
 
-        // 부채꼴 범위 표시 활성화
+        // 사각형 범위 표시 활성화
         if (squareShapeRange != null)
         {
             squareShapeRange.SetActive(true);
@@ -163,9 +210,8 @@ public class BossController : Enemy
             squareCollider.size = squareShapeRange.transform.localScale;
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(1f);
         isLook = true;
         nav.isStopped = true;
 
@@ -211,9 +257,8 @@ public class BossController : Enemy
             fanCollider.radius = fanShapeRange.transform.localScale.x / 2f;
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(1f);
         isLook = true;
         nav.isStopped = true;
 
@@ -231,6 +276,8 @@ public class BossController : Enemy
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack3"); // 보스 공격 애니메이션 실행
+
+        yield return new WaitForSeconds(0.2f);
 
         int bladeCount = 50; // 떨어지는 칼 개수
         float radius = 50f; // 칼이 떨어지는 범위 반경
@@ -364,11 +411,8 @@ public class BossController : Enemy
             fanCollider.radius = fanShapeRange.transform.localScale.x / 2f;
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(3f);
-
-        yield return new WaitForSeconds(1f);
         isLook = true;
         nav.isStopped = true;
 
@@ -377,5 +421,47 @@ public class BossController : Enemy
         {
             fanShapeRange.SetActive(false);
         }
+    }
+
+    IEnumerator Attack4()
+    {
+        Attack1Vec = target.position + lookVec;
+
+        isLook = false;
+        nav.isStopped = false;
+        anim.SetTrigger("Attack4");
+
+        // 사각형 범위 표시 활성화
+        if (circleShapeRange != null)
+        {
+            circleShapeRange.SetActive(true);
+
+            // 원형  범위의 위치를 보스 위치로 설정
+            circleShapeRange.transform.position = transform.position + (transform.forward * 15f);
+            // 부채꼴의 크기 조정
+            circleShapeRange.transform.localScale = new Vector3(4f, 4f, 5f); // 적절한 크기로 조정
+
+            Vector3 direction = transform.forward;  // 보스의 방향
+
+            // 부채꼴이 보스 앞에 위치하고 범위가 펼쳐지도록 회전 조정
+            circleShapeRange.transform.rotation = Quaternion.LookRotation(direction);
+
+            circleShapeRange.transform.rotation = Quaternion.Euler(-90f, 90f, 0f); ;  // X축을 90도 회전시켜 수평으로 맞춤
+
+            circleCollider.radius = circleShapeRange.transform.localScale.x / 2f;
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        isLook = true;
+        nav.isStopped = true;
+
+        // 부채꼴 범위 표시 비활성화
+        if (circleShapeRange != null)
+        {
+            circleShapeRange.SetActive(false);
+        }
+
+
     }
 }

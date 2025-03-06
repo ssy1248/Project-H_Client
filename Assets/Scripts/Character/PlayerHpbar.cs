@@ -6,60 +6,99 @@ using System.Collections;
 public class PlayerHealthBar : MonoBehaviour
 {
     public Slider healthSlider; // 플레이어 체력을 표시할 슬라이더
+    public Slider partyHealthSlider; // 파티 UI에서 표시될 내 HP 바
     public TextMeshProUGUI healthText; // 플레이어 체력 텍스트
 
     private int maxHealth;
     private int currentHealth;
     private bool isAnimating = false; // 애니메이션 실행 여부 체크
 
+    public PlayerController playerController;
+    private PartyHealthBar partyHealthBar;
+
     void Start()
     {
-        maxHealth = 100; // 예시로 최대 체력을 100으로 설정
+        if (playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogError("playerController 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
+                return;
+            }
+        }
+
+        maxHealth = playerController.maxHealth;
         currentHealth = maxHealth;
         healthSlider.maxValue = maxHealth;
         healthSlider.value = maxHealth;
 
-        UpdateHealthText(); // 텍스트 업데이트
+        // 파티 UI에서 내 HP 바를 자동으로 찾음 (없으면 인스펙터에서 수동 연결)
+        if (partyHealthSlider == null)
+        {
+            PartyHealthBar partyHealthBar = FindObjectOfType<PartyHealthBar>();
+            if (partyHealthBar != null)
+            {
+                partyHealthSlider = partyHealthBar.GetMyHealthBar(); // 내 캐릭터의 파티 UI HP 바 가져오기
+                if (partyHealthSlider != null)
+                {
+                    partyHealthSlider.maxValue = maxHealth;
+                    partyHealthSlider.value = maxHealth;
+                }
+            }
+        }
+
+        UpdateHealthText();
     }
 
     public void TakeDamage(int damage)
     {
-        if (isAnimating) return; // 애니메이션 중이면 중복 실행 방지
+        if (isAnimating) return;
 
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            StartCoroutine(AnimateHealthReduction(0)); // 체력이 0이 되면 애니메이션 실행
+            StartCoroutine(AnimateHealthReduction(0));
             return;
         }
 
-        StartCoroutine(AnimateHealthReduction(currentHealth)); // 체력 애니메이션 실행
+        StartCoroutine(AnimateHealthReduction(currentHealth));
     }
 
     private IEnumerator AnimateHealthReduction(int targetValue)
     {
-        isAnimating = true; // 애니메이션 시작
+        isAnimating = true;
 
-        float duration = 0.5f; // 애니메이션 지속 시간
+        float duration = 0.5f;
         float elapsedTime = 0f;
         float startValue = healthSlider.value;
+        float startPartyValue = partyHealthSlider != null ? partyHealthSlider.value : startValue;
 
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            healthSlider.value = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
+            float newValue = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
+            healthSlider.value = newValue;
+
+            if (partyHealthSlider != null)
+            {
+                partyHealthSlider.value = Mathf.Lerp(startPartyValue, targetValue, elapsedTime / duration);
+            }
+
             yield return null;
         }
 
-        healthSlider.value = targetValue; // 최종 값 보정
+        healthSlider.value = targetValue;
+        if (partyHealthSlider != null)
+        {
+            partyHealthSlider.value = targetValue;
+        }
 
-        isAnimating = false; // 애니메이션 종료
-
-        UpdateHealthText(); // 체력 텍스트 업데이트
+        isAnimating = false;
+        UpdateHealthText();
     }
 
-    // 플레이어 체력 텍스트 업데이트
     private void UpdateHealthText()
     {
         if (healthText != null)
