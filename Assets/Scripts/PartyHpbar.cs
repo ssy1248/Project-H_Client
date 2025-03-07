@@ -13,7 +13,8 @@ public class PartyHealthBar : MonoBehaviour
 
     public Slider GetMyHealthBar()
     {
-        if (playerController == null) return null;
+        if (playerController == null)
+            return null;
 
         // partyIndex를 활용하여 해당 위치의 HP 바를 가져옴
         if (playerController.partyIndex >= 0 && playerController.partyIndex < partyHealthBars.Length)

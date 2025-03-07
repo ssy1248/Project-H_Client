@@ -45,6 +45,11 @@ public class PlayerHealthBar : MonoBehaviour
                     partyHealthSlider.maxValue = maxHealth;
                     partyHealthSlider.value = maxHealth;
                 }
+                if (partyHealthSlider == null)
+                {
+                    Debug.LogError("partyHealthSlider 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
+                    return;
+                }
             }
         }
 
