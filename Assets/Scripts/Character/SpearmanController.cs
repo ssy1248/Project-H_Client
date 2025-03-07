@@ -6,35 +6,36 @@ public class SpearmanCounter : MonoBehaviour
 {
     Animator anim;
     public float counterDuration = 3f; // 카운터 자세 유지 시간
-    private bool isInCounter = false; // 카운터 자세 여부
+    private bool isInCounter = false; // 카운터 상태 여부
     private float counterTimer = 0f; // 카운터 시간
 
-    private Weapon weapon; // Weapon 객체 참조
+    private Weapon weapon; // 무기 객체 참조
+
+    public float counterCooldown = 10f; // 카운터 스킬 쿨타임 (10초)
+    private bool canUseCounter = true; // 스킬 사용 가능 여부
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         weapon = GetComponent<Weapon>(); // Weapon 컴포넌트 가져오기
 
-        // Weapon 컴포넌트가 없다면 에러 로그 출력
         if (weapon == null)
         {
-            Debug.LogError("Weapon component not found on this GameObject. Please add a Weapon component.");
+            Debug.LogError("Weapon component not found");
         }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !isInCounter)
+        if (Input.GetKeyDown(KeyCode.Q) && !isInCounter && canUseCounter)
         {
-            StartCounter(); // 카운터 자세 시작
+            StartCounter();
         }
 
         if (isInCounter)
         {
             counterTimer += Time.deltaTime;
 
-            // 카운터 시간이 끝나면 idle로 돌아가기
             if (counterTimer >= counterDuration)
             {
                 EndCounter();
@@ -44,43 +45,50 @@ public class SpearmanCounter : MonoBehaviour
 
     private void StartCounter()
     {
-        if (weapon == null) return; // Weapon이 없으면 카운터 시작하지 않음
+        if (weapon == null) return;
 
         isInCounter = true;
+        canUseCounter = false; // 스킬 재사용 불가 설정
         counterTimer = 0f;
-        anim.SetTrigger("doCounterStance"); // 카운터 자세 애니메이션 트리거
-        weapon.ActivateCounterAttack(); // 카운터 공격 활성화
+        anim.SetTrigger("doCounterStance");
+        weapon.ActivateCounterAttack();
         Debug.Log("Entering counter stance...");
+
+        StartCoroutine(CounterCooldownRoutine()); // 쿨타임 시작
     }
 
     private void EndCounter()
     {
-        if (weapon == null) return; // Weapon이 없으면 카운터 종료하지 않음
+        if (weapon == null) return;
 
         isInCounter = false;
-        anim.SetTrigger("doExitCounterStance"); // 카운터 종료 애니메이션 트리거
-        weapon.DeactivateCounterAttack(); // 카운터 공격 비활성화
+        anim.SetTrigger("doExitCounterStance");
+        weapon.DeactivateCounterAttack();
         Debug.Log("Exiting counter stance...");
     }
 
-    // 카운터 자세에서 공격을 받을 때 데미지 처리
+    // 카운터 스킬 쿨타임 루틴
+    private IEnumerator CounterCooldownRoutine()
+    {
+        Debug.Log("Counter skill cooldown started.");
+        yield return new WaitForSeconds(counterCooldown); // 쿨타임 대기
+        canUseCounter = true; // 스킬 다시 사용 가능
+        Debug.Log("Counter skill is ready again!");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (weapon == null) return; // Weapon이 없으면 처리하지 않음
+        if (weapon == null) return;
 
-        // 카운터 자세일 때, 'EnemyArrow' 태그의 공격을 받으면 카운터 공격 처리
         if (isInCounter && other.CompareTag("EnemyArrow"))
         {
-            
-            // 카운터 공격 애니메이션 실행
             anim.SetTrigger("doCounterAttack");
 
             Weapon incomingWeapon = other.GetComponent<Weapon>();
             if (incomingWeapon != null && incomingWeapon.isCounterAttack)
             {
-                // 카운터 공격 처리
                 Debug.Log("Counter attack triggered!");
-                weapon.Use();  // 카운터 공격 실행 (Swing() 코루틴 실행됨)
+                weapon.Use();
             }
         }
     }

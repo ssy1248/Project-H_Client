@@ -6,7 +6,7 @@ using System.Collections;
 public class PlayerHealthBar : MonoBehaviour
 {
     public Slider healthSlider; // 플레이어 체력을 표시할 슬라이더
-    public Slider partyHealthSlider; // 파티 UI에서 표시될 내 HP 바
+    private Slider partyHealthSlider; // 파티 UI에서 표시될 내 HP 바
     public TextMeshProUGUI healthText; // 플레이어 체력 텍스트
 
     private int maxHealth;
@@ -44,6 +44,11 @@ public class PlayerHealthBar : MonoBehaviour
                 {
                     partyHealthSlider.maxValue = maxHealth;
                     partyHealthSlider.value = maxHealth;
+                }
+                if (partyHealthSlider == null)
+                {
+                    Debug.LogError("partyHealthSlider 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
+                    return;
                 }
             }
         }

@@ -9,11 +9,17 @@ public class PartyHealthBar : MonoBehaviour
     void Start()
     {
         playerController = FindObjectOfType<PlayerController>();
+        if (playerController == null)
+        {
+            Debug.LogError("playerController 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
+            return;
+        }
     }
 
     public Slider GetMyHealthBar()
     {
-        if (playerController == null) return null;
+        if (playerController == null)
+            return null;
 
         // partyIndex를 활용하여 해당 위치의 HP 바를 가져옴
         if (playerController.partyIndex >= 0 && playerController.partyIndex < partyHealthBars.Length)

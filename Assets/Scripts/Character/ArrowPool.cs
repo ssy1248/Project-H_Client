@@ -1,47 +1,51 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class ArrowPool : MonoBehaviour
 {
-    public GameObject arrowPrefab; // È­»ì ÇÁ¸®ÆÕ
-    public int poolSize = 10; // Ç® Å©±â
-    private List<GameObject> arrowPool; // Ç®À» ÀúÀåÇÒ ¸®½ºÆ®
+    public GameObject arrowPrefab; // í™”ì‚´ í”„ë¦¬íŒ¹
+    public int initialPoolSize = 20; // ê²Œì„ ì‹œì‘ ì‹œ í’€ì— ë„£ì„ í™”ì‚´ ê°œìˆ˜
+    private List<GameObject> arrowPool; // í™”ì‚´ í’€ ë¦¬ìŠ¤íŠ¸
 
     private void Awake()
     {
-        // Ç® ÃÊ±âÈ­
+        // ì²˜ìŒì—ëŠ” í’€ì„ ë¹ˆ ìƒíƒœë¡œ ì´ˆê¸°í™”
         arrowPool = new List<GameObject>();
-
-        // ÃÊ±âÈ­µÈ Ç®¿¡ È­»ìÀ» Ãß°¡
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject arrow = Instantiate(arrowPrefab);
-            arrow.SetActive(false); // Ã³À½¿¡´Â ºñÈ°¼ºÈ­
-            arrowPool.Add(arrow);
-        }
     }
 
-    // ºñÈ°¼ºÈ­µÈ È­»ìÀ» ¹İÈ¯ÇÏ°í »ç¿ëÇÏ´Â ÇÔ¼ö
+    private void Start()
+    {
+        // ê²Œì„ì´ ì‹œì‘ë˜ë©´ í™”ì‚´ í”„ë¦¬íŒ¹ 20ê°œë¥¼ ìƒì„±í•˜ì—¬ í’€ì— ì¶”ê°€
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            GameObject arrow = Instantiate(arrowPrefab, transform);
+            arrow.SetActive(false); // ì²˜ìŒì—ëŠ” ë¹„í™œì„±í™”
+            arrowPool.Add(arrow);
+        }
+        Debug.Log($"í™”ì‚´ í’€ ì´ˆê¸°í™” (ì´ {initialPoolSize}ê°œ)");
+    }
+
+    // ë¹„í™œì„±í™”ëœ í™”ì‚´ì„ ë°˜í™˜í•˜ê³  ì‚¬ìš©í•˜ëŠ” í•¨ìˆ˜
     public GameObject GetArrow()
     {
         foreach (var arrow in arrowPool)
         {
             if (!arrow.activeInHierarchy)
             {
-                arrow.SetActive(true); // È°¼ºÈ­
+                arrow.SetActive(true);
                 return arrow;
             }
         }
 
-        // ¸¸¾à ºñÈ°¼ºÈ­µÈ È­»ìÀÌ ¾ø´Ù¸é »õ·Î »ı¼ºÇÏ¿© ¹İÈ¯
-        GameObject newArrow = Instantiate(arrowPrefab);
+        // ë¹„í™œì„±í™”ëœ í™”ì‚´ì´ ì—†ë‹¤ë©´ ìƒˆë¡œ ìƒì„±í•˜ì—¬ í’€ì„ í™•ì¥
+        GameObject newArrow = Instantiate(arrowPrefab, transform);
         arrowPool.Add(newArrow);
         return newArrow;
     }
 
-    // »ç¿ëÀÌ ³¡³­ È­»ìÀ» Ç®¿¡ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+    // ì‚¬ìš©ì´ ëë‚œ í™”ì‚´ì„ í’€ì— ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
     public void ReturnArrow(GameObject arrow)
     {
-        arrow.SetActive(false); // ºñÈ°¼ºÈ­
+        arrow.SetActive(false); // ë¹„í™œì„±í™”
     }
 }
