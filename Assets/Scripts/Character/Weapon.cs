@@ -11,7 +11,6 @@ public class Weapon : MonoBehaviour
     public TrailRenderer trailEffect;
     public Transform ArrowPos;
     public GameObject ArrowPrefab; // 기본 화살 프리팹
-    public Transform ArrowFormPos;
 
     public GameObject arrowPoolObject; // 빈 오브젝트로 전체 화살 풀을 관리
     private List<GameObject> arrowPool; // 오브젝트 풀
@@ -33,6 +32,12 @@ public class Weapon : MonoBehaviour
                 GameObject arrow = child.gameObject;
                 arrow.SetActive(false); // 처음에는 비활성화
                 arrowPool.Add(arrow);
+
+                // **충돌 감지 스크립트 추가**
+                if (arrow.GetComponent<Arrow>() == null)
+                {
+                    arrow.AddComponent<Arrow>().weapon = this;
+                }
             }
         }
     }
@@ -113,14 +118,28 @@ public class Weapon : MonoBehaviour
         // 만약 비활성화된 화살이 없다면 새로 생성
         GameObject newArrow = Instantiate(ArrowPrefab);
         arrowPool.Add(newArrow);
+
+        if (newArrow.GetComponent<Arrow>() == null)
+        {
+            newArrow.AddComponent<Arrow>().weapon = this;
+        }
+
         return newArrow;
     }
 
     // 사용이 끝난 화살을 풀에 반환하는 함수
     IEnumerator ReturnArrowToPool(GameObject arrow)
     {
-        yield return new WaitForSeconds(3f); // 3초 후에 풀로 반환 (화살이 바닥에 떨어졌다고 가정)
+        yield return new WaitForSeconds(3f);
 
-        arrow.SetActive(false); // 비활성화
+        if (arrow != null)
+        {
+            arrow.SetActive(false);
+        }
+    }
+
+    public void ReturnArrow(GameObject arrow)
+    {
+        StartCoroutine(ReturnArrowToPool(arrow));
     }
 }

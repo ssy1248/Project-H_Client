@@ -729,7 +729,7 @@ Transform:
   m_GameObject: {fileID: 1750137634855022199}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.201, y: 1.048, z: 0.235}
+  m_LocalPosition: {x: 0.201, y: 1.39, z: 0.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3237,10 +3237,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   dodgeEffectsRogue: []
+  playerHealthBar: {fileID: 0}
+  partyIndex: 0
   moveSpeed: 10
   maxHealth: 100
   currentHealth: 0
-  AttackRate: 0.5
+  AttackRate: 1
   isMove: 0
 --- !u!114 &6610204839000774221
 MonoBehaviour:
@@ -7380,31 +7382,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.17994438
+      value: 0.48206976
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.66389066
+      value: -0.5299664
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.71202713
+      value: -0.556869
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.14101988
+      value: 0.42028716
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 182.184
+      value: 182.457
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 26.348007
+      value: 79.508
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c3972562e865e5d4c84dff2ee012a91d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 265.48102
+      value: 265.12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7449,8 +7451,8 @@ MonoBehaviour:
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
   ArrowPos: {fileID: 8066742506459858657}
-  ArrowPrefab: {fileID: 0}
-  ArrowFormPos: {fileID: 0}
+  ArrowPrefab: {fileID: 4883892594694907906, guid: a5c5952bcdb610d42ac5250757327dcc,
+    type: 3}
   arrowPoolObject: {fileID: 0}
   poolSize: 10
   isCounterAttack: 0

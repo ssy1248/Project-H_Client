@@ -5,10 +5,13 @@ using UnityEngine;
 public class RogueController : PlayerController
 {
     public GameObject landEffectPrefab;  // 착지 이펙트 프리팹
-    public float jumpForce = 10f;
     private bool isLanding = false;  // 스킬 진행 중인지 체크하는 변수
     public GameObject LandEffectPoolObj; // 풀을 저장할 리스트
     private List<GameObject> LandEffectPool; // 풀을 저장할 리스트
+
+
+    private float SkillCoolTime;
+    //현재 애니메이션 동작으로 인해 기본 쿨타임은 3초
 
     private void Start()
     {
@@ -69,6 +72,9 @@ public class RogueController : PlayerController
             // 만약 풀에서 오브젝트를 가져올 수 없으면 로그 출력
             Debug.LogError("No available effect object in the pool.");
         }
+
+        //추후 쿨타임 계산 가능
+        //yield return new WaitForSeconds(SkillCoolTime);
 
         isLanding = false;  // 착지 상태 초기화 (스킬이 끝났으므로 다시 스킬을 사용할 수 있음)
     }

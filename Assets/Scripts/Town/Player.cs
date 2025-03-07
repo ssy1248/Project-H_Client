@@ -89,6 +89,7 @@ public class Player : MonoBehaviour
     #region Unity Lifecycle
     void Awake()
     {
+
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         meshs = GetComponentsInChildren<MeshRenderer>();
@@ -604,12 +605,8 @@ public class Player : MonoBehaviour
         IsMine = isMine;
         if (IsMine)
         {
+
             MPlayer = gameObject.AddComponent<MyPlayer>();
-        }
-        else
-        {
-            if (nav != null)
-                Destroy(nav);
         }
     }
 
@@ -625,12 +622,10 @@ public class Player : MonoBehaviour
             uiNameChat.SetName(name);
     }
 
-    public void RecvMessage(string msg, UIChat.ChatType type)
+    public void RecvMessage(string msg, int id)
     {
         if (uiNameChat != null)
             uiNameChat.PushText(msg);
-        if (uiChat != null)
-            uiChat.PushMessage(msg, IsMine, type);
     }
 
     public void PlayAnimation(int animCode)
@@ -638,7 +633,10 @@ public class Player : MonoBehaviour
         animator?.SetTrigger("Anim" + animCode);
     }
     #endregion
-
+    public string GetNickname()
+    {
+        return nickname;
+    }
     // 채팅 메시지를 전송하는 함수 (로컬 플레이어에서만 동작)
     public void SendMessage(string msg)
     {

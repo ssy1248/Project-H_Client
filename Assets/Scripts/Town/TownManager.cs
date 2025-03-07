@@ -583,7 +583,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
         Debug.Log(data);
 
-        uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global);
+        uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global, data.PlayerId);
     }
     //  주말 목표 입니다람쥐
 
@@ -1210,7 +1210,6 @@ public class TownManager : MonoBehaviour
 
         // 플레이어를 리스트에 추가
         players.Add(player);
-        player.SpawnEffect();
     }
 
     //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)

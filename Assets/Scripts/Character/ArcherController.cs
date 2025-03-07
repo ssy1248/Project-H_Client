@@ -38,7 +38,7 @@ public class ArcherController : MonoBehaviour
     private IEnumerator BoostAttackSpeed()
     {
         isBuffActive = true;
-        playerController.AttackRate *= 0.5f; // 공격 속도 1.5배 증가
+        playerController.AttackRate *= 0.1f; // 공격 속도 1.5배 증가
 
         // 이펙트 활성화
         ActivateEffect(buffEffects, ref effectIndex, transform.position);
