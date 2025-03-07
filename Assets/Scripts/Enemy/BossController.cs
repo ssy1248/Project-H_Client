@@ -164,20 +164,20 @@ public class BossController : Enemy
                     {
                         case 0:
                         case 1:
-                            yield return StartAttack(3);
+                            yield return StartAttack(0);
                             break;
                         case 2:
                         case 3:
-                            yield return StartAttack(3);
+                            yield return StartAttack(1);
                             break;
                         case 4:
-                            yield return StartAttack(3);
+                            yield return StartAttack(2);
                             break;
                         case 5:
                             yield return StartAttack(3);
                             break;
                         case 6:
-                            yield return StartAttack(3);
+                            yield return StartAttack(5);
                             break;
                     }
 
