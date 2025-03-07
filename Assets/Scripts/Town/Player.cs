@@ -369,6 +369,7 @@ public class Player : MonoBehaviour
 
     public void Skill()
     {
+        // 스킬 애니메이션 작동 추가
         if (equipWeapon == null)
             return;
 
@@ -376,11 +377,10 @@ public class Player : MonoBehaviour
         if (isDodge)
             return;
 
-        // 무기 사용 (애니메이션, 쿨타임, MP 체크 등 내부 로직)
-        equipWeapon.Use();
-
         if (SkillData.SkillType == 1)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 단일 공격
             string singleTargetId = PlayerActionManager.Instance.GetTargetIdFromMouseClick();
             if (singleTargetId == "-1")
@@ -406,9 +406,11 @@ public class Player : MonoBehaviour
         }
         else if(SkillData.SkillType == 2)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 범위 공격
             // 1) OverlapSphere를 통해 범위 내 Collider 탐색
-            float range = SkillData.SkillRange; // 예: 범위(반경)
+            float range = SkillData.SkillRange; // 범위(반경)
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, range);
             List<string> targetIds = new List<string>();
@@ -451,12 +453,16 @@ public class Player : MonoBehaviour
                 Debug.Log("범위 내에 몬스터가 없습니다.");
             }
         }
-            else if(SkillData.SkillType == 3)
+        else if(SkillData.SkillType == 3)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 버프 스킬
         }
         else if(SkillData.SkillType == 4)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 디버프 스킬
         }
     }
