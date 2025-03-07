@@ -30,9 +30,13 @@ public class PlayerActionManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.StartsWith("Dungeon"))
         {
             // 일반 공격
-            if (Input.GetMouseButtonDown(0)) // 좌클릭 감지
+            if (Input.GetMouseButtonDown(0) && DungeonManager.Instance.MyPlayer.equipWeapon.type == Weapon.Type.Melee) // 좌클릭 감지
             {
                 NormalAttackRequest();
+            }
+            if(Input.GetMouseButtonDown(0) && DungeonManager.Instance.MyPlayer.equipWeapon.type == Weapon.Type.Range)
+            {
+                RangeNormalAttackRequest();
             }
             // 스킬 공격
             if (Input.GetKeyDown(KeyCode.Q))
@@ -75,6 +79,9 @@ public class PlayerActionManager : MonoBehaviour
                 break;
             case S_PlayerAction.ActionOneofCase.HitResult:
                 ProcessHitResult(action.HitResult);
+                break;
+            case S_PlayerAction.ActionOneofCase.RangeNormalAttackResult:
+                ProcessRangeNormalAttackActionResult(action.RangeNormalAttackResult);
                 break;
             default:
                 Debug.LogWarning("알 수 없는 플레이어 액션이 도착했습니다.");
@@ -151,6 +158,20 @@ public class PlayerActionManager : MonoBehaviour
         }
     }
 
+    private void ProcessRangeNormalAttackActionResult(RangeNormalAttackResult result)
+    {
+        Debug.Log($"생성된 화살 아이디 = {result.ArrowId}, 생성 완료 메세지 = {result.Message}");
+        Player[] players = GameObject.FindObjectsOfType<Player>();
+        foreach (Player player in players)
+        {
+            if (player.MPlayer != null)
+            {
+                player.Attack();
+                break;
+            }
+        }
+    }
+
     void DodgeRequest()
     {
         // 클라이언트의 MyPlayer 인스턴스를 가져옵니다.
@@ -185,6 +206,36 @@ public class PlayerActionManager : MonoBehaviour
         C_PlayerAction actionPacket = new C_PlayerAction
         {
             DodgeAction = dodgeAction
+        };
+
+        GameManager.Network.Send(actionPacket);
+    }
+
+    void RangeNormalAttackRequest()
+    {
+        Debug.Log("원거리 공격 발사~~");
+
+        // 클라이언트의 MyPlayer 인스턴스를 가져옵니다.
+        var myPlayer = DungeonManager.Instance.MyPlayer;
+
+        // 플레이어가 바라보는 방향을 구합니다.
+        Vector3 playerForward = myPlayer.transform.forward.normalized;
+
+        Vector currentPositionProto = new Vector
+        {
+            X = playerForward.x,
+            Y = playerForward.y,
+            Z = playerForward.z,
+        };
+
+        RangeNormalAttackAction rangeNormalAttackAction = new RangeNormalAttackAction
+        {
+            Direction = currentPositionProto,
+        };
+
+        C_PlayerAction actionPacket = new C_PlayerAction
+        {
+            RangeNormalAttackAction = rangeNormalAttackAction
         };
 
         GameManager.Network.Send(actionPacket);

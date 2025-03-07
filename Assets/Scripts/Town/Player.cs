@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
     private Vector3 dodgeVec;
 
     // 무기 관련
-    private Weapon equipWeapon;
+    public Weapon equipWeapon;
     private float fireDelay;
     #endregion
 
@@ -473,12 +473,12 @@ public class Player : MonoBehaviour
         if (equipWeapon == null)
             return;
 
-        if (!isDodge)
+        if (!isDodge && equipWeapon.type == Weapon.Type.Melee)
         {
             equipWeapon.Use();
             int attackIndex = UnityEngine.Random.Range(0, 2);
             animator.SetInteger("attackIndex", attackIndex);
-            animator.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+            animator.SetTrigger("doSwing");
 
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
@@ -491,6 +491,15 @@ public class Player : MonoBehaviour
             isMove = false;
             animator.SetBool("isRun", false);
             fireDelay = 0;
+        }
+        else if (!isDodge && equipWeapon.type == Weapon.Type.Range)
+        {
+            equipWeapon.Use();
+            int attackIndex = UnityEngine.Random.Range(0, 2);
+            animator.SetInteger("attackIndex", attackIndex);
+            animator.SetTrigger("doShot");
+
+            Debug.Log("원거리 공격~~~~~~~~~~~~~");
         }
     }
     #endregion

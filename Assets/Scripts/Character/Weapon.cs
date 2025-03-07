@@ -19,13 +19,16 @@ public class Weapon : MonoBehaviour
 
     public bool isCounterAttack = false; // 카운터 공격 여부
 
-    private void Start()
+    private void Awake()
     {
-        if(arrowPoolObject == null)
+        if (arrowPoolObject == null)
         {
             arrowPoolObject = GameObject.Find("Arrow Pool");
         }
+    }
 
+    private void Start()
+    {
         // 풀 초기화 (원거리 무기일 때만 실행)
         if (type == Type.Range && arrowPoolObject != null)
         {
