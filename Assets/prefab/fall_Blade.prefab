@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3321434024380449853}
   - component: {fileID: 56745199607917285}
   - component: {fileID: 4032232774667420343}
+  - component: {fileID: 2665464884559620537}
   m_Layer: 0
   m_Name: fall_Blade
   m_TagString: Untagged
@@ -111,3 +112,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2665464884559620537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950922629420032753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc1c08f2a7876141b3e5f70b1aa251d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
