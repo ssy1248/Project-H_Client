@@ -116,15 +116,22 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+
+        // 직업별로 Dodge 또는 Teleport 사용 가능하도록 설정
+        if (gameObject.CompareTag("Mage"))
+            Teleport();
+        else if (gameObject.CompareTag("Archer") || gameObject.CompareTag("Rogue"))
+            Dodge();
+
         GETInput();
         //move();
         //Turn();
         Attack();
 
-        if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
-            Teleport();
-        else
-            Dodge();
+        //if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
+        //    Teleport();
+        //else
+        //    Dodge();
 
         if(Input.GetMouseButton(1))
         {
@@ -253,6 +260,10 @@ public class PlayerController : MonoBehaviour
 
     void Dodge()
     {
+        // 아처, 로그만 Dodge 가능
+        if (!gameObject.CompareTag("Archer") && !gameObject.CompareTag("Rogue"))
+            return;
+
         if (DDown && !isDodge && !isOnCooldown)
         {
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward; // 이동 중이면 이동 방향 사용
