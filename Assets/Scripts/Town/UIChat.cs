@@ -100,7 +100,7 @@ public class UIChat : MonoBehaviour
             alarm.gameObject.SetActive(false);
             rectBg.DOSizeDelta(new Vector2(550, 500), 0.3f);
             icon.DORotate(new Vector3(0, 0, 0), 0.3f);
-            icon.DOMove(new Vector3(126, 122, 0), 0.3f);
+            icon.DOMove(new Vector3(275, 480, 0), 0.3f);
         }
 
         isOpen = !isOpen;
