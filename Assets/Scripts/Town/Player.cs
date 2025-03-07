@@ -563,7 +563,7 @@ public class Player : MonoBehaviour
         {
             if (!isDamage)
             {
-                Arrow enemyArrow = other.GetComponent<Arrow>();
+                EnemyArrow enemyArrow = other.GetComponent<EnemyArrow>();
                 currentHealth -= enemyArrow.damage;
                 DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), true, 300f);
                 Debug.Log("현재 체력: " + currentHealth);
