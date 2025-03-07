@@ -473,7 +473,7 @@ public class Player : MonoBehaviour
         if (equipWeapon == null)
             return;
 
-        if (!isDodge && equipWeapon.type == Weapon.Type.Melee)
+        if (!isDodge)
         {
             equipWeapon.Use();
             int attackIndex = UnityEngine.Random.Range(0, 2);
@@ -492,14 +492,32 @@ public class Player : MonoBehaviour
             animator.SetBool("isRun", false);
             fireDelay = 0;
         }
-        else if (!isDodge && equipWeapon.type == Weapon.Type.Range)
+    }
+
+    public void RangeAttack()
+    {
+        if (equipWeapon == null)
+            return;
+
+        if (!isDodge)
         {
-            equipWeapon.Use();
             int attackIndex = UnityEngine.Random.Range(0, 2);
             animator.SetInteger("attackIndex", attackIndex);
             animator.SetTrigger("doShot");
+            equipWeapon.Use();
 
             Debug.Log("원거리 공격~~~~~~~~~~~~~");
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                Vector3 attackDirection = hit.point - transform.position;
+                attackDirection.y = 0;
+                if (attackDirection.magnitude > 0.1f)
+                    transform.rotation = Quaternion.LookRotation(attackDirection.normalized);
+            }
+            isMove = false;
+            animator.SetBool("isRun", false);
+            fireDelay = 0;
         }
     }
     #endregion

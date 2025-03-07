@@ -729,7 +729,7 @@ Transform:
   m_GameObject: {fileID: 1750137634855022199}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.201, y: 1.048, z: 0.235}
+  m_LocalPosition: {x: 0.201, y: 1.048, z: 0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3033,7 +3033,6 @@ GameObject:
   - component: {fileID: 6780161134169667257}
   - component: {fileID: 2637581427618498089}
   - component: {fileID: 1940315979212962944}
-  - component: {fileID: 2736082249205084631}
   m_Layer: 10
   m_Name: Player3
   m_TagString: Archer
@@ -3134,6 +3133,7 @@ MonoBehaviour:
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  equipWeapon: {fileID: 3107268398132963145}
   SkillData: {fileID: 11400000, guid: e49b1f66803087a4f93baa71775e8b7b, type: 2}
   dodgeInterpolationTime: 0.3
 --- !u!54 &2637581427618498089
@@ -3182,32 +3182,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2736082249205084631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8126715550554907011}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportEffects: []
-  dodgeEffectsArcher: []
-  dodgeEffectsRogue: []
-  playerHealthBar: {fileID: 0}
-  partyIndex: 0
-  moveSpeed: 10
-  maxHealth: 100
-  currentHealth: 0
-  AttackRate: 0.5
-  isMove: 0
 --- !u!1 &8165106367563517277
 GameObject:
   m_ObjectHideFlags: 0
@@ -7323,6 +7301,7 @@ MonoBehaviour:
   ArrowPrefab: {fileID: 4883892594694907906, guid: a5c5952bcdb610d42ac5250757327dcc,
     type: 3}
   arrowPoolObject: {fileID: 0}
+  arrowPool: []
   poolSize: 10
   isCounterAttack: 0
 --- !u!65 &7350562832052345636

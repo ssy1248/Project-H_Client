@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7845935493152297734}
   - component: {fileID: 3968591428026219389}
   - component: {fileID: 7517599828295712729}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Beam
   m_TagString: Arrow
   m_Icon: {fileID: 0}
@@ -208,4 +208,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf08282a1b5d7c44975ed123e0c1cb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  arrowId: 0
+  weapon: {fileID: 0}
