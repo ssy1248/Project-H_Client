@@ -131,9 +131,9 @@ public class Enemy : MonoBehaviour
         else if (other.tag == "Arrow")
         {
             Arrow arrow = other.GetComponent<Arrow>();
-            curHealth -= arrow.damage;
-            bossHealthBar.TakeDamage(arrow.damage);
-            DamageManager.Instance.SpawnDamageText(arrow.damage, transform.Find("Head"), isPlayerHit: false, 400f);
+            //curHealth -= arrow.damage;
+            //bossHealthBar.TakeDamage(arrow.damage);
+            //DamageManager.Instance.SpawnDamageText(arrow.damage, transform.Find("Head"), isPlayerHit: false, 400f);
             StartCoroutine(OnDamage());
 
             Debug.Log("Range : " + curHealth);

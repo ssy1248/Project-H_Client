@@ -1918,10 +1918,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 5054031177101009540}
+  nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
   TeleportDistanceThreshold: 0.5
-  nickname: 
+  raycastDistance: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  goalPos: {x: 0, y: 0, z: 0}
+  goalRot: {x: 0, y: 0, z: 0, w: 0}
+  moveSpeed: 10
+  speed: 10
+  dodgeDistance: 3
+  teleportEffects: []
+  dodgeEffectsArcher: []
+  dodgeEffectsRogue: []
+  maxHealth: 100
+  currentHealth: 0
+  SkillData: {fileID: 0}
+  dodgeInterpolationTime: 0.3
 --- !u!54 &1481365728124327118
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1981,7 +1997,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5272240073111373674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56c2e2f6cc4742f4ea45ce1936b04e1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   teleportEffects: []
@@ -1990,7 +2006,8 @@ MonoBehaviour:
   moveSpeed: 10
   maxHealth: 100
   currentHealth: 0
-  speed: 50
+  AttackRate: 0.5
+  isMove: 0
 --- !u!1 &5292943547685816377
 GameObject:
   m_ObjectHideFlags: 0
@@ -7033,14 +7050,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6009321651834436868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d554390fb4a290346a6d5d6ed356953f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a56b123ca9a0a942bb347029e703597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  damage: 20
-  attackRate: 0.3
-  meleeArea: {fileID: 5327254482031874525}
-  trailEffect: {fileID: 8995077632290933470}
+  damage: 0
+  attackRate: 1
+  meleeArea: {fileID: 0}
+  trailEffect: {fileID: 0}
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
   ArrowFormPos: {fileID: 0}
