@@ -2053,9 +2053,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1033318463392360039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 242.99, y: -115.94}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6318135189678709801
@@ -2512,7 +2512,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 485.98, y: 135.94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3149052794576753940
 CanvasRenderer:
@@ -2888,7 +2888,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5649305341173885553
 Transform:
   m_ObjectHideFlags: 0
@@ -2982,6 +2982,7 @@ MonoBehaviour:
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  equipWeapon: {fileID: 0}
   SkillData: {fileID: 0}
   dodgeInterpolationTime: 0.3
 --- !u!136 &4960176003952788751
@@ -3003,7 +3004,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -3069,6 +3070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counterDuration: 3
+  counterCooldown: 10
 --- !u!114 &7121084326392434518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3089,6 +3091,7 @@ MonoBehaviour:
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
   arrowPoolObject: {fileID: 0}
+  arrowPool: []
   poolSize: 10
   isCounterAttack: 0
 --- !u!1 &6204452463409933878
@@ -3322,9 +3325,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1033318463392360039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 242.99, y: -67.97}
   m_SizeDelta: {x: 405.98, y: 95.94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3266642637469598266
@@ -5739,6 +5742,7 @@ MonoBehaviour:
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
   arrowPoolObject: {fileID: 0}
+  arrowPool: []
   poolSize: 10
   isCounterAttack: 0
 --- !u!65 &8638025419221830365
