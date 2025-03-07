@@ -3201,6 +3201,8 @@ MonoBehaviour:
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
+  playerHealthBar: {fileID: 0}
+  partyIndex: 0
   moveSpeed: 10
   maxHealth: 100
   currentHealth: 0
@@ -7317,9 +7319,9 @@ MonoBehaviour:
   attackRate: 1
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
-  ArrowPos: {fileID: 0}
-  ArrowPrefab: {fileID: 0}
-  ArrowFormPos: {fileID: 0}
+  ArrowPos: {fileID: 8066742506459858657}
+  ArrowPrefab: {fileID: 4883892594694907906, guid: a5c5952bcdb610d42ac5250757327dcc,
+    type: 3}
   arrowPoolObject: {fileID: 0}
   poolSize: 10
   isCounterAttack: 0

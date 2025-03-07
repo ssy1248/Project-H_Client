@@ -21,6 +21,11 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
+        if(arrowPoolObject == null)
+        {
+            arrowPoolObject = GameObject.Find("Arrow Pool");
+        }
+
         // 풀 초기화 (원거리 무기일 때만 실행)
         if (type == Type.Range && arrowPoolObject != null)
         {
