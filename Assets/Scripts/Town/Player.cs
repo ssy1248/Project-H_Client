@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
     private Vector3 dodgeVec;
 
     // 무기 관련
-    private Weapon equipWeapon;
+    public Weapon equipWeapon;
     private float fireDelay;
     #endregion
 
@@ -370,6 +370,7 @@ public class Player : MonoBehaviour
 
     public void Skill()
     {
+        // 스킬 애니메이션 작동 추가
         if (equipWeapon == null)
             return;
 
@@ -377,11 +378,10 @@ public class Player : MonoBehaviour
         if (isDodge)
             return;
 
-        // 무기 사용 (애니메이션, 쿨타임, MP 체크 등 내부 로직)
-        equipWeapon.Use();
-
         if (SkillData.SkillType == 1)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 단일 공격
             string singleTargetId = PlayerActionManager.Instance.GetTargetIdFromMouseClick();
             if (singleTargetId == "-1")
@@ -407,9 +407,11 @@ public class Player : MonoBehaviour
         }
         else if(SkillData.SkillType == 2)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 범위 공격
             // 1) OverlapSphere를 통해 범위 내 Collider 탐색
-            float range = SkillData.SkillRange; // 예: 범위(반경)
+            float range = SkillData.SkillRange; // 범위(반경)
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, range);
             List<string> targetIds = new List<string>();
@@ -452,12 +454,16 @@ public class Player : MonoBehaviour
                 Debug.Log("범위 내에 몬스터가 없습니다.");
             }
         }
-            else if(SkillData.SkillType == 3)
+        else if(SkillData.SkillType == 3)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 버프 스킬
         }
         else if(SkillData.SkillType == 4)
         {
+            // 무기 사용 
+            equipWeapon.Use();
             // 디버프 스킬
         }
     }
@@ -472,8 +478,35 @@ public class Player : MonoBehaviour
             equipWeapon.Use();
             int attackIndex = UnityEngine.Random.Range(0, 2);
             animator.SetInteger("attackIndex", attackIndex);
-            animator.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+            animator.SetTrigger("doSwing");
 
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                Vector3 attackDirection = hit.point - transform.position;
+                attackDirection.y = 0;
+                if (attackDirection.magnitude > 0.1f)
+                    transform.rotation = Quaternion.LookRotation(attackDirection.normalized);
+            }
+            isMove = false;
+            animator.SetBool("isRun", false);
+            fireDelay = 0;
+        }
+    }
+
+    public void RangeAttack()
+    {
+        if (equipWeapon == null)
+            return;
+
+        if (!isDodge)
+        {
+            int attackIndex = UnityEngine.Random.Range(0, 2);
+            animator.SetInteger("attackIndex", attackIndex);
+            animator.SetTrigger("doShot");
+            equipWeapon.Use();
+
+            Debug.Log("원거리 공격~~~~~~~~~~~~~");
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
