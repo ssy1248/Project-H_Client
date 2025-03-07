@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,89 +10,165 @@ public class SkillCoolTime : MonoBehaviour
     public GameObject[] TMP;
     public TextMeshProUGUI[] hideSkillTimeTexts;
     public Image[] hideSkillImages;
-    private bool[] isHideSkills = { false, false };
-    private float[] SkillTimes = { 3, 5 }; // °¢ ½ºÅ³ÀÇ ÄğÅ¸ÀÓ (ÃÊ ´ÜÀ§)
-    private float[] getSkillTimes = { 0, 0 }; // ÄğÅ¸ÀÓÀ» ÃßÀûÇÏ´Â º¯¼ö
+    public GameObject[] skillButton;
+    private bool[] isHideSkills = { false, false, false, false, false };
+    private float[] SkillTimes = { 10, 5, 7, 5, 10 }; // ê° ìŠ¤í‚¬ì˜ ì¿¨íƒ€ì„ (ì´ˆ ë‹¨ìœ„)
+    private float[] getSkillTimes = { 0, 0, 0, 0, 0 }; // ì¿¨íƒ€ì„ì„ ì¶”ì í•˜ëŠ” ë³€ìˆ˜
+
+    private string playerTag;
 
     // Start is called before the first frame update
     void Start()
     {
-        // ÃÊ±âÈ­: ÅØ½ºÆ®, ¹öÆ° »óÅÂ ¼³Á¤
+        //íƒœê·¸ë³„ ìºë¦­í„° ì°¾ê¸°
+        string[] tags = { "Rogue", "Archer", "Spearman" };
+        GameObject player = null;
+
+        foreach (string tag in tags)
+        {
+            GameObject foundPlayer = GameObject.FindWithTag(tag);
+            if (foundPlayer != null)
+            {
+                player = foundPlayer;
+                playerTag = tag;
+                break;
+            }
+        }
+
+        // ì´ˆê¸°í™”: í…ìŠ¤íŠ¸, ë²„íŠ¼ ìƒíƒœ ì„¤ì •
         for (int i = 0; i < TMP.Length; i++)
         {
             hideSkillTimeTexts[i] = TMP[i].GetComponent<TextMeshProUGUI>();
             hideSkillButtons[i].SetActive(false);
         }
+
+        //ìºë¦­í„°ë³„ ë²„íŠ¼ í™œì„±í™”
+        SetSkillButtonsByJob();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Å° ÀÔ·Â Ã¼Å©: Q(0)¿Í Space(1) ´­·¶À» ¶§ ÇØ´ç ½ºÅ³ ½ÃÀÛ
+        // í‚¤ ì…ë ¥ ì²´í¬: Q(0)ì™€ Space(1) ëˆŒë €ì„ ë•Œ í•´ë‹¹ ìŠ¤í‚¬ ì‹œì‘
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ActivateSkill(0);
+            ActivateSkill(2);
+            ActivateSkill(4);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             ActivateSkill(1);
+            ActivateSkill(3);
         }
 
-        // ÄğÅ¸ÀÓ »óÅÂ ¾÷µ¥ÀÌÆ®
+        // ì¿¨íƒ€ì„ ìƒíƒœ ì—…ë°ì´íŠ¸
         HideSkillCheck();
     }
 
-    // Å° ÀÔ·Â¿¡ µû¶ó ½ºÅ³ È°¼ºÈ­ ÇÔ¼ö
-    private void ActivateSkill(int skillNum)
+    private void SetSkillButtonsByJob()
     {
-        if (!isHideSkills[skillNum]) // ÀÌ¹Ì È°¼ºÈ­µÈ ½ºÅ³ÀÌ¸é ½ÇÇàµÇÁö ¾ÊÀ½
+        for (int i = 0; i < skillButton.Length; i++)
         {
-            HideSkillSetting(skillNum); // ½ºÅ³ ¼³Á¤
+            skillButton[i].SetActive(false); // ì¼ë‹¨ ëª¨ë‘ ë¹„í™œì„±í™”
+        }
+
+        if (playerTag == "Rogue") // ë¡œê·¸ì¼ ê²½ìš° 0,1ë²ˆ ìŠ¤í‚¬ í™œì„±í™”
+        {
+            skillButton[0].SetActive(true);
+            skillButton[1].SetActive(true);
+        }
+        else if (playerTag == "Archer") // ì•„ì²˜ì¼ ê²½ìš° 2,3ë²ˆ ìŠ¤í‚¬ í™œì„±í™”
+        {
+            skillButton[2].SetActive(true);
+            skillButton[3].SetActive(true);
+        }
+        else if (playerTag == "Spearman") // ìŠ¤í”¼ì–´ë§¨ì¼ ê²½ìš° 4ë²ˆ ìŠ¤í‚¬ë§Œ í™œì„±í™”
+        {
+            skillButton[4].SetActive(true);
         }
     }
 
-    // ½ºÅ³ È°¼ºÈ­ ¹× ÄğÅ¸ÀÓ ½ÃÀÛ
-    public void HideSkillSetting(int skillNum)
+    private void ActivateSkill(int skillNum)
     {
-        hideSkillButtons[skillNum].SetActive(true); // ¹öÆ° È°¼ºÈ­
-        getSkillTimes[skillNum] = SkillTimes[skillNum]; // ÃÊ±âÈ­
-        isHideSkills[skillNum] = true; // ÄğÅ¸ÀÓ ½ÃÀÛ Ç¥½Ã
+        // ğŸš¨ ì§ì—…ë³„ë¡œ ì‚¬ìš© ê°€ëŠ¥í•œ ìŠ¤í‚¬ì¸ì§€ í™•ì¸
+        if ((playerTag == "Rogue" && (skillNum == 0 || skillNum == 1)) ||
+            (playerTag == "Archer" && (skillNum == 2 || skillNum == 3)) ||
+            (playerTag == "Spearman" && skillNum == 4))
+        {
+            if (!isHideSkills[skillNum])
+            {
+                HideSkillSetting(skillNum);
+            }
+        }
     }
 
-    // ÄğÅ¸ÀÓ Ã¼Å©
+    //// í‚¤ ì…ë ¥ì— ë”°ë¼ ìŠ¤í‚¬ í™œì„±í™” í•¨ìˆ˜
+    //private void ActivateSkill(int skillNum)
+    //{
+    //    if (!isHideSkills[skillNum]) // ì´ë¯¸ í™œì„±í™”ëœ ìŠ¤í‚¬ì´ë©´ ì‹¤í–‰ë˜ì§€ ì•ŠìŒ
+    //    {
+    //        HideSkillSetting(skillNum); // ìŠ¤í‚¬ ì„¤ì •
+    //    }
+    //}
+
+    // ìŠ¤í‚¬ í™œì„±í™” ë° ì¿¨íƒ€ì„ ì‹œì‘
+    public void HideSkillSetting(int skillNum)
+    {
+        hideSkillButtons[skillNum].SetActive(true); // ë²„íŠ¼ í™œì„±í™”
+        getSkillTimes[skillNum] = SkillTimes[skillNum]; // ì´ˆê¸°í™”
+        isHideSkills[skillNum] = true; // ì¿¨íƒ€ì„ ì‹œì‘ í‘œì‹œ
+    }
+
+    // ì¿¨íƒ€ì„ ì²´í¬
     private void HideSkillCheck()
     {
         if (isHideSkills[0])
         {
-            StartCoroutine(SkillTimeCheck(0)); // 1¹ø ½ºÅ³
+            StartCoroutine(SkillTimeCheck(0)); // 1ë²ˆ ìŠ¤í‚¬
         }
 
         if (isHideSkills[1])
         {
-            StartCoroutine(SkillTimeCheck(1)); // 2¹ø ½ºÅ³
+            StartCoroutine(SkillTimeCheck(1)); // 2ë²ˆ ìŠ¤í‚¬
+        }
+
+        if (isHideSkills[2])
+        {
+            StartCoroutine(SkillTimeCheck(2)); // 3ë²ˆ ìŠ¤í‚¬
+        }
+
+        if (isHideSkills[3])
+        {
+            StartCoroutine(SkillTimeCheck(3)); // 4ë²ˆ ìŠ¤í‚¬
+        }
+
+        if (isHideSkills[4])
+        {
+            StartCoroutine(SkillTimeCheck(4)); // 5ë²ˆ ìŠ¤í‚¬
         }
     }
 
-    // ÄğÅ¸ÀÓ °ü¸® (Å¸ÀÌ¸Ó)
+    // ì¿¨íƒ€ì„ ê´€ë¦¬ (íƒ€ì´ë¨¸)
     IEnumerator SkillTimeCheck(int skillNum)
     {
         yield return null;
 
         if (getSkillTimes[skillNum] > 0)
         {
-            getSkillTimes[skillNum] -= Time.deltaTime; // ½Ã°£ °¨¼Ò
+            getSkillTimes[skillNum] -= Time.deltaTime; // ì‹œê°„ ê°ì†Œ
 
             if (getSkillTimes[skillNum] < 0)
             {
                 getSkillTimes[skillNum] = 0;
-                isHideSkills[skillNum] = false; // ÄğÅ¸ÀÓ Á¾·á
-                hideSkillButtons[skillNum].SetActive(false); // ¹öÆ° ºñÈ°¼ºÈ­
+                isHideSkills[skillNum] = false; // ì¿¨íƒ€ì„ ì¢…ë£Œ
+                hideSkillButtons[skillNum].SetActive(false); // ë²„íŠ¼ ë¹„í™œì„±í™”
             }
 
-            hideSkillTimeTexts[skillNum].text = getSkillTimes[skillNum].ToString("0"); // ³²Àº ½Ã°£ Ç¥½Ã
+            hideSkillTimeTexts[skillNum].text = getSkillTimes[skillNum].ToString("0"); // ë‚¨ì€ ì‹œê°„ í‘œì‹œ
 
             float time = getSkillTimes[skillNum] / SkillTimes[skillNum];
-            hideSkillImages[skillNum].fillAmount = time; // ÀÌ¹ÌÁö Ã¤¿ì±â
+            hideSkillImages[skillNum].fillAmount = time; // ì´ë¯¸ì§€ ì±„ìš°ê¸°
         }
     }
 }
