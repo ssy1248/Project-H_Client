@@ -113,6 +113,8 @@ class PacketManager
         _handler.Add((ushort)MsgId.SMonsterattck, PacketHandler.S_MonsterAttckHandler);
         _onRecv.Add((ushort)MsgId.SMonsterdie, MakePacket<S_MonsterDie>);
         _handler.Add((ushort)MsgId.SMonsterdie, PacketHandler.S_MonsterDieHandler);
+        _onRecv.Add((ushort)MsgId.SSetuserstate, MakePacket<S_SetUserState>);
+        _handler.Add((ushort)MsgId.SSetuserstate, PacketHandler.S_SetUserHandler);
         Debug.Log("핸들러 등록 완료");
     }
 
