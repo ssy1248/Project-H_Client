@@ -311,7 +311,12 @@ public static void S_MonsterDieHandler(PacketSession session, IMessage packet)
 
     MonsterManager.Instance.DeleteMonster(monsterDiePacket);
 }
+    public static void S_SetUserHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SetUserState setUserStatePacket) return;
 
+        TownManager.Instance.SetUserState(setUserStatePacket);
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
