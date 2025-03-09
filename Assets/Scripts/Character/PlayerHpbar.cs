@@ -14,7 +14,7 @@ public class PlayerHealthBar : MonoBehaviour
     private bool isAnimating = false; // 애니메이션 실행 여부 체크
 
     public PlayerController playerController;
-    private PartyHealthBar partyHealthBar;
+    public PartyHealthBar partyHealthBar;
 
     void Start()
     {

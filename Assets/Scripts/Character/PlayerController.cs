@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = maxHealth;
 
-        //임시 파티 인덱스
+        //임시 파티 인덱스 추후 서버에서 받아와야할듯
         partyIndex = 0;
     }
 

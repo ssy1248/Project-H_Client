@@ -22,7 +22,6 @@ public class ArrowPool : MonoBehaviour
             arrow.SetActive(false); // 처음에는 비활성화
             arrowPool.Add(arrow);
         }
-        Debug.Log($"화살 풀 초기화 (총 {initialPoolSize}개)");
     }
 
     // 비활성화된 화살을 반환하고 사용하는 함수

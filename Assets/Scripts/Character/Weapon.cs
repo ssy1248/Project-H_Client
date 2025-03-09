@@ -13,11 +13,21 @@ public class Weapon : MonoBehaviour
     public GameObject ArrowPrefab; // 기본 화살 프리팹
 
     public GameObject arrowPoolObject; // 빈 오브젝트로 전체 화살 풀을 관리
+
+    [SerializeField]
     private List<GameObject> arrowPool; // 오브젝트 풀
     public int poolSize = 10; // 풀 크기
 
 
     public bool isCounterAttack = false; // 카운터 공격 여부
+
+    private void Awake()
+    {
+        if (arrowPoolObject == null)
+        {
+            arrowPoolObject = GameObject.Find("Arrow Pool");
+        }
+    }
 
     private void Start()
     {
@@ -34,9 +44,9 @@ public class Weapon : MonoBehaviour
                 arrowPool.Add(arrow);
 
                 // **충돌 감지 스크립트 추가**
-                if (arrow.GetComponent<Arrow>() == null)
+                if (arrow.GetComponent<Arrow>().weapon == null)
                 {
-                    arrow.AddComponent<Arrow>().weapon = this;
+                    arrow.GetComponent<Arrow>().weapon = this;
                 }
             }
         }
@@ -88,13 +98,14 @@ public class Weapon : MonoBehaviour
         // 원거리 무기일 때만 실행
         if (type == Type.Range)
         {
+            Debug.Log("Weapon USE : Range");
             // 오브젝트 풀에서 화살을 가져옴
             GameObject instantArrow = GetArrowFromPool();
             instantArrow.transform.position = ArrowPos.position;
             instantArrow.transform.rotation = ArrowPos.rotation;
 
             Rigidbody arrowRigid = instantArrow.GetComponent<Rigidbody>();
-            arrowRigid.velocity = ArrowPos.forward * 40;
+            arrowRigid.velocity = ArrowPos.forward * 10;
 
             // 화살이 벽에 부딪히거나 일정 시간이 지나면 풀로 반환
             StartCoroutine(ReturnArrowToPool(instantArrow));
@@ -106,11 +117,13 @@ public class Weapon : MonoBehaviour
     // 비활성화된 화살을 풀에서 꺼내는 함수
     private GameObject GetArrowFromPool()
     {
+        Debug.Log("IN GetArrowFromPool : Range");
         foreach (var arrow in arrowPool)
         {
             if (!arrow.activeInHierarchy)
             {
                 arrow.SetActive(true); // 활성화
+                Debug.Log($"OUT GetArrowFromPool {arrow} : Range 이미 있는 화살");
                 return arrow;
             }
         }
@@ -124,12 +137,14 @@ public class Weapon : MonoBehaviour
             newArrow.AddComponent<Arrow>().weapon = this;
         }
 
+        Debug.Log($"OUT GetArrowFromPool {newArrow} : Range 부족해 생성한 화살");
         return newArrow;
     }
 
     // 사용이 끝난 화살을 풀에 반환하는 함수
     IEnumerator ReturnArrowToPool(GameObject arrow)
     {
+        Debug.Log("ReturnArrowToPool 코루틴 시작");
         yield return new WaitForSeconds(3f);
 
         if (arrow != null)
