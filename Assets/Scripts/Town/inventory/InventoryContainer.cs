@@ -14,7 +14,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
     public Button btn_close;
     public ItemInfoPanel itemInfoPanel;
 
-    private List<InventorySlot> itemSlots = new List<InventorySlot>();
+    [SerializeField]private List<InventorySlot> itemSlots = new List<InventorySlot>();
     private bool isShowing = false;
     private Transform originalParent;
     private Vector2 offset;
@@ -23,8 +23,10 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
     private void Start()
     {
         // 버튼에 이벤트 핸들러 부착
+         // 패킷 핸들러 이벤트 구독
+        
         btn_close.onClick.AddListener(Hide);
-        var i = 0;
+        var i = 0; 
         foreach (Transform child in itemSlotParent)
         {
             if (child.gameObject.TryGetComponent(out InventorySlot slot))
@@ -39,10 +41,10 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
                 slot.Init(i++, InventorySlot.SlotType.INVENTORY);
             }
         }
-        // 패킷 핸들러 이벤트 구독
-        PacketHandler.S_InventoryEvent += S_UpdateInventoryHandler;
-        PacketHandler.S_MoveItemEvent += S_MoveItemHandler;
-        PacketHandler.S_ActiveItemEvent += S_ActiveItemResponseHandler;
+
+        TownManager.Instance.S_InventoryEvent += S_UpdateInventoryHandler;
+        TownManager.Instance.S_MoveItemEvent += S_MoveItemHandler;
+        TownManager.Instance.S_ActiveItemEvent += S_ActiveItemResponseHandler;
     }
 
     #region public
@@ -237,7 +239,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    protected virtual void S_UpdateInventoryHandler(S_InventoryResponse data)
+    public virtual void S_UpdateInventoryHandler(S_InventoryResponse data)
     {
         // 인벤토리 갱신
         ClearSlots();
@@ -376,6 +378,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void Show()
     {
+        //gameObject.SetActive(true);
         canvasGroup.alpha = 1;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -384,6 +387,7 @@ public class InventoryContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void Hide()
     {
+        //gameObject.SetActive(false);
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
