@@ -32875,10 +32875,10 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "arrowId" field.</summary>
     public const int ArrowIdFieldNumber = 1;
-    private uint arrowId_;
+    private int arrowId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public uint ArrowId {
+    public int ArrowId {
       get { return arrowId_; }
       set {
         arrowId_ = value;
@@ -32960,7 +32960,7 @@ namespace Google.Protobuf.Protocol {
     #else
       if (ArrowId != 0) {
         output.WriteRawTag(8);
-        output.WriteUInt32(ArrowId);
+        output.WriteInt32(ArrowId);
       }
       if (HitObject != 0) {
         output.WriteRawTag(16);
@@ -32982,7 +32982,7 @@ namespace Google.Protobuf.Protocol {
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (ArrowId != 0) {
         output.WriteRawTag(8);
-        output.WriteUInt32(ArrowId);
+        output.WriteInt32(ArrowId);
       }
       if (HitObject != 0) {
         output.WriteRawTag(16);
@@ -33003,7 +33003,7 @@ namespace Google.Protobuf.Protocol {
     public int CalculateSize() {
       int size = 0;
       if (ArrowId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(ArrowId);
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ArrowId);
       }
       if (HitObject != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(HitObject);
@@ -33052,7 +33052,7 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            ArrowId = input.ReadUInt32();
+            ArrowId = input.ReadInt32();
             break;
           }
           case 16: {
@@ -33083,7 +33083,7 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            ArrowId = input.ReadUInt32();
+            ArrowId = input.ReadInt32();
             break;
           }
           case 16: {
