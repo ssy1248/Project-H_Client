@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
     public NavMeshAgent nav;
     public Animator anim;
 
+    public BossHealthBar bossHealthBar; // 보스 체력 UI 연결
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -30,8 +32,8 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
 
-        //if(enemyType != Type.B)
-        Invoke("ChaseStart", 2);
+            //if(enemyType != Type.B)
+            Invoke("ChaseStart", 2);
     }
     void ChaseStart()
     {
@@ -119,6 +121,7 @@ public class Enemy : MonoBehaviour
         if (weapon != null)
             {
                 curHealth -= weapon.damage;  // 일반 공격으로 받은 데미지 처리
+                bossHealthBar.TakeDamage(weapon.damage);
                 DamageManager.Instance.SpawnDamageText(weapon.damage, transform.Find("Head"), isPlayerHit: false, 400f);
                 StartCoroutine(OnDamage());
 
@@ -128,8 +131,9 @@ public class Enemy : MonoBehaviour
         else if (other.tag == "Arrow")
         {
             Arrow arrow = other.GetComponent<Arrow>();
-            curHealth -= arrow.damage;
-            DamageManager.Instance.SpawnDamageText(arrow.damage, transform.Find("Head"), isPlayerHit: false, 400f);
+            //curHealth -= arrow.damage;
+            //bossHealthBar.TakeDamage(arrow.damage);
+            //DamageManager.Instance.SpawnDamageText(arrow.damage, transform.Find("Head"), isPlayerHit: false, 400f);
             StartCoroutine(OnDamage());
 
             Debug.Log("Range : " + curHealth);

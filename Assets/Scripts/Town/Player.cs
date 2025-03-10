@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
 
     private UIChat uiChat;
 
+    public StatInfo playerData;
+    public float exp;
+
     public string nickname;
     public int PlayerId { get; private set; }
     public bool IsMine { get; private set; }
@@ -33,6 +36,8 @@ public class Player : MonoBehaviour
 
     public float raycastDistance = 10f;  // 레이캐스트의 거리
     public LayerMask groundLayer;
+
+
 
     // 원격 이동용 변수
     public Vector3 goalPos;
@@ -75,7 +80,7 @@ public class Player : MonoBehaviour
     private Vector3 dodgeVec;
 
     // 무기 관련
-    private Weapon equipWeapon;
+    public Weapon equipWeapon;
     private float fireDelay;
     #endregion
 
@@ -85,9 +90,12 @@ public class Player : MonoBehaviour
     protected Rigidbody rigid;
     #endregion
 
+    public SkillObjectableScript SkillData;
+
     #region Unity Lifecycle
     void Awake()
     {
+
         rigid = GetComponent<Rigidbody>();
 
         if (rigid != null)
@@ -168,7 +176,7 @@ public class Player : MonoBehaviour
     }
 
     #region Dodge Prediction Methods
-    // 회피 보간 시간 (서버와의 좌표 차이 보정용)
+    // 회피 보간 시간 
     public float dodgeInterpolationTime = 0.3f;
 
     // 회피 입력 시 계산된 예측 좌표
@@ -192,7 +200,6 @@ public class Player : MonoBehaviour
 
     /// <summary>
     /// 현재 위치에서 targetPos까지 일정 시간 동안 보간(interpolation)하여 이동합니다.
-    /// (고무줄 효과 연출)
     /// </summary>
     public void InterpolateToPosition(Vector3 targetPos)
     {
@@ -202,6 +209,11 @@ public class Player : MonoBehaviour
 
     private IEnumerator MoveToPositionCoroutine(Vector3 targetPos, float duration)
     {
+        if (gameObject.CompareTag("Archer"))
+            ActivateDodgeEffect(dodgeEffectsArcher, ref dodgeEffectArcherIndex);
+        else if (gameObject.CompareTag("Rogue"))
+            ActivateDodgeEffect(dodgeEffectsRogue, ref dodgeEffectRogueIndex);
+
         Vector3 startPos = transform.position;
         float elapsed = 0f;
         while (elapsed < duration)
@@ -281,6 +293,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // 실질적인 회피 함수
     public void Dodge()
     {
         if (!isDodge)
@@ -290,6 +303,7 @@ public class Player : MonoBehaviour
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward;
             // 회피 예측 좌표 계산
             predictedDodgePos = transform.position + dodgeVec * dodgeDistance;
+            Debug.Log("클라 예측 좌표 : " + predictedDodgePos);
             // 배속 적용 (필요에 따라 값 조정)
             speed *= 2;
             // 새로 추가한 함수로 회피 애니메이션 트리거
@@ -366,6 +380,106 @@ public class Player : MonoBehaviour
         effect.SetActive(false);
     }
 
+    public void Skill()
+    {
+        // 스킬 애니메이션 작동 추가
+        if (equipWeapon == null)
+            return;
+
+        // 이미 회피 중이라면 스킬 사용 불가(또는 다른 처리)
+        if (isDodge)
+            return;
+
+        if (SkillData.SkillType == 1)
+        {
+            // 무기 사용 
+            equipWeapon.Use();
+            // 단일 공격
+            string singleTargetId = PlayerActionManager.Instance.GetTargetIdFromMouseClick();
+            if (singleTargetId == "-1")
+            {
+                Debug.Log("타겟이 없습니다.");
+                return;
+            }
+
+            // 서버 전송
+            SkillAttack skillAttack = new SkillAttack
+            {
+                AttackerName = nickname,
+                SkillId = SkillData.SkillId,
+            };
+            skillAttack.TargetId.Add(singleTargetId);
+
+            C_PlayerAction actionPacket = new C_PlayerAction
+            {
+                SkillAttack = skillAttack
+            };
+
+            GameManager.Network.Send(actionPacket);
+        }
+        else if(SkillData.SkillType == 2)
+        {
+            // 무기 사용 
+            equipWeapon.Use();
+            // 범위 공격
+            // 1) OverlapSphere를 통해 범위 내 Collider 탐색
+            float range = SkillData.SkillRange; // 범위(반경)
+
+            Collider[] colliders = Physics.OverlapSphere(transform.position, range);
+            List<string> targetIds = new List<string>();
+
+            // 2) Collider 중 몬스터만 필터링하여 monsterId를 수집
+            foreach (Collider col in colliders)
+            {
+                // Monster 컴포넌트에서 monsterId를 가져온다고 가정
+                Monster monster = col.GetComponent<Monster>();
+                if (monster != null)
+                {
+                    // 몬스터의 ID를 문자열 형태로 추가
+                    targetIds.Add(monster.MonsterId);
+                }
+            }
+
+            // 3) 서버로 보낼 SkillAttack 메시지 생성
+            if (targetIds.Count > 0)
+            {
+                SkillAttack skillAttack = new SkillAttack
+                {
+                    AttackerName = DungeonManager.Instance.MyPlayer.nickname,
+                    SkillId = SkillData.SkillId
+                };
+                // repeated 필드는 AddRange 사용
+                skillAttack.TargetId.AddRange(targetIds);
+
+                C_PlayerAction actionPacket = new C_PlayerAction
+                {
+                    SkillAttack = skillAttack
+                };
+
+                // 4) 서버로 전송
+                GameManager.Network.Send(actionPacket);
+
+                // 이후, 서버에서 해당 타겟 목록에 대해 데미지 처리
+            }
+            else
+            {
+                Debug.Log("범위 내에 몬스터가 없습니다.");
+            }
+        }
+        else if(SkillData.SkillType == 3)
+        {
+            // 무기 사용 
+            equipWeapon.Use();
+            // 버프 스킬
+        }
+        else if(SkillData.SkillType == 4)
+        {
+            // 무기 사용 
+            equipWeapon.Use();
+            // 디버프 스킬
+        }
+    }
+
     public void Attack()
     {
         if (equipWeapon == null)
@@ -376,8 +490,35 @@ public class Player : MonoBehaviour
             equipWeapon.Use();
             int attackIndex = UnityEngine.Random.Range(0, 2);
             animator.SetInteger("attackIndex", attackIndex);
-            animator.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+            animator.SetTrigger("doSwing");
 
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                Vector3 attackDirection = hit.point - transform.position;
+                attackDirection.y = 0;
+                if (attackDirection.magnitude > 0.1f)
+                    transform.rotation = Quaternion.LookRotation(attackDirection.normalized);
+            }
+            isMove = false;
+            animator.SetBool("isRun", false);
+            fireDelay = 0;
+        }
+    }
+
+    public void RangeAttack(int arrowId)
+    {
+        if (equipWeapon == null)
+            return;
+
+        if (!isDodge)
+        {
+            int attackIndex = UnityEngine.Random.Range(0, 2);
+            animator.SetInteger("attackIndex", attackIndex);
+            animator.SetTrigger("doShot");
+            equipWeapon.RangeUse(arrowId);
+
+            Debug.Log("원거리 공격~~~~~~~~~~~~~");
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
@@ -463,7 +604,7 @@ public class Player : MonoBehaviour
         {
             if (!isDamage)
             {
-                Arrow enemyArrow = other.GetComponent<Arrow>();
+                EnemyArrow enemyArrow = other.GetComponent<EnemyArrow>();
                 currentHealth -= enemyArrow.damage;
                 DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), true, 300f);
                 Debug.Log("현재 체력: " + currentHealth);
@@ -499,12 +640,8 @@ public class Player : MonoBehaviour
         IsMine = isMine;
         if (IsMine)
         {
+
             MPlayer = gameObject.AddComponent<MyPlayer>();
-        }
-        else
-        {
-            //if (nav != null)
-            //    Destroy(nav);
         }
     }
 
@@ -520,12 +657,10 @@ public class Player : MonoBehaviour
             uiNameChat.SetName(name);
     }
 
-    public void RecvMessage(string msg, UIChat.ChatType type)
+    public void RecvMessage(string msg, int id)
     {
         if (uiNameChat != null)
             uiNameChat.PushText(msg);
-        if (uiChat != null)
-            uiChat.PushMessage(msg, IsMine, type);
     }
 
     public void PlayAnimation(int animCode)
@@ -533,7 +668,10 @@ public class Player : MonoBehaviour
         animator?.SetTrigger("Anim" + animCode);
     }
     #endregion
-
+    public string GetNickname()
+    {
+        return nickname;
+    }
     // 채팅 메시지를 전송하는 함수 (로컬 플레이어에서만 동작)
     public void SendMessage(string msg)
     {
@@ -564,12 +702,12 @@ public class Player : MonoBehaviour
     }
     IEnumerator EndSpawnEffect(GameObject obj)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.3f);
         SpawnManger.Instance.setData(obj);
     }
     IEnumerator DestroyThis(GameObject obj)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.3f);
         SpawnManger.Instance.setData(obj);
         Destroy(gameObject);
         StopAllCoroutines();

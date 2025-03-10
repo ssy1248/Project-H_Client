@@ -345,8 +345,8 @@ public class PlayerTest : MonoBehaviour
             if (!isDamage)
             {
                 Arrow enemyArrow = other.GetComponent<Arrow>();
-                currentHealth -= enemyArrow.damage;
-                DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), true, 300f);
+                //currentHealth -= enemyArrow.damage;
+                //DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), true, 300f);
                 Debug.Log("현재 체력: " + currentHealth);
                 StartCoroutine(OnDamage());
             }
@@ -401,12 +401,12 @@ public class PlayerTest : MonoBehaviour
             uiNameChat.SetName(name);
     }
 
-    public void RecvMessage(string msg, UIChat.ChatType type)
+    public void RecvMessage(string msg, UIChat.ChatType type,int id)
     {
         if (uiNameChat != null)
             uiNameChat.PushText(msg);
         if (uiChat != null)
-            uiChat.PushMessage(msg, IsMine, type);
+            uiChat.PushMessage(msg, IsMine, type, id);
     }
 
     public void PlayAnimation(int animCode)

@@ -82,18 +82,23 @@ public class UIAnimation : MonoBehaviour
                 equipment.Toggle();
                 break;
             case var _ when Input.GetKeyDown(KeyCode.M):
-                if (marketplace.activeSelf)
-                {
-                    marketplace.SetActive(false);
-                }
-                else
-                {
-                    marketplace.SetActive(true);
-                }
+                marketToggle();
                 break;
         }
     }
+   
+    public void marketToggle()
+    {
+        if (marketplace.activeSelf)
+        {
+            marketplace.SetActive(false);
+        }
+        else
+        {
+            marketplace.SetActive(true);
+        }
 
+    }
     public void MatchRequest()
     {
         // 1) 내 플레이어가 누군지 확인

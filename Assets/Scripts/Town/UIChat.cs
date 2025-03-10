@@ -12,6 +12,7 @@ public class UIChat : MonoBehaviour
     [SerializeField] private Transform chatItemRoot;
     [SerializeField] private TMP_Text txtChatItemBase;
     [SerializeField] private TMP_InputField inputChat;
+    [SerializeField] GameObject animationTypeObject;
     [SerializeField] private Button btnSend;
     [SerializeField] private Button btnToggle;
     [SerializeField] private Button btnWhisper;
@@ -31,7 +32,7 @@ public class UIChat : MonoBehaviour
     private Player player;
     private bool isOpen = true;
     private ChatType currentChatType = ChatType.Global;
-    private List<(ChatType type, string msg, bool myChat)> chatMessages = new();
+    private List<(ChatType type, string msg, bool myChat,int id)> chatMessages = new();
 
     private string selectedWhisperUser;
 
@@ -49,9 +50,9 @@ public class UIChat : MonoBehaviour
 
         btnSend.onClick.AddListener(SendMessage);
         btnToggle.onClick.AddListener(ToggleChatWindow);
-        btnWhisper.onClick.AddListener(OnWhisperButtonClicked);
-        btnParty.onClick.AddListener(() => SetChatType(ChatType.Party));
-        btnGlobalChat.onClick.AddListener(() => SetChatType(ChatType.Global));  // 전체 채팅 버튼 추가
+        //btnWhisper.onClick.AddListener(OnWhisperButtonClicked);
+        //btnParty.onClick.AddListener(() => SetChatType(ChatType.Party));
+       // btnGlobalChat.onClick.AddListener(() => SetChatType(ChatType.Global));  // 전체 채팅 버튼 추가
         btnCloseWhisperInput.onClick.AddListener(CloseWhisperUserInputUI);
 
         inputChat.onSubmit.AddListener((text) =>
@@ -99,7 +100,7 @@ public class UIChat : MonoBehaviour
             alarm.gameObject.SetActive(false);
             rectBg.DOSizeDelta(new Vector2(550, 500), 0.3f);
             icon.DORotate(new Vector3(0, 0, 0), 0.3f);
-            icon.DOMove(new Vector3(126, 122, 0), 0.3f);
+            icon.DOMove(new Vector3(275, 480, 0), 0.3f);
         }
 
         isOpen = !isOpen;
@@ -141,26 +142,22 @@ public class UIChat : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
 
-        // 파티 채팅일 경우
-        if (currentChatType == ChatType.Party)
-        {
-            SendMessageToParty(inputChat.text);
-        }
-        // 귓속말일 경우
-        else if (currentChatType == ChatType.Whisper && !string.IsNullOrEmpty(selectedWhisperUser))
-        {
-            SendWhisperToUser(inputChat.text, selectedWhisperUser);
-        }
-        else // 일반 채팅
-        {
-            player.SendMessage(inputChat.text);
-        }
-
-        PushMessage(inputChat.text, true, currentChatType);
+        player.SendMessage(inputChat.text);
+        PushMessage(inputChat.text, true, currentChatType, player.PlayerId);
         inputChat.text = string.Empty;
         ActivateInputFieldProperly();
     }
-
+    public void SetAnimationSetting()
+    {
+        if (!animationTypeObject.activeSelf)
+        {
+            animationTypeObject.SetActive(true);
+        }
+        else
+        {
+            animationTypeObject.SetActive(false);
+        }
+    }
     private void SendMessageToParty(string message)
     {
         // 파티 채팅 처리 로직
@@ -178,17 +175,17 @@ public class UIChat : MonoBehaviour
         ResetIME();
     }
     
-    public void PushMessage(string msg, bool myChat, ChatType type)
+    public void PushMessage(string msg, bool myChat, ChatType type, int id)
     {
-        chatMessages.Add((type, msg, myChat));
+        chatMessages.Add((type, msg, myChat,id));
 
         if (type == currentChatType || type == ChatType.Global)
         {
-            DisplayMessage(msg, myChat);
+            DisplayMessage(msg, myChat, id);
         }
     }
 
-    private void DisplayMessage(string msg, bool myChat)
+    private void DisplayMessage(string msg, bool myChat,int id)
     {
         // 텍스트 메시지 프리팹을 제대로 할당받았는지 확인
         if (txtChatItemBase == null)
@@ -200,20 +197,14 @@ public class UIChat : MonoBehaviour
         // 메시지 아이템 생성
         var msgItem = Instantiate(txtChatItemBase, chatItemRoot);
 
+        Player playerTemp = TownManager.Instance.GetPlayerAvatarById(id);
         // 채팅 타입에 맞는 색상 지정
         Color messageColor = Color.white;  // 기본은 흰색
-        if (currentChatType == ChatType.Party)
-        {
-            messageColor = new Color(0f, 0f, 1f);  // 파티 채팅일 경우 파란색
-        }
-        else if (currentChatType == ChatType.Whisper)
-        {
-            messageColor = new Color(1f, 0f, 1f);  // 귓속말일 경우 분홍색
-        }
 
-        // 내 채팅은 초록색으로 표시 (기존 로직)
-        msgItem.color = myChat ? Color.green : messageColor;
-        msgItem.text = msg;
+        playerTemp.RecvMessage(msg, id);
+        // 내 채팅은 주황색으로 표시 (기존 로직)
+        msgItem.color = myChat ? Color.yellow : messageColor;
+        msgItem.text = playerTemp.GetNickname()+" : " + msg;
 
         // 활성화
         msgItem.gameObject.SetActive(true);
@@ -229,7 +220,7 @@ public class UIChat : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (var (type, msg, myChat) in chatMessages)
+        foreach (var (type, msg, myChat,id) in chatMessages)
         {
             // 귓속말 모드일 경우 해당 유저와의 메시지만 표시
             if (currentChatType == ChatType.Whisper && !msg.Contains(selectedWhisperUser))
@@ -237,7 +228,7 @@ public class UIChat : MonoBehaviour
 
             if (type == currentChatType || type == ChatType.Global)
             {
-                DisplayMessage(msg, myChat);
+                DisplayMessage(msg, myChat,id);
             }
         }
     }

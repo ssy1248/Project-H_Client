@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 6451988442728358640}
   - component: {fileID: 641300870232900358}
   - component: {fileID: 7919851244481946001}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: imgNameBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 1845867634598784447}
   - component: {fileID: 6645908291461973540}
   - component: {fileID: 6716651286009136014}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: imgHpFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 1106855201095435814}
   - component: {fileID: 7644908215917116073}
   - component: {fileID: 8877251588297591679}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: txtHpValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -900,7 +900,7 @@ GameObject:
   - component: {fileID: 5332461988815184123}
   - component: {fileID: 770558508058195461}
   - component: {fileID: 2924745854785398986}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: imgCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1041,7 +1041,7 @@ GameObject:
   - component: {fileID: 3062048431066599832}
   - component: {fileID: 566185330151281797}
   - component: {fileID: 482618861854802579}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: UIMonsterInformation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1317,9 +1317,10 @@ GameObject:
   - component: {fileID: 3457392739566561618}
   - component: {fileID: 7086057417477922350}
   - component: {fileID: -7102917344977902150}
+  - component: {fileID: 8152156247500655472}
   m_Layer: 0
   m_Name: Monster3
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1376,6 +1377,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &8152156247500655472
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195731064521364597}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!1 &6246388429024831126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,7 +1592,7 @@ GameObject:
   - component: {fileID: 2102953574073880511}
   - component: {fileID: 3133851607422367492}
   - component: {fileID: 4283182599318628615}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: txtName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1703,7 +1727,7 @@ GameObject:
   - component: {fileID: 730028204124506565}
   - component: {fileID: 5739053676918334301}
   - component: {fileID: 692606230521418981}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: imhHpBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}

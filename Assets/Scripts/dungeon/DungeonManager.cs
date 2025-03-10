@@ -76,13 +76,11 @@ public class DungeonManager : MonoBehaviour
     }
     public void DungeonExit()
     {
-       SceneManager.LoadScene("Town");
-       var Packet = new C_DungeonExit
-        {
+        SceneManager.LoadScene("Town");
 
-        };
-        GameManager.Network.Send(Packet);
+        TownManager.Instance.DungeonExit();
     }
+
     public void Move(Vector3 pos, float rotation)
     {
         var movePacket = new C_Move

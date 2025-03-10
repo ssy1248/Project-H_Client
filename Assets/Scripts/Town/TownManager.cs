@@ -22,6 +22,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] Marketplace market;
+    [SerializeField] PlayerState playerState;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
     [SerializeField] ShopUI shopUi;
@@ -412,6 +413,16 @@ public class TownManager : MonoBehaviour
         };
         GameManager.Network.Send(marketListPacket);
     }
+    public void DungeonExit()
+    {
+        var Packet = new C_DungeonExit();
+        GameManager.Network.Send(Packet);
+    }
+    public void GetUserState()
+    {
+        var Packet = new C_GetUserState();
+        GameManager.Network.Send(Packet);
+    }
     /* 여기까지 */
 
     /* 임시로 만든 받는 메서드 들 */
@@ -580,7 +591,7 @@ public class TownManager : MonoBehaviour
         errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
         Debug.Log(data);
 
-        uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global);
+        uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global, data.PlayerId);
     }
     //  주말 목표 입니다람쥐
 
@@ -1182,9 +1193,20 @@ public class TownManager : MonoBehaviour
 
             int dungeon = data.DungeonSession.PartyInfo.DungeonIndex;
             LoadingWindow.GetComponentInChildren<Loading>().Index = dungeon;
+            PartyManager partyManager = FindFirstObjectByType<PartyManager>();
+            partyManager.InDungeonPartyInfo = data.Party;
         }
     }
    
+    public void SetUserState(S_SetUserState data)
+    {
+        Debug.Log(data);
+        MyPlayer.exp = data.Exp;
+        MyPlayer.playerData = data.Data;
+
+        playerState.SetState();
+    }
+
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
@@ -1194,7 +1216,8 @@ public class TownManager : MonoBehaviour
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
-  
+            MyPlayer.playerData = playerInfo.StatInfo;
+
             ActivateGameUI();
             MyPlayer.SpawnEffect();
             return;
@@ -1205,7 +1228,6 @@ public class TownManager : MonoBehaviour
 
         // 플레이어를 리스트에 추가
         players.Add(player);
-        player.SpawnEffect();
     }
 
     //private Vector3 CalculateSpawnPosition(TransformInfo transformInfo)

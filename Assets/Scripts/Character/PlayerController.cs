@@ -10,16 +10,25 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> dodgeEffectsArcher = new List<GameObject>(); // 궁수 Dodge 이펙트 풀
     public List<GameObject> dodgeEffectsRogue = new List<GameObject>(); // 도적 Dodge 이펙트 풀
 
+    public PlayerHealthBar playerHealthBar;
+
+    public int partyIndex;
 
     private int effectIndex = 0; // 텔레포트 이펙트 인덱스
     private int dodgeEffectArcherIndex = 0; // 궁수 Dodge 이펙트 인덱스
     private int dodgeEffectRogueIndex = 0; // 도적 Dodge 이펙트 인덱스
     public float moveSpeed = 10f;
 
+    private float DodgeCoolTime = 5f;
+
+    private int comboIndex = 0; // 콤보 순서 저장 변수
+    private float comboResetTime = 1.0f; // 콤보가 초기화되는 시간
+    private float lastAttackTime = 0f; // 마지막 공격 시간 저장
+
     private Camera camera;
     protected NavMeshAgent nav;
 
-    public int maxHealth = 100;
+    public int maxHealth = 200;
     public int currentHealth;
     public float AttackRate = 0.5f;
 
@@ -29,7 +38,11 @@ public class PlayerController : MonoBehaviour
     bool FDown;
 
     public bool isMove = false;
+
     protected bool isDodge;
+    private bool isOnCooldown = false;
+    private float currentCooldown = 0f;
+
     protected bool isFireReady = true;
     bool isBorder1;
     bool isBorder2;
@@ -56,6 +69,9 @@ public class PlayerController : MonoBehaviour
         nav.updateRotation = false;
 
         currentHealth = maxHealth;
+
+        //임시 파티 인덱스 추후 서버에서 받아와야할듯
+        partyIndex = 0;
     }
 
     public void setDestination(Vector3 dest)
@@ -94,20 +110,28 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isRun", false);  // 달리기 애니메이션 멈추기
         isMove = false;
         isFireReady = false;
+
         // 추가적으로 UI나 게임 오버 화면을 띄우는 로직을 여기에 추가 가능
     }
 
     public void Update()
     {
+
+        // 직업별로 Dodge 또는 Teleport 사용 가능하도록 설정
+        if (gameObject.CompareTag("Mage"))
+            Teleport();
+        else if (gameObject.CompareTag("Archer") || gameObject.CompareTag("Rogue"))
+            Dodge();
+
         GETInput();
         //move();
         //Turn();
-        //Attack();
+        Attack();
 
-        if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
-            Teleport();
-        else
-            Dodge();
+        //if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
+        //    Teleport();
+        //else
+        //    Dodge();
 
         if(Input.GetMouseButton(1))
         {
@@ -123,6 +147,23 @@ public class PlayerController : MonoBehaviour
             // 죽으면 더 이상 업데이트되지 않도록
             return;
         }
+
+        // 쿨타임이 끝났다면 currentCooldown을 0으로 리셋
+        if (isOnCooldown)
+        {
+            currentCooldown -= Time.deltaTime;
+            if (currentCooldown <= 0f)
+            {
+                isOnCooldown = false;  // 쿨타임 끝
+            }
+        }
+
+        // D키를 눌렀고, 구르기 중이 아니고 쿨타임이 끝났으면 구르기 실행
+        if (DDown && !isDodge && !isOnCooldown)
+        {
+            Dodge();
+        }
+
 
 
         Mousemove();
@@ -219,7 +260,11 @@ public class PlayerController : MonoBehaviour
 
     void Dodge()
     {
-        if (DDown && !isDodge)
+        // 아처, 로그만 Dodge 가능
+        if (!gameObject.CompareTag("Archer") && !gameObject.CompareTag("Rogue"))
+            return;
+
+        if (DDown && !isDodge && !isOnCooldown)
         {
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward; // 이동 중이면 이동 방향 사용
             moveSpeed *= 2;
@@ -234,6 +279,10 @@ public class PlayerController : MonoBehaviour
             {
                 ActivateDodgeEffect(dodgeEffectsRogue, ref dodgeEffectRogueIndex);
             }
+
+            // 쿨타임 설정
+            isOnCooldown = true;
+            currentCooldown = DodgeCoolTime;  // 쿨타임 시간 설정
 
             Invoke("DodgeOut", 0.4f);
         }
@@ -327,8 +376,10 @@ public class PlayerController : MonoBehaviour
         {
             equipWeapon.Use();
 
-            int attackIndex = Random.Range(0, 2);
-            anim.SetInteger("attackIndex", attackIndex);
+            // 마우스 클릭할 때마다 콤보 증가 (순환)
+            comboIndex = (comboIndex + 1) % 3; // 예제에서는 0, 1을 번갈아가며 실행
+
+            anim.SetInteger("attackIndex", comboIndex);
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
 
             // 마우스 클릭한 위치를 기준으로 방향 설정
@@ -348,6 +399,13 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isRun", false);
 
             fireDelay = 0;
+            lastAttackTime = Time.time; // 마지막 공격 시간 저장
+        }
+
+        // 일정 시간이 지나면 콤보 초기화
+        if (Time.time - lastAttackTime > comboResetTime)
+        {
+            comboIndex = 0;
         }
     }
 
@@ -359,7 +417,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!isDamage)
             {
-                Arrow enemyArrow = other.GetComponent<Arrow>();
+                EnemyArrow enemyArrow = other.GetComponent<EnemyArrow>();
+                playerHealthBar.TakeDamage(enemyArrow.damage);
                 currentHealth -= enemyArrow.damage;
                 DamageManager.Instance.SpawnDamageText(enemyArrow.damage, transform.Find("Head"), isPlayerHit: true, 300f);
                 Debug.Log("현재 체력: " + currentHealth);  // 현재 체력 로그 출력

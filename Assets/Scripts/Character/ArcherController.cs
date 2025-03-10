@@ -12,6 +12,9 @@ public class ArcherController : MonoBehaviour
     private int effectIndex = 0; // 현재 사용할 이펙트 인덱스
     private GameObject activeEffect; // 현재 활성화된 이펙트
 
+    public float buffCooldown = 7f; // 버프 쿨타임 (7초)
+    private bool canUseBuff = true; // 스킬 사용 가능 여부
+
     private void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -23,9 +26,10 @@ public class ArcherController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !isBuffActive)
+        if (Input.GetKeyDown(KeyCode.Q) && !isBuffActive && canUseBuff)
         {
             StartCoroutine(BoostAttackSpeed());
+            StartCoroutine(BuffCooldownRoutine()); // 쿨타임 시작
         }
 
         // 활성화된 이펙트가 있으면 계속 플레이어를 따라다니게 함
@@ -38,12 +42,13 @@ public class ArcherController : MonoBehaviour
     private IEnumerator BoostAttackSpeed()
     {
         isBuffActive = true;
-        playerController.AttackRate *= 0.5f; // 공격 속도 1.5배 증가
+        canUseBuff = false; // 스킬 재사용 불가 설정
+        playerController.AttackRate *= 0.15f; // 공격 속도 증가
 
         // 이펙트 활성화
         ActivateEffect(buffEffects, ref effectIndex, transform.position);
 
-        yield return new WaitForSeconds(5f); // 5초 지속
+        yield return new WaitForSeconds(3f); // 3초 지속
 
         playerController.AttackRate = originalAttackRate; // 원래 속도로 복귀
         isBuffActive = false;
@@ -54,6 +59,15 @@ public class ArcherController : MonoBehaviour
             activeEffect.SetActive(false);
             activeEffect = null;
         }
+    }
+
+    // 버프 스킬 쿨타임 루틴
+    private IEnumerator BuffCooldownRoutine()
+    {
+        Debug.Log("Buff skill cooldown started.");
+        yield return new WaitForSeconds(buffCooldown); // 쿨타임 대기
+        canUseBuff = true; // 스킬 다시 사용 가능
+        Debug.Log("Buff skill is ready again!");
     }
 
     void ActivateEffect(List<GameObject> effectList, ref int effectIndex, Vector3 position, Vector3? direction = null)
