@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private int dodgeEffectArcherIndex = 0; // 궁수 Dodge 이펙트 인덱스
     private int dodgeEffectRogueIndex = 0; // 도적 Dodge 이펙트 인덱스
     public float moveSpeed = 10f;
+    private bool isPlayingSound = false; // 소리가 재생 중인지 확인하는 변수
 
     private float DodgeCoolTime = 5f;
 
@@ -108,6 +109,7 @@ public class PlayerController : MonoBehaviour
         nav.isStopped = true;  // NavMeshAgent 멈추기
         rigid.isKinematic = true;  // Rigidbody 비활성화
         anim.SetBool("isRun", false);  // 달리기 애니메이션 멈추기
+        PlayerLoopSEManager.instance.StopSE("PlayerRun");
         isMove = false;
         isFireReady = false;
 
@@ -139,6 +141,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 setDestination(hit.point);
+
             }
         }
 
@@ -178,23 +181,43 @@ public class PlayerController : MonoBehaviour
             transform.position += dir.normalized * Time.deltaTime * moveSpeed;
 
             anim.SetBool("isRun", true); // 이동 중일 때만 'run' 애니메이션 실행
+
+            // 소리가 아직 재생되지 않았다면 실행
+            if (!isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.LoopPlaySE("PlayerRun");
+                isPlayingSound = true; // 소리 재생 상태 변경
+            }
         }
         else
         {
             anim.SetBool("isRun", false); // 이동하지 않으면 'idle' 애니메이션
+
+            // 이동이 끝나면 소리 멈추기
+            if (isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.StopSE("PlayerRun");
+                isPlayingSound = false; // 소리 상태 초기화
+            }
         }
 
+        // 목표 지점에 도달하면 이동 멈추기
         if (Vector3.Distance(transform.position, moveVec) <= 0.1f)
         {
             isMove = false;
-            anim.SetBool("isRun", false); // 목표 지점에 도달하면 'idle' 상태로 돌아가게 설정
+            anim.SetBool("isRun", false); // 목표 도착 시 idle 상태
+            if (isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.StopSE("PlayerRun");
+                isPlayingSound = false; // 소리 상태 초기화
+            }
         }
     }
 
-    bool IsMage()
-    {
-        return gameObject.CompareTag("Mage"); // 태그가 "Mage"이면 마법사로 판별
-    }
+    //bool IsMage()
+    //{
+    //    return gameObject.CompareTag("Mage"); // 태그가 "Mage"이면 마법사로 판별
+    //}
 
     void StopToWall() // 벽에 충돌했을 때 멈추는 함수
     {
@@ -269,6 +292,16 @@ public class PlayerController : MonoBehaviour
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward; // 이동 중이면 이동 방향 사용
             moveSpeed *= 2;
             anim.SetTrigger("doDodge");
+            if (gameObject.CompareTag("Rogue"))
+            {
+                SEManager.instance.PlaySE("RogueDodge");
+
+            }
+            if (gameObject.CompareTag("Archer"))
+            {
+                SEManager.instance.PlaySE("ArcherDodge");
+
+            }
             isDodge = true;
 
             if (gameObject.CompareTag("Archer"))
@@ -381,6 +414,22 @@ public class PlayerController : MonoBehaviour
 
             anim.SetInteger("attackIndex", comboIndex);
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+
+            if (gameObject.CompareTag("Rogue"))
+            {
+                SEManager.instance.PlaySE("RogueHit");
+
+            }
+            if (gameObject.CompareTag("Archer"))
+            {
+                SEManager.instance.PlaySE("ArcherHit");
+
+            }
+            if (gameObject.CompareTag("Spearman"))
+            {
+                SEManager.instance.PlaySE("SpearmanHit");
+
+            }
 
             // 마우스 클릭한 위치를 기준으로 방향 설정
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

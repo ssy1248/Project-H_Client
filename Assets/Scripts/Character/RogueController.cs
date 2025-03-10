@@ -51,7 +51,8 @@ public class RogueController : PlayerController
     private IEnumerator PerformSmash()
     {
         // 점프 애니메이션이 끝날 때까지 기다립니다 (예: 1초)
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
+        SEManager.instance.PlaySE("RogueSkill1");
 
         // 캐릭터의 위치에서 앞쪽으로 약간 이동한 위치 계산
         Vector3 effectPosition = transform.position + transform.forward * 1.5f;  // 1.5f는 이동할 거리
