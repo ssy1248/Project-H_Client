@@ -48,7 +48,7 @@ class PacketHandler
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_Move enterPacket) return;
-        if (TownManager.Instance !=null)
+        if (TownManager.Instance != null)
         {
             TownManager.Instance.AllMove(enterPacket);
             return;
@@ -268,7 +268,7 @@ class PacketHandler
         if (packet is not S_PlayerAction enterPacket) return;
         PlayerActionManager.Instance.PlayerActionHandler(enterPacket);
     }
-    
+
     // 몬스터 관련.
     public static void S_MonsterSpawnHandler(PacketSession session, IMessage packet)
     {
@@ -290,21 +290,26 @@ class PacketHandler
     {
         if (packet is not S_MonsterHit monsterHitPacket) return;
     }
-    
+
     public static void S_MonsterAttckHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MonsterAttck monsterAttckPacket) return;
-    
+
         MonsterManager.Instance.MonsterAttckAnimation(monsterAttckPacket);
     }
-    
+
     public static void S_MonsterDieHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MonsterDie monsterDiePacket) return;
-    
+
         MonsterManager.Instance.DeleteMonster(monsterDiePacket);
     }
-    
+    public static void S_SetUserHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_SetUserState setUserStatePacket) return;
+
+        TownManager.Instance.SetUserState(setUserStatePacket);
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {

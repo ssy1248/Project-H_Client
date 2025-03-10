@@ -10,7 +10,7 @@ public class BossController : Enemy
     Vector3 Attack1Vec;
     Vector3 Attack2Vec;
 
-    private Projector projector;
+    private BladePool bladePool;
     bool isLook;
     bool isPatternActive;
 
@@ -39,6 +39,9 @@ public class BossController : Enemy
 
         nav.isStopped = true;
         StartCoroutine(Think());
+
+        //스킬 풀 찾기
+        bladePool = FindObjectOfType<BladePool>();
 
         // 콜라이더 미리 초기화
         if (fanShapeRange != null)
@@ -93,6 +96,13 @@ public class BossController : Enemy
             lookVec = new Vector3(h, 0, v) * 5f;
             transform.LookAt(target.position + lookVec);
         }
+    }
+
+    // 일정 시간이 지나면 블레이드를 풀에 반환하는 함수
+    IEnumerator ReturnBladeToPool(GameObject blade, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        bladePool.ReturnBlade(blade);
     }
 
     private Coroutine _stateCoroutine = null;
@@ -167,11 +177,6 @@ public class BossController : Enemy
                             yield return StartAttack(3);
                             break;
                         case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                        case 10:
-                        case 11:
                             yield return StartAttack(5);
                             break;
                     }
@@ -285,32 +290,29 @@ public class BossController : Enemy
 
         List<GameObject> warningCircles = new List<GameObject>(); // 개별 원형 범위 저장 리스트
 
-        // 각 칼이 떨어질 위치를 미리 생성하여 경고 표시
+        // 칼이 떨어질 위치를 미리 생성하여 경고 표시
         Vector3[] attackPositions = new Vector3[bladeCount];
         for (int i = 0; i < bladeCount; i++)
         {
-            // 보스 주변의 랜덤 각도와 거리로 위치 생성
-            float angle = Random.Range(0f, 360f); // 0부터 360도 사이의 랜덤 각도
-            float distance = Random.Range(0f, radius); // 0부터 지정된 반경 사이의 랜덤 거리
-            Vector3 randomPos = target.position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad) * distance, 0, Mathf.Sin(angle * Mathf.Deg2Rad) * distance); // 원형 범위 계산
+            float angle = Random.Range(0f, 360f);
+            float distance = Random.Range(0f, radius);
+            Vector3 randomPos = target.position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad) * distance, 0, Mathf.Sin(angle * Mathf.Deg2Rad) * distance);
+            attackPositions[i] = new Vector3(randomPos.x, 1.5f, randomPos.z);
 
-            attackPositions[i] = new Vector3(randomPos.x, 1.5f, randomPos.z); // Y값을 1.5f로 고정하여 칼이 떨어지게 설정
-
-            // 원형 범위 경고 이펙트 생성 (지면에 배치)
+            // 원형 범위 경고 이펙트 생성
             if (circleShapeRange != null)
             {
                 GameObject warningCircle = Instantiate(circleShapeRange, attackPositions[i], Quaternion.identity);
-                warningCircle.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f); // 크기 설정
-                warningCircle.transform.rotation = Quaternion.Euler(-90f, 90f, 0); // 원형 범위가 올바르게 보이도록 회전
+                warningCircle.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                warningCircle.transform.rotation = Quaternion.Euler(-90f, 90f, 0);
 
-                // SphereCollider 설정
                 SphereCollider collider = warningCircle.GetComponent<SphereCollider>();
                 if (collider == null)
                 {
-                    collider = warningCircle.AddComponent<SphereCollider>(); // 없으면 추가
+                    collider = warningCircle.AddComponent<SphereCollider>();
                 }
-                collider.radius = warningCircle.transform.localScale.x / 2f; // 크기에 맞게 설정
-                collider.isTrigger = true; // 충돌 감지용
+                collider.radius = warningCircle.transform.localScale.x / 2f;
+                collider.isTrigger = true;
 
                 warningCircle.SetActive(true);
                 warningCircles.Add(warningCircle);
@@ -319,20 +321,25 @@ public class BossController : Enemy
 
         yield return new WaitForSeconds(warningDuration); // 경고 표시 후 1초 대기
 
-        // 칼이 순차적으로 떨어짐
+        // 오브젝트 풀링 사용하여 칼 생성
         for (int i = 0; i < bladeCount; i++)
         {
-            Vector3 spawnPosition = new Vector3(attackPositions[i].x, 12f, attackPositions[i].z); // Y축을 10f로 설정하여 위에서 떨어지도록 조정
-            GameObject blade = Instantiate(bladePrefab, spawnPosition, Quaternion.identity);
+            Vector3 spawnPosition = new Vector3(attackPositions[i].x, 12f, attackPositions[i].z);
+            GameObject blade = bladePool.GetBlade(); // 풀에서 가져오기
+            blade.transform.position = spawnPosition;
+            blade.transform.rotation = Quaternion.Euler(180f, 0f, 0f); // X축 180도 회전
 
-            // 칼을 180도 회전시켜서 떨어지도록 적용
-            blade.transform.rotation = Quaternion.Euler(180f, 0f, 0f); // X축을 기준으로 180도 회전
+            Rigidbody rb = blade.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.down * 5f; // 아래로 떨어지는 속도 적용
+            }
 
-            blade.GetComponent<Rigidbody>().velocity = Vector3.down * 5f; // 아래로 떨어지는 속도 적용
-
+            // 칼이 3초 후에 풀로 돌아가도록 설정
+            StartCoroutine(ReturnBladeToPool(blade, 3f));
         }
 
-        yield return new WaitForSeconds(1f); // 칼이 다 떨어진 후
+        yield return new WaitForSeconds(1f);
 
         // 경고 이펙트 제거
         foreach (var circle in warningCircles)
@@ -346,9 +353,6 @@ public class BossController : Enemy
         isLook = true;
         nav.isStopped = true;
     }
-
-
-
 
     // 보스가 타겟에게 도달하는 이동 패턴
     IEnumerator Walk()

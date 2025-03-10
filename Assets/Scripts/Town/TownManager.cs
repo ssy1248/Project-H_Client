@@ -22,6 +22,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIRegister UiRegister;
     [SerializeField] private UIAnimation uiAnimation;
     [SerializeField] Marketplace market;
+    [SerializeField] PlayerState playerState;
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
     [SerializeField] ShopUI shopUi;
@@ -415,6 +416,11 @@ public class TownManager : MonoBehaviour
     public void DungeonExit()
     {
         var Packet = new C_DungeonExit();
+        GameManager.Network.Send(Packet);
+    }
+    public void GetUserState()
+    {
+        var Packet = new C_GetUserState();
         GameManager.Network.Send(Packet);
     }
     /* 여기까지 */
@@ -1190,6 +1196,15 @@ public class TownManager : MonoBehaviour
         }
     }
    
+    public void SetUserState(S_SetUserState data)
+    {
+        Debug.Log(data);
+        MyPlayer.exp = data.Exp;
+        MyPlayer.playerData = data.Data;
+
+        playerState.SetState();
+    }
+
     // 자기 자신 스폰용도 
     public void Spawn(PlayerInfo playerInfo, bool isPlayer = false)
     {
@@ -1199,7 +1214,8 @@ public class TownManager : MonoBehaviour
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
-  
+            MyPlayer.playerData = playerInfo.StatInfo;
+
             ActivateGameUI();
             MyPlayer.SpawnEffect();
             return;

@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
 
     private UIChat uiChat;
 
+    public StatInfo playerData;
+    public float exp;
+
     public string nickname;
     public int PlayerId { get; private set; }
     public bool IsMine { get; private set; }
@@ -32,6 +35,8 @@ public class Player : MonoBehaviour
 
     public float raycastDistance = 10f;  // 레이캐스트의 거리
     public LayerMask groundLayer;
+
+
 
     // 원격 이동용 변수
     public Vector3 goalPos;
