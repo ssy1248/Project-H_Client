@@ -7,8 +7,8 @@ public class BossController : Enemy
 {
     Vector3 lookVec;
     Vector3 tauntVec;
-    Vector3 Attack1Vec;
-    Vector3 Attack2Vec;
+    Vector3 AttackVec;
+    
 
     private BladePool bladePool;
     bool isLook;
@@ -25,6 +25,11 @@ public class BossController : Enemy
     private BoxCollider squareCollider;
     private SphereCollider fanCollider;
     private SphereCollider circleCollider;
+
+    // 보스 무기 Collider
+    public GameObject bossWeapon;  // 보스 무기 오브젝트 (Collider 포함)
+    public GameObject effectObject; //보스 무기 이펙트
+    private Collider weaponCollider;
 
 
     void Awake()
@@ -72,6 +77,20 @@ public class BossController : Enemy
 
             circleCollider.isTrigger = true;
             circleShapeRange.SetActive(false);
+        }
+
+        // 보스 무기 Collider 가져오기
+        if (bossWeapon != null)
+        {
+            weaponCollider = bossWeapon.GetComponent<Collider>();
+            if (weaponCollider != null)
+                weaponCollider.enabled = false; // 기본적으로 비활성화
+        }
+
+        // Effect 오브젝트 활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(false);
         }
     }
 
@@ -191,11 +210,15 @@ public class BossController : Enemy
 
     IEnumerator Attack1()
     {
-        Attack1Vec = target.position + lookVec;
+        AttackVec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack1");
+
+        // 무기 충돌 활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = true;
 
         // 사각형 범위 표시 활성화
         if (squareShapeRange != null)
@@ -226,17 +249,27 @@ public class BossController : Enemy
             squareShapeRange.SetActive(false);
         }
 
+        // 무기 충돌 비활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = false;
+
 
     }
 
 
     IEnumerator Attack2()
     {
-        Attack2Vec = target.position + lookVec;
+        AttackVec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack2");
+
+        // Effect 오브젝트 활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(true);
+        }
 
         // 부채꼴 범위 표시 활성화
         if (fanShapeRange != null)
@@ -273,7 +306,11 @@ public class BossController : Enemy
             fanShapeRange.SetActive(false);
         }
 
-
+        // Effect 오브젝트 비활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(false);
+        }
     }
 
     IEnumerator Attack3()
@@ -391,6 +428,10 @@ public class BossController : Enemy
         nav.isStopped = false;
         anim.SetTrigger("doTaunt");
 
+        // 무기 충돌 활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = true;
+
         // 부채꼴 범위 표시 활성화
         if (fanShapeRange != null)
         {
@@ -425,15 +466,26 @@ public class BossController : Enemy
         {
             fanShapeRange.SetActive(false);
         }
+
+        // 무기 충돌 비활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = false;
     }
 
     IEnumerator Attack4()
     {
-        Attack1Vec = target.position + lookVec;
+        AttackVec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack4");
+
+        // Effect 오브젝트 활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(true);
+        }
+
 
         // 사각형 범위 표시 활성화
         if (circleShapeRange != null)
@@ -442,7 +494,7 @@ public class BossController : Enemy
 
             // 원형  범위의 위치를 보스 위치로 설정
             circleShapeRange.transform.position = transform.position + (transform.forward * 15f);
-            // 부채꼴의 크기 조정
+            // 범위 크기 조정
             circleShapeRange.transform.localScale = new Vector3(4f, 4f, 5f); // 적절한 크기로 조정
 
             Vector3 direction = transform.forward;  // 보스의 방향
@@ -466,6 +518,10 @@ public class BossController : Enemy
             circleShapeRange.SetActive(false);
         }
 
-
+        // Effect 오브젝트 비활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(false);
+        }
     }
 }
