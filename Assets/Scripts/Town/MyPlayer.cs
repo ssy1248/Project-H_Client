@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using Cinemachine;
+using TMPro;
+using Unity.VisualScripting;
+using Unity.Burst.CompilerServices;
 
 public class MyPlayer : MonoBehaviour
 {
@@ -18,6 +21,12 @@ public class MyPlayer : MonoBehaviour
     private EventSystem eSystem;
     private Animator animator;
     private Vector3 lastPos;
+
+    private Vector3 targetPosition;
+    private Quaternion targetRot;
+    private float moveSpeed = 4f;
+    private float smoothRotateSpeed = 10f;
+
 
     private readonly List<int> animHash = new List<int>();
 
@@ -35,11 +44,19 @@ public class MyPlayer : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.avoidancePriority = 0;
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        agent.acceleration = 100f; // ���ӵ� ���� -> ��� ����
+        agent.stoppingDistance = 0.1f; // ���ߴ� �Ÿ� ����
+        agent.autoBraking = true; // �ڵ� �극��ũ Ȱ��ȭ
+        agent.angularSpeed = 1000f; // ȸ�� �ӵ� ����
+        agent.updateRotation = false;
 
         animator = GetComponent<Animator>();
 
         InitializeCamera();
+
         lastPos = transform.position;
+        targetPosition = transform.position;
+        targetRot = transform.rotation;
 
         LoadAnimationHashes();
 
@@ -49,8 +66,86 @@ public class MyPlayer : MonoBehaviour
     void Update()
     {
         HandleInput();
+        test();
         CheckMove();
+
     }
+
+    // test
+    public void UpdateUserPosition(Vector3 move, Quaternion rot, float speed)
+    {
+        targetPosition = move;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            targetPosition = new Vector3(targetPosition.x, hit.position.y, targetPosition.z);
+        }
+
+        targetRot = rot;
+        moveSpeed = speed;
+    }
+
+    //test
+    private void test()
+    {
+        if (targetPosition != null)
+        {
+            //Vector3 directionToTarget2 = targetPosition - transform.position;
+            //directionToTarget2.y = 0;
+
+            //float distanceToTarget = directionToTarget2.magnitude;
+
+            //// 목표 위치에 거의 도달하면 정확히 고정
+            //if (distanceToTarget < 0.01f)
+            //{
+            //    transform.position = targetPosition;
+            //    return;
+            //}
+
+            //float moveSpeed = 4f;
+            //Vector3 moveDirection = directionToTarget2.normalized;
+
+            //// MoveTowards 사용으로 소수점 흔들림 방지
+            ////Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * moveSpeed);
+            //Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
+            //transform.position = newPosition;
+
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
+        }
+
+        if (targetRot != null)
+        {
+            //Vector3 directionToTarget = transform.position - targetPosition;
+            //directionToTarget.y = 0;
+
+            //if (directionToTarget.sqrMagnitude > Mathf.Epsilon)
+            //{
+            //    directionToTarget = -directionToTarget;
+            //    Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+            //    // 목표 회전값에 거의 도달하면 정확히 고정
+            //    if (Quaternion.Angle(transform.rotation, targetRotation) > 0.5f)
+            //    {
+            //        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+
+            //        // 테스트
+            //        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            //        //transform.rotation = targetRotation; // 목표 회전값으로 고정
+            //    }
+            //    else
+            //    {
+            //        transform.rotation = targetRotation; // 목표 회전값으로 고정
+            //    }
+            //}
+
+            float t = Mathf.Clamp(Time.deltaTime * smoothRotateSpeed, 0, 0.99f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, t);
+            agent.updateRotation = false;
+        }
+    }
+
 
     private void InitializeCamera()
     {
@@ -87,14 +182,14 @@ public class MyPlayer : MonoBehaviour
                 NavMeshHit navHit;
                 if (NavMesh.SamplePosition(hitPosition, out navHit, 0.5f, NavMesh.AllAreas))
                 {
-                    agent.SetDestination(navHit.position);
+                    //agent.SetDestination(navHit.position);
 
                     // 방향 + 속도 velocity 구하는 로직.
                     Vector3 directionToGoal = (navHit.position - transform.position).normalized;
                     float speed = agent.speed;
                     Vector3 velocity = directionToGoal * speed;
 
-                    SendMovePacket(navHit.position, velocity, speed, speed);
+                    SendMovePacket(navHit.position, velocity, moveSpeed, moveSpeed);
                 }
             }
         }
@@ -122,7 +217,7 @@ public class MyPlayer : MonoBehaviour
 
 
         // 현재 위치를 마지막 위치로 저장
-        lastPos = transform.position;
+        //lastPos = transform.position;
     }
 
    

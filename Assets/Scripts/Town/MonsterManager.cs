@@ -107,6 +107,23 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
+    public void MonsterHitAnimation(S_MonsterHit monsterHitPacket)
+    {
+        foreach (var mMonsterId in monsterHitPacket.MonsterId)
+        {
+
+            if (monsterDict.ContainsKey(mMonsterId))
+            {
+                Monster findMonster = monsterDict.GetValueOrDefault(mMonsterId);
+                if (findMonster != null)
+                {
+                    findMonster.switchAnimation(monsterHitPacket.MonsterAinID);
+                }
+            }
+
+        }
+    }
+
     // ���� ����
     public void DeleteMonster(S_MonsterDie monsterDiePacket)
     {

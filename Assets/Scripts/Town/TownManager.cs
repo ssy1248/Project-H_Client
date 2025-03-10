@@ -524,6 +524,8 @@ public class TownManager : MonoBehaviour
 
             // 플레이어가 본인인지 검증.
             if(MyPlayer.PlayerId == playerId) {
+
+                MyPlayer.MPlayer.UpdateUserPosition(targetPos, targetRot, speed);
                 continue;
             }
 
