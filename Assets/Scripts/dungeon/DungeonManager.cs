@@ -76,11 +76,8 @@ public class DungeonManager : MonoBehaviour
     }
     public void DungeonExit()
     {
-        SceneManager.LoadScene("Town");
-
-        TownManager.Instance.DungeonExit();
+        GameManager.Instance.DungeonExit();
     }
-
     public void Move(Vector3 pos, float rotation)
     {
         var movePacket = new C_Move
@@ -176,6 +173,7 @@ public class DungeonManager : MonoBehaviour
             // 플레이어가 본인인지 검증.
             if (MyPlayer.PlayerId == playerId)
             {
+                MyPlayer.MPlayer.UpdateUserPosition(targetPos, targetRot, speed);
                 continue;
             }
 

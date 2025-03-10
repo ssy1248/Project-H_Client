@@ -39,8 +39,8 @@ public class StorageContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
         // 패킷 핸들러 이벤트 구독
-        PacketHandler.S_InventoryEvent += S_UpdateInventoryHandler;
-        PacketHandler.S_MoveItemEvent += S_MoveItemHandler;
+        TownManager.Instance.S_InventoryEvent += S_UpdateInventoryHandler;
+        TownManager.Instance.S_MoveItemEvent += S_MoveItemHandler;
     }
 
     #region public

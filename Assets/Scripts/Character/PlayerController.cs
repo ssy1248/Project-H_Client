@@ -59,6 +59,10 @@ public class PlayerController : MonoBehaviour
     Weapon equipWeapon;
     float fireDelay;
 
+    // 
+    MyPlayer testplayer;
+    Player otherPlayer;
+
 
     public void Awake()
     {
@@ -73,12 +77,23 @@ public class PlayerController : MonoBehaviour
 
         //임시 파티 인덱스 추후 서버에서 받아와야할듯
         partyIndex = 0;
+
+        testplayer = GetComponent<MyPlayer>();
+
+        otherPlayer = GetComponent<Player>();
+        otherPlayer.enabled = true;
+        if(otherPlayer.IsMine)
+        {
+            testplayer.enabled = false;
+            this.enabled = false;
+        }
     }
 
     public void setDestination(Vector3 dest)
     {
-        nav.SetDestination(dest);
+        //nav.SetDestination(dest);
         moveVec = dest;
+        //moveVec = testplayer.MousePos;
         isMove = true;
         anim.SetBool("isRun", true);
     }
@@ -128,6 +143,7 @@ public class PlayerController : MonoBehaviour
         GETInput();
         //move();
         //Turn();
+
         Attack();
 
         //if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
@@ -137,10 +153,17 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetMouseButton(1))
         {
+            //  if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit)
             RaycastHit hit;
             if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
             {
-                setDestination(hit.point);
+                if(testplayer == null)
+                {
+                    testplayer = GetComponent<MyPlayer>();
+                } else
+                {
+                    setDestination(testplayer.MousePos);
+                }
 
             }
         }
@@ -176,6 +199,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isMove)
         {
+            Debug.Log($"moveVec :  {moveVec}");
+
             var dir = new Vector3(moveVec.x, transform.position.y, moveVec.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
             transform.forward = dir;
             transform.position += dir.normalized * Time.deltaTime * moveSpeed;
@@ -214,10 +239,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //bool IsMage()
-    //{
-    //    return gameObject.CompareTag("Mage"); // 태그가 "Mage"이면 마법사로 판별
-    //}
+
+
+
+
+    bool IsMage()
+    {
+        return gameObject.CompareTag("Mage"); // 태그가 "Mage"이면 마법사로 판별
+    }
 
     void StopToWall() // 벽에 충돌했을 때 멈추는 함수
     {
@@ -498,6 +527,8 @@ public class PlayerController : MonoBehaviour
         }
         yield return null;
     }
+
+
 
 
 }

@@ -26,7 +26,7 @@ public class EquipmentContainer : MonoBehaviour, IBeginDragHandler, IDragHandler
         InitializeSlot(footSlot, (int)ItemType.Foot);
         InitializeSlot(righthandSlot, (int)ItemType.Weapon);
         InitializeSlot(lefthandSlot, (int)ItemType.Weapon);
-        PacketHandler.S_MoveItemEvent += S_MoveItemHandler;
+        TownManager.Instance.S_MoveItemEvent += S_MoveItemHandler;
     }
 
     #region public
