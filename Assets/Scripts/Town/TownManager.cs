@@ -7,6 +7,7 @@ using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 // using static UnityEditor.Experimental.GraphView.GraphView;
@@ -26,6 +27,14 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
     [SerializeField] ShopUI shopUi;
+    [SerializeField] GameObject townEffect;
+
+    // 인벤토리 이벤트
+    public UnityAction<S_InventoryResponse> S_InventoryEvent;
+    public UnityAction<S_EquipItemResponse> S_EquipItemEvent;
+    public UnityAction<S_DisrobeItemResponse> S_DisrobeItemEvent;
+    public UnityAction<S_MoveItemResponse> S_MoveItemEvent;
+    public UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
 
     #region 파티 UI
     [Header("파티 UI 모음")]
@@ -1275,6 +1284,7 @@ public class TownManager : MonoBehaviour
         uiChat.gameObject.SetActive(true);
         uiAnimation.Init();
         uiAnimation.Show();
+        townEffect.SetActive(false);
     }
 
     public Player GetPlayerAvatarById(int playerId)
