@@ -2,9 +2,6 @@
 using Google.Protobuf.Protocol;
 using ServerCore;
 using UnityEngine.Events;
-using System.Diagnostics;
-using static UnityEngine.Rendering.DebugUI.Table;
-using UnityEngine;
 
 class PacketHandler
 {
@@ -74,29 +71,29 @@ class PacketHandler
     {
         if (packet is not S_BuyItemResponse enterPacket) return;
     }
-    public static UnityAction<S_EquipItemResponse> S_EquipItemEvent;
+
     public static void S_EquipItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_EquipItemResponse enterPacket) return;
-        S_EquipItemEvent?.Invoke(enterPacket);
+        TownManager.Instance.S_EquipItemEvent.Invoke(enterPacket);
     }
-    public static UnityAction<S_DisrobeItemResponse> S_DisrobeItemEvent;
+
     public static void S_DisrobeItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_DisrobeItemResponse enterPacket) return;
-        S_DisrobeItemEvent?.Invoke(enterPacket);
+        TownManager.Instance.S_DisrobeItemEvent?.Invoke(enterPacket);
     }
-    public static UnityAction<S_MoveItemResponse> S_MoveItemEvent;
+
     public static void S_MoveItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_MoveItemResponse enterPacket) return;
-        S_MoveItemEvent?.Invoke(enterPacket);
+        TownManager.Instance.S_MoveItemEvent?.Invoke(enterPacket);
     }
-    public static UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
+
     public static void S_ActiveItemHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_ActiveItemResponse enterPacket) return;
-        S_ActiveItemEvent?.Invoke(enterPacket);
+        TownManager.Instance.S_ActiveItemEvent?.Invoke(enterPacket);
     }
     public static void S_PartyHandler(PacketSession session, IMessage packet)
     {
@@ -186,11 +183,11 @@ class PacketHandler
         if (packet is not S_BuyInMarket enterPacket) return;
         TownManager.Instance.BuyInMarketResponse(enterPacket);
     }
-    public static UnityAction<S_InventoryResponse> S_InventoryEvent;
+   
     public static void S_InventoryHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_InventoryResponse enterPacket) return;
-        S_InventoryEvent?.Invoke(enterPacket);
+        TownManager.Instance.S_InventoryEvent?.Invoke(enterPacket);
     }
     public static void S_MatchResponse(PacketSession session, IMessage packet)
     {
