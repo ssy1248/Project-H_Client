@@ -166,7 +166,7 @@ public class PlayerActionManager : MonoBehaviour
         {
             if (player.MPlayer != null)
             {
-                player.RangeAttack();
+                player.RangeAttack(result.ArrowId);
                 break;
             }
         }

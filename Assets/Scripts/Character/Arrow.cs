@@ -16,23 +16,38 @@ public class Arrow : MonoBehaviour
             // 부딪힌 패킷 전송
             C_RangeAttackImpact hitObj = new C_RangeAttackImpact
             {
-                
+                ArrowId = arrowId,
+                HitObject = 1, // 몬스터
+                MonsterId = other.transform.GetComponent<Monster>().MonsterId,
             };
+
             Debug.Log("부딪혔다 몬스터");
             gameObject.SetActive(false);  // 화살 비활성화
             if (weapon != null)
             {
                 weapon.ReturnArrow(gameObject);
             }
+
+            GameManager.Network.Send(hitObj);
         } 
         else
         {
+            // 부딪힌 패킷 전송
+            C_RangeAttackImpact hitObj = new C_RangeAttackImpact
+            {
+                ArrowId = arrowId,
+                HitObject = 2, // 장애물
+                MonsterId = "0",
+            };
+
             Debug.Log("부딪혔다 몬스터가 아닌것에");
             gameObject.SetActive(false);
             if (weapon != null)
             {
                 weapon.ReturnArrow(gameObject);
             }
+
+            GameManager.Network.Send(hitObj);
         }
     }
 }

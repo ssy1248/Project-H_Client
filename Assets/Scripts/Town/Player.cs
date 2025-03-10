@@ -494,7 +494,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void RangeAttack()
+    public void RangeAttack(int arrowId)
     {
         if (equipWeapon == null)
             return;
@@ -504,7 +504,7 @@ public class Player : MonoBehaviour
             int attackIndex = UnityEngine.Random.Range(0, 2);
             animator.SetInteger("attackIndex", attackIndex);
             animator.SetTrigger("doShot");
-            equipWeapon.Use();
+            equipWeapon.RangeUse(arrowId);
 
             Debug.Log("원거리 공격~~~~~~~~~~~~~");
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
