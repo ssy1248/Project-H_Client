@@ -27,6 +27,8 @@ public class MyPlayer : MonoBehaviour
     private float moveSpeed = 4f;
     private float smoothRotateSpeed = 10f;
 
+    public Vector3 MousePos { get; set; }
+
 
     private readonly List<int> animHash = new List<int>();
 
@@ -84,6 +86,9 @@ public class MyPlayer : MonoBehaviour
 
         targetRot = rot;
         moveSpeed = speed;
+
+        //lastPos = targetPosition;
+        Debug.Log($" targetPosition : {targetPosition}");
     }
 
     //test
@@ -111,7 +116,13 @@ public class MyPlayer : MonoBehaviour
             //Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
             //transform.position = newPosition;
 
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            float stopDistance = 0.1f;  // 목표 위치에 도달했다고 판단할 거리
+            //transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, targetPosition) < stopDistance)
+            {
+                //transform.position = targetPosition;  // 정확히 목표 위치에 도달하도록 설정
+            }
 
         }
 
@@ -140,8 +151,16 @@ public class MyPlayer : MonoBehaviour
             //    }
             //}
 
+            float stopRotationDistance = 0.01f;  // 회전의 작은 차이로 목표 회전과의 차이를 확인
             float t = Mathf.Clamp(Time.deltaTime * smoothRotateSpeed, 0, 0.99f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, t);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, t);
+
+            // 목표 회전과 현재 회전 간의 차이가 일정 이하일 때 완전히 목표 회전으로 설정
+            if (Quaternion.Angle(transform.rotation, targetRot) < stopRotationDistance)
+            {
+                //transform.rotation = targetRot;
+
+            }
             agent.updateRotation = false;
         }
     }
@@ -183,6 +202,7 @@ public class MyPlayer : MonoBehaviour
                 if (NavMesh.SamplePosition(hitPosition, out navHit, 0.5f, NavMesh.AllAreas))
                 {
                     //agent.SetDestination(navHit.position);
+                    MousePos = navHit.position;
 
                     // 방향 + 속도 velocity 구하는 로직.
                     Vector3 directionToGoal = (navHit.position - transform.position).normalized;
@@ -217,7 +237,7 @@ public class MyPlayer : MonoBehaviour
 
 
         // 현재 위치를 마지막 위치로 저장
-        //lastPos = transform.position;
+        lastPos = transform.position;
     }
 
    

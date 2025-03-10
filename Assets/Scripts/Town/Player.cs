@@ -537,13 +537,30 @@ public class Player : MonoBehaviour
     #region Remote Player Methods (Smoothing Movement)
     void SmoothMoveAndRotate()
     {
-        MoveSmoothly();
-        RotateSmoothly();
+        if (!IsMine)
+        {
+            MoveSmoothly();
+            //RotateSmoothly();
+        }
+        
     }
 
     void MoveSmoothly()
     {
-        transform.position = Vector3.MoveTowards(transform.position, goalPos, agentSpeed * Time.deltaTime);
+
+        if(isMove)
+        {
+            var dir = new Vector3(goalPos.x, transform.position.y, goalPos.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            transform.forward = dir;
+            transform.position += dir.normalized * Time.deltaTime * 10f;
+        }
+
+        if (Vector3.Distance(transform.position, goalPos) <= 0.1f)
+        {
+            isMove = false;
+        }
+
+        //transform.position = Vector3.MoveTowards(transform.position, goalPos, 10f * Time.deltaTime);
     }
 
     void RotateSmoothly()
@@ -576,6 +593,7 @@ public class Player : MonoBehaviour
         }
         goalRot = rot;
         agentSpeed = speed;
+        isMove = true;
         Debug.Log(goalPos);
 
         
