@@ -26,6 +26,7 @@ public class TownManager : MonoBehaviour
     [SerializeField] private UIChat uiChat;
     [SerializeField] private TMP_Text txtServer;
     [SerializeField] ShopUI shopUi;
+    [SerializeField] GameObject townEffect;
 
     #region 파티 UI
     [Header("파티 UI 모음")]
@@ -1273,6 +1274,7 @@ public class TownManager : MonoBehaviour
         uiChat.gameObject.SetActive(true);
         uiAnimation.Init();
         uiAnimation.Show();
+        townEffect.SetActive(false);
     }
 
     public Player GetPlayerAvatarById(int playerId)

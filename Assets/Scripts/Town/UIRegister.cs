@@ -46,10 +46,10 @@ public class UIRegister : MonoBehaviour
     private readonly string[] characterDescriptions =
     {
         "이름구함\n용감한 전사입니다.",
-        "이름구함\n신비로운 마법사입니다.",
+        "이름구함\n예리한 도적입니다.",
         "이름구함\n날렵한 궁수입니다.",
         "이름구함\n강력한 탱커입니다.",
-        "이름구함\n치유의 성직자입니다."
+        "이름구함\n치유의 마법사입니다."
     };
 
     private const string DefaultServerMessage = "Input Server";
@@ -74,15 +74,11 @@ public class UIRegister : MonoBehaviour
 
     private void ToggleScreens()
     {
-        if (serverPanel.activeSelf)
-        {
-            serverPanel.SetActive(false);
-            loginPanel.SetActive(true);
-        }
-        else if (loginPanel.activeSelf)
+
+        if (loginPanel.activeSelf)
         {
             loginPanel.SetActive(false);
-            serverPanel.SetActive(true);
+            //serverPanel.SetActive(true);
             localServerBtn.gameObject.SetActive(true); // 로컬 서버 버튼 활성화
         }
         else if (registerPanel.activeSelf)
