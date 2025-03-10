@@ -48,7 +48,7 @@ class PacketHandler
         if (TownManager.Instance != null)
         {
             TownManager.Instance.AllMove(enterPacket);
-            return;
+            //return;
         }
         if (DungeonManager.Instance != null)
         {
@@ -283,10 +283,13 @@ class PacketHandler
         MonsterManager.Instance.UpdateMonsters(monsterMovePacket);
     }
 
-    public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
-    {
-        if (packet is not S_MonsterHit monsterHitPacket) return;
-    }
+public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
+{
+    if (packet is not S_MonsterHit monsterHitPacket) return;
+
+        MonsterManager.Instance.MonsterHitAnimation(monsterHitPacket);
+
+}
 
     public static void S_MonsterAttckHandler(PacketSession session, IMessage packet)
     {

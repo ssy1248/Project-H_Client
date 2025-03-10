@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Unity.AI.Navigation;
 using Google.Protobuf.Protocol;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -96,6 +97,12 @@ public class Player : MonoBehaviour
     {
 
         rigid = GetComponent<Rigidbody>();
+
+        if (rigid != null)
+        {
+            rigid.isKinematic = true; // 강제로 설정
+        }
+
         animator = GetComponent<Animator>();
         meshs = GetComponentsInChildren<MeshRenderer>();
         cam = Camera.main;
@@ -145,14 +152,14 @@ public class Player : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
                 {
-                    setDestination(hit.point);
+                   // setDestination(hit.point);
                 }
             }
             // 이동 중이면 매 프레임 이동 처리 및 도착 여부 확인
             if (isMove)
             {
-                Mousemove();
-                CheckArrival();
+               // Mousemove();
+               // CheckArrival();
             }
 
             // 마우스 좌클릭 공격
@@ -530,13 +537,30 @@ public class Player : MonoBehaviour
     #region Remote Player Methods (Smoothing Movement)
     void SmoothMoveAndRotate()
     {
-        MoveSmoothly();
-        RotateSmoothly();
+        if (!IsMine)
+        {
+            MoveSmoothly();
+            //RotateSmoothly();
+        }
+        
     }
 
     void MoveSmoothly()
     {
-        transform.position = Vector3.MoveTowards(transform.position, goalPos, agentSpeed * Time.deltaTime);
+
+        if(isMove)
+        {
+            var dir = new Vector3(goalPos.x, transform.position.y, goalPos.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            transform.forward = dir;
+            transform.position += dir.normalized * Time.deltaTime * 10f;
+        }
+
+        if (Vector3.Distance(transform.position, goalPos) <= 0.1f)
+        {
+            isMove = false;
+        }
+
+        //transform.position = Vector3.MoveTowards(transform.position, goalPos, 10f * Time.deltaTime);
     }
 
     void RotateSmoothly()
@@ -561,22 +585,19 @@ public class Player : MonoBehaviour
     public void Move(Vector3 move, Quaternion rot, float speed)
     {
         goalPos = move;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            goalPos = new Vector3(goalPos.x, hit.position.y, goalPos.z);
+        }
         goalRot = rot;
         agentSpeed = speed;
+        isMove = true;
         Debug.Log(goalPos);
 
-        // 캐릭터의 위치에서 아래로 레이캐스트 쏘기
-        RaycastHit hit;
-        goalPos.y += 5.0f;
-        if (Physics.Raycast(goalPos, Vector3.down, out hit, raycastDistance, groundLayer))
-        {
-            goalPos.y = hit.point.y;
-            Debug.Log($" 히트함 :  {hit.point.y}");
-        }
-        else
-        {
-            Debug.Log($"히트안함 :  {goalPos.y}");
-        }
+        
+
 
 
     }
@@ -689,13 +710,13 @@ public class Player : MonoBehaviour
     
     public void DespawnEffect()
     {
-        GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
-        StartCoroutine(DestroyThis(temp));
+        //GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
+        //StartCoroutine(DestroyThis(temp));
     }
     public void SpawnEffect()
     {
-        GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
-        StartCoroutine(EndSpawnEffect(temp));
+        //GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
+        //StartCoroutine(EndSpawnEffect(temp));
     }
     IEnumerator EndSpawnEffect(GameObject obj)
     {
