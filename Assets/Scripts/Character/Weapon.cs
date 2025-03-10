@@ -11,6 +11,7 @@ public class Weapon : MonoBehaviour
     public TrailRenderer trailEffect;
     public Transform ArrowPos;
     public GameObject ArrowPrefab; // 기본 화살 프리팹
+    public int ArrowId;
 
     public GameObject arrowPoolObject; // 빈 오브젝트로 전체 화살 풀을 관리
 
@@ -59,7 +60,12 @@ public class Weapon : MonoBehaviour
             StopCoroutine("Swing");
             StartCoroutine("Swing");
         }
-        else if (type == Type.Range)
+    }
+
+    public void RangeUse(int Id)
+    {
+        ArrowId = Id;
+        if (type == Type.Range)
         {
             StopCoroutine("Shot");
             StartCoroutine("Shot");
@@ -104,6 +110,7 @@ public class Weapon : MonoBehaviour
             instantArrow.transform.position = ArrowPos.position;
             instantArrow.transform.rotation = ArrowPos.rotation;
 
+            instantArrow.GetComponent<Arrow>().arrowId = ArrowId;
             Rigidbody arrowRigid = instantArrow.GetComponent<Rigidbody>();
             arrowRigid.velocity = ArrowPos.forward * 10;
 
