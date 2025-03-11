@@ -274,6 +274,7 @@ public class BossController : Enemy
         // 부채꼴 범위 표시 활성화
         if (fanShapeRange != null)
         {
+            
             fanShapeRange.SetActive(true);
 
             // 부채꼴 범위의 위치를 보스 위치로 설정
@@ -490,6 +491,8 @@ public class BossController : Enemy
         // 사각형 범위 표시 활성화
         if (circleShapeRange != null)
         {
+
+            Debug.Log("원 공격이다");
             circleShapeRange.SetActive(true);
 
             // 원형  범위의 위치를 보스 위치로 설정

@@ -310,6 +310,48 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
 
         TownManager.Instance.SetUserState(setUserStatePacket);
     }
+
+    // [보스]
+    public static void S_BossSpawnHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BossSpawn bossSpawnPacket) return;
+
+    }
+
+    public static void S_BossMoveHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BossMove bossMovePacket) return;
+
+    }
+
+    public static void S_BossHitHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BossHit bossHitPacket) return;
+
+        
+    }
+
+    public static void S_BossDieHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BossDie bossDiePacket) return;
+
+        
+    }
+
+    public static void S_BossSkillStartHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BossSkillStart bossSkillStartPacket) return;
+
+        
+    }
+
+    public static void S_BossSkillEndHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_BossSkillEnd bossSkillEndPacket) return;
+
+        
+    }
+
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
