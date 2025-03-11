@@ -28,7 +28,7 @@ public class SpawnManger : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            spawnObjects.Add(Instantiate(spawneffectObject, parent));
+            //spawnObjects.Add(Instantiate(spawneffectObject, parent));
         }
     }
     public GameObject getData(Transform tr)

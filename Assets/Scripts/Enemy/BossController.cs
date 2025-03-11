@@ -7,8 +7,8 @@ public class BossController : Enemy
 {
     Vector3 lookVec;
     Vector3 tauntVec;
-    Vector3 Attack1Vec;
-    Vector3 Attack2Vec;
+    Vector3 AttackVec;
+    
 
     private BladePool bladePool;
     bool isLook;
@@ -26,6 +26,15 @@ public class BossController : Enemy
     private SphereCollider fanCollider;
     private SphereCollider circleCollider;
 
+    // 보스 무기 Collider
+    public GameObject bossWeapon;  // 보스 무기 오브젝트 (Collider 포함)
+    public GameObject effectObject; //보스 무기 이펙트
+    private Collider weaponCollider;
+
+    private void Start()
+    {
+        StartCoroutine(Think());
+    }
 
     void Awake()
     {
@@ -38,7 +47,7 @@ public class BossController : Enemy
         anim = GetComponent<Animator>();
 
         nav.isStopped = true;
-        StartCoroutine(Think());
+        //StartCoroutine(Think());
 
         //스킬 풀 찾기
         bladePool = FindObjectOfType<BladePool>();
@@ -72,6 +81,20 @@ public class BossController : Enemy
 
             circleCollider.isTrigger = true;
             circleShapeRange.SetActive(false);
+        }
+
+        // 보스 무기 Collider 가져오기
+        if (bossWeapon != null)
+        {
+            weaponCollider = bossWeapon.GetComponent<Collider>();
+            if (weaponCollider != null)
+                weaponCollider.enabled = false; // 기본적으로 비활성화
+        }
+
+        // Effect 오브젝트 활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(false);
         }
     }
 
@@ -191,11 +214,18 @@ public class BossController : Enemy
 
     IEnumerator Attack1()
     {
-        Attack1Vec = target.position + lookVec;
+        AttackVec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack1");
+
+        yield return new WaitForSeconds(0.3f);
+        SEManager.instance.PlaySE("BossHit");
+
+        // 무기 충돌 활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = true;
 
         // 사각형 범위 표시 활성화
         if (squareShapeRange != null)
@@ -226,17 +256,29 @@ public class BossController : Enemy
             squareShapeRange.SetActive(false);
         }
 
+        // 무기 충돌 비활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = false;
+
 
     }
 
 
     IEnumerator Attack2()
     {
-        Attack2Vec = target.position + lookVec;
+        AttackVec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack2");
+        yield return new WaitForSeconds(0.3f);
+        SEManager.instance.PlaySE("BossSwing");
+
+        // Effect 오브젝트 활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(true);
+        }
 
         // 부채꼴 범위 표시 활성화
         if (fanShapeRange != null)
@@ -273,7 +315,11 @@ public class BossController : Enemy
             fanShapeRange.SetActive(false);
         }
 
-
+        // Effect 오브젝트 비활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(false);
+        }
     }
 
     IEnumerator Attack3()
@@ -298,6 +344,7 @@ public class BossController : Enemy
             float distance = Random.Range(0f, radius);
             Vector3 randomPos = target.position + new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad) * distance, 0, Mathf.Sin(angle * Mathf.Deg2Rad) * distance);
             attackPositions[i] = new Vector3(randomPos.x, 1.5f, randomPos.z);
+
 
             // 원형 범위 경고 이펙트 생성
             if (circleShapeRange != null)
@@ -334,12 +381,15 @@ public class BossController : Enemy
             {
                 rb.velocity = Vector3.down * 5f; // 아래로 떨어지는 속도 적용
             }
-
             // 칼이 3초 후에 풀로 돌아가도록 설정
             StartCoroutine(ReturnBladeToPool(blade, 3f));
         }
 
+        SEManager.instance.PlaySE("BossFallBlade");
+
         yield return new WaitForSeconds(1f);
+
+        
 
         // 경고 이펙트 제거
         foreach (var circle in warningCircles)
@@ -359,15 +409,22 @@ public class BossController : Enemy
     {
         nav.isStopped = false;
         anim.SetBool("isWalk", true);  // 걷는 애니메이션 시작
-
+        LoopSEManager.instance.LoopPlaySE("BossWalk");
         // stoppingDistance 값을 플레이어와의 거리보다 작게 설정하여, 도달 후 바로 멈추도록 설정
         nav.stoppingDistance = 15f;
 
         // acceleration과 deceleration 값 조정하여 더 자연스러운 멈춤 구현
         nav.acceleration = 8f;  // 보스의 가속도를 적당히 설정
 
-        while (Vector3.Distance(transform.position, target.position) > 15f)  // 타겟과 일정 거리 이내에 도달할 때까지
+        if (Vector3.Distance(transform.position, target.position) > 15f)
         {
+            anim.SetBool("isWalk", true);  // 걷는 애니메이션 시작
+            //SEManager.instance.LoopPlaySE("BossWalk");
+        }
+
+            while (Vector3.Distance(transform.position, target.position) > 15f)  // 타겟과 일정 거리 이내에 도달할 때까지
+        {
+
             // 타겟 위치를 실시간으로 받아서 목적지를 설정
             nav.SetDestination(target.position);  // 매 프레임마다 타겟의 위치를 계속 갱신
 
@@ -380,6 +437,7 @@ public class BossController : Enemy
         }
 
         anim.SetBool("isWalk", false);  // 이동이 끝나면 애니메이션 종료
+        LoopSEManager.instance.StopSE("BossWalk");
         nav.isStopped = true;  // 목적지 도달 후 멈추기
     }
 
@@ -391,10 +449,21 @@ public class BossController : Enemy
         nav.isStopped = false;
         anim.SetTrigger("doTaunt");
 
+        // 무기 충돌 활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = true;
+
         // 부채꼴 범위 표시 활성화
         if (fanShapeRange != null)
         {
             fanShapeRange.SetActive(true);
+
+            yield return new WaitForSeconds(1.5f);
+            SEManager.instance.PlaySE("BossHit");
+            yield return new WaitForSeconds(0.3f);
+            SEManager.instance.PlaySE("BossHit");
+            yield return new WaitForSeconds(0.3f);
+            SEManager.instance.PlaySE("BossHit");
 
             // 부채꼴 범위의 위치를 보스 위치로 설정
             fanShapeRange.transform.position = transform.position;
@@ -415,7 +484,7 @@ public class BossController : Enemy
             fanCollider.radius = fanShapeRange.transform.localScale.x / 2f;
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
 
         isLook = true;
         nav.isStopped = true;
@@ -425,15 +494,29 @@ public class BossController : Enemy
         {
             fanShapeRange.SetActive(false);
         }
+
+        // 무기 충돌 비활성화
+        if (weaponCollider != null)
+            weaponCollider.enabled = false;
     }
 
     IEnumerator Attack4()
     {
-        Attack1Vec = target.position + lookVec;
+        AttackVec = target.position + lookVec;
 
         isLook = false;
         nav.isStopped = false;
         anim.SetTrigger("Attack4");
+
+        yield return new WaitForSeconds(0.3f);
+        SEManager.instance.PlaySE("BossSwingCircle");
+
+        // Effect 오브젝트 활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(true);
+        }
+
 
         // 사각형 범위 표시 활성화
         if (circleShapeRange != null)
@@ -442,7 +525,7 @@ public class BossController : Enemy
 
             // 원형  범위의 위치를 보스 위치로 설정
             circleShapeRange.transform.position = transform.position + (transform.forward * 15f);
-            // 부채꼴의 크기 조정
+            // 범위 크기 조정
             circleShapeRange.transform.localScale = new Vector3(4f, 4f, 5f); // 적절한 크기로 조정
 
             Vector3 direction = transform.forward;  // 보스의 방향
@@ -466,6 +549,10 @@ public class BossController : Enemy
             circleShapeRange.SetActive(false);
         }
 
-
+        // Effect 오브젝트 비활성화
+        if (effectObject != null)
+        {
+            effectObject.SetActive(false);
+        }
     }
 }

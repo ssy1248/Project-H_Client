@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private int dodgeEffectArcherIndex = 0; // 궁수 Dodge 이펙트 인덱스
     private int dodgeEffectRogueIndex = 0; // 도적 Dodge 이펙트 인덱스
     public float moveSpeed = 10f;
+    private bool isPlayingSound = false; // 소리가 재생 중인지 확인하는 변수
 
     private float DodgeCoolTime = 5f;
 
@@ -58,6 +60,10 @@ public class PlayerController : MonoBehaviour
     Weapon equipWeapon;
     float fireDelay;
 
+    // 
+    MyPlayer testplayer;
+    Player otherPlayer;
+
 
     public void Awake()
     {
@@ -72,12 +78,17 @@ public class PlayerController : MonoBehaviour
 
         //임시 파티 인덱스 추후 서버에서 받아와야할듯
         partyIndex = 0;
+
+        testplayer = GetComponent<MyPlayer>();
+
+        otherPlayer = GetComponent<Player>();
     }
 
     public void setDestination(Vector3 dest)
     {
-        nav.SetDestination(dest);
+        //nav.SetDestination(dest);
         moveVec = dest;
+        //moveVec = testplayer.MousePos;
         isMove = true;
         anim.SetBool("isRun", true);
     }
@@ -108,6 +119,7 @@ public class PlayerController : MonoBehaviour
         nav.isStopped = true;  // NavMeshAgent 멈추기
         rigid.isKinematic = true;  // Rigidbody 비활성화
         anim.SetBool("isRun", false);  // 달리기 애니메이션 멈추기
+        PlayerLoopSEManager.instance.StopSE("PlayerRun");
         isMove = false;
         isFireReady = false;
 
@@ -126,6 +138,7 @@ public class PlayerController : MonoBehaviour
         GETInput();
         //move();
         //Turn();
+
         Attack();
 
         //if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
@@ -135,10 +148,18 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetMouseButton(1))
         {
+            //  if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit)
             RaycastHit hit;
             if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out hit))
             {
-                setDestination(hit.point);
+                if(testplayer == null)
+                {
+                    testplayer = GetComponent<MyPlayer>();
+                } else
+                {
+                    setDestination(testplayer.MousePos);
+                }
+
             }
         }
 
@@ -173,23 +194,49 @@ public class PlayerController : MonoBehaviour
     {
         if (isMove)
         {
+            Debug.Log($"moveVec :  {moveVec}");
+
             var dir = new Vector3(moveVec.x, transform.position.y, moveVec.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
             transform.forward = dir;
             transform.position += dir.normalized * Time.deltaTime * moveSpeed;
 
             anim.SetBool("isRun", true); // 이동 중일 때만 'run' 애니메이션 실행
+
+            // 소리가 아직 재생되지 않았다면 실행
+            if (!isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.LoopPlaySE("PlayerRun");
+                isPlayingSound = true; // 소리 재생 상태 변경
+            }
         }
         else
         {
             anim.SetBool("isRun", false); // 이동하지 않으면 'idle' 애니메이션
+
+            // 이동이 끝나면 소리 멈추기
+            if (isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.StopSE("PlayerRun");
+                isPlayingSound = false; // 소리 상태 초기화
+            }
         }
 
+        // 목표 지점에 도달하면 이동 멈추기
         if (Vector3.Distance(transform.position, moveVec) <= 0.1f)
         {
             isMove = false;
-            anim.SetBool("isRun", false); // 목표 지점에 도달하면 'idle' 상태로 돌아가게 설정
+            anim.SetBool("isRun", false); // 목표 도착 시 idle 상태
+            if (isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.StopSE("PlayerRun");
+                isPlayingSound = false; // 소리 상태 초기화
+            }
         }
     }
+
+
+
+
 
     bool IsMage()
     {
@@ -269,6 +316,16 @@ public class PlayerController : MonoBehaviour
             dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward; // 이동 중이면 이동 방향 사용
             moveSpeed *= 2;
             anim.SetTrigger("doDodge");
+            if (gameObject.CompareTag("Rogue"))
+            {
+                SEManager.instance.PlaySE("RogueDodge");
+
+            }
+            if (gameObject.CompareTag("Archer"))
+            {
+                SEManager.instance.PlaySE("ArcherDodge");
+
+            }
             isDodge = true;
 
             if (gameObject.CompareTag("Archer"))
@@ -372,15 +429,35 @@ public class PlayerController : MonoBehaviour
         fireDelay += Time.deltaTime;
         isFireReady = AttackRate * equipWeapon.attackRate < fireDelay;
 
+        // UI 클릭 시 공격 불가능하도록 처리
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (FDown && isFireReady && !isDodge)
         {
             equipWeapon.Use();
 
             // 마우스 클릭할 때마다 콤보 증가 (순환)
-            comboIndex = (comboIndex + 1) % 3; // 예제에서는 0, 1을 번갈아가며 실행
+            comboIndex = (comboIndex + 1) % 3;
 
             anim.SetInteger("attackIndex", comboIndex);
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+
+            if (gameObject.CompareTag("Rogue"))
+            {
+                SEManager.instance.PlaySE("RogueHit");
+
+            }
+            if (gameObject.CompareTag("Archer"))
+            {
+                SEManager.instance.PlaySE("ArcherHit");
+
+            }
+            if (gameObject.CompareTag("Spearman"))
+            {
+                SEManager.instance.PlaySE("SpearmanHit");
+
+            }
 
             // 마우스 클릭한 위치를 기준으로 방향 설정
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -449,6 +526,8 @@ public class PlayerController : MonoBehaviour
         }
         yield return null;
     }
+
+
 
 
 }

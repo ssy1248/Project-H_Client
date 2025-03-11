@@ -47,6 +47,7 @@ public class ArcherController : MonoBehaviour
 
         // 이펙트 활성화
         ActivateEffect(buffEffects, ref effectIndex, transform.position);
+        SEManager.instance.PlaySE("ArcherSkill1");
 
         yield return new WaitForSeconds(3f); // 3초 지속
 

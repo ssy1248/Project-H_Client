@@ -76,11 +76,8 @@ public class DungeonManager : MonoBehaviour
     }
     public void DungeonExit()
     {
-        SceneManager.LoadScene("Town");
-
-        TownManager.Instance.DungeonExit();
+        GameManager.Instance.DungeonExit();
     }
-
     public void Move(Vector3 pos, float rotation)
     {
         var movePacket = new C_Move
@@ -176,6 +173,7 @@ public class DungeonManager : MonoBehaviour
             // 플레이어가 본인인지 검증.
             if (MyPlayer.PlayerId == playerId)
             {
+                MyPlayer.MPlayer.UpdateUserPosition(targetPos, targetRot, speed);
                 continue;
             }
 
@@ -205,7 +203,7 @@ public class DungeonManager : MonoBehaviour
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
         Player player = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));
         player.SetIsMine(false);
-
+        Destroy(player.gameObject.GetComponent<RogueController>());
         // 플레이어를 리스트에 추가
         players.Add(playerData.PlayerId, player);
     }
