@@ -308,6 +308,16 @@ public class Player : MonoBehaviour
             speed *= 2;
             // 새로 추가한 함수로 회피 애니메이션 트리거
             TriggerDodgeAnimation();
+            if (gameObject.CompareTag("Rogue"))
+            {
+                SEManager.instance.PlaySE("RogueDodge");
+
+            }
+            if (gameObject.CompareTag("Archer"))
+            {
+                SEManager.instance.PlaySE("ArcherDodge");
+
+            }
             isDodge = true;
 
             if (gameObject.CompareTag("Archer"))
@@ -492,6 +502,22 @@ public class Player : MonoBehaviour
             animator.SetInteger("attackIndex", attackIndex);
             animator.SetTrigger("doSwing");
 
+            if (gameObject.CompareTag("Rogue"))
+            {
+                SEManager.instance.PlaySE("RogueHit");
+
+            }
+            if (gameObject.CompareTag("Archer"))
+            {
+                SEManager.instance.PlaySE("ArcherHit");
+
+            }
+            if (gameObject.CompareTag("Spearman"))
+            {
+                SEManager.instance.PlaySE("SpearmanHit");
+
+            }
+
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
@@ -612,6 +638,7 @@ public class Player : MonoBehaviour
             nav.isStopped = true;
         rigid.isKinematic = true;
         animator.SetBool("isRun", false);
+        PlayerLoopSEManager.instance.StopSE("PlayerRun");
         isMove = false;
         isFireReady = false;
     }
