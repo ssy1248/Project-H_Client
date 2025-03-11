@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     public float raycastDistance = 10f;  // 레이캐스트의 거리
     public LayerMask groundLayer;
 
+    private bool isPlayingSound = false;
+
     // 원격 이동용 변수
     public Vector3 goalPos;
     public Quaternion goalRot;
@@ -82,8 +84,8 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Components
-    private Animator animator;
-    private MeshRenderer[] meshs;
+    protected Animator animator;
+    protected MeshRenderer[] meshs;
     protected Rigidbody rigid;
     #endregion
 
@@ -599,11 +601,34 @@ public class Player : MonoBehaviour
             {
                 animator.SetBool("isRun", dir.magnitude > 1f);
             }
+            // 소리가 아직 재생되지 않았다면 실행
+            if (!isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.LoopPlaySE("PlayerRun");
+                isPlayingSound = true; // 소리 재생 상태 변경
+            }
+        }
+        else
+        {
+            animator.SetBool("isRun", false); // 이동하지 않으면 'idle' 애니메이션
+
+            // 이동이 끝나면 소리 멈추기
+            if (isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.StopSE("PlayerRun");
+                isPlayingSound = false; // 소리 상태 초기화
+            }
         }
 
         if (Vector3.Distance(transform.position, goalPos) <= 0.1f)
         {
             isMove = false;
+            animator.SetBool("isRun", false);
+            if (isPlayingSound)
+            {
+                PlayerLoopSEManager.instance.StopSE("PlayerRun");
+                isPlayingSound = false; // 소리 상태 초기화
+            }
         }
 
         //transform.position = Vector3.MoveTowards(transform.position, goalPos, 10f * Time.deltaTime);
