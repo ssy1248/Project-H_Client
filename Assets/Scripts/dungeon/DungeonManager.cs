@@ -203,7 +203,7 @@ public class DungeonManager : MonoBehaviour
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
         Player player = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));
         player.SetIsMine(false);
-
+        Destroy(player.gameObject.GetComponent<RogueController>());
         // 플레이어를 리스트에 추가
         players.Add(playerData.PlayerId, player);
     }
