@@ -102,6 +102,7 @@ public class SEManager : MonoBehaviour
         availableAS.Play();
     }
 
+    // 이쪽 문제 있는거 확인하기
     void LoopPlaySound(AudioClip clip)
     {
         AudioSource availableAS = null;
@@ -137,6 +138,7 @@ public class SEManager : MonoBehaviour
             }
         }
 
+        avilableAS.loop = false;
         avilableAS.clip = clip;
         avilableAS.Stop();
     }
