@@ -460,6 +460,7 @@ public class Player : MonoBehaviour
         }
         else if(SkillData.SkillType == 3)
         {
+            Debug.Log("버프 스킬 사용");
             // 무기 사용 
             equipWeapon.Use();
             animator.SetTrigger("doSkill1");
