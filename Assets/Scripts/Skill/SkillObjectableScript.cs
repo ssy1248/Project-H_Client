@@ -23,4 +23,6 @@ public class SkillObjectableScript : ScriptableObject
     public int SkillCost;
     // 스킬 범위
     public int SkillRange;
+    // 스킬 지속시간
+    public int SkillDuration;
 }
