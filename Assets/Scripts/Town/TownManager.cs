@@ -1227,6 +1227,8 @@ public class TownManager : MonoBehaviour
             MyPlayer.SetIsMine(true);
             MyPlayer.playerData = playerInfo.StatInfo;
 
+          
+
             ActivateGameUI();
             MyPlayer.SpawnEffect();
             return;

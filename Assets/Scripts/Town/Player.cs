@@ -660,6 +660,7 @@ public class Player : MonoBehaviour
         {
 
             MPlayer = gameObject.AddComponent<MyPlayer>();
+            gameObject.AddComponent<PlayerController>();
         }
     }
 
