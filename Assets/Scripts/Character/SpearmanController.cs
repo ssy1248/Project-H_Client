@@ -51,8 +51,8 @@ public class SpearmanCounter : MonoBehaviour
         canUseCounter = false; // 스킬 재사용 불가 설정
         counterTimer = 0f;
         anim.SetTrigger("doCounterStance");
+        SEManager.instance.PlaySE("SpearmanGuard");
         weapon.ActivateCounterAttack();
-        Debug.Log("Entering counter stance...");
 
         StartCoroutine(CounterCooldownRoutine()); // 쿨타임 시작
     }
@@ -83,6 +83,7 @@ public class SpearmanCounter : MonoBehaviour
         if (isInCounter && other.CompareTag("EnemyArrow"))
         {
             anim.SetTrigger("doCounterAttack");
+            SEManager.instance.PlaySE("SpearmanCounterAttack");
 
             Weapon incomingWeapon = other.GetComponent<Weapon>();
             if (incomingWeapon != null && incomingWeapon.isCounterAttack)

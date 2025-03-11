@@ -6,6 +6,7 @@ using System.Linq;
 using Cinemachine;
 using Google.Protobuf.Protocol;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -1227,6 +1228,8 @@ public class TownManager : MonoBehaviour
             MyPlayer.SetIsMine(true);
             MyPlayer.playerData = playerInfo.StatInfo;
 
+          
+
             ActivateGameUI();
             MyPlayer.SpawnEffect();
             return;
@@ -1234,7 +1237,7 @@ public class TownManager : MonoBehaviour
         //CreatePlayer(playerInfo, new Vector3 (playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ + 136.5156f));
         Player player = CreatePlayer(playerInfo, new Vector3(playerInfo.Transform.PosX, playerInfo.Transform.PosY, playerInfo.Transform.PosZ));
         player.SetIsMine(false);
-
+        Destroy(player.gameObject.GetComponent<RogueController>());
         // 플레이어를 리스트에 추가
         players.Add(player);
     }

@@ -26,7 +26,7 @@ public class UIAnimation : MonoBehaviour
 
     void Start()
     {
-
+     
     }
 
     public void Init()

@@ -45,9 +45,9 @@ public class UIRegister : MonoBehaviour
 
     private readonly string[] characterDescriptions =
     {
-        "이름구함\n용감한 전사입니다.",
-        "이름구함\n예리한 도적입니다.",
-        "이름구함\n날렵한 궁수입니다.",
+        "피오르\n긴 창을 이용해 공격하며, 방어와 반격에 특화된 전사.",
+        "녹스\n빠른 기동력을 활용해 적을 교란하며, 적에게 출혈을 일으키는 도적",
+        "실피아\n활을 이용해 먼 거리에서 강력하고 빠른 공격을 퍼붓는 궁수",
         "이름구함\n강력한 탱커입니다.",
         "이름구함\n치유의 마법사입니다."
     };
@@ -70,6 +70,8 @@ public class UIRegister : MonoBehaviour
 
         btnGoToRegister.onClick.AddListener(GoToRegisterScreen);
         SetServerUI(); // 첫 화면인 서버 입력 UI 표시
+
+        TownSEManager.instance.LoopPlaySE("UIRegisterMusic");
     }
 
     private void ToggleScreens()
@@ -131,6 +133,8 @@ public class UIRegister : MonoBehaviour
         if (selectedCharacterId >= 0 && selectedCharacterId <= 5)
         {
             TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // 선택된 캐릭터의 id로 게임 시작 요청
+            TownSEManager.instance.StopSE("UIRegisterMusic");
+            TownSEManager.instance.LoopPlaySE("TownMusic");
         }
         else
         {

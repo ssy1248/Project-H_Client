@@ -61,6 +61,8 @@ public class Loading : MonoBehaviour
         {
             gameObject.SetActive(false);
             SceneManager.LoadSceneAsync("Dungeon " + index);
+            SEManager.instance.StopSE("TownMusic");
+            SEManager.instance.LoopPlaySE("DungeonMusic");
 
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RogueController : PlayerController
+public class RogueController : Player
 {
     public GameObject landEffectPrefab;  // 착지 이펙트 프리팹
     private bool isLanding = false;  // 스킬 진행 중인지 체크하는 변수
@@ -15,7 +15,7 @@ public class RogueController : PlayerController
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
 
         LandEffectPool = new List<GameObject>();
 
@@ -41,7 +41,7 @@ public class RogueController : PlayerController
         if (!isLanding)  // 스킬이 진행 중이지 않을 때만 실행
         {
             isLanding = true;  // 스킬 진행 중으로 설정
-            anim.SetTrigger("doSkill1");  // 점프 및 내려찍기 애니메이션 트리거
+            animator.SetTrigger("doSkill1");  // 점프 및 내려찍기 애니메이션 트리거
             StartCoroutine(PerformSmash());
         }
 
@@ -51,7 +51,8 @@ public class RogueController : PlayerController
     private IEnumerator PerformSmash()
     {
         // 점프 애니메이션이 끝날 때까지 기다립니다 (예: 1초)
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
+        SEManager.instance.PlaySE("RogueSkill1");
 
         // 캐릭터의 위치에서 앞쪽으로 약간 이동한 위치 계산
         Vector3 effectPosition = transform.position + transform.forward * 1.5f;  // 1.5f는 이동할 거리
