@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private UINameChat uiNameChat;
 
-
     private UIChat uiChat;
 
     public StatInfo playerData;
@@ -35,8 +34,6 @@ public class Player : MonoBehaviour
 
     public float raycastDistance = 10f;  // 레이캐스트의 거리
     public LayerMask groundLayer;
-
-
 
     // 원격 이동용 변수
     public Vector3 goalPos;
@@ -387,6 +384,7 @@ public class Player : MonoBehaviour
         {
             // 무기 사용 
             equipWeapon.Use();
+            animator.SetTrigger("doSkill1");
             // 단일 공격
             string singleTargetId = PlayerActionManager.Instance.GetTargetIdFromMouseClick();
             if (singleTargetId == "-1")
@@ -414,6 +412,7 @@ public class Player : MonoBehaviour
         {
             // 무기 사용 
             equipWeapon.Use();
+            animator.SetTrigger("doSkill1");
             // 범위 공격
             // 1) OverlapSphere를 통해 범위 내 Collider 탐색
             float range = SkillData.SkillRange; // 범위(반경)
@@ -463,7 +462,23 @@ public class Player : MonoBehaviour
         {
             // 무기 사용 
             equipWeapon.Use();
+            animator.SetTrigger("doSkill1");
             // 버프 스킬
+            string buffTarget = "Buff";
+
+            SkillAttack skillAttack = new SkillAttack
+            {
+                AttackerName = DungeonManager.Instance.MyPlayer.nickname,
+                SkillId = SkillData.SkillId
+            };
+            skillAttack.TargetId.Add(buffTarget);
+
+            C_PlayerAction actionPacket = new C_PlayerAction
+            {
+                SkillAttack = skillAttack
+            };
+
+            GameManager.Network.Send(actionPacket);
         }
         else if(SkillData.SkillType == 4)
         {

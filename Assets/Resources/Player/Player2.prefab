@@ -3448,7 +3448,7 @@ Animator:
   m_GameObject: {fileID: 8588462082483426788}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3b40e2fb34bbb1e4da00ed8f7c35d651, type: 3}
-  m_Controller: {fileID: 9100000, guid: c1f4f6357bd56ea4abf17b5dfe3bc812, type: 2}
+  m_Controller: {fileID: 9100000, guid: baa3431a09c917346b3e55890a113ee9, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3494,6 +3494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 1507038350636548826}
+  exp: 0
   nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
@@ -3512,6 +3513,7 @@ MonoBehaviour:
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  equipWeapon: {fileID: 0}
   SkillData: {fileID: 11400000, guid: 407da90ad5637214296b41c486dd289a, type: 2}
   dodgeInterpolationTime: 0.3
 --- !u!54 &196227380015684679
@@ -4859,8 +4861,9 @@ MonoBehaviour:
   trailEffect: {fileID: 6701403360059370495}
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
-  ArrowFormPos: {fileID: 0}
+  ArrowId: 0
   arrowPoolObject: {fileID: 0}
+  arrowPool: []
   poolSize: 10
   isCounterAttack: 0
 --- !u!65 &8867036366493970157
