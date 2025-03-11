@@ -2844,7 +2844,6 @@ GameObject:
   - component: {fileID: 4547330911606009033}
   - component: {fileID: 4960176003952788751}
   - component: {fileID: 5084992332092879402}
-  - component: {fileID: 6014297078318467471}
   m_Layer: 10
   m_Name: Player1
   m_TagString: Untagged
@@ -2920,12 +2919,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087412293188826244}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffb2e211de0d4420c8dc13c7fc181b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 4792742804265865160}
+  exp: 0
   nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
@@ -2944,6 +2944,7 @@ MonoBehaviour:
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  equipWeapon: {fileID: 0}
   SkillData: {fileID: 11400000, guid: 176cfd0ff17d4ab478a3528fa7d8cdb8, type: 2}
   dodgeInterpolationTime: 0.3
 --- !u!136 &4960176003952788751
@@ -2996,28 +2997,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 10
   m_CollisionDetection: 1
---- !u!114 &6014297078318467471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6087412293188826244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportEffects: []
-  dodgeEffectsArcher: []
-  dodgeEffectsRogue: []
-  playerHealthBar: {fileID: 0}
-  partyIndex: 0
-  moveSpeed: 10
-  maxHealth: 100
-  currentHealth: 0
-  AttackRate: 0.5
-  isMove: 0
 --- !u!1 &6204452463409933878
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,7 +5640,9 @@ MonoBehaviour:
   trailEffect: {fileID: 5917301371963963758}
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
+  ArrowId: 0
   arrowPoolObject: {fileID: 0}
+  arrowPool: []
   poolSize: 10
   isCounterAttack: 0
 --- !u!65 &8638025419221830365

@@ -81,12 +81,6 @@ public class PlayerController : MonoBehaviour
         testplayer = GetComponent<MyPlayer>();
 
         otherPlayer = GetComponent<Player>();
-        otherPlayer.enabled = true;
-        if(otherPlayer.IsMine)
-        {
-            testplayer.enabled = false;
-            this.enabled = false;
-        }
     }
 
     public void setDestination(Vector3 dest)
