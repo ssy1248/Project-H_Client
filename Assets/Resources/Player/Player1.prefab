@@ -1468,6 +1468,37 @@ Transform:
   - {fileID: 3785231446933126666}
   m_Father: {fileID: 2083261611314079813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4146532977610680834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5872409829775962902}
+  m_Layer: 10
+  m_Name: Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5872409829775962902
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4146532977610680834}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.09, y: 1.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5649305341173885553}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4177638582557508444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2845,6 +2876,7 @@ GameObject:
   - component: {fileID: 4960176003952788751}
   - component: {fileID: 5084992332092879402}
   - component: {fileID: 6014297078318467471}
+  - component: {fileID: 4493392697963560122}
   m_Layer: 10
   m_Name: Player1
   m_TagString: Untagged
@@ -2868,6 +2900,7 @@ Transform:
   - {fileID: 86241016537614823}
   - {fileID: 6507679343161950050}
   - {fileID: 5357243797472763412}
+  - {fileID: 5872409829775962902}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5346658151503479060
@@ -2926,6 +2959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 4792742804265865160}
+  exp: 0
   nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
@@ -2944,6 +2978,7 @@ MonoBehaviour:
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  equipWeapon: {fileID: 0}
   SkillData: {fileID: 11400000, guid: 176cfd0ff17d4ab478a3528fa7d8cdb8, type: 2}
   dodgeInterpolationTime: 0.3
 --- !u!136 &4960176003952788751
@@ -2965,7 +3000,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -3011,13 +3046,28 @@ MonoBehaviour:
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
-  playerHealthBar: {fileID: 0}
+  playerHealthBar: {fileID: 618059027924202292, guid: fb453fe924e19ed49a0ea47d0b01f579,
+    type: 3}
   partyIndex: 0
   moveSpeed: 10
   maxHealth: 100
   currentHealth: 0
   AttackRate: 0.5
   isMove: 0
+--- !u!114 &4493392697963560122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6087412293188826244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09dff9c0646c4f84ebf25e5820f81731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  counterDuration: 3
+  counterCooldown: 10
 --- !u!1 &6204452463409933878
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,7 +5711,9 @@ MonoBehaviour:
   trailEffect: {fileID: 5917301371963963758}
   ArrowPos: {fileID: 0}
   ArrowPrefab: {fileID: 0}
+  ArrowId: 0
   arrowPoolObject: {fileID: 0}
+  arrowPool: []
   poolSize: 10
   isCounterAttack: 0
 --- !u!65 &8638025419221830365

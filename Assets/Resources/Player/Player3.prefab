@@ -3033,6 +3033,8 @@ GameObject:
   - component: {fileID: 6780161134169667257}
   - component: {fileID: 2637581427618498089}
   - component: {fileID: 1940315979212962944}
+  - component: {fileID: 2748987807860663349}
+  - component: {fileID: 7692847189424511120}
   m_Layer: 10
   m_Name: Player3
   m_TagString: Archer
@@ -3057,6 +3059,7 @@ Transform:
   - {fileID: 7598484687720074236}
   - {fileID: 7920169677084138055}
   - {fileID: 8066742506459858657}
+  - {fileID: 3362395225412272521}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8487303295401028002
@@ -3090,8 +3093,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 4
-  m_Acceleration: 7
+  m_Speed: 0
+  m_Acceleration: 1
   avoidancePriority: 50
   m_AngularSpeed: 300
   m_StoppingDistance: 1
@@ -3115,6 +3118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 1968826812916094880}
+  exp: 0
   nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
@@ -3186,6 +3190,48 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2748987807860663349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8126715550554907011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportEffects: []
+  dodgeEffectsArcher:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dodgeEffectsRogue: []
+  playerHealthBar: {fileID: 618059027924202292, guid: fb453fe924e19ed49a0ea47d0b01f579,
+    type: 3}
+  partyIndex: 1
+  moveSpeed: 10
+  maxHealth: 100
+  currentHealth: 0
+  AttackRate: 1
+  isMove: 0
+--- !u!114 &7692847189424511120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8126715550554907011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b0735cece4f7749ae4548c526bc756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buffEffects:
+  - {fileID: 1619556661389288887}
+  - {fileID: 5044895833197397168}
+  buffCooldown: 7
 --- !u!1 &8165106367563517277
 GameObject:
   m_ObjectHideFlags: 0
@@ -4184,6 +4230,92 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4011698159117039733, guid: a9f0ba86f09075d4187774f60d8b6a2d,
     type: 3}
   m_PrefabInstance: {fileID: 1761711458470067651}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2013904824175726878
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7018606411016115333}
+    m_Modifications:
+    - target: {fileID: 406580558982217764, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_Name
+      value: ArcherBuffPool
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 24.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.465
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 22.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b911763874d0a84c884f39eb9a60c28, type: 3}
+--- !u!1 &1619556661389288887 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 975875907305174185, guid: 0b911763874d0a84c884f39eb9a60c28,
+    type: 3}
+  m_PrefabInstance: {fileID: 2013904824175726878}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3362395225412272521 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
+    type: 3}
+  m_PrefabInstance: {fileID: 2013904824175726878}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5044895833197397168 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6769404798893872558, guid: 0b911763874d0a84c884f39eb9a60c28,
+    type: 3}
+  m_PrefabInstance: {fileID: 2013904824175726878}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2104465746896960250
 PrefabInstance:
@@ -7300,6 +7432,7 @@ MonoBehaviour:
   ArrowPos: {fileID: 8066742506459858657}
   ArrowPrefab: {fileID: 4883892594694907906, guid: a5c5952bcdb610d42ac5250757327dcc,
     type: 3}
+  ArrowId: 0
   arrowPoolObject: {fileID: 0}
   arrowPool: []
   poolSize: 10
