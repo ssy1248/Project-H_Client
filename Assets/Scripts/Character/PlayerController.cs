@@ -438,7 +438,7 @@ public class PlayerController : MonoBehaviour
             equipWeapon.Use();
 
             // 마우스 클릭할 때마다 콤보 증가 (순환)
-            comboIndex = (comboIndex + 1) % 3; // 예제에서는 0, 1을 번갈아가며 실행
+            comboIndex = (comboIndex + 1) % 3;
 
             anim.SetInteger("attackIndex", comboIndex);
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
