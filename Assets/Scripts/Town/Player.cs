@@ -553,6 +553,10 @@ public class Player : MonoBehaviour
             var dir = new Vector3(goalPos.x, transform.position.y, goalPos.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
             transform.forward = dir;
             transform.position += dir.normalized * Time.deltaTime * 10f;
+            if (!IsMine)
+            {
+                animator.SetBool("isRun", dir.magnitude > 1f);
+            }
         }
 
         if (Vector3.Distance(transform.position, goalPos) <= 0.1f)
