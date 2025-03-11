@@ -596,10 +596,6 @@ public class Player : MonoBehaviour
         isMove = true;
         Debug.Log(goalPos);
 
-        
-
-
-
     }
     #endregion
 
