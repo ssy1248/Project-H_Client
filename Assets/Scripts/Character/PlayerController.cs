@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -427,6 +428,10 @@ public class PlayerController : MonoBehaviour
 
         fireDelay += Time.deltaTime;
         isFireReady = AttackRate * equipWeapon.attackRate < fireDelay;
+
+        // UI 클릭 시 공격 불가능하도록 처리
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
 
         if (FDown && isFireReady && !isDodge)
         {
