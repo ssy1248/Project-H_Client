@@ -29,8 +29,8 @@ public class Player : MonoBehaviour
 
     #region Movement & Remote Smoothing
     [Header("Movement Settings")]
-    public float SmoothMoveSpeed = 10f;       // 원격 보간 이동 속도
-    public float SmoothRotateSpeed = 10f;     // 원격 보간 회전 속도
+    public float SmoothMoveSpeed = 4f;       // 원격 보간 이동 속도
+    public float SmoothRotateSpeed = 4f;     // 원격 보간 회전 속도
     public float TeleportDistanceThreshold = 10f; // 순간 이동 거리 임계값
 
     public float raycastDistance = 10f;  // 레이캐스트의 거리
@@ -162,10 +162,10 @@ public class Player : MonoBehaviour
             }
 
             // 마우스 좌클릭 공격
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    Attack();
-            //}
+            if (Input.GetMouseButtonDown(0))
+            {
+                Attack();
+            }
         }
         else
         {
@@ -586,6 +586,8 @@ public class Player : MonoBehaviour
             MoveSmoothly();
             //RotateSmoothly();
         }
+
+
         
     }
 
@@ -594,9 +596,29 @@ public class Player : MonoBehaviour
 
         if(isMove)
         {
-            var dir = new Vector3(goalPos.x, transform.position.y, goalPos.z) - new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            transform.forward = dir;
-            transform.position += dir.normalized * Time.deltaTime * 10f;
+            // 이동 방향 벡터 구하기
+            Vector3 dir = new Vector3(goalPos.x, transform.position.y, goalPos.z) - transform.position;
+
+            // 목표 위치와 현재 위치 간의 거리 계산
+            float distance = dir.magnitude;
+
+            // 목표 위치에 도달하면 이동을 멈추도록 설정
+            if (distance > 0.05f)
+            {
+                // 회전 처리
+                Quaternion targetRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, SmoothRotateSpeed);
+
+                // 이동 처리
+                transform.position += dir.normalized * Time.deltaTime * SmoothMoveSpeed;
+                // transform.position = Vector3.MoveTowards(transform.position, goalPos, Time.deltaTime * SmoothMoveSpeed);
+            }
+            else
+            {
+                // 목표에 도달했을 때 멈추는 로직
+                transform.position = goalPos; // 목표 위치에 정확히 도달
+            }
+
             if (!IsMine)
             {
                 animator.SetBool("isRun", dir.magnitude > 1f);
