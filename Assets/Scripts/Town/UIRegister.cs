@@ -71,7 +71,7 @@ public class UIRegister : MonoBehaviour
         btnGoToRegister.onClick.AddListener(GoToRegisterScreen);
         SetServerUI(); // 첫 화면인 서버 입력 UI 표시
 
-        SEManager.instance.LoopPlaySE("UIRegisterMusic");
+        TownSEManager.instance.LoopPlaySE("UIRegisterMusic");
     }
 
     private void ToggleScreens()
@@ -133,8 +133,8 @@ public class UIRegister : MonoBehaviour
         if (selectedCharacterId >= 0 && selectedCharacterId <= 5)
         {
             TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // 선택된 캐릭터의 id로 게임 시작 요청
-            SEManager.instance.StopSE("UIRegisterMusic");
-            SEManager.instance.LoopPlaySE("TownMusic");
+            TownSEManager.instance.StopSE("UIRegisterMusic");
+            TownSEManager.instance.LoopPlaySE("TownMusic");
         }
         else
         {
