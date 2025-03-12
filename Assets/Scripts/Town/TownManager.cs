@@ -101,7 +101,6 @@ public class TownManager : MonoBehaviour
         }
 
         InitializePlayerDatabase();
-        DontDestroyOnLoad(gameObject);
     }
 
 
