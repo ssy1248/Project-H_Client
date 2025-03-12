@@ -99,9 +99,11 @@ public class TownManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         InitializePlayerDatabase();
     }
+
+
 
     private void Start()
     {
@@ -499,6 +501,7 @@ public class TownManager : MonoBehaviour
             }
         }
         //shopUi.GetBuyData(data.StoreList.ToList());
+
         ItemManager.instance.SetData(data.ItemData.ToList());
     }
     // 나가면 삭제해주기 

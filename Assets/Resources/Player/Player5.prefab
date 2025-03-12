@@ -2438,6 +2438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 2075369095008506869}
+  exp: 0
   nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
@@ -2448,14 +2449,15 @@ MonoBehaviour:
     m_Bits: 0
   goalPos: {x: 0, y: 0, z: 0}
   goalRot: {x: 0, y: 0, z: 0, w: 0}
-  moveSpeed: 10
-  speed: 10
+  moveSpeed: 1
+  speed: 1
   dodgeDistance: 3
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
   maxHealth: 100
   currentHealth: 0
+  equipWeapon: {fileID: 0}
   SkillData: {fileID: 0}
   dodgeInterpolationTime: 0.3
 --- !u!1 &7581309179231962001

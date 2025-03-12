@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
@@ -167,8 +168,11 @@ public class Monster : MonoBehaviour
         }
 
 
-
-        if (targetPosition != null)
+        if (IsVector3NaN(targetPosition))
+        {
+            return;
+        }
+        if (targetPosition != null )
         {
             // ���� ��ġ�� ��ǥ ��ġ ���� ���� ���� ���
             Vector3 directionToTarget2 = targetPosition - transform.position;
@@ -195,6 +199,11 @@ public class Monster : MonoBehaviour
             transform.position = newPosition;
 
             
+        }
+        // NaN  체크용도
+        bool IsVector3NaN(Vector3 vec)
+        {
+            return float.IsNaN(vec.x) || float.IsNaN(vec.y) || float.IsNaN(vec.z);
         }
 
 

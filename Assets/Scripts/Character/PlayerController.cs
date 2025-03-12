@@ -132,16 +132,16 @@ public class PlayerController : MonoBehaviour
     {
 
         // 직업별로 Dodge 또는 Teleport 사용 가능하도록 설정
-        if (gameObject.CompareTag("Mage"))
-            Teleport();
-        else if (gameObject.CompareTag("Archer") || gameObject.CompareTag("Rogue"))
-            Dodge();
+        //if (gameObject.CompareTag("Mage"))
+        //    Teleport();
+        //else if (gameObject.CompareTag("Archer") || gameObject.CompareTag("Rogue"))
+        //    Dodge();
 
-        GETInput();
+        //GETInput();
         //move();
         //Turn();
 
-        Attack();
+        //Attack();
 
         //if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
         //    Teleport();
@@ -182,10 +182,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // D키를 눌렀고, 구르기 중이 아니고 쿨타임이 끝났으면 구르기 실행
-        if (DDown && !isDodge && !isOnCooldown)
-        {
-            Dodge();
-        }
+        //if (DDown && !isDodge && !isOnCooldown)
+        //{
+        //    Dodge();
+        //}
 
 
 

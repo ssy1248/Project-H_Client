@@ -60,6 +60,11 @@ public class Player : MonoBehaviour
     private int effectIndex = 0;
     private int dodgeEffectArcherIndex = 0;
     private int dodgeEffectRogueIndex = 0;
+
+    private bool isBuffActive = false;
+    public List<GameObject> buffEffects; // 이펙트 오브젝트 풀
+    private int BuffEffectIndex = 0; // 현재 사용할 이펙트 인덱스
+    private GameObject activeEffect; // 현재 활성화된 이펙트
     #endregion
 
     #region Health & Damage
@@ -157,20 +162,26 @@ public class Player : MonoBehaviour
             // 이동 중이면 매 프레임 이동 처리 및 도착 여부 확인
             if (isMove)
             {
-               // Mousemove();
+                //Mousemove();
                // CheckArrival();
             }
 
             // 마우스 좌클릭 공격
-            if (Input.GetMouseButtonDown(0))
-            {
-                Attack();
-            }
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    Attack();
+            //}
         }
         else
         {
             // 원격 플레이어: 부드러운 보간 처리
             SmoothMoveAndRotate();
+        }
+
+        // 활성화된 이펙트가 있으면 계속 플레이어를 따라다니게 함
+        if (activeEffect != null && activeEffect.activeSelf)
+        {
+            activeEffect.transform.position = transform.position;
         }
     }
 
@@ -279,6 +290,11 @@ public class Player : MonoBehaviour
     public bool IsMage()
     {
         return gameObject.CompareTag("Mage");
+    }
+
+    public bool IsArcher()
+    {
+        return gameObject.CompareTag("Archer");
     }
 
     // 도착 여부를 매 프레임 확인하는 함수
@@ -482,9 +498,9 @@ public class Player : MonoBehaviour
             Debug.Log("버프 스킬 사용");
             // 무기 사용 
             equipWeapon.Use();
-            animator.SetTrigger("doSkill1");
             // 버프 스킬
             string buffTarget = "Buff";
+            StartCoroutine(BoostAttackSpeed());
 
             SkillAttack skillAttack = new SkillAttack
             {
@@ -586,14 +602,10 @@ public class Player : MonoBehaviour
             MoveSmoothly();
             //RotateSmoothly();
         }
-
-
-        
     }
 
     void MoveSmoothly()
     {
-
         if(isMove)
         {
             // 이동 방향 벡터 구하기
@@ -603,26 +615,24 @@ public class Player : MonoBehaviour
             float distance = dir.magnitude;
 
             // 목표 위치에 도달하면 이동을 멈추도록 설정
-            if (distance > 0.05f)
+            if (distance > 0.1f)
             {
                 // 회전 처리
                 Quaternion targetRot = Quaternion.LookRotation(dir);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, SmoothRotateSpeed);
 
                 // 이동 처리
-                transform.position += dir.normalized * Time.deltaTime * SmoothMoveSpeed;
+                animator.SetBool("isRun", true);
+                transform.position += dir * Time.deltaTime * SmoothMoveSpeed;
                 // transform.position = Vector3.MoveTowards(transform.position, goalPos, Time.deltaTime * SmoothMoveSpeed);
             }
             else
             {
+                animator.SetBool("isRun", false);
                 // 목표에 도달했을 때 멈추는 로직
                 transform.position = goalPos; // 목표 위치에 정확히 도달
             }
 
-            if (!IsMine)
-            {
-                animator.SetBool("isRun", dir.magnitude > 1f);
-            }
             // 소리가 아직 재생되지 않았다면 실행
             if (!isPlayingSound)
             {
@@ -821,5 +831,24 @@ public class Player : MonoBehaviour
         Destroy(gameObject);
         StopAllCoroutines();
     }
-    
+
+    private IEnumerator BoostAttackSpeed()
+    {
+        isBuffActive = true;
+
+        // 이펙트 활성화
+        ActivateEffect(buffEffects, ref BuffEffectIndex, transform.position);
+        SEManager.instance.PlaySE("ArcherSkill1");
+
+        yield return new WaitForSeconds(5f); // 5초 지속
+
+        isBuffActive = false;
+
+        // 이펙트 비활성화
+        if (activeEffect != null)
+        {
+            activeEffect.SetActive(false);
+            activeEffect = null;
+        }
+    }
 }
