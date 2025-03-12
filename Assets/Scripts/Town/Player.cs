@@ -600,7 +600,7 @@ public class Player : MonoBehaviour
         if (!IsMine)
         {
             MoveSmoothly();
-            RotateSmoothly();
+            //RotateSmoothly();
         }
     }
 
