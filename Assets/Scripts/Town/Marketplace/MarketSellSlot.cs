@@ -13,15 +13,18 @@ public class MarketSellSlot : MonoBehaviour
     [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] TMP_TextInfo priceText;
     [SerializeField] TextMeshProUGUI itemText;
+    [SerializeField] Image itemImg;
 
-    [SerializeField] ItemInfo itemData;
+    [SerializeField] ItemInfo iteminfoData;
+
     public void InitSlot(Marketplace temp)
     {
         marketplaceTemp = temp;
     }
     public void SetData(ItemInfo data)
     {
-        itemData = data;
+        iteminfoData = data;
+        itemImg.sprite = ItemManager.instance.GetItemImg(data.Imgsrc);
         nameText.SetText(data.Name);
         itemText.SetText(data.ItemType.ToString());
         gameObject.SetActive(true);
@@ -32,6 +35,6 @@ public class MarketSellSlot : MonoBehaviour
     }
     public void SellInMarket()
     {
-        TownManager.Instance.SellInMarketRequest(itemData.Id, itemData.ItemType, Convert.ToInt32(marketplaceTemp.goldData.text));
+        TownManager.Instance.SellInMarketRequest(iteminfoData.Id, iteminfoData.ItemType, Convert.ToInt32(marketplaceTemp.goldData.text));
     }
 }

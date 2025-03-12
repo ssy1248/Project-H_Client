@@ -13,6 +13,7 @@ public class MarkeBuySlot : MonoBehaviour
     [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] TextMeshProUGUI priceText;
     [SerializeField] TextMeshProUGUI itemText;
+    [SerializeField] Image itemImg;
 
     public marketItemInfo marketData;
 
@@ -23,6 +24,7 @@ public class MarkeBuySlot : MonoBehaviour
     public void SetData(marketItemInfo data)
     {
         marketData = data;
+        itemImg.sprite = ItemManager.instance.GetItemImg(data.ItemId);
         nameText.SetText(data.Name);
         priceText.SetText(data.Price.ToString());
         itemText.SetText(data.ItemId.ToString());
