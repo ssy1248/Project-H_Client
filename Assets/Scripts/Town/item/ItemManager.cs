@@ -20,6 +20,8 @@ public class ItemManager : MonoBehaviour
 
     [SerializeField] Dictionary<int, ItemData> itemData = new Dictionary<int, ItemData>();
     private Dictionary<string, Sprite> itemImages = new Dictionary<string, Sprite>();
+
+
     private void Awake()
     {
         if (_instance == null)
@@ -31,9 +33,15 @@ public class ItemManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        LoadAssets();
+        if (itemImages.Count == 0)
+        {
+            LoadAssets();
+        }
         InitializeItemHandler();
+        DontDestroyOnLoad(gameObject);
     }
+
+
     public void SetData(List<ItemData> data)
     {
         foreach (ItemData item in data)
