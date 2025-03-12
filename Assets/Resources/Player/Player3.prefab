@@ -3033,7 +3033,6 @@ GameObject:
   - component: {fileID: 6780161134169667257}
   - component: {fileID: 2637581427618498089}
   - component: {fileID: 1940315979212962944}
-  - component: {fileID: 2748987807860663349}
   - component: {fileID: 7692847189424511120}
   m_Layer: 10
   m_Name: Player3
@@ -3135,6 +3134,9 @@ MonoBehaviour:
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
+  buffEffects:
+  - {fileID: 1619556661389288887}
+  - {fileID: 5044895833197397168}
   maxHealth: 100
   currentHealth: 0
   equipWeapon: {fileID: 3107268398132963145}
@@ -3190,32 +3192,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2748987807860663349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8126715550554907011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportEffects: []
-  dodgeEffectsArcher:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  dodgeEffectsRogue: []
-  playerHealthBar: {fileID: 618059027924202292, guid: fb453fe924e19ed49a0ea47d0b01f579,
-    type: 3}
-  partyIndex: 1
-  moveSpeed: 1
-  maxHealth: 100
-  currentHealth: 0
-  AttackRate: 1
-  isMove: 0
 --- !u!114 &7692847189424511120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3223,7 +3199,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8126715550554907011}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2b0735cece4f7749ae4548c526bc756, type: 3}
   m_Name: 

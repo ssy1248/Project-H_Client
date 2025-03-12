@@ -36,6 +36,10 @@ public class PartyManager : MonoBehaviour
         {
             DungeonPartyUISetUp();
         }
+        else if (partyUI != null && InDungeonPartyInfo.PartyName != partyUI.GetComponentInChildren<TMP_InputField>().text)
+        {
+            DungeonPartyUISetUp();
+        }
     }
 
     public void DungeonPartyUISetUp()
