@@ -16,6 +16,8 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] GameObject marketplace;
     [SerializeField] private GameObject party;
 
+    [SerializeField] private GameObject AnnouncePanel;
+
     [SerializeField] int inventoryPage = 1;
     [SerializeField] int slotInPage = 10;
     [SerializeField] int slotDistance = 100;
@@ -115,6 +117,7 @@ public class UIAnimation : MonoBehaviour
         if (myPartyInfo == null)
         {
             Debug.Log("파티를 생성하고 매칭 신청을 해주세요");
+            AnnouncePanel.SetActive(true);
             return;
         }
 
