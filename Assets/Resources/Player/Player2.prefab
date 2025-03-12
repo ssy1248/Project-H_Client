@@ -3431,25 +3431,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8588462082483426788}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11b6464d31900dd4588ff635fba0623f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiNameChat: {fileID: 0}
+  exp: 0
+  nickname: 
+  SmoothMoveSpeed: 10
+  SmoothRotateSpeed: 10
+  TeleportDistanceThreshold: 10
+  raycastDistance: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  goalPos: {x: 0, y: 0, z: 0}
+  goalRot: {x: 0, y: 0, z: 0, w: 0}
+  moveSpeed: 1
+  speed: 10
+  dodgeDistance: 3
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue:
   - {fileID: 2387814214293163923}
   - {fileID: 2193070645021638184}
   - {fileID: 7347697303881227416}
-  playerHealthBar: {fileID: 618059027924202292, guid: fb453fe924e19ed49a0ea47d0b01f579,
-    type: 3}
-  partyIndex: 0
-  moveSpeed: 10
   maxHealth: 1000
   currentHealth: 0
-  AttackRate: 0.5
-  isMove: 0
+  equipWeapon: {fileID: 0}
+  SkillData: {fileID: 0}
+  dodgeInterpolationTime: 0.3
   landEffectPrefab: {fileID: 3308203971073312029}
   LandEffectPoolObj: {fileID: 1084153169516303324}
 --- !u!1 &8719423701616253389

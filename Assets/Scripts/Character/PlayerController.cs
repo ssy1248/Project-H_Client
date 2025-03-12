@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private int effectIndex = 0; // 텔레포트 이펙트 인덱스
     private int dodgeEffectArcherIndex = 0; // 궁수 Dodge 이펙트 인덱스
     private int dodgeEffectRogueIndex = 0; // 도적 Dodge 이펙트 인덱스
-    public float moveSpeed = 10f;
+    public float moveSpeed = 4f;
     private bool isPlayingSound = false; // 소리가 재생 중인지 확인하는 변수
 
     private float DodgeCoolTime = 5f;
@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
 
     public void Awake()
     {
+        this.enabled = false; // 현재 스크립트 비활성화
+
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>(); // 자식이 아닌 부모 오브젝트에서 가져오기
         meshs = GetComponentsInChildren<MeshRenderer>();
@@ -130,16 +132,16 @@ public class PlayerController : MonoBehaviour
     {
 
         // 직업별로 Dodge 또는 Teleport 사용 가능하도록 설정
-        if (gameObject.CompareTag("Mage"))
-            Teleport();
-        else if (gameObject.CompareTag("Archer") || gameObject.CompareTag("Rogue"))
-            Dodge();
+        //if (gameObject.CompareTag("Mage"))
+        //    Teleport();
+        //else if (gameObject.CompareTag("Archer") || gameObject.CompareTag("Rogue"))
+        //    Dodge();
 
-        GETInput();
+        //GETInput();
         //move();
         //Turn();
 
-        Attack();
+        //Attack();
 
         //if (IsMage()) // 마법사라면 Dodge 대신 Teleport 사용
         //    Teleport();
@@ -180,10 +182,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // D키를 눌렀고, 구르기 중이 아니고 쿨타임이 끝났으면 구르기 실행
-        if (DDown && !isDodge && !isOnCooldown)
-        {
-            Dodge();
-        }
+        //if (DDown && !isDodge && !isOnCooldown)
+        //{
+        //    Dodge();
+        //}
 
 
 

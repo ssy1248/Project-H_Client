@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArcherController : MonoBehaviour
 {
-    private PlayerController playerController;
+    //private PlayerController playerController;
     private bool isBuffActive = false;
     private float originalAttackRate;
 
@@ -17,16 +17,16 @@ public class ArcherController : MonoBehaviour
 
     private void Start()
     {
-        playerController = GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            originalAttackRate = playerController.AttackRate;
-        }
+        //playerController = GetComponent<PlayerController>();
+        //if (playerController != null)
+        //{
+        //    originalAttackRate = playerController.AttackRate;
+        //}
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !isBuffActive && canUseBuff)
+        if (Input.GetKeyDown(KeyCode.Q) && !isBuffActive && canUseBuff && DungeonManager.Instance.MyPlayer == true)
         {
             StartCoroutine(BoostAttackSpeed());
             StartCoroutine(BuffCooldownRoutine()); // 쿨타임 시작
@@ -43,15 +43,15 @@ public class ArcherController : MonoBehaviour
     {
         isBuffActive = true;
         canUseBuff = false; // 스킬 재사용 불가 설정
-        playerController.AttackRate *= 0.15f; // 공격 속도 증가
+        //playerController.AttackRate *= 0.15f; // 공격 속도 증가
 
         // 이펙트 활성화
         ActivateEffect(buffEffects, ref effectIndex, transform.position);
         SEManager.instance.PlaySE("ArcherSkill1");
 
-        yield return new WaitForSeconds(3f); // 3초 지속
+        yield return new WaitForSeconds(5f); // 5초 지속
 
-        playerController.AttackRate = originalAttackRate; // 원래 속도로 복귀
+        //playerController.AttackRate = originalAttackRate; // 원래 속도로 복귀
         isBuffActive = false;
 
         // 이펙트 비활성화

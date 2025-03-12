@@ -25,7 +25,7 @@ public class MyPlayer : MonoBehaviour
     private Vector3 targetPosition;
     private Quaternion targetRot;
     private float moveSpeed = 4f;
-    private float smoothRotateSpeed = 10f;
+    private float smoothRotateSpeed = 3.0f;
 
     public Vector3 MousePos { get; set; }
 
@@ -69,7 +69,7 @@ public class MyPlayer : MonoBehaviour
     {
         HandleInput();
         test();
-        CheckMove();
+        //CheckMove();
 
     }
 
@@ -94,75 +94,33 @@ public class MyPlayer : MonoBehaviour
     //test
     private void test()
     {
-        if (targetPosition != null)
+        // 이동 방향 벡터 구하기
+        Vector3 dir = new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position;
+
+        // 목표 위치와 현재 위치 간의 거리 계산
+        float distance = dir.magnitude;
+
+        // 목표 위치에 도달하면 이동을 멈추도록 설정
+        if (distance > 0.1f)
         {
-            //Vector3 directionToTarget2 = targetPosition - transform.position;
-            //directionToTarget2.y = 0;
+            // 회전 처리
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, smoothRotateSpeed);
 
-            //float distanceToTarget = directionToTarget2.magnitude;
-
-            //// 목표 위치에 거의 도달하면 정확히 고정
-            //if (distanceToTarget < 0.01f)
-            //{
-            //    transform.position = targetPosition;
-            //    return;
-            //}
-
-            //float moveSpeed = 4f;
-            //Vector3 moveDirection = directionToTarget2.normalized;
-
-            //// MoveTowards 사용으로 소수점 흔들림 방지
-            ////Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * moveSpeed);
-            //Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);
-            //transform.position = newPosition;
-
-            float stopDistance = 0.1f;  // 목표 위치에 도달했다고 판단할 거리
-            //transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, targetPosition) < stopDistance)
-            {
-                //transform.position = targetPosition;  // 정확히 목표 위치에 도달하도록 설정
-            }
-
+            // 이동 처리
+            transform.position += dir.normalized * Time.deltaTime * moveSpeed;
+            animator.SetBool("isRun", true);
+        }
+        else
+        {
+            // 목표에 도달했을 때 멈추는 로직
+            transform.position = targetPosition; // 목표 위치에 정확히 도달
+            animator.SetBool("isRun", false);
         }
 
-        if (targetRot != null)
-        {
-            //Vector3 directionToTarget = transform.position - targetPosition;
-            //directionToTarget.y = 0;
+        agent.updateRotation = false;
 
-            //if (directionToTarget.sqrMagnitude > Mathf.Epsilon)
-            //{
-            //    directionToTarget = -directionToTarget;
-            //    Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-
-            //    // 목표 회전값에 거의 도달하면 정확히 고정
-            //    if (Quaternion.Angle(transform.rotation, targetRotation) > 0.5f)
-            //    {
-            //        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-
-            //        // 테스트
-            //        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-            //        //transform.rotation = targetRotation; // 목표 회전값으로 고정
-            //    }
-            //    else
-            //    {
-            //        transform.rotation = targetRotation; // 목표 회전값으로 고정
-            //    }
-            //}
-
-            float stopRotationDistance = 0.01f;  // 회전의 작은 차이로 목표 회전과의 차이를 확인
-            float t = Mathf.Clamp(Time.deltaTime * smoothRotateSpeed, 0, 0.99f);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, t);
-
-            // 목표 회전과 현재 회전 간의 차이가 일정 이하일 때 완전히 목표 회전으로 설정
-            if (Quaternion.Angle(transform.rotation, targetRot) < stopRotationDistance)
-            {
-                //transform.rotation = targetRot;
-
-            }
-            agent.updateRotation = false;
-        }
+        
     }
 
 
