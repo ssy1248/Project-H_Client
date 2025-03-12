@@ -615,26 +615,24 @@ public class Player : MonoBehaviour
             float distance = dir.magnitude;
 
             // 목표 위치에 도달하면 이동을 멈추도록 설정
-            if (distance > 0.05f)
+            if (distance > 0.1f)
             {
                 // 회전 처리
                 Quaternion targetRot = Quaternion.LookRotation(dir);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, SmoothRotateSpeed);
 
                 // 이동 처리
-                transform.position += dir.normalized * Time.deltaTime * SmoothMoveSpeed;
+                animator.SetBool("isRun", true);
+                transform.position += dir * Time.deltaTime * SmoothMoveSpeed;
                 // transform.position = Vector3.MoveTowards(transform.position, goalPos, Time.deltaTime * SmoothMoveSpeed);
             }
             else
             {
+                animator.SetBool("isRun", false);
                 // 목표에 도달했을 때 멈추는 로직
                 transform.position = goalPos; // 목표 위치에 정확히 도달
             }
 
-            if (!IsMine)
-            {
-                animator.SetBool("isRun", dir.magnitude > 1f);
-            }
             // 소리가 아직 재생되지 않았다면 실행
             if (!isPlayingSound)
             {
