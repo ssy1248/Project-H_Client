@@ -74,6 +74,7 @@ public class PartyManager : MonoBehaviour
 
                 // 이제 파티 정보를 기반으로 파티 캐릭터 UI를 생성합니다.
                 InstantiatePartyCharacters();
+                InitialDungeonUI();
             }
             else
             {
@@ -102,7 +103,6 @@ public class PartyManager : MonoBehaviour
             GameObject partyChar = Instantiate(prefabToInstantiate, partyUI.transform);
 
             // 필요에 따라 위치나 크기 조정을 추가할 수 있습니다.
-            // 예를 들어, 레이아웃 그룹이 있다면 자동 배치될 것입니다.
 
             // 인스턴스화된 객체의 자식에서 TextMeshProUGUI 컴포넌트를 찾아 playerName을 설정합니다.
             TextMeshProUGUI nameText = partyChar.GetComponentInChildren<TextMeshProUGUI>();
@@ -113,6 +113,21 @@ public class PartyManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("인스턴스에서 TextMeshProUGUI 컴포넌트를 찾을 수 없습니다.");
+            }
+        }
+    }
+
+    void InitialDungeonUI()
+    {
+        for(int i = 0; i < InDungeonPartyInfo.Players.Count; i++)
+        {
+            if (DungeonManager.Instance.MyPlayer.PlayerId == InDungeonPartyInfo.Players[i].PlayerId)
+            {
+                DungeonUIManager.Instance.PlayerLevelText.text = new string("Lv. ") + InDungeonPartyInfo.Players[i].PlayerLevel;
+                DungeonUIManager.Instance.PlayerHpText.text = InDungeonPartyInfo.Players[i].PlayerCurHp + " / " + InDungeonPartyInfo.Players[i].PlayerFullHp;
+                DungeonUIManager.Instance.PlayerMpText.text = InDungeonPartyInfo.Players[i].PlayerCurMp + " / " + InDungeonPartyInfo.Players[i].PlayerFullMp;
+                DungeonUIManager.Instance.PlayerIcon[InDungeonPartyInfo.Players[i].PlayerClass - 1].SetActive(true);
+                break;
             }
         }
     }

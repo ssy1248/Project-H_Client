@@ -95,7 +95,8 @@ class PacketManager
         _onRecv.Add((ushort)MsgId.SSetauctiondata, MakePacket<S_SetAuctionData>);
         _handler.Add((ushort)MsgId.SSetauctiondata, PacketHandler.S_SetAuctionDataHandler);
         _onRecv.Add((ushort)MsgId.SWaitauction, MakePacket<S_WaitAuction>);
-        _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler); _onRecv.Add((ushort)MsgId.SMoveitemresponse, MakePacket<S_MoveItemResponse>);
+        _handler.Add((ushort)MsgId.SWaitauction, PacketHandler.S_WaitAuctionHandler); 
+        _onRecv.Add((ushort)MsgId.SMoveitemresponse, MakePacket<S_MoveItemResponse>);
         _handler.Add((ushort)MsgId.SMoveitemresponse, PacketHandler.S_MoveItemHandler);
         _handler.Add((ushort)MsgId.SDungeonspawn, PacketHandler.S_DungeonSpawnHandler);
         _onRecv.Add((ushort)MsgId.SDungeonspawn, MakePacket<S_DungeonSpawn>);
@@ -115,6 +116,19 @@ class PacketManager
         _handler.Add((ushort)MsgId.SMonsterdie, PacketHandler.S_MonsterDieHandler);
         _onRecv.Add((ushort)MsgId.SSetuserstate, MakePacket<S_SetUserState>);
         _handler.Add((ushort)MsgId.SSetuserstate, PacketHandler.S_SetUserHandler);
+
+        _onRecv.Add((ushort)MsgId.SBossspawn, MakePacket< S_BossSpawn>);
+        _handler.Add((ushort)MsgId.SBossspawn, PacketHandler.S_BossSpawnHandler);
+        _onRecv.Add((ushort)MsgId.SBossmove, MakePacket<S_BossMove>);
+        _handler.Add((ushort)MsgId.SBossmove, PacketHandler.S_BossMoveHandler);
+        _onRecv.Add((ushort)MsgId.SBosshit, MakePacket<S_BossHit>);
+        _handler.Add((ushort)MsgId.SBosshit, PacketHandler.S_BossHitHandler);
+        _onRecv.Add((ushort)MsgId.SBossdie, MakePacket<S_BossDie>);
+        _handler.Add((ushort)MsgId.SBossdie, PacketHandler.S_BossDieHandler);
+        _onRecv.Add((ushort)MsgId.SBossskillstart, MakePacket<S_BossSkillStart>);
+        _handler.Add((ushort)MsgId.SBossskillstart, PacketHandler.S_BossSkillStartHandler);
+        _onRecv.Add((ushort)MsgId.SBossskillend, MakePacket<S_BossSkillEnd>);
+        _handler.Add((ushort)MsgId.SBossskillend, PacketHandler.S_BossSkillEndHandler);
         Debug.Log("핸들러 등록 완료");
     }
 
