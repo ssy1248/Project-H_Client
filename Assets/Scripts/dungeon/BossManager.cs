@@ -90,6 +90,18 @@ public class BossManager : MonoBehaviour
 
     public void OnBossDeath()
     {
+        boss.BossDie();
+
+        // 코루틴 실행
+        StartCoroutine(DisableBossAfterDelay(1.0f));
+
+    }
+
+
+    private IEnumerator DisableBossAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         currentBoss.SetActive(false);
         currentBladePool.SetActive(false);
     }

@@ -109,6 +109,13 @@ public class Monster : MonoBehaviour
         targetRot = rot;
         moveSpeed = speed;
         MonsterHp = hp;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            targetPosition = new Vector3(targetPosition.x, hit.position.y, targetPosition.z);
+        }
+
         //�̵�
         //MoveTowardsTarget();
         //Debug.Log($"���� ���� ��ǥ {targetRot}");
