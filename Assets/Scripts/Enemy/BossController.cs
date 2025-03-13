@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
+using SRF;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -471,7 +472,8 @@ public class BossController : Enemy
         yield return new WaitForSeconds(2f);
 
         // 여기에 로직 패킷 메세지 보낼거임
-        Skill_02_Send(transform.position, transform.forward, fanCollider.radius, 45f);
+        float worldRadius = fanCollider.bounds.size.x / 2f;
+        Skill_02_Send(transform.position, transform.forward, worldRadius, 45f);
 
 
         isLook = true;
@@ -545,6 +547,7 @@ public class BossController : Enemy
         float warningDuration = 1f; // 경고 범위 표시 시간
 
         List<GameObject> warningCircles = new List<GameObject>(); // 개별 원형 범위 저장 리스트
+        List<CircleArea> warningCircleData = new List<CircleArea>(); // 서버에 보낼 데이터 리스트
 
         // 칼이 떨어질 위치를 미리 생성하여 경고 표시
         Vector3[] attackPositions = new Vector3[bladeCount];
@@ -573,10 +576,23 @@ public class BossController : Enemy
 
                 warningCircle.SetActive(true);
                 warningCircles.Add(warningCircle);
+
+                // 이곳에 서버에 보낼 데이터 생성. 
+                warningCircleData.Add(new CircleArea
+                {
+                    Center = new Vector { X = attackPositions[i].x, Y = attackPositions[i].y, Z = attackPositions[i].z },
+                    Radius = 1.5f
+                });
+
             }
         }
 
         yield return new WaitForSeconds(warningDuration); // 경고 표시 후 1초 대기
+
+        // 여기에 로직 넣어줘 
+        // 빨강 범위? 뱅ㄹ ? 아까
+
+        Skill_03_Send(warningCircleData);
 
         // 오브젝트 풀링 사용하여 칼 생성
         for (int i = 0; i < bladeCount; i++)
@@ -614,6 +630,34 @@ public class BossController : Enemy
         // nav.isStopped = true;
 
     }
+
+
+    public void Skill_03_Send(List<CircleArea> warningCircleData)
+    {
+        Vector protoVector = new Vector
+        {
+            X = transform.position.x,
+            Y = transform.position.y,
+            Z = transform.position.z
+        };
+
+    
+        var bossSkillPacket = new C_BossSkill
+        {
+            BossId = id,
+            Type = "Skill_03",
+            CurrentPosition = protoVector,
+            MultiCircle = new MultiCircleAttack()
+        };
+
+        // 리스트를 배열로 변환하여 추가
+        bossSkillPacket.MultiCircle.Circles.AddRange(warningCircleData);
+
+        GameManager.Network.Send(bossSkillPacket);
+        isSkill = false;
+    }
+
+
 
     IEnumerator Skill_04() 
     {
@@ -660,6 +704,12 @@ public class BossController : Enemy
 
         yield return new WaitForSeconds(3f);
 
+        // 여기서 클라 -> 서버 메시지
+        // 여기에 로직 패킷 메세지 보낼거임
+        float worldRadius = fanCollider.bounds.size.x / 2f;
+        Skill_04_Send(transform.position, transform.forward, worldRadius, 45f);
+
+
         isLook = true;
         // nav.isStopped = true;
 
@@ -673,6 +723,51 @@ public class BossController : Enemy
         if (weaponCollider != null)
             weaponCollider.enabled = false;
     }
+
+    public void Skill_04_Send(Vector3 center, Vector3 direction, float radius, float angle)
+    {
+        Vector protoVector = new Vector
+        {
+            X = transform.position.x,
+            Y = transform.position.y,
+            Z = transform.position.z
+
+        };
+
+        Vector centerVector = new Vector
+        {
+            X = center.x,
+            Y = center.y,
+            Z = center.z
+        };
+
+        Vector directionVector = new Vector
+        {
+            X = direction.x,
+            Y = direction.y,
+            Z = direction.z
+        };
+
+        var bossSkillPacket = new C_BossSkill
+        {
+            BossId = id,
+            Type = "Skill_04",
+            CurrentPosition = protoVector,
+
+            Sector = new SectorArea
+            {
+                Center = centerVector,
+                Direction = directionVector,
+                Radius = radius,
+                Angle = angle,
+            }
+        };
+
+        GameManager.Network.Send(bossSkillPacket);
+        isSkill = false;
+    }
+
+
 
     IEnumerator Skill_05() 
     {
