@@ -4220,20 +4220,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArcherBuffPool
       objectReference: {fileID: 0}
+    - target: {fileID: 406580558982217764, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 975875907305174185, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.465
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
         type: 3}
@@ -4268,6 +4278,11 @@ PrefabInstance:
     - target: {fileID: 3844793567161323671, guid: 0b911763874d0a84c884f39eb9a60c28,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6769404798893872558, guid: 0b911763874d0a84c884f39eb9a60c28,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

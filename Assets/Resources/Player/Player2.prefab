@@ -3267,7 +3267,6 @@ GameObject:
   - component: {fileID: 9047784073065238460}
   - component: {fileID: 196227380015684679}
   - component: {fileID: 7210424792132183613}
-  - component: {fileID: 2852045848852673819}
   m_Layer: 10
   m_Name: Player2
   m_TagString: Rogue
@@ -3369,6 +3368,7 @@ MonoBehaviour:
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
+  buffEffects: []
   maxHealth: 100
   currentHealth: 0
   equipWeapon: {fileID: 0}
@@ -3424,46 +3424,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2852045848852673819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588462082483426788}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11b6464d31900dd4588ff635fba0623f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiNameChat: {fileID: 0}
-  exp: 0
-  nickname: 
-  SmoothMoveSpeed: 10
-  SmoothRotateSpeed: 10
-  TeleportDistanceThreshold: 10
-  raycastDistance: 10
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  goalPos: {x: 0, y: 0, z: 0}
-  goalRot: {x: 0, y: 0, z: 0, w: 0}
-  moveSpeed: 1
-  speed: 10
-  dodgeDistance: 3
-  teleportEffects: []
-  dodgeEffectsArcher: []
-  dodgeEffectsRogue:
-  - {fileID: 2387814214293163923}
-  - {fileID: 2193070645021638184}
-  - {fileID: 7347697303881227416}
-  maxHealth: 1000
-  currentHealth: 0
-  equipWeapon: {fileID: 0}
-  SkillData: {fileID: 0}
-  dodgeInterpolationTime: 0.3
-  landEffectPrefab: {fileID: 3308203971073312029}
-  LandEffectPoolObj: {fileID: 1084153169516303324}
 --- !u!1 &8719423701616253389
 GameObject:
   m_ObjectHideFlags: 0
@@ -5116,10 +5076,60 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4875123534900892728}
     m_Modifications:
+    - target: {fileID: 603232670323573268, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1167199837443702050, guid: 90bf240eb695ba34283a6217e14f2b3f,
         type: 3}
       propertyPath: m_Name
       value: LandEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234499166351556421, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3506725967961010262, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3661440218529475555, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4416017383651017723, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101050249771221283, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310662132257010849, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6565837873093828792, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961960727071304775, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8149516463340136598, guid: 90bf240eb695ba34283a6217e14f2b3f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9035868922150717662, guid: 90bf240eb695ba34283a6217e14f2b3f,
         type: 3}
@@ -5176,18 +5186,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90bf240eb695ba34283a6217e14f2b3f, type: 3}
---- !u!1 &1084153169516303324 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1167199837443702050, guid: 90bf240eb695ba34283a6217e14f2b3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 2249853133374861054}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3308203971073312029 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3661440218529475555, guid: 90bf240eb695ba34283a6217e14f2b3f,
-    type: 3}
-  m_PrefabInstance: {fileID: 2249853133374861054}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7087767960069252640 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9035868922150717662, guid: 90bf240eb695ba34283a6217e14f2b3f,
@@ -7900,27 +7898,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c43df650f97ac9f4eafa9e678945cf61, type: 3}
---- !u!1 &2193070645021638184 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5054391630856406976, guid: c43df650f97ac9f4eafa9e678945cf61,
-    type: 3}
-  m_PrefabInstance: {fileID: 6362341941643753960}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2387814214293163923 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8748431568725096059, guid: c43df650f97ac9f4eafa9e678945cf61,
-    type: 3}
-  m_PrefabInstance: {fileID: 6362341941643753960}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4360847071989028737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7264098424781008489, guid: c43df650f97ac9f4eafa9e678945cf61,
-    type: 3}
-  m_PrefabInstance: {fileID: 6362341941643753960}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7347697303881227416 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4446134261121099120, guid: c43df650f97ac9f4eafa9e678945cf61,
     type: 3}
   m_PrefabInstance: {fileID: 6362341941643753960}
   m_PrefabAsset: {fileID: 0}
