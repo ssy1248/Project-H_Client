@@ -31,11 +31,13 @@ public class RewardAuction : MonoBehaviour
 
     public void StartAuction(S_SetAuctionData data)
     {
+        nowitem = ItemManager.instance.GetBuyId(data.Itemid);
         rarity = data.Rarity;
-        nowName = "";
+        nowName = nowitem.Name;
         Debug.Log(data);
         id = data.Id;
-        nowitem = ItemManager.instance.GetBuyId(data.Itemid);
+        rewardImg.sprite = ItemManager.instance.GetItemImg(data.Itemid);
+        nameText.text = nowName;
         nowGold = nowitem.Price;
         nowTime = data.Time;
         maxRewardItems = data.MaxRewardItems;
