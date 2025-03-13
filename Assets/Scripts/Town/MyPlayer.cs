@@ -153,29 +153,34 @@ public class MyPlayer : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && !eSystem.IsPointerOverGameObject())
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity); // 모든 충돌 감지
 
-            Vector3 hitPosition = Vector3.zero;
-            bool foundGround = false;
+            // 오직 Ground 레이어만 감지 (BossMonster 레이어는 애초에 감지 안 됨)
+            int groundLayerMask = LayerMask.GetMask("Ground");
+            RaycastHit hit;
 
-            foreach (RaycastHit hit in hits)
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
             {
-                if (hit.collider.CompareTag("BossMonster")) continue; // 보스 몬스터 무시
-                hitPosition = hit.point;
-                foundGround = true;
-                break; // 첫 번째로 감지된 땅만 사용
-            }
+                Vector3 hitPosition = hit.point;
 
-            if (!foundGround) return; // 땅을 못 찾았으면 종료
+                // 클릭한 지점이 NavMesh 위에 있는지 확인
+                NavMeshHit navHit;
+                if (!NavMesh.SamplePosition(hitPosition, out navHit, 1.0f, NavMesh.AllAreas))
+                {
+                    Debug.LogWarning($"❌ 클릭한 위치: {hitPosition}");
+                    return;
+                }
 
-            // 클릭한 지점이 NavMesh 위에 있는지 확인
-            NavMeshHit navHit;
-            if (NavMesh.SamplePosition(hitPosition, out navHit, 0.5f, NavMesh.AllAreas))
-            {
                 MousePos = navHit.position;
 
                 // 방향 + 속도 velocity 구하는 로직.
-                Vector3 directionToGoal = (navHit.position - transform.position).normalized;
+                Vector3 directionToGoal = (navHit.position - transform.position);
+                if (directionToGoal.magnitude < 0.01f)
+                {
+                    Debug.Log("❌ 목적지가 현재 위치와 너무 가까움!");
+                    return;
+                }
+
+                directionToGoal.Normalize();
                 float speed = agent.speed;
                 Vector3 velocity = directionToGoal * speed;
 
@@ -183,6 +188,7 @@ public class MyPlayer : MonoBehaviour
             }
         }
     }
+
 
     public void ExecuteAnimation(int animIdx)
     {
