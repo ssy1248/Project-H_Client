@@ -351,7 +351,18 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
 
         
     }
+    public static void S_ClearBoxHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_ClearBox boxPacket) return;
 
+
+    }
+    public static void S_GetExpEndHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_GetExp expPacket) return;
+
+
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
