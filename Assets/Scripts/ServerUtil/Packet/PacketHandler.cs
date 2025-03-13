@@ -1,7 +1,9 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using System.Diagnostics;
 using UnityEngine.Events;
+using UnityEngine;
 
 class PacketHandler
 {
@@ -126,6 +128,9 @@ class PacketHandler
     public static void S_LeaveDungeonHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_LeaveDungeon enterPacket) return;
+        var dm = DungeonManager.Instance;
+        if(!dm) return;
+        dm.DungeonFailureHandler();
     }
     public static void S_ScreenTextHandler(PacketSession session, IMessage packet)
     {
@@ -315,12 +320,18 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
     public static void S_BossSpawnHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BossSpawn bossSpawnPacket) return;
+        
+        BossManager.Instance.SpawnBoss(bossSpawnPacket);
+        UnityEngine.Debug.Log("스폰 패킷");
 
     }
 
     public static void S_BossMoveHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BossMove bossMovePacket) return;
+
+        BossManager.Instance.MoveBoss(bossMovePacket);
+        UnityEngine.Debug.Log("무브 패킷");
 
     }
 
@@ -334,15 +345,19 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
     public static void S_BossDieHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BossDie bossDiePacket) return;
+        BossManager.Instance.OnBossDeath();
 
-        
+
+
     }
 
     public static void S_BossSkillStartHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BossSkillStart bossSkillStartPacket) return;
+        BossManager.Instance.ReceiveSkillPacket(bossSkillStartPacket);
 
-        
+
+
     }
 
     public static void S_BossSkillEndHandler(PacketSession session, IMessage packet)
