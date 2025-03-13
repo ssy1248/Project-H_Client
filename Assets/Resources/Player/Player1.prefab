@@ -2875,7 +2875,6 @@ GameObject:
   - component: {fileID: 4547330911606009033}
   - component: {fileID: 4960176003952788751}
   - component: {fileID: 5084992332092879402}
-  - component: {fileID: 6014297078318467471}
   - component: {fileID: 4493392697963560122}
   m_Layer: 10
   m_Name: Player1
@@ -2976,6 +2975,7 @@ MonoBehaviour:
   teleportEffects: []
   dodgeEffectsArcher: []
   dodgeEffectsRogue: []
+  buffEffects: []
   maxHealth: 100
   currentHealth: 0
   equipWeapon: {fileID: 0}
@@ -3026,34 +3026,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 10
   m_CollisionDetection: 1
---- !u!114 &6014297078318467471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6087412293188826244}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ace875250497684fa194ce134bd4b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportEffects: []
-  dodgeEffectsArcher: []
-  dodgeEffectsRogue: []
-  playerHealthBar: {fileID: 618059027924202292, guid: fb453fe924e19ed49a0ea47d0b01f579,
-    type: 3}
-  partyIndex: 0
-  moveSpeed: 1
-  maxHealth: 100
-  currentHealth: 0
-  AttackRate: 0.5
-  isMove: 0
 --- !u!114 &4493392697963560122
 MonoBehaviour:
   m_ObjectHideFlags: 0
