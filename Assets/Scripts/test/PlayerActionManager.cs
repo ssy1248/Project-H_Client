@@ -176,7 +176,7 @@ public class PlayerActionManager : MonoBehaviour
     {
         // 클라이언트의 MyPlayer 인스턴스를 가져옵니다.
         var myPlayer = DungeonManager.Instance.MyPlayer;
-            
+
         // 플레이어가 바라보는 방향을 구합니다.
         Vector3 playerForward = myPlayer.transform.forward.normalized;
 
