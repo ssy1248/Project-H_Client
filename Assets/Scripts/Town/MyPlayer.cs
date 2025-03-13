@@ -88,7 +88,7 @@ public class MyPlayer : MonoBehaviour
         moveSpeed = speed;
 
         //lastPos = targetPosition;
-        Debug.Log($" targetPosition : {targetPosition}");
+        //Debug.Log($" targetPosition : {targetPosition}");
     }
 
     //test

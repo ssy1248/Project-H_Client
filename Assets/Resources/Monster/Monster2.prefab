@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7385806717596509466}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 611266510136260827}
   - component: {fileID: 4873386079108235227}
   - component: {fileID: 5154295797635924467}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imhHpBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 4424909412105385648}
   - component: {fileID: -5241486603569071781}
   - component: {fileID: 8736884405149607335}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Monster2
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!65 &8736884405149607335
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 6181466899805411561}
   - component: {fileID: 1250879168697315523}
   - component: {fileID: 7575739642209425676}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imgNameBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 9119184162485296955}
   - component: {fileID: 6638203117613970227}
   - component: {fileID: 294291695135697666}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imgCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 1965089203040863603}
   - component: {fileID: 4994944119646013363}
   - component: {fileID: 6064626686923352444}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: txtHpValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -497,7 +497,7 @@ GameObject:
   - component: {fileID: 2358321786593366934}
   - component: {fileID: 2669644144208659458}
   - component: {fileID: 2234440209487485213}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imgHpFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -574,7 +574,7 @@ GameObject:
   - component: {fileID: 8598368406904406132}
   - component: {fileID: 1111726494755754130}
   - component: {fileID: 4333033914961648051}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: UIMonsterInformation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -694,7 +694,7 @@ GameObject:
   - component: {fileID: 7056574350613491060}
   - component: {fileID: 321936643656821532}
   - component: {fileID: 8925188159513704917}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: txtName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,6 +826,54 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7385806717596509466}
     m_Modifications:
+    - target: {fileID: 1046658080973496, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1089818287329586, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1218190636026622, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240222798952858, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1292789949531180, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1410927325430386, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547598778423874, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1592125234692788, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1609119223618932, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672770965465688, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1788506250886510, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1931298151966786, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 1931298151966786, guid: f451b1c0c743402fb3da05eae7420ed1, type: 3}
       propertyPath: m_IsActive
       value: 1
