@@ -31,12 +31,29 @@ public class PartyManager : MonoBehaviour
 
     void Update()
     {
-        // 이미 UI가 생성되었으면 더 이상 생성하지 않음
         if (partyUI == null)
         {
             DungeonPartyUISetUp();
+            return;
         }
-        else if (partyUI != null && InDungeonPartyInfo.PartyName != partyUI.GetComponentInChildren<TMP_InputField>().text)
+
+        // InDungeonPartyInfo가 null인지 확인
+        if (InDungeonPartyInfo == null)
+        {
+            Debug.LogError("InDungeonPartyInfo is NULL!");
+            return;
+        }
+
+        // TMP_InputField 가져오기
+        TMP_InputField inputField = partyUI.GetComponentInChildren<TMP_InputField>();
+        if (inputField == null)
+        {
+            Debug.LogError("TMP_InputField is NULL inside partyUI!");
+            return;
+        }
+
+        // 파티 이름이 다르면 UI를 다시 세팅
+        if (InDungeonPartyInfo.PartyName != inputField.text)
         {
             DungeonPartyUISetUp();
         }
