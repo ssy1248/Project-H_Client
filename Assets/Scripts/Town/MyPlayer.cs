@@ -152,23 +152,34 @@ public class MyPlayer : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && !eSystem.IsPointerOverGameObject())
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity); // 모든 충돌 감지
+
+            Vector3 hitPosition = Vector3.zero;
+            bool foundGround = false;
+
+            foreach (RaycastHit hit in hits)
             {
-                Vector3 hitPosition = rayHit.point; // 충돌 지점의 위치를 hitPosition에 저장
-                // 클릭한 지점이 NavMesh 위에 있는지 확인
-                NavMeshHit navHit;
-                if (NavMesh.SamplePosition(hitPosition, out navHit, 0.5f, NavMesh.AllAreas))
-                {
-                    //agent.SetDestination(navHit.position);
-                    MousePos = navHit.position;
+                if (hit.collider.CompareTag("BossMonster")) continue; // 보스 몬스터 무시
+                hitPosition = hit.point;
+                foundGround = true;
+                break; // 첫 번째로 감지된 땅만 사용
+            }
 
-                    // 방향 + 속도 velocity 구하는 로직.
-                    Vector3 directionToGoal = (navHit.position - transform.position).normalized;
-                    float speed = agent.speed;
-                    Vector3 velocity = directionToGoal * speed;
+            if (!foundGround) return; // 땅을 못 찾았으면 종료
 
-                    SendMovePacket(navHit.position, velocity, moveSpeed, moveSpeed);
-                }
+            // 클릭한 지점이 NavMesh 위에 있는지 확인
+            NavMeshHit navHit;
+            if (NavMesh.SamplePosition(hitPosition, out navHit, 0.5f, NavMesh.AllAreas))
+            {
+                MousePos = navHit.position;
+
+                // 방향 + 속도 velocity 구하는 로직.
+                Vector3 directionToGoal = (navHit.position - transform.position).normalized;
+                float speed = agent.speed;
+                Vector3 velocity = directionToGoal * speed;
+
+                SendMovePacket(navHit.position, velocity, moveSpeed, moveSpeed);
             }
         }
     }

@@ -325,6 +325,11 @@ public class BossController : Enemy
         }
     }
 
+    public void BossDie()
+    {
+        anim.SetTrigger("doDie");
+    }
+
     IEnumerator Skill_01()
     {
         AttackVec = targetPosition + lookVec;
@@ -877,7 +882,7 @@ public class BossController : Enemy
         if (weaponCollider != null)
             weaponCollider.enabled = false;
 
-
+        anim.SetTrigger("doDie");
     }
 
 
