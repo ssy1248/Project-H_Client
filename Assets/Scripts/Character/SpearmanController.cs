@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpearmanCounter : MonoBehaviour
 {
@@ -27,9 +28,12 @@ public class SpearmanCounter : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !isInCounter && canUseCounter)
+        if(SceneManager.GetActiveScene().name.StartsWith("Dungeon"))
         {
-            StartCounter();
+            if (Input.GetKeyDown(KeyCode.Q) && !isInCounter && canUseCounter)
+            {
+                StartCounter();
+            }
         }
 
         if (isInCounter)
