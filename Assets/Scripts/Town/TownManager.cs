@@ -502,6 +502,7 @@ public class TownManager : MonoBehaviour
         }
         //shopUi.GetBuyData(data.StoreList.ToList());
 
+        UiRegister.ConfirmCharacter();
         ItemManager.instance.SetData(data.ItemData.ToList());
     }
     // 나가면 삭제해주기 

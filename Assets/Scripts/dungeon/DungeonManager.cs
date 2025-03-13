@@ -24,6 +24,10 @@ public class DungeonManager : MonoBehaviour
     public Player MyPlayer { get; private set; }
     public RewardAuction rewardAuction;
 
+    // 상자 
+    [SerializeField] GameObject boxObject;
+    [SerializeField] GameObject rewardBox;
+
     // �÷��̾�� ���͵� ������ 
     private Dictionary<int , Player> players = new Dictionary<int, Player>();
     private Dictionary<int, Monster> monsters = new Dictionary<int, Monster>();
@@ -93,6 +97,11 @@ public class DungeonManager : MonoBehaviour
 
         GameManager.Network.Send(movePacket);
     }
+    public void LoootingBox()
+    {
+        var Packet = new C_LootingBox();
+        GameManager.Network.Send(Packet);
+    }
     // �������� �ޱ� 
     public void Despawn(S_Despawn data)
     {
@@ -105,6 +114,7 @@ public class DungeonManager : MonoBehaviour
             playerToRemove.DespawnEffect();
         }
     }
+  
     public void FinalizeBuyAuctionResponse(S_FinalizeBuyAuction data)
     {
         rewardAuction.GetReward(data.Name,data.ItemId,true);
@@ -186,6 +196,17 @@ public class DungeonManager : MonoBehaviour
     {
 
     }
+    public void GetExp(S_GetExp data)
+    {
+        boxObject.GetComponent<BoxSetting>().EndBox();
+        rewardAuction.GetReward(MyPlayer.nickname,data.Exp,false,true);
+    }
+    //박스 생성용
+    public void ClearBox(S_ClearBox data)
+    {
+        boxObject = Instantiate(rewardBox);
+        boxObject.GetComponent<BoxSetting>().InitBox(data.Rarity);
+    }
     // �����뵵 
     public void Spawn(PlayerStatus playerData, TransformInfo playerTransform , bool isPlayer = false)
     {
@@ -217,6 +238,11 @@ public class DungeonManager : MonoBehaviour
         player.Move(spawnPos, Quaternion.identity, 0);
         player.SetPlayerId(playerData.PlayerId);
         player.SetNickname(playerData.PlayerName);
+
+        player.playerData.Hp = playerData.PlayerCurHp;
+        player.playerData.MaxHp = playerData.PlayerFullHp;
+        player.playerData.Mp = playerData.PlayerCurMp;
+        player.playerData.MaxMp = playerData.PlayerFullMp;
 
         if (playerList.TryGetValue(playerData.PlayerId, out var existingPlayer))
         {
