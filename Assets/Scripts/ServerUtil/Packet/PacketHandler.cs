@@ -128,9 +128,6 @@ class PacketHandler
     public static void S_LeaveDungeonHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_LeaveDungeon enterPacket) return;
-        var dm = DungeonManager.Instance;
-        if(!dm) return;
-        dm.DungeonFailureHandler();
     }
     public static void S_ScreenTextHandler(PacketSession session, IMessage packet)
     {

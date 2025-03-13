@@ -18,13 +18,13 @@ public class DungeonManager : MonoBehaviour
     public EventSystem E_System => eSystem;
     public CinemachineFreeLook FreeLook => freeLook;
 
-    // ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+    // ÆÄÆ¼ µ¥ÀÌÅÍ 
     private Dictionary<string, PartyInfo> partyInfoDict = new Dictionary<string, PartyInfo>();
-    // ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ 
+    // ÀÚ±â ÀÚ½Å 
     public Player MyPlayer { get; private set; }
     public RewardAuction rewardAuction;
 
-    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+    // ÇÃ·¹ÀÌ¾îµé ¸ó½ºÅÍµé µ¥ÀÌÅÍ 
     private Dictionary<int , Player> players = new Dictionary<int, Player>();
     private Dictionary<int, Monster> monsters = new Dictionary<int, Monster>();
     private Dictionary<int, Player> playerList = new();
@@ -54,7 +54,7 @@ public class DungeonManager : MonoBehaviour
         }
         InitializePlayerDatabase();
     }
-    // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // Å¬¶óÀÌ¾ðÆ® ¿¡¼­ º¸³»±â
 
     public void EnterAuctionBid(int gold ,string id)
     {
@@ -93,7 +93,7 @@ public class DungeonManager : MonoBehaviour
 
         GameManager.Network.Send(movePacket);
     }
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ±ï¿½ 
+    // ¼­¹ö¿¡¼­ ¹Þ±â 
     public void Despawn(S_Despawn data)
     {
         Player playerToRemove = players[data.PlayerId];
@@ -147,30 +147,30 @@ public class DungeonManager : MonoBehaviour
     public void AllMove(S_Move data)
     {
         //Debug.Log(data);
-        // ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½ï¿½Å­ ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        // data.transformInfosï¿½ï¿½ TransformInfo ï¿½è¿­ï¿½Ì¹Ç·ï¿½, ï¿½Ì¸ï¿½ ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        // ¹ÞÀº ¹è¿­ ¸¸Å­ ¹Ýº¹¹®À» µ¹·Á¾ßÇÔ
+        // data.transformInfos´Â TransformInfo ¹è¿­ÀÌ¹Ç·Î, ÀÌ¸¦ ¹Ýº¹¹®À¸·Î Ã³¸®
         foreach (var syncTransformInfo in data.TransformInfos)
         {
-            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ID
+            // ÇÃ·¹ÀÌ¾î ID
             int playerId = syncTransformInfo.PlayerId;
 
-            // Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Ä¡ È¸ï¿½ï¿½)
+            // Æ®·£½ºÆû Á¤º¸ (À§Ä¡ È¸Àü)
             TransformInfo transformInfo = syncTransformInfo.Transform;
             Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
             Quaternion targetRot = Quaternion.Euler(0, transformInfo.Rot, 0);
 
-            // ï¿½ï¿½ï¿½Çµï¿½
+            // ½ºÇÇµå
             float speed = syncTransformInfo.Speed;
 
 
-            // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+            // ÇÃ·¹ÀÌ¾î°¡ Á¸ÀçÇÏ´ÂÁö °ËÁõ.
             Player player = GetPlayerAvatarById(playerId);
             if (player == null)
             {
                 continue;
             }
 
-            // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+            // ÇÃ·¹ÀÌ¾î°¡ º»ÀÎÀÎÁö °ËÁõ.
             if (MyPlayer.PlayerId == playerId)
             {
                 MyPlayer.MPlayer.UpdateUserPosition(targetPos, targetRot, speed);
@@ -178,7 +178,7 @@ public class DungeonManager : MonoBehaviour
             }
 
 
-            // ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ±ï¿½ï¿½.
+            // ÇÃ·¹ÀÌ¾î¿¡°Ô ÀÌµ¿ Á¤º¸¸¦ ³Ñ±ä´Ù.
             player.Move(targetPos, targetRot, speed);
         }
     }
@@ -186,12 +186,12 @@ public class DungeonManager : MonoBehaviour
     {
 
     }
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ëµµ 
+    // ½ºÆù¿ëµµ 
     public void Spawn(PlayerStatus playerData, TransformInfo playerTransform , bool isPlayer = false)
     {
         if (isPlayer)
         {
-            Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ô´Ï´ï¿½.");
+            Debug.Log("ÇÃ·¹ÀÌ¾î ÀÔ´Ï´Ù.");
             //Vector3 spawnPos = CalculateSpawnPosition(playerInfo.Transform);
             MyPlayer = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));//CreatePlayer(playerInfo, spawnPos);
             MyPlayer.SetIsMine(true);
@@ -204,7 +204,7 @@ public class DungeonManager : MonoBehaviour
         Player player = CreatePlayer(playerData, new Vector3(playerTransform.PosX, playerTransform.PosY, playerTransform.PosZ));
         player.SetIsMine(false);
         Destroy(player.gameObject.GetComponent<RogueController>());
-        // ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½
+        // ÇÃ·¹ÀÌ¾î¸¦ ¸®½ºÆ®¿¡ Ãß°¡
         players.Add(playerData.PlayerId, player);
     }
     public Player CreatePlayer(PlayerStatus playerData, Vector3 spawnPos)
@@ -230,7 +230,7 @@ public class DungeonManager : MonoBehaviour
 
         return player;
     }
-    public Monster CreateMonster(Vector3 spawnPos)// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+    public Monster CreateMonster(Vector3 spawnPos)// ¾ÆÁ÷ ¸ó½ºÅÍ ÀÎÆ÷°¡ ¾øÀ½ 
     {
         //var monster = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
         return new Monster();
@@ -239,9 +239,5 @@ public class DungeonManager : MonoBehaviour
     public Player GetPlayerAvatarById(int playerId)
     {
         return playerList.TryGetValue(playerId, out var player) ? player : null;
-    }
-
-    public void DungeonFailureHandler(){
-
     }
 }
