@@ -30,7 +30,7 @@ public class SpearmanCounter : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name.StartsWith("Dungeon"))
         {
-            if (Input.GetKeyDown(KeyCode.Q) && !isInCounter && canUseCounter)
+            if (Input.GetKeyDown(KeyCode.Space) && !isInCounter && canUseCounter)
             {
                 StartCounter();
             }
