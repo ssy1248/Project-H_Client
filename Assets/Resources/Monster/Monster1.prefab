@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6439525802715864508}
   - component: {fileID: 1606323191047949302}
   - component: {fileID: 5466402315271668107}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: UIMonsterInformation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 7791359593525513748}
   - component: {fileID: 5589379760114868462}
   - component: {fileID: 4893749745072482864}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: txtName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 5273557984882636083}
   - component: {fileID: 2611178589116308917}
   - component: {fileID: 553115032842198183}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Monster1
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!65 &553115032842198183
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 1619162186479623654}
   - component: {fileID: 3444149614049733056}
   - component: {fileID: 3444583986848220432}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imgNameBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 4821668717138560481}
   - component: {fileID: 8038021005761082384}
   - component: {fileID: 7741039274355422709}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imgCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +511,7 @@ GameObject:
   - component: {fileID: 1046163730125408348}
   - component: {fileID: 199941432363665837}
   - component: {fileID: 5225947734628380066}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imhHpBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 7321633068860721842}
   - component: {fileID: 8985707263695673503}
   - component: {fileID: 6686374498917834975}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: txtHpValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -720,7 +720,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3688280507641933807}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -754,7 +754,7 @@ GameObject:
   - component: {fileID: 3651935584387815130}
   - component: {fileID: 6353013861286469721}
   - component: {fileID: 4013490544929404360}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: imgHpFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,6 +826,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3688280507641933807}
     m_Modifications:
+    - target: {fileID: 128149177907190737, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 132497999615214216, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 535702951195797787, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
         type: 3}
       propertyPath: m_RootOrder
@@ -900,6 +910,91 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MushroomAngryPADefault
+      objectReference: {fileID: 0}
+    - target: {fileID: 875073071404757921, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1326775223490303571, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2075813819616887360, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2834780513048225266, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3731391309266774753, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3957353509392229428, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023885974302558781, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030216323347147538, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278060067821853555, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5764857850006842417, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5930036569632296968, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6336947773430299057, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507951052277606729, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826779368021592145, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7705993964377185779, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7716050567424239938, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8710764191252930891, guid: b19e63ffa2bd4f06a137cd7dd4b83a15,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -17,7 +17,7 @@ public class SpearmanCounter : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        weapon = GetComponent<Weapon>(); // Weapon 컴포넌트 가져오기
+        weapon = GetComponentInChildren<Weapon>(); // Weapon 컴포넌트 가져오기
 
         if (weapon == null)
         {

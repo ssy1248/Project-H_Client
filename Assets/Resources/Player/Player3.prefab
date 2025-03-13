@@ -3033,7 +3033,6 @@ GameObject:
   - component: {fileID: 6780161134169667257}
   - component: {fileID: 2637581427618498089}
   - component: {fileID: 1940315979212962944}
-  - component: {fileID: 7692847189424511120}
   m_Layer: 10
   m_Name: Player3
   m_TagString: Archer
@@ -3092,7 +3091,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 0
+  m_Speed: 4
   m_Acceleration: 1
   avoidancePriority: 50
   m_AngularSpeed: 300
@@ -3128,8 +3127,8 @@ MonoBehaviour:
     m_Bits: 0
   goalPos: {x: 0, y: 0, z: 0}
   goalRot: {x: 0, y: 0, z: 0, w: 0}
-  moveSpeed: 1
-  speed: 1
+  moveSpeed: 5
+  speed: 5
   dodgeDistance: 3
   teleportEffects: []
   dodgeEffectsArcher: []
@@ -3192,22 +3191,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &7692847189424511120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8126715550554907011}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2b0735cece4f7749ae4548c526bc756, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buffEffects:
-  - {fileID: 1619556661389288887}
-  - {fileID: 5044895833197397168}
-  buffCooldown: 7
 --- !u!1 &8165106367563517277
 GameObject:
   m_ObjectHideFlags: 0

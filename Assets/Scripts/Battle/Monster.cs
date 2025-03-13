@@ -273,7 +273,7 @@ public class Monster : MonoBehaviour
     {
         if(id == "Attck")
         {
-            Debug.Log($"공격 좌표 : {transform.position}");
+            //Debug.Log($"공격 좌표 : {transform.position}");
 
             animator.ResetTrigger(Constants.MonsterAttack1);
             animator.SetTrigger(Constants.MonsterAttack1);
@@ -283,11 +283,11 @@ public class Monster : MonoBehaviour
             StartCoroutine(WaitForAnimationEnd("Die"));
         } else if (id == "Hit")
         {
-            Debug.Log($"들어왔어요.!  id : {id}");
+            //Debug.Log($"들어왔어요.!  id : {id}");
             animator.ResetTrigger(Constants.MonsterHit);
             animator.SetTrigger(Constants.MonsterHit);
         }
-        Debug.Log($"id : {id}");
+        //Debug.Log($"id : {id}");
     }
 
     private IEnumerator WaitForAnimationEnd(string stateName)
