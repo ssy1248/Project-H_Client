@@ -108,7 +108,7 @@ public class MyPlayer : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, smoothRotateSpeed);
 
             // 이동 처리
-            transform.position += dir.normalized * Time.deltaTime * moveSpeed;
+            transform.position += dir * Time.deltaTime * moveSpeed;
             animator.SetBool("isRun", true);
         }
         else
