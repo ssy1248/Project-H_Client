@@ -66,8 +66,7 @@ public class UIRegister : MonoBehaviour
         localServerBtn.onClick.AddListener(OnClickLocalServer);
         btnBack.onClick.AddListener(ToggleScreens);
 
-        btnConfirmCharacter.onClick.AddListener(ConfirmCharacter);
-
+        btnConfirmCharacter.onClick.AddListener(checkchar);
         btnGoToRegister.onClick.AddListener(GoToRegisterScreen);
         SetServerUI(); // 첫 화면인 서버 입력 UI 표시
 
@@ -127,19 +126,15 @@ public class UIRegister : MonoBehaviour
         }
 
     }
-
-    private void ConfirmCharacter()
+    private void checkchar()
     {
-        if (selectedCharacterId >= 0 && selectedCharacterId <= 5)
-        {
-            TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // 선택된 캐릭터의 id로 게임 시작 요청
-            TownSEManager.instance.StopSE("UIRegisterMusic");
-            TownSEManager.instance.LoopPlaySE("TownMusic");
-        }
-        else
-        {
-            Debug.LogError("No character selected!");
-        }
+        TownManager.Instance.SelectCharacterRequest(selectedCharacterId);  // 선택된 캐릭터의 id로 게임 시작 요청
+    }
+
+    public void ConfirmCharacter()
+    {
+        TownSEManager.instance.StopSE("UIRegisterMusic");
+        TownSEManager.instance.LoopPlaySE("TownMusic");
     }
 
     // 캐릭터 선택을 classIdx에 반영
