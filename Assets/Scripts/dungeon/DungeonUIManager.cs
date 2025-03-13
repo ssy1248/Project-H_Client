@@ -9,16 +9,17 @@ public class DungeonUIManager : MonoBehaviour
     private static DungeonUIManager _instance;
     public static DungeonUIManager Instance => _instance;
 
-    // ÇÃ·¹ÀÌ¾î °æÇèÄ¡ ½½¶óÀÌ´õ
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½
     [SerializeField] public Slider PlayerExpSlider;
-    // ÇÃ·¹ÀÌ¾î ·¹º§ ÅØ½ºÆ®
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
     [SerializeField] public TextMeshProUGUI PlayerLevelText;
-    // ÇÃ·¹ÀÌ¾î Ã¼·Â ÅØ½ºÆ®
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã¼ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
     [SerializeField] public TextMeshProUGUI PlayerHpText;
-    // ÇÃ·¹ÀÌ¾î ¸¶³ª ÅØ½ºÆ®
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
     [SerializeField] public TextMeshProUGUI PlayerMpText;
-    //ÇÃ·¹ÀÌ¾î ¾ÆÀÌÄÜ
+    //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     [SerializeField] public GameObject[] PlayerIcon;
+    public GameOverUI gameOverUI;
 
     private void Awake()
     {

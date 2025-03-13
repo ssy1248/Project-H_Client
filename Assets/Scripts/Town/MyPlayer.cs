@@ -152,26 +152,43 @@ public class MyPlayer : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && !eSystem.IsPointerOverGameObject())
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayHit))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            // 오직 Ground 레이어만 감지 (BossMonster 레이어는 애초에 감지 안 됨)
+            int groundLayerMask = LayerMask.GetMask("Ground");
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayerMask))
             {
-                Vector3 hitPosition = rayHit.point; // 충돌 지점의 위치를 hitPosition에 저장
+                Vector3 hitPosition = hit.point;
+
                 // 클릭한 지점이 NavMesh 위에 있는지 확인
                 NavMeshHit navHit;
-                if (NavMesh.SamplePosition(hitPosition, out navHit, 0.5f, NavMesh.AllAreas))
+                if (!NavMesh.SamplePosition(hitPosition, out navHit, 1.0f, NavMesh.AllAreas))
                 {
-                    //agent.SetDestination(navHit.position);
-                    MousePos = navHit.position;
-
-                    // 방향 + 속도 velocity 구하는 로직.
-                    Vector3 directionToGoal = (navHit.position - transform.position).normalized;
-                    float speed = agent.speed;
-                    Vector3 velocity = directionToGoal * speed;
-
-                    SendMovePacket(navHit.position, velocity, moveSpeed, moveSpeed);
+                    Debug.LogWarning($"❌ 클릭한 위치: {hitPosition}");
+                    return;
                 }
+
+                MousePos = navHit.position;
+
+                // 방향 + 속도 velocity 구하는 로직.
+                Vector3 directionToGoal = (navHit.position - transform.position);
+                if (directionToGoal.magnitude < 0.01f)
+                {
+                    Debug.Log("❌ 목적지가 현재 위치와 너무 가까움!");
+                    return;
+                }
+
+                directionToGoal.Normalize();
+                float speed = agent.speed;
+                Vector3 velocity = directionToGoal * speed;
+
+                SendMovePacket(navHit.position, velocity, moveSpeed, moveSpeed);
             }
         }
     }
+
 
     public void ExecuteAnimation(int animIdx)
     {

@@ -128,6 +128,9 @@ class PacketHandler
     public static void S_LeaveDungeonHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_LeaveDungeon enterPacket) return;
+        var dm = DungeonManager.Instance;
+        if(!dm) return;
+        dm.DungeonFailureHandler();
     }
     public static void S_ScreenTextHandler(PacketSession session, IMessage packet)
     {
@@ -363,7 +366,17 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
 
         
     }
+    public static void S_ClearBoxHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_ClearBox boxPacket) return;
+        DungeonManager.Instance.ClearBox(boxPacket);
 
+    }
+    public static void S_GetExpEndHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_GetExp expPacket) return;
+        DungeonManager.Instance.GetExp(expPacket);
+    }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
     {
