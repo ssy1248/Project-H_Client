@@ -339,7 +339,10 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BossHit bossHitPacket) return;
 
-        
+        BossManager.Instance.TakeDamage(bossHitPacket);
+
+
+
     }
 
     public static void S_BossDieHandler(PacketSession session, IMessage packet)
