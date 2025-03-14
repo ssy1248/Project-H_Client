@@ -37,6 +37,8 @@ public class TownManager : MonoBehaviour
     public UnityAction<S_MoveItemResponse> S_MoveItemEvent;
     public UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
 
+    public TextMeshProUGUI GoldText;
+
     #region 파티 UI
     [Header("파티 UI 모음")]
     [SerializeField] private GameObject PartyUI;
@@ -444,8 +446,7 @@ public class TownManager : MonoBehaviour
     // 테스트 코드 
     public void RegisterResponse(S_RegisterResponse data)
     {
-
-
+        UIRegister.Instance.RegitserEndLogInUI();
     }
     // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
     public void LoginResponse(S_LoginResponse data)
@@ -1159,6 +1160,12 @@ public class TownManager : MonoBehaviour
         MyPlayer.playerData = data.Data;
 
         playerState.SetState();
+    }
+
+    public void SetGoldText(S_Gold gold)
+    {
+        Debug.Log("들어온 골드 : " + gold.Gold);
+        GoldText.text = gold.Gold.ToString();
     }
 
     // 자기 자신 스폰용도 

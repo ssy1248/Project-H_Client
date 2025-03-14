@@ -339,7 +339,10 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_BossHit bossHitPacket) return;
 
-        
+        BossManager.Instance.TakeDamage(bossHitPacket);
+
+
+
     }
 
     public static void S_BossDieHandler(PacketSession session, IMessage packet)
@@ -376,6 +379,12 @@ public static void S_MonsterHitHandler(PacketSession session, IMessage packet)
     {
         if (packet is not S_GetExp expPacket) return;
         DungeonManager.Instance.GetExp(expPacket);
+    }
+
+    public static void S_GoldHandler(PacketSession session, IMessage packet)
+    {
+        if (packet is not S_Gold GoldPacket) return;
+        TownManager.Instance.SetGoldText(GoldPacket);
     }
     /*
     public static void S_EnterHandler(PacketSession session, IMessage packet)
