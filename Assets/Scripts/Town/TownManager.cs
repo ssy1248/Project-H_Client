@@ -1165,6 +1165,7 @@ public class TownManager : MonoBehaviour
 
     public void SetGoldText(S_Gold gold)
     {
+        Debug.Log("들어온 골드 : " + gold.Gold);
         GoldText.text = gold.Gold.ToString();
     }
 
