@@ -18,8 +18,11 @@ public class SEManager : MonoBehaviour
     public static SEManager instance;
 
     Dictionary<string, AudioClip> se_map;
-	// Use this for initialization
-	void Awake ()
+
+    // **마스터 볼륨**
+    public float masterVolume = 1f;
+    // Use this for initialization
+    void Awake ()
     {
         if(instance ==null)
         {
@@ -141,5 +144,18 @@ public class SEManager : MonoBehaviour
         avilableAS.loop = false;
         avilableAS.clip = clip;
         avilableAS.Stop();
+    }
+
+    public void SetMasterVolume(float volume)
+    {
+        masterVolume = volume;
+        // 이미 재생 중인 AudioSource의 볼륨도 변경
+        foreach (var AS in audioPool)
+        {
+            if (AS.isPlaying)
+            {
+                AS.volume = masterVolume;
+            }
+        }
     }
 }
