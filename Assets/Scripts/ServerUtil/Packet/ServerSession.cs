@@ -12,7 +12,7 @@ public class ServerSession : PacketSession
 	public void Send(IMessage packet)
 	{
 		string msgName = packet.Descriptor.Name.Replace("_", String.Empty);
-		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
+		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName,true);
 			
 		ushort size = (ushort)packet.CalculateSize();
 		// byte[] sendBuff = new byte[size + 4]; 
@@ -26,7 +26,7 @@ public class ServerSession : PacketSession
 		Array.Copy(packet.ToByteArray(), 0, sendBuff, 5, size); // 전달하려는 데이터
 		
 		Send(new ArraySegment<byte>(sendBuff));
-	}
+    }
 	
 	public override void OnConnected(EndPoint endPoint)
 	{
@@ -35,8 +35,13 @@ public class ServerSession : PacketSession
 		
 		
 		TownManager.Instance.Connected();
-		
-		PacketManager.Instance.CustomHandler = (s, m, i) =>
+
+        if (PacketManager.Instance == null)
+        {
+            Debug.LogError("PacketManager 초기화되지 않음!");
+        }
+
+        PacketManager.Instance.CustomHandler = (s, m, i) =>
 		{
 			PacketQueue.Instance.Push(i, m);
 #if !UNITY_EDITOR
@@ -55,7 +60,7 @@ public class ServerSession : PacketSession
 
 	public override void OnRecvPacket(ArraySegment<byte> buffer)
 	{
-        Debug.Log($"패킷 수신 크기: {buffer.Count}");
+        //Debug.Log($"패킷 수신 크기: {buffer.Count}");
         PacketManager.Instance.OnRecvPacket(this, buffer);
 	}
 

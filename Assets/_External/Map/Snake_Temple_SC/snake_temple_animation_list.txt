@@ -1,0 +1,49 @@
+Snake Temple Animation List
+----------
+
+Switches:
+
+frame 01-03 :press
+frame 03-04 :state pressed
+frame 04-06 :release
+----------
+
+Doors:
+
+frame 01-14 : open
+frame 14-20 : state open
+frame 20-34 : close
+----------
+
+Spike Trap
+
+frame 02-56 : spring
+frame 56-70 : state sprung
+frame 70-95 : retract
+----------
+
+Door Blockers
+
+frame 001-020 : state closed
+frame 020-060 : open
+frame 060-080 : state open
+frame 080-120 : close
+----------
+
+Chests
+
+frame 001-020 : state closed
+frame 020-040 : open
+frame 050-060 : state open
+frame 080-100 : close
+----------
+
+Wall Water Fountain
+
+frame 001-010 : state closed
+frame 010-100 : open
+frame 100-160 : water start
+frame 200-300 : water flow (loop)
+frame 300-540 : water stop
+frame 550-620 : close
+frame 540-550 : state open

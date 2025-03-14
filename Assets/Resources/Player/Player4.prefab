@@ -2392,7 +2392,7 @@ Animator:
   m_GameObject: {fileID: 7425247205764167969}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3b40e2fb34bbb1e4da00ed8f7c35d651, type: 3}
-  m_Controller: {fileID: 9100000, guid: d97792edc8a4046beb1f2702f22fb57b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6ce46c13e3a838b4c8c6fa027e757691, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2438,9 +2438,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiNameChat: {fileID: 2075369095008506869}
+  exp: 0
+  nickname: 
   SmoothMoveSpeed: 10
   SmoothRotateSpeed: 10
   TeleportDistanceThreshold: 0.5
+  raycastDistance: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  goalPos: {x: 0, y: 0, z: 0}
+  goalRot: {x: 0, y: 0, z: 0, w: 0}
+  moveSpeed: 1
+  speed: 1
+  dodgeDistance: 3
+  teleportEffects: []
+  dodgeEffectsArcher: []
+  dodgeEffectsRogue: []
+  maxHealth: 100
+  currentHealth: 0
+  equipWeapon: {fileID: 0}
+  SkillData: {fileID: 0}
+  dodgeInterpolationTime: 0.3
 --- !u!1 &7581309179231962001
 GameObject:
   m_ObjectHideFlags: 0
@@ -2740,8 +2759,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 67786810abbfe724296435e7e5d7a5cc, type: 2}
-  m_sharedMaterial: {fileID: 655808461212083387, guid: 67786810abbfe724296435e7e5d7a5cc,
+  m_fontAsset: {fileID: 11400000, guid: 1fe099f46a237c149a87837c65b177ef, type: 2}
+  m_sharedMaterial: {fileID: 6193584115982977352, guid: 1fe099f46a237c149a87837c65b177ef,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3263,8 +3282,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Nickname
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 67786810abbfe724296435e7e5d7a5cc, type: 2}
-  m_sharedMaterial: {fileID: 655808461212083387, guid: 67786810abbfe724296435e7e5d7a5cc,
+  m_fontAsset: {fileID: 11400000, guid: 1fe099f46a237c149a87837c65b177ef, type: 2}
+  m_sharedMaterial: {fileID: 6193584115982977352, guid: 1fe099f46a237c149a87837c65b177ef,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
