@@ -19,6 +19,7 @@ public class RewardAuction : MonoBehaviour
     [SerializeField] TextMeshProUGUI stateText;
     [SerializeField] TextMeshProUGUI maxRewardText;
     [SerializeField] TextMeshProUGUI GetRewardText;
+    [SerializeField] GameObject outBtn;
 
     string id = "";
     public bool isEnd = false;
@@ -55,6 +56,7 @@ public class RewardAuction : MonoBehaviour
     {
         isEnd = true;
         auctionObject.SetActive(false);
+        outBtn.SetActive(true);
         StopCoroutine("TimeCheck");
     }
     public void ChangeGold(S_EnterAuctionBid data)

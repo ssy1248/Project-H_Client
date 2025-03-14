@@ -811,25 +811,25 @@ public class Player : MonoBehaviour
     
     public void DespawnEffect()
     {
-        //GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
-        //StartCoroutine(DestroyThis(temp));
+        GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
+        StartCoroutine(DestroyThis(temp));
     }
     public void SpawnEffect()
     {
-        //GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
-        //StartCoroutine(EndSpawnEffect(temp));
+       GameObject temp = SpawnManger.Instance.getData(gameObject.transform);
+       StartCoroutine(EndSpawnEffect(temp));
     }
     IEnumerator EndSpawnEffect(GameObject obj)
     {
         yield return new WaitForSeconds(1.3f);
-        SpawnManger.Instance.setData(obj);
+        //SpawnManger.Instance.setData(obj);
     }
     IEnumerator DestroyThis(GameObject obj)
     {
         yield return new WaitForSeconds(1.3f);
-        SpawnManger.Instance.setData(obj);
+        //SpawnManger.Instance.setData(obj);
         Destroy(gameObject);
-        StopAllCoroutines();
+        //StopAllCoroutines();
     }
 
     private IEnumerator BoostAttackSpeed()

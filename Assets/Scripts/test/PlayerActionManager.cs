@@ -150,7 +150,7 @@ public class PlayerActionManager : MonoBehaviour
         Player[] players = GameObject.FindObjectsOfType<Player>();
         foreach (Player player in players)
         {
-            if(player.MPlayer != null && player.nickname == result.UseUserName)
+            if(player.nickname == result.UseUserName)
             {
                 player.Attack();
                 break;
