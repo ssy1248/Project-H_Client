@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 public class PartyManager : MonoBehaviour
 {
     [Header("파티 관련")]
+    public static PartyManager _instance;
+    public static PartyManager Instance => _instance;
+
     [SerializeField] private GameObject PartyListPrefab;
     [SerializeField] private GameObject PartyLeaderCharPrefab;
     [SerializeField] private GameObject PartyMemberCharPrefab;
@@ -21,7 +24,17 @@ public class PartyManager : MonoBehaviour
     private void Awake()
     {
         // 마을에서 부터 던전으로 이동시킬 오브젝트
-        DontDestroyOnLoad(this.gameObject);
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -31,12 +44,29 @@ public class PartyManager : MonoBehaviour
 
     void Update()
     {
-        // 이미 UI가 생성되었으면 더 이상 생성하지 않음
         if (partyUI == null)
         {
             DungeonPartyUISetUp();
+            return;
         }
-        else if (partyUI != null && InDungeonPartyInfo.PartyName != partyUI.GetComponentInChildren<TMP_InputField>().text)
+
+        // InDungeonPartyInfo가 null인지 확인
+        if (InDungeonPartyInfo == null)
+        {
+            Debug.Log("안에 던전 인포가 없어요!");
+            return;
+        }
+
+        // TMP_InputField 가져오기
+        TMP_InputField inputField = partyUI.GetComponentInChildren<TMP_InputField>();
+        if (inputField == null)
+        {
+            Debug.LogError("TMP_InputField is NULL inside partyUI!");
+            return;
+        }
+
+        // 파티 이름이 다르면 UI를 다시 세팅
+        if (InDungeonPartyInfo.PartyName != inputField.text)
         {
             DungeonPartyUISetUp();
         }

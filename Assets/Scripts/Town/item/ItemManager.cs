@@ -44,10 +44,14 @@ public class ItemManager : MonoBehaviour
 
     public void SetData(List<ItemData> data)
     {
-        foreach (ItemData item in data)
+        if (itemData.Count == 0)
         {
-            itemData.Add(item.Id, item);
+            foreach (ItemData item in data)
+            {
+                itemData.Add(item.Id, item);
+            }
         }
+        
     }
     public ItemData GetBuyId(int id)
     {
