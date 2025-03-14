@@ -93,7 +93,7 @@ public class BossManager : MonoBehaviour
         boss.BossDie();
 
         // 코루틴 실행
-        StartCoroutine(DisableBossAfterDelay(1.0f));
+        StartCoroutine(DisableBossAfterDelay(3.0f));
 
     }
 
@@ -104,10 +104,27 @@ public class BossManager : MonoBehaviour
 
         currentBoss.SetActive(false);
         currentBladePool.SetActive(false);
+
+        Destroy(currentBoss);        // 보스 완전 삭제
+        Destroy(currentBladePool);   // 블레이드 풀 완전 삭제
+
+        yield return new WaitForSeconds(0.1f); // 삭제가 완료될 때까지 대기
+
+        if (currentBoss != null)
+        {
+            Debug.LogError($"currentBoss가 아직 씬에 남아 있음: {currentBoss}");
+        }
+        if (currentBladePool != null)
+        {
+            Debug.LogError($"currentBladePool이 아직 씬에 남아 있음: {currentBladePool}");
+        }
     }
 
-    void TakeDamage()
+    public void TakeDamage(S_BossHit bossHitPacket)
     {
+        int bossHp = boss.GetHp();
+        bossHp -= bossHitPacket.Damage;
+        boss.SetHp(bossHp);
 
     }
 

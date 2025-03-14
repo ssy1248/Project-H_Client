@@ -135,7 +135,16 @@ public class BossController : Enemy
     public void SetHp(int bossHp)
     {
         hp = bossHp;
+        Debug.Log("[보스 공격당함]");
+        anim.SetTrigger("Hit");
     }
+
+    public int GetHp()
+    {
+        return hp; 
+    }
+
+
 
     void Update()
     {
