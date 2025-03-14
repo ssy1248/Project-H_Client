@@ -68,7 +68,7 @@ public class BossManager : MonoBehaviour
         if (currentBoss != null )
         {
             currentBoss.transform.position = currentPosition;
-            currentBoss.transform.localScale = new Vector3(4f, 4f, 4f);
+            currentBoss.transform.localScale = new Vector3(2f, 2f, 2f);
         }
     }
 
@@ -90,6 +90,18 @@ public class BossManager : MonoBehaviour
 
     public void OnBossDeath()
     {
+        boss.BossDie();
+
+        // 코루틴 실행
+        StartCoroutine(DisableBossAfterDelay(1.0f));
+
+    }
+
+
+    private IEnumerator DisableBossAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         currentBoss.SetActive(false);
         currentBladePool.SetActive(false);
     }
@@ -114,7 +126,6 @@ public class BossManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         
