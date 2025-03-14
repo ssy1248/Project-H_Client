@@ -26,8 +26,9 @@ public class SEManager : MonoBehaviour
     {
         if(instance ==null)
         {
-            audioPool = new List<AudioSource>();
             instance = this;
+            audioPool = new List<AudioSource>();
+           
             se_map = new Dictionary<string, AudioClip>();
             foreach(var e in effect)
             {
