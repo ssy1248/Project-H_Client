@@ -129,6 +129,14 @@ class PacketManager
         _handler.Add((ushort)MsgId.SBossskillstart, PacketHandler.S_BossSkillStartHandler);
         _onRecv.Add((ushort)MsgId.SBossskillend, MakePacket<S_BossSkillEnd>);
         _handler.Add((ushort)MsgId.SBossskillend, PacketHandler.S_BossSkillEndHandler);
+
+        _onRecv.Add((ushort)MsgId.SGetexp, MakePacket<S_GetExp>);
+        _handler.Add((ushort)MsgId.SGetexp, PacketHandler.S_GetExpEndHandler);
+        _onRecv.Add((ushort)MsgId.SClearbox, MakePacket<S_ClearBox>);
+        _handler.Add((ushort)MsgId.SClearbox, PacketHandler.S_ClearBoxHandler);
+
+        _onRecv.Add((ushort)MsgId.SGold, MakePacket<S_Gold>);
+        _handler.Add((ushort)MsgId.SGold, PacketHandler.S_GoldHandler);
         Debug.Log("핸들러 등록 완료");
     }
 

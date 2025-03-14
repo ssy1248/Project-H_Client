@@ -31,11 +31,13 @@ public class RewardAuction : MonoBehaviour
 
     public void StartAuction(S_SetAuctionData data)
     {
+        nowitem = ItemManager.instance.GetBuyId(data.Itemid);
         rarity = data.Rarity;
-        nowName = "";
+        nowName = nowitem.Name;
         Debug.Log(data);
         id = data.Id;
-        nowitem = ItemManager.instance.GetBuyId(data.Itemid);
+        rewardImg.sprite = ItemManager.instance.GetItemImg(data.Itemid);
+        nameText.text = nowName;
         nowGold = nowitem.Price;
         nowTime = data.Time;
         maxRewardItems = data.MaxRewardItems;
@@ -74,8 +76,14 @@ public class RewardAuction : MonoBehaviour
     }
     // ±∏∏≈ Ω≈√ª 
 
-    public void GetReward(string name, int data , bool isItem)
+    public void GetReward(string name, int data , bool isItem = false, bool isExp = false)
     {
+        getRewardObject.SetActive(true);
+        if (isExp)
+        {
+            GetRewardText.SetText(name + " ¥‘¿« \n" + data + "  ∞Ê«Ëƒ° »πµÊ ");
+            return;
+        }
         if (isItem)
         {
             GetRewardText.SetText(name + " ¥‘¿« \n" +ItemManager.instance.GetBuyId(data).Name +" X 1 æ∆¿Ã≈€ »πµÊ ");
@@ -84,7 +92,7 @@ public class RewardAuction : MonoBehaviour
         {
             GetRewardText.SetText(name + " ¥‘¿« \n" + data + "G  \n ∫∏ªÛ »πµÊ ");
         }
-        getRewardObject.SetActive(true);
+        
         
     }
 

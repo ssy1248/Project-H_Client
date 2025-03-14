@@ -19,6 +19,8 @@ public class DungeonUIManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI PlayerMpText;
     //�÷��̾� ������
     [SerializeField] public GameObject[] PlayerIcon;
+    [SerializeField] public GameObject[] PlayerSkillIcon;
+    [SerializeField] public GameObject[] PlayerDodgeIcon;
     public GameOverUI gameOverUI;
 
     private void Awake()

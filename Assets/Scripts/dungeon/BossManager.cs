@@ -68,7 +68,7 @@ public class BossManager : MonoBehaviour
         if (currentBoss != null )
         {
             currentBoss.transform.position = currentPosition;
-            currentBoss.transform.localScale = new Vector3(4f, 4f, 4f);
+            currentBoss.transform.localScale = new Vector3(2f, 2f, 2f);
         }
     }
 
@@ -143,7 +143,6 @@ public class BossManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         

@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 
     private UIChat uiChat;
 
-    public StatInfo playerData;
+    public StatInfo playerData = new();
     public float exp;
 
     public string nickname;

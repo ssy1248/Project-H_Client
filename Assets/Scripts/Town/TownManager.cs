@@ -37,6 +37,8 @@ public class TownManager : MonoBehaviour
     public UnityAction<S_MoveItemResponse> S_MoveItemEvent;
     public UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
 
+    public TextMeshProUGUI GoldText;
+
     #region 파티 UI
     [Header("파티 UI 모음")]
     [SerializeField] private GameObject PartyUI;
@@ -67,7 +69,6 @@ public class TownManager : MonoBehaviour
 
     [Header("테스트")]
     // 테스트 용도로 생성
-    [SerializeField] GameObject errorText;
 
     private const string DefaultPlayerPath = "Player/Player1";
 
@@ -441,23 +442,16 @@ public class TownManager : MonoBehaviour
     // 핸들러와 연결후 각각 필요한 기능 구현 
 
     // 회원가입 확인 메세지 출력정도.
-    IEnumerator erroText()
-    {
-        errorText.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        errorText.SetActive(false);
-    }
+
     // 테스트 코드 
     public void RegisterResponse(S_RegisterResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
+
     }
     // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
     public void LoginResponse(S_LoginResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         if (data.Success)
         {
             UiRegister.ShowCharacterSelection();
@@ -473,8 +467,7 @@ public class TownManager : MonoBehaviour
     // 다른 플레이어들 들어오면 생성해주기 // 아래 spanwn 함수 사용하면 아마 구현
     public void Enter(S_Enter data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Player.ToString());
+
         Spawn(data.Player);
     }
 
@@ -483,8 +476,7 @@ public class TownManager : MonoBehaviour
     // 여기 패킷에 자기 자신이 몇번인지 추가해줬으면 좋겠습니다.
     public void AllSpawn(S_Spawn data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Players.ToString());
+
         //Debug.Log(data);
         //Debug.Log(data.StoreList);
         //Debug.Log("플레이어 수 : " + data.Players.Count);
@@ -502,17 +494,12 @@ public class TownManager : MonoBehaviour
         }
         //shopUi.GetBuyData(data.StoreList.ToList());
 
+        UiRegister.ConfirmCharacter();
         ItemManager.instance.SetData(data.ItemData.ToList());
     }
     // 나가면 삭제해주기 
     public void Despawn(S_Despawn data)
     {
-        //StartCoroutine("erroText");
-        //errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerIds.ToString()) ;
-
-        // 나중에 주석풀자.
-
-
         Player playerToRemove = players.FirstOrDefault(p => p.PlayerId == data.PlayerId);
 
         if (playerToRemove != null)
@@ -527,10 +514,11 @@ public class TownManager : MonoBehaviour
     {
         // 받은 배열 만큼 반복문을 돌려야함
         // data.transformInfos는 TransformInfo 배열이므로, 이를 반복문으로 처리
-        foreach (var syncTransformInfo  in data.TransformInfos) {
+        foreach (var syncTransformInfo in data.TransformInfos)
+        {
             // 플레이어 ID
             int playerId = syncTransformInfo.PlayerId;
-            
+
             // 트랜스폼 정보 (위치 회전)
             TransformInfo transformInfo = syncTransformInfo.Transform;
             Vector3 targetPos = new Vector3(transformInfo.PosX, transformInfo.PosY, transformInfo.PosZ);
@@ -542,49 +530,27 @@ public class TownManager : MonoBehaviour
 
             // 플레이어가 존재하는지 검증.
             Player player = GetPlayerAvatarById(playerId);
-            if(player == null) {
+            if (player == null)
+            {
                 continue;
             }
 
             // 플레이어가 본인인지 검증.
-            if(MyPlayer.PlayerId == playerId) {
+            if (MyPlayer.PlayerId == playerId)
+            {
 
                 MyPlayer.MPlayer.UpdateUserPosition(targetPos, targetRot, speed);
                 continue;
             }
 
-            
+
             // 플레이어에게 이동 정보를 넘긴다.
             player.Move(targetPos, targetRot, speed);
         }
-
-
-
-        // StartCoroutine("erroText");
-        // errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
-
-        // Player player = GetPlayerAvatarById(data.PlayerId);
-        // if (player == null)
-        // {
-        //     Debug.LogWarning("Player with ID " + data.PlayerId + " not found.");
-        //     return;
-        // }
-
-        // if(MyPlayer.PlayerId != data.PlayerId)
-
-        // // TransformInfo�� �̿��� ���ο� ��ġ�� ȸ������ ����մϴ�.
-        // Vector3 targetPos = new Vector3(data.Transform.PosX, data.Transform.PosY, data.Transform.PosZ);
-        // // ���⼭�� y�� ȸ���� �����Ѵٰ� ���� (�ʿ�� �ٸ� �൵ ����)
-        // Quaternion targetRot = Quaternion.Euler(0, data.Transform.Rot, 0);
-
-        // // �÷��̾��� Move() �޼��带 ȣ���Ͽ� �ε巯�� �̵� �� ȸ�� ó���� �����մϴ�.
-        // player.Move(targetPos, targetRot);
     }
     //아마 아이디 받은뒤 해당 id player 애니메이션 
     public void AllAnimation(S_Animation data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.PlayerId.ToString());
 
         // playerList 딕셔너리나 GetPlayerAvatarById를 이용해 해당 플레이어를 찾습니다.
         Player player = GetPlayerAvatarById(data.PlayerId);
@@ -600,9 +566,6 @@ public class TownManager : MonoBehaviour
     // 채팅 받아오기
     public void ChatResponse(S_Chat data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.ChatMsg);
-        Debug.Log(data);
 
         uiChat.PushMessage(data.ChatMsg, data.PlayerId == MyPlayer.PlayerId, UIChat.ChatType.Global, data.PlayerId);
     }
@@ -611,8 +574,7 @@ public class TownManager : MonoBehaviour
     // 아이템 사는거 응답 처리
     public void BuyItemResponse(S_BuyItemResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
     }
     public void SellItemResponse(S_SellItemResponse data)
     {
@@ -625,26 +587,20 @@ public class TownManager : MonoBehaviour
     // 아이템 장착 응답 처리
     public void EquipItemResponse(S_EquipItemResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
     }
     // 아이템 탈착 응답 처리
     public void DisrobeItemResponse(S_DisrobeItemResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
     }
     // 소비 장착 응답 처리
     public void ActiveItemeResponse(S_ActiveItemResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
     }
     // 파티 응답 처리
     public void PartyResponse(S_PartyResponse data)
     {
-        StartCoroutine("erroText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
         Debug.Log($"파티 생성 받은 데이터 : {data.Party}");
 
         // 기존에 생성된 파티원 UI가 있다면 먼저 제거
@@ -689,8 +645,7 @@ public class TownManager : MonoBehaviour
     }
     public void PartyInviteResponse(S_PartyResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 초대 후 받은 데이터 : {data}");
 
         // 파티 UI 활성화
@@ -768,8 +723,7 @@ public class TownManager : MonoBehaviour
     //파티 가입
     public void PartyJoinHandler(S_PartyResponse data)
     {
-        //StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 가입 받은 데이터 : {data}");
 
         // 파티 UI 활성화 및 파티 이름 업데이트
@@ -844,8 +798,7 @@ public class TownManager : MonoBehaviour
     // 모든 파티 조회
     public void PartyListResponse(S_PartySearchResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 리스트 조회 받은 데이터 : {data}");
 
         // 기존에 생성된 파티원 UI가 있다면 먼저 제거
@@ -883,8 +836,7 @@ public class TownManager : MonoBehaviour
     // 파티 검색 결과 // 코드 구현
     public void PartySearchResponse(S_PartySearchResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 서치 받은 데이터 : {data}");
 
         // 검색 성공
@@ -936,8 +888,7 @@ public class TownManager : MonoBehaviour
     // 파티 추방
     public void PartyKickResponse(S_PartyResultResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 추방 받은 데이터 : {data}");
 
         if(data.Success)
@@ -1010,8 +961,7 @@ public class TownManager : MonoBehaviour
     // 파티 탈퇴
     public void PartyExitResponse(S_PartyResultResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 탈퇴 받은 데이터 : {data}");
 
         if (data.Success)
@@ -1076,8 +1026,7 @@ public class TownManager : MonoBehaviour
 
     public void PartyUpdateResponse(S_PartyResponse data)
     {
-        StartCoroutine("errorText");
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
         Debug.Log($"파티 업데이트 받은 데이터 : {data}");
 
         if (MyPlayer == null || !data.Party.Players.Any(ps => {
@@ -1160,16 +1109,10 @@ public class TownManager : MonoBehaviour
     }
     public void SellInMarketResponse(S_SellInMarket data)
     {
-        
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
+
     }
     public void BuyInMarketResponse(S_BuyInMarket data)
     {
-        StartCoroutine("errorText");
-        Debug.Log(data);
-        errorText.GetComponent<TextMeshProUGUI>().SetText(data.Message);
 
     }
     public void MarketMyListResponse(S_MarketMyList data)
@@ -1218,6 +1161,12 @@ public class TownManager : MonoBehaviour
         MyPlayer.playerData = data.Data;
 
         playerState.SetState();
+    }
+
+    public void SetGoldText(S_Gold gold)
+    {
+        Debug.Log("들어온 골드 : " + gold.Gold);
+        GoldText.text = gold.Gold.ToString();
     }
 
     // 자기 자신 스폰용도 

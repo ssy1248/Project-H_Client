@@ -71,22 +71,6 @@ public class UIAnimation : MonoBehaviour
             return;
         }
         if(!isShowing) return;
-        switch (true)
-        {
-            // �κ��丮 Ű 
-            case var _ when Input.GetKeyDown(KeyCode.O):
-                storage.Toggle();
-                break;
-            case var _ when Input.GetKeyDown(KeyCode.I):
-                inventory.Toggle();
-                break;
-            case var _ when Input.GetKeyDown(KeyCode.P):
-                equipment.Toggle();
-                break;
-            case var _ when Input.GetKeyDown(KeyCode.M):
-                marketToggle();
-                break;
-        }
     }
    
     public void marketToggle()
