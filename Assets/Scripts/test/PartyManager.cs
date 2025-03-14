@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 public class PartyManager : MonoBehaviour
 {
     [Header("파티 관련")]
+    public static PartyManager _instance;
+    public static PartyManager Instance => _instance;
+
     [SerializeField] private GameObject PartyListPrefab;
     [SerializeField] private GameObject PartyLeaderCharPrefab;
     [SerializeField] private GameObject PartyMemberCharPrefab;
@@ -21,7 +24,17 @@ public class PartyManager : MonoBehaviour
     private void Awake()
     {
         // 마을에서 부터 던전으로 이동시킬 오브젝트
-        DontDestroyOnLoad(this.gameObject);
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -40,7 +53,7 @@ public class PartyManager : MonoBehaviour
         // InDungeonPartyInfo가 null인지 확인
         if (InDungeonPartyInfo == null)
         {
-            Debug.LogError("InDungeonPartyInfo is NULL!");
+            Debug.Log("안에 던전 인포가 없어요!");
             return;
         }
 
