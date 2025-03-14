@@ -134,6 +134,9 @@ class PacketManager
         _handler.Add((ushort)MsgId.SGetexp, PacketHandler.S_GetExpEndHandler);
         _onRecv.Add((ushort)MsgId.SClearbox, MakePacket<S_ClearBox>);
         _handler.Add((ushort)MsgId.SClearbox, PacketHandler.S_ClearBoxHandler);
+
+        _onRecv.Add((ushort)MsgId.SGold, MakePacket<S_Gold>);
+        _handler.Add((ushort)MsgId.SGold, PacketHandler.S_GoldHandler);
         Debug.Log("핸들러 등록 완료");
     }
 

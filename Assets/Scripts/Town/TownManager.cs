@@ -37,6 +37,8 @@ public class TownManager : MonoBehaviour
     public UnityAction<S_MoveItemResponse> S_MoveItemEvent;
     public UnityAction<S_ActiveItemResponse> S_ActiveItemEvent;
 
+    public TextMeshProUGUI GoldText;
+
     #region 파티 UI
     [Header("파티 UI 모음")]
     [SerializeField] private GameObject PartyUI;
@@ -1159,6 +1161,11 @@ public class TownManager : MonoBehaviour
         MyPlayer.playerData = data.Data;
 
         playerState.SetState();
+    }
+
+    public void SetGoldText(S_Gold gold)
+    {
+        GoldText.text = gold.Gold.ToString();
     }
 
     // 자기 자신 스폰용도 
