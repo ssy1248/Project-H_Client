@@ -446,8 +446,7 @@ public class TownManager : MonoBehaviour
     // 테스트 코드 
     public void RegisterResponse(S_RegisterResponse data)
     {
-
-
+        UIRegister.Instance.RegitserEndLogInUI();
     }
     // 로그인 확인후 다음 캐릭터 선택창으로 이동 구현
     public void LoginResponse(S_LoginResponse data)

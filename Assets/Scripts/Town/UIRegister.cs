@@ -173,6 +173,16 @@ public class UIRegister : MonoBehaviour
         btnBack.gameObject.SetActive(true);
     }
 
+    public void RegitserEndLogInUI()
+    {
+        loginPanel.SetActive(true);
+        //serverPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        characterPanel.SetActive(false);
+        txtMessage.text = string.Empty;
+        btnBack.gameObject.SetActive(true);
+    }
+
     public void Login()
     {
         TownManager.Instance.Login(loginEmail.text, loginPassword.text);
