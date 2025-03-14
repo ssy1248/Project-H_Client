@@ -182,10 +182,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // D키를 눌렀고, 구르기 중이 아니고 쿨타임이 끝났으면 구르기 실행
-        //if (DDown && !isDodge && !isOnCooldown)
-        //{
-        //    Dodge();
-        //}
+        if (DDown && !isDodge && !isOnCooldown)
+        {
+            Dodge();
+        }
 
 
 

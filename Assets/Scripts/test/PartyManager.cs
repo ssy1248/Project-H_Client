@@ -131,8 +131,6 @@ public class PartyManager : MonoBehaviour
                 DungeonUIManager.Instance.PlayerHpText.text = InDungeonPartyInfo.Players[i].PlayerCurHp + " / " + InDungeonPartyInfo.Players[i].PlayerFullHp;
                 DungeonUIManager.Instance.PlayerMpText.text = InDungeonPartyInfo.Players[i].PlayerCurMp + " / " + InDungeonPartyInfo.Players[i].PlayerFullMp;
                 DungeonUIManager.Instance.PlayerIcon[InDungeonPartyInfo.Players[i].PlayerClass - 1].SetActive(true);
-                DungeonUIManager.Instance.PlayerSkillIcon[InDungeonPartyInfo.Players[i].PlayerClass - 1].SetActive(true);
-                DungeonUIManager.Instance.PlayerDodgeIcon[InDungeonPartyInfo.Players[i].PlayerClass - 1].SetActive(true);
                 break;
             }
         }
