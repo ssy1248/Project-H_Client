@@ -213,12 +213,26 @@ public class Player : MonoBehaviour
     /// </summary>
     public void InterpolateToPosition(Vector3 targetPos)
     {
+        // 이펙트를 사용하는 함수를 MoveToPositionCoroutine 여기에 몰아야할듯?
+        // 안그러면 회피 이펙트 코루틴을 사용하는 곳들이 StopAllCoroutines -> 이거에 다 사라짐
         StopAllCoroutines();
         StartCoroutine(MoveToPositionCoroutine(targetPos, dodgeInterpolationTime));
     }
 
     private IEnumerator MoveToPositionCoroutine(Vector3 targetPos, float duration)
     {
+        // NavMeshAgent의 자동 위치 갱신을 비활성화
+        if (nav != null)
+        {
+            nav.updatePosition = false;
+            // 기존 경로를 초기화하여, Agent가 더 이상 이동하지 않도록 합니다.
+            nav.ResetPath();
+            // 일단 해당 시점에서 정지 상태로 설정
+            nav.isStopped = true;
+            // 현재 Transform.position으로 Warp
+            nav.Warp(transform.position);
+        }
+
         if (gameObject.CompareTag("Archer"))
             ActivateDodgeEffect(dodgeEffectsArcher, ref dodgeEffectArcherIndex);
         else if (gameObject.CompareTag("Rogue"))
@@ -233,6 +247,16 @@ public class Player : MonoBehaviour
             yield return null;
         }
         transform.position = targetPos;
+
+        // 이동 완료 후 NavMeshAgent의 자동 위치 갱신을 재활성화
+        if (nav != null)
+        {
+            // 최종 위치로 다시 Warp(혹은 transform.position 대입)
+            nav.Warp(transform.position);
+            // Agent가 필요하다면 다시 움직일 수 있도록
+            nav.updatePosition = true;
+            nav.isStopped = false;
+        }
     }
 
     /// <summary>

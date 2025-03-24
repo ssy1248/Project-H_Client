@@ -92,26 +92,18 @@ public class PlayerActionManager : MonoBehaviour
     // 회피 액션이 들어오면 처리할 핸들러
     private void ProcessDodgeResult(DodgeResult result)
     {
-        Debug.Log($"회피 결과: 회피로 감소한 피해량={result.EvadedDamage}, " +
-             $"이동 거리={result.DodgeDistance}, " +
-             $"최종 위치=({result.FinalPosition.X}, {result.FinalPosition.Y}, {result.FinalPosition.Z})");
+        Debug.Log($"회피 결과: 최종 위치=({result.FinalPosition.X}, {result.FinalPosition.Y}, {result.FinalPosition.Z})");
 
         Player[] players = GameObject.FindObjectsOfType<Player>();
         foreach (Player player in players)
         {
             if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
-                //player.Dodge();
                 // 서버 계산 좌표를 부드럽게 적용합니다.
                 player.InterpolateToPosition(new Vector3(
                     result.FinalPosition.X,
                     result.FinalPosition.Y,
                     result.FinalPosition.Z));
-                //player.SetPosition(new Vector3(
-                //    result.FinalPosition.X,
-                //    result.FinalPosition.Y,
-                //    result.FinalPosition.Z)
-                //    );
                 player.TriggerDodgeAnimation();
                 break;
             }
@@ -180,14 +172,6 @@ public class PlayerActionManager : MonoBehaviour
         // 플레이어가 바라보는 방향을 구합니다.
         Vector3 playerForward = myPlayer.transform.forward.normalized;
 
-        // 현재 위치
-        Vector currentPositionProto = new Vector
-        {
-            X = transform.position.x,
-            Y = transform.position.y,
-            Z = transform.position.z
-        };
-
         // 프로토버퍼 메시지 형식에 맞게 Vector3 객체로 변환합니다. -> 바라보는 방향
         Vector directionProto = new Vector
         {
@@ -199,7 +183,6 @@ public class PlayerActionManager : MonoBehaviour
         DodgeAction dodgeAction = new DodgeAction
         {
             AttackerName = myPlayer.nickname,
-            CurrentPosition = currentPositionProto,
             Direction = directionProto
         };
 
