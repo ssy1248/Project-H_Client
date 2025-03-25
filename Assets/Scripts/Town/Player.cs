@@ -165,12 +165,6 @@ public class Player : MonoBehaviour
                 //Mousemove();
                // CheckArrival();
             }
-
-            // 마우스 좌클릭 공격
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    Attack();
-            //}
         }
         else
         {
@@ -333,37 +327,48 @@ public class Player : MonoBehaviour
     }
 
     // 실질적인 회피 함수
-    public void Dodge()
+    public void Dodge(Vector3? serverFinalPos = null)
     {
         if (!isDodge)
         {
-            // 회피 시 이동 방향 계산:
-            // 이동 중이면 목적지와의 방향, 그렇지 않으면 현재 바라보는 방향 사용
-            dodgeVec = isMove ? (moveVec - transform.position).normalized : transform.forward;
-            // 회피 예측 좌표 계산
-            predictedDodgePos = transform.position + dodgeVec * dodgeDistance;
-            Debug.Log("클라 예측 좌표 : " + predictedDodgePos);
-            // 배속 적용 (필요에 따라 값 조정)
-            speed *= 2;
-            // 새로 추가한 함수로 회피 애니메이션 트리거
+            // 이동 중이라면 이동 중지를 먼저 처리합니다.
+            if (isMove)
+            {
+                isMove = false;
+                if (nav != null)
+                {
+                    nav.ResetPath();
+                    nav.isStopped = true;
+                }
+            }
+
+            // 회피 방향은 현재 바라보는 방향을 사용
+            dodgeVec = transform.forward;
+            // 서버 좌표가 제공되면 그 좌표를 사용하고, 그렇지 않으면 로컬 예측 좌표를 계산합니다.
+            Vector3 finalDodgePos = serverFinalPos.HasValue
+                ? serverFinalPos.Value
+                : transform.position + dodgeVec * dodgeDistance;
+            predictedDodgePos = finalDodgePos;
+            Debug.Log("최종 회피 좌표: " + finalDodgePos);
+
+            // 회피 애니메이션 실행
             TriggerDodgeAnimation();
+
+            // 효과 및 사운드 실행 (예: Archer, Rogue)
             if (gameObject.CompareTag("Rogue"))
             {
                 SEManager.instance.PlaySE("RogueDodge");
-
+                ActivateDodgeEffect(dodgeEffectsRogue, ref dodgeEffectRogueIndex);
             }
-            if (gameObject.CompareTag("Archer"))
+            else if (gameObject.CompareTag("Archer"))
             {
                 SEManager.instance.PlaySE("ArcherDodge");
-
-            }
-            isDodge = true;
-
-            if (gameObject.CompareTag("Archer"))
                 ActivateDodgeEffect(dodgeEffectsArcher, ref dodgeEffectArcherIndex);
-            else if (gameObject.CompareTag("Rogue"))
-                ActivateDodgeEffect(dodgeEffectsRogue, ref dodgeEffectRogueIndex);
+            }
 
+            isDodge = true;
+            // 서버에서 전달받은 좌표(또는 예측 좌표)로 회피 이동 보간 시작
+            StartCoroutine(MoveToPositionCoroutine(finalDodgePos, dodgeInterpolationTime));
             Invoke("DodgeOut", 0.4f);
         }
     }
