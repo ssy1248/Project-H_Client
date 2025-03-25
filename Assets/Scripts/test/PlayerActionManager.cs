@@ -99,16 +99,12 @@ public class PlayerActionManager : MonoBehaviour
         {
             if (player.MPlayer != null && player.nickname == result.UseUserName)
             {
-                // 서버 계산 좌표를 부드럽게 적용합니다.
-                player.InterpolateToPosition(new Vector3(
-                    result.FinalPosition.X,
-                    result.FinalPosition.Y,
-                    result.FinalPosition.Z));
-                player.TriggerDodgeAnimation();
+                // 서버에서 전달된 최종 좌표로 Dodge()를 호출합니다.
+                Vector3 serverPos = new Vector3(result.FinalPosition.X, result.FinalPosition.Y, result.FinalPosition.Z);
+                player.Dodge(serverPos);
                 break;
             }
         }
-        // 여기서 UI 업데이트나 게임 로직에 반영
     }
 
     // 피격 액션이 들어오면 처리할 핸들러
@@ -179,6 +175,9 @@ public class PlayerActionManager : MonoBehaviour
             Y = playerForward.y,
             Z = playerForward.z
         };
+
+        // 반격을 위한 몬스터 아이디를 얻어야 할듯
+        string monsterId;
 
         DodgeAction dodgeAction = new DodgeAction
         {
