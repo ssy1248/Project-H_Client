@@ -215,15 +215,12 @@ public class Player : MonoBehaviour
 
     private IEnumerator MoveToPositionCoroutine(Vector3 targetPos, float duration)
     {
-        // NavMeshAgent의 자동 위치 갱신을 비활성화
+        // NavMeshAgent의 자동 위치 갱신 비활성화 및 초기화
         if (nav != null)
         {
             nav.updatePosition = false;
-            // 기존 경로를 초기화하여, Agent가 더 이상 이동하지 않도록 합니다.
             nav.ResetPath();
-            // 일단 해당 시점에서 정지 상태로 설정
             nav.isStopped = true;
-            // 현재 Transform.position으로 Warp
             nav.Warp(transform.position);
         }
 
@@ -242,12 +239,14 @@ public class Player : MonoBehaviour
         }
         transform.position = targetPos;
 
-        // 이동 완료 후 NavMeshAgent의 자동 위치 갱신을 재활성화
+        // 회피가 끝났으므로 이동 상태를 false로 설정
+        isMove = false;
+
+        // 이동 완료 후 NavMeshAgent 초기화 및 재활성화
         if (nav != null)
         {
-            // 최종 위치로 다시 Warp(혹은 transform.position 대입)
+            nav.ResetPath();  // 이전 목적지 제거
             nav.Warp(transform.position);
-            // Agent가 필요하다면 다시 움직일 수 있도록
             nav.updatePosition = true;
             nav.isStopped = false;
         }
